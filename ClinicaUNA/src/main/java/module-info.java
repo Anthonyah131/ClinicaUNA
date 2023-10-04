@@ -1,4 +1,4 @@
-module cr.ac.una.clinicauna {
+module clinicauna {
     requires javafx.controls;
     requires javafx.fxml;
 
