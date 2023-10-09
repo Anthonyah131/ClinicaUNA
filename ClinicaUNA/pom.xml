@@ -1,35 +1,121 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>cr.ac.una</groupId>
     <artifactId>ClinicaUNA</artifactId>
     <version>1.0</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <mainClass>cr.ac.una.clinicauna.App</mainClass>
+        <moduleName>clinicauna</moduleName>
     </properties>
+    
     <dependencies>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>17.0.2</version>
         </dependency>
+        
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>17.0.2</version>
         </dependency>
+        
+        <!-- dependencia del Jfoenix  para parte grafica-->
+        <dependency>
+            <groupId>com.jfoenix</groupId>
+            <artifactId>jfoenix</artifactId>
+            <version>9.0.10</version>
+        </dependency>
+        <!-- dependencia del MaterialFx para parte grafica-->
+        <dependency>
+            <groupId>io.github.palexdev</groupId>
+            <artifactId>materialfx</artifactId>
+            <version>11.14.0-EA3</version>
+            <type>jar</type>
+        </dependency>
+        <!-- dependencia del media para parte multimedia-->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>19.0.2.1</version>
+            <type>jar</type>
+        </dependency>
+        
     </dependencies>
+    
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>3.11.0</version>
                 <configuration>
-                    <release>11</release>
+                    <release>17</release>
+                    java-options=--add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+                    java-options=--add-opens=java.base/java.util=ALL-UNNAMED
+                    java-options=--add-opens=java.base/java.text=ALL-UNNAMED
+                    java-options=--add-opens=javafx.base/com.sun.javafx.reflect=ALL-UNNAMED
+                    java-options=--add-opens=javafx.base/com.sun.javafx.beans=ALL-UNNAMED
+                    java-options=--add-opens=javafx.graphics/com.sun.glass.utils=ALL-UNNAMED
+                    java-options=--add-opens=javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED
+                    java-options=--add-opens=javafx.graphics/com.sun.javafx.util=ALL-UNNAMED
+                    java-options=--add-opens=javafx.graphics/com.sun.javafx.font=ALL-UNNAMED
+                    java-options=--add-opens=java.desktop/java.awt.font=ALL-UNNAMED
+                    java-options=--add-opens=javafx.graphics/javafx.css=ALL-UNNAMED
+                    java-options=--add-opens=javafx.base/com.sun.javafx.runtime=ALL-UNNAMED
+                    java-options=--add-opens=javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED
+                    java-options=--add-opens=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED
+                    java-options=--add-opens=javafx.base/com.sun.javafx.binding=ALL-UNNAMED
+                    java-options=--add-opens=javafx.base/com.sun.javafx.event=ALL-UNNAMED
+                    java-options=--add-opens=javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED
+                    java-options=--add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=com.jfoenix
+                    java-options=--add-exports=javafx.controls/com.sun.javafx.scene.control=com.jfoenix
+                    java-options=--add-exports=javafx.base/com.sun.javafx.binding=com.jfoenix
+                    java-options=--add-exports=javafx.graphics/com.sun.javafx.stage=com.jfoenix
+                    java-options=--add-exports=javafx.graphics/com.sun.javafx.scene=com.jfoenix
+                    java-options=--add-exports=javafx.graphics/com.sun.javafx.geom=com.jfoenix
+                    java-options=--add-exports=javafx.graphics/com.sun.javafx.scene.text=com.jfoenix
+                    java-options=--add-exports=javafx.graphics/com.sun.javafx.scene.control.inputmap=com.jfoenix
+                    java-options=--add-exports=javafx.graphics/com.sun.javafx.scene.traversal=com.jfoenix
+                    java-options=--add-exports=javafx.graphics/com.sun.javafx.scene.traversal=com.jfoenix
+                    java-options=--add-exports=javafx.graphics/com.sun.javafx.util=com.jfoenix
+                    java-options=--add-exports=javafx.base/com.sun.javafx.event=com.jfoenix
+                    java-options=--add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+                    java-options=--add-opens=java.base/java.util=ALL-UNNAMED
+                    java-options=--add-opens=java.base/java.text=ALL-UNNAMED
+                    java-options=--add-opens=javafx.base/com.sun.javafx.reflect=ALL-UNNAMED
+                    java-options=--add-opens=javafx.base/com.sun.javafx.beans=ALL-UNNAMED
+                    java-options=--add-opens=javafx.graphics/com.sun.glass.utils=ALL-UNNAMED
+                    java-options=--add-opens=javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED
+                    java-options=--add-opens=javafx.graphics/com.sun.javafx.util=ALL-UNNAMED
+                    java-options=--add-opens=javafx.graphics/com.sun.javafx.font=ALL-UNNAMED
+                    java-options=--add-opens=java.desktop/java.awt.font=ALL-UNNAMED
+                    java-options=--add-opens=javafx.graphics/javafx.css=ALL-UNNAMED
+                    java-options=--add-opens=javafx.base/com.sun.javafx.runtime=ALL-UNNAMED
+                    java-options=--add-opens=javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED
+                    java-options=--add-opens=javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED
+                    java-options=--add-opens=javafx.base/com.sun.javafx.binding=ALL-UNNAMED
+                    java-options=--add-opens=javafx.base/com.sun.javafx.event=ALL-UNNAMED
+                    java-options=--add-opens=javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED
+                    java-options=--add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=com.jfoenix
+                    java-options=--add-exports=javafx.controls/com.sun.javafx.scene.control=com.jfoenix
+                    java-options=--add-exports=javafx.base/com.sun.javafx.binding=com.jfoenix
+                    java-options=--add-exports=javafx.graphics/com.sun.javafx.stage=com.jfoenix
+                    java-options=--add-exports=javafx.graphics/com.sun.javafx.scene=com.jfoenix
+                    java-options=--add-exports=javafx.graphics/com.sun.javafx.geom=com.jfoenix
+                    java-options=--add-exports=javafx.graphics/com.sun.javafx.scene.text=com.jfoenix
+                    java-options=--add-exports=javafx.graphics/com.sun.javafx.scene.control.inputmap=com.jfoenix
+                    java-options=--add-exports=javafx.graphics/com.sun.javafx.scene.traversal=com.jfoenix
+                    java-options=--add-exports=javafx.graphics/com.sun.javafx.scene.traversal=com.jfoenix
+                    java-options=--add-exports=javafx.graphics/com.sun.javafx.util=com.jfoenix
+                    java-options=--add-exports=javafx.base/com.sun.javafx.event=com.jfoenix
                 </configuration>
+                
             </plugin>
             <plugin>
                 <groupId>org.openjfx</groupId>
@@ -37,6 +123,20 @@
                 <version>0.0.6</version>
                 <configuration>
                     <mainClass>cr.ac.una.clinicauna.App</mainClass>
+                    <options>
+                        <option>--add-exports</option>
+                        <option>javafx.controls/com.sun.javafx.scene.control.behavior=com.jfoenix</option>
+                        <option>--add-exports</option>
+                        <option>javafx.controls/com.sun.javafx.scene.control=com.jfoenix</option>
+                        <option>--add-exports</option>
+                        <option>javafx.base/com.sun.javafx.binding=com.jfoenix</option>
+                        <option>--add-exports</option>
+                        <option>javafx.graphics/com.sun.javafx.stage=com.jfoenix</option>
+                        <option>--add-exports</option>
+                        <option>javafx.base/com.sun.javafx.event=com.jfoenix</option>
+                        <option>--add-opens</option>
+                        <option>java.base/java.lang.reflect=com.jfoenix</option>
+                    </options>  
                 </configuration>
                 <executions>
                     <execution>
@@ -51,6 +151,32 @@
                         <configuration>
                             <options>
                                 <option>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=localhost:8000</option>
+                                <option>--add-opens</option>
+                                <option>java.base/java.lang.reflect=ALL-UNNAMED</option>
+                                <option>--add-opens</option>
+                                <option>javafx.graphics/javafx.css=ALL-UNNAMED</option>
+                                <option>--add-opens</option>
+                                <option>javafx.base/com.sun.javafx.runtime=ALL-UNNAMED</option>
+                                <option>--add-opens</option>
+                                <option>javafx.controls/com.sun.javafx.scene.control.behavior=ALL-UNNAMED</option>
+                                <option>--add-opens</option>
+                                <option>javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED</option>
+                                <option>--add-opens</option>
+                                <option>javafx.base/com.sun.javafx.binding=ALL-UNNAMED</option>
+                                <option>--add-opens</option>
+                                <option>javafx.base/com.sun.javafx.event=ALL-UNNAMED</option>
+                                <option>--add-opens</option>
+                                <option>javafx.graphics/com.sun.javafx.stage=ALL-UNNAMED</option>
+                                <option>--add-exports</option>
+                                <option>javafx.controls/com.sun.javafx.scene.control.behavior=com.jfoenix</option>
+                                <option>--add-exports</option>
+                                <option>javafx.controls/com.sun.javafx.scene.control=com.jfoenix</option>
+                                <option>--add-exports</option>
+                                <option>javafx.base/com.sun.javafx.binding=com.jfoenix</option>
+                                <option>--add-exports</option>
+                                <option>javafx.graphics/com.sun.javafx.stage=com.jfoenix</option>
+                                <option>--add-exports</option>
+                                <option>javafx.base/com.sun.javafx.event=com.jfoenix</option>
                             </options>
                         </configuration>
                     </execution>
@@ -60,6 +186,18 @@
                         <configuration>
                             <options>
                                 <option>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address}</option>
+                                <option>--add-exports</option>
+                                <option>javafx.controls/com.sun.javafx.scene.control.behavior=com.jfoenix</option>
+                                <option>--add-exports</option>
+                                <option>javafx.controls/com.sun.javafx.scene.control=com.jfoenix</option>
+                                <option>--add-exports</option>
+                                <option>javafx.base/com.sun.javafx.binding=com.jfoenix</option>
+                                <option>--add-exports</option>
+                                <option>javafx.graphics/com.sun.javafx.stage=com.jfoenix</option>
+                                <option>--add-exports</option>
+                                <option>javafx.base/com.sun.javafx.event=com.jfoenix</option>
+                                <option>--add-opens</option>
+                                <option>java.base/java.lang.reflect=com.jfoenix</option>
                             </options>
                         </configuration>
                     </execution>
@@ -68,11 +206,11 @@
                         <id>ide-profile</id>
                         <configuration>
                             <options>
-				<option>${profiler.jvmargs.arg1}</option>
-				<option>${profiler.jvmargs.arg2}</option>
-				<option>${profiler.jvmargs.arg3}</option>
-				<option>${profiler.jvmargs.arg4}</option>
-				<option>${profiler.jvmargs.arg5}</option>
+                                <option>${profiler.jvmargs.arg1}</option>
+                                <option>${profiler.jvmargs.arg2}</option>
+                                <option>${profiler.jvmargs.arg3}</option>
+                                <option>${profiler.jvmargs.arg4}</option>
+                                <option>${profiler.jvmargs.arg5}</option>
                             </options>
                         </configuration>
                     </execution>

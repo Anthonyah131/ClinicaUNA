@@ -5,7 +5,7 @@
     <artifactId>WsClinicaUNA</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
-    <name>WsClinicaUNA-1.0</name>
+    <name>WsClinicaUNA</name>
     
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
