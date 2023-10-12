@@ -67,7 +67,7 @@
 .mfx-button-link{
     -fx-cursor: hand;
     -fx-background-color: transparent; /* Establece el fondo del botón como transparente */
-    -fx-font: 17px "Arial Rounded MT Bold"; /* Establece la fuente y el tamano */
+    -fx-font: 15px "Arial Rounded MT Bold"; /* Establece la fuente y el tamano */
     -fx-text-fill: #ffffff; /* Color del texto */
     -fx-underline: true;
     -fx-content-display: text-only;

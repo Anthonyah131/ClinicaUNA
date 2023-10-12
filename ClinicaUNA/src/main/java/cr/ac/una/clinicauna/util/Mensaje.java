@@ -6,8 +6,10 @@
 package cr.ac.una.clinicauna.util;
 
 import java.util.Optional;
+import java.util.ResourceBundle;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Window;
 
@@ -16,6 +18,24 @@ import javafx.stage.Window;
  * @author ccarranza
  */
 public class Mensaje {
+    
+    private ResourceBundle resourceBundle;
+    
+    public Mensaje(ResourceBundle resourceBundle) {
+        this.resourceBundle = resourceBundle;
+    }
+    
+    public void showi18n(Alert.AlertType tipo, String tituloKey, String mensajeKey, String aceptarButtonKey) {
+        Alert alert = new Alert(tipo);
+        alert.setTitle(resourceBundle.getString(tituloKey));
+        alert.setHeaderText(null);
+        alert.setContentText(resourceBundle.getString(mensajeKey));
+        
+        ButtonType aceptarButton = new ButtonType(resourceBundle.getString(aceptarButtonKey), ButtonBar.ButtonData.OK_DONE);
+        alert.getButtonTypes().set(0, aceptarButton);
+
+        alert.show();
+    }
 
     public void show(AlertType tipo, String titulo, String mensaje) {
         Alert alert = new Alert(tipo);

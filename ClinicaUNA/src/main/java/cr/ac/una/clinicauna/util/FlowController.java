@@ -149,13 +149,14 @@ public class FlowController {
         stage.getScene().setRoot(loader.getRoot());
     }
 
-    public void goViewInWindow(String viewName) {
+    public void goViewInWindow(String viewName, Boolean resizable) {
         FXMLLoader loader = getLoader(viewName);
         Controller controller = loader.getController();
         controller.initialize();
         Stage stage = new Stage();
         stage.getIcons().add(new Image(App.class.getResourceAsStream("/cr/ac/una/clinicauna/resources/LogoUNArojo.png")));
         stage.setTitle("ClinicaUNA");
+        stage.setResizable(resizable);
         stage.setOnHidden((WindowEvent event) -> {
             controller.getStage().getScene().setRoot(new Pane());
             controller.setStage(null);
