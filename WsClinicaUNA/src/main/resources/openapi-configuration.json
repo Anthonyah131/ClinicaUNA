@@ -1,0 +1,29 @@
+{
+    "resourcePackages": [
+        "cr.ac.una.unaplanillaws.controller"
+    ],
+    "prettyPrint": true,
+    "cacheTTL": 0,
+    "openAPI": {
+        "info": {
+            "version": "1.0.0",
+            "title": "Clinica UNA ES",
+            "description": "API REST WsClinicaUNA",
+            "contact": {
+                "name": "Kevin Arauz,Anthony Avila,Luis ",
+                "email": "corre@gmail.com"
+            }
+        },
+        "servers": [
+            {
+                "url": "http://localhost:8080/WsClinicaUNA/"
+            },
+            {
+                "url": "https://localhost:8080/WsClinicaUNA/"
+            }
+        ],
+        "components": {
+            
+        }
+    }
+}

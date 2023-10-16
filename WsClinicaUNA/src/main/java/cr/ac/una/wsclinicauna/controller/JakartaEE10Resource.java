@@ -1,4 +1,4 @@
-package cr.ac.una.wsclinicauna.resources;
+package cr.ac.una.wsclinicauna.controller;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
