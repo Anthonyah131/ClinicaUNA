@@ -6,8 +6,22 @@
 
 }
 
+.mfx-button{
+    -mfx-button-type: RAISED;
+}
+
+/*.mfx-ripple-generator{
+        -mfx-animation-speed: 0;
+        -mfx-background-opacity: 0;
+        -mfx-ripple-radius: 0;
+        -mfx-paused: true;
+    -mfx-animation-speed: 2;
+    -mfx-ripple-radius: 8;
+    -mfx-ripple-color: #000000;
+}*/
+
 /*-----------------------------------------------------------------------------------------------------------------*/
-.mfx-button-Log, .mfx-button-Salir{
+.mfx-button-Log {
     -fx-cursor: hand;
     -fx-background-color: #333333; /* Establece el fondo del botón como transparente */
     -fx-font: 20px "Arial Rounded MT Bold"; /* Establece la fuente y el tamano */
@@ -17,6 +31,9 @@
     -fx-border-color: #000000;
     -fx-border-width: 2px;
     -fx-padding: 0;  /*Elimina el relleno del botón */
+}
+.mfx-button-Log .ripple-container .mfx-ripple-generator{
+    -mfx-paused: true;
 }
 .mfx-button-Log:hover{
     -fx-background-color: #FFFFFF; /* Establece el fondo del botón como transparente */
@@ -39,6 +56,37 @@
 }
 
 /*-----------------------------------------------------------------------------------------------------------------*/
+
+.mfx-button-menu, .mfx-button-salir{
+    -fx-cursor: hand;
+    -fx-pref-width: 300px;   /* Ancho mínimo */
+    -fx-pref-height: 50px;   /* Alto mínimo */
+    -fx-background-color: #333333; /* Establece el fondo del botón como transparente */
+    -fx-font: 20px "Arial Rounded MT Bold"; /* Establece la fuente y el tamano */
+    -fx-text-fill: #FFFFFF; /* Color del texto */
+    -fx-background-radius: 0px;
+}
+.mfx-button-menu:hover{
+    -fx-background-color: #FFFFFF; /* Establece el fondo del botón como transparente */
+    -fx-text-fill: #000000;
+    /*-fx-scale-x: 1.2; /* Escala horizontalmente el botón a 120% en hover */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 1), 10, 0.5, 0.0, 0.0);
+}
+.mfx-button-menu:pressed{
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+
+.mfx-button-salir:hover{
+    -fx-background-color: #cc0000; /* Establece el fondo del botón como transparente */
+    -fx-text-fill: #000000;
+    /*-fx-scale-x: 1.2; /* Escala horizontalmente el botón a 120% en hover */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 1), 10, 0.5, 0.0, 0.0);
+}
+.mfx-button-salir:pressed{
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+
+/*-----------------------------------------------------------------------------------------------------------------*/
 .mfx-button-Image, .mfx-button-Image-salir{
     -fx-cursor: hand;
     -fx-background-color: transparent; /* Establece el fondo del botón como transparente */
@@ -47,6 +95,10 @@
     -fx-background-size: contain; /* Ajusta el tamaño de la imagen al botón */
     -fx-background-position: center; /* Centra la imagen en el botón */
     -fx-padding: 0;  /*Elimina el relleno del botón */
+}
+
+.mfx-button-Image .mfx-ripple-generator, .mfx-button-Image-salir .mfx-ripple-generator{
+    -mfx-paused: true;
 }
 
 .mfx-button-Image:hover{
@@ -116,9 +168,94 @@
     -mfx-color: #000000;
 }
 /*-----------------------------------------------------------------------------------------------------------------*/
+.jfx-text-field-edit {
+    -mfx-main: #000000;
+    -fx-background-color: rgba(153, 153, 153, 0.49);
+    -fx-background-radius: 5px;
+    -fx-pref-height: 40px;
+    -fx-border-color: #000000;
+    -fx-border-radius: 5px;
+    -fx-padding: 5;
+    -fx-font: 15px "Arial Rounded MT Bold";
+    -fx-text-fill: #000000; /* Color del texto */
+    -fx-prompt-text-fill: #000000;
+    -jfx-focus-color: #000000;
+    -jfx-label-float: true;
+}
+
+.jfx-text-field-edit > .input-line {
+    -fx-background-color: #4d4d4d;
+    -fx-pref-height: 3px;
+    -fx-translate-y: 2;
+}
+
+.jfx-text-field-edit > .input-focused-line {
+    -fx-background-color: #cc00cc;
+    -fx-pref-height: 3px;
+    -fx-translate-y: 2;
+}
+
+/*:focused*/
+.jfx-text-field-edit:focused {
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+/*-----------------------------------------------------------------------------------------------------------------*/
+.panel-transparencia{
+    -fx-background-color: rgba(102, 102, 102, 0.25);
+    -fx-background-repeat: no-repeat; /* Evita que la imagen se repita */
+    -fx-background-size: contain; /* Ajusta el tamaño de la imagen al botón */
+    -fx-background-position: center; /* Centra la imagen en el botón */
+    -fx-background-radius: 10px;
+    -fx-border-color: #000000;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+/*-----------------------------------------------------------------------------------------------------------------*/
 .fondo-login{
     -fx-background-image: url("../resources/media/images/logImage.png");
     -fx-background-size: cover;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;
 }
+
+.fondo-registro-modal{
+    -fx-background-image: url("../resources/media/images/fondoRegistroModal.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
+
+.fondo-registro-completa{
+    -fx-background-image: url("../resources/media/images/fondoRegistro.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
+
+.fondo-recuperar{
+    -fx-background-image: url("../resources/media/images/fondoRecuperar.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
+/*-----------------------------------------------------------------------------------------------------------------*/
+.jfx-combo-box {
+    -jfx-focus-color: #cc00cc;
+    -fx-font: 15px "Arial Rounded MT Bold";
+    -jfx-unfocus-color: #000000;
+    -fx-prompt-text-fill: #000000;
+}
+.jfx-combo-box:focused {
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+/*-----------------------------------------------------------------------------------------------------------------*/
+.txt-effect{
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 1), 15, 0.7, 0.0, 0.0);
+}
+/*-----------------------------------------------------------------------------------------------------------------*/
+.jfx-check-box {
+    -fx-font: 15px "Arial Rounded MT Bold";
+    -fx-text-fill: #000000; /* Color del texto */
+}
+/*-----------------------------------------------------------------------------------------------------------------*/

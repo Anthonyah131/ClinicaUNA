@@ -25,13 +25,13 @@ public class Mensaje {
         this.resourceBundle = resourceBundle;
     }
     
-    public void showi18n(Alert.AlertType tipo, String tituloKey, String mensajeKey, String aceptarButtonKey) {
+    public void showi18n(Alert.AlertType tipo, String tituloKey, String mensajeKey) {
         Alert alert = new Alert(tipo);
         alert.setTitle(resourceBundle.getString(tituloKey));
         alert.setHeaderText(null);
         alert.setContentText(resourceBundle.getString(mensajeKey));
         
-        ButtonType aceptarButton = new ButtonType(resourceBundle.getString(aceptarButtonKey), ButtonBar.ButtonData.OK_DONE);
+        ButtonType aceptarButton = new ButtonType(resourceBundle.getString("key.accept"), ButtonBar.ButtonData.OK_DONE);
         alert.getButtonTypes().set(0, aceptarButton);
 
         alert.show();

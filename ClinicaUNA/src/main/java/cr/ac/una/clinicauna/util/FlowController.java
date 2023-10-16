@@ -81,7 +81,7 @@ public class FlowController {
 
     public void goMain() {
         try {
-            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P01_PrincipalView.fxml"), FlowController.idioma)));
+            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P02_PrincipalView.fxml"), FlowController.idioma)));
 //            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P02_LogInView.fxml"), FlowController.idioma)));
 //            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P03_RegistroView.fxml"), FlowController.idioma)));
 //            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P07_MantenimientoGeneralesView.fxml"), FlowController.idioma)));
@@ -207,7 +207,7 @@ public class FlowController {
         FlowController.idioma = idioma;
     }
 
-    public void initialize() {
+    public void clearHashMap() {
         this.loaders.clear();
     }
 
