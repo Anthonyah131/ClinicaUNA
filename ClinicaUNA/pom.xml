@@ -45,7 +45,26 @@
             <version>19.0.2.1</version>
             <type>jar</type>
         </dependency>
-        
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.inject</groupId>
+            <artifactId>jersey-hk2</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-binding</artifactId>
+            <version>3.0.2</version>
+        </dependency>
     </dependencies>
     
     <build>
@@ -136,7 +155,15 @@
                         <option>javafx.base/com.sun.javafx.event=com.jfoenix</option>
                         <option>--add-opens</option>
                         <option>java.base/java.lang.reflect=com.jfoenix</option>
-                    </options>  
+                    </options>
+                    <stripDebug>true</stripDebug>
+                    <compress>2</compress>
+                    <noHeaderFiles>true</noHeaderFiles>
+                    <noManPages>true</noManPages>
+                    <launcher>clinicauna</launcher>
+                    <jlinkImageName>clinicauna</jlinkImageName>
+                    <jlinkZipName>clinicaunazip</jlinkZipName>
+                    <mainClass>clinicauna/cr.ac.una.clinicauna.App</mainClass>  
                 </configuration>
                 <executions>
                     <execution>
