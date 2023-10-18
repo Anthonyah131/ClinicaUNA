@@ -192,7 +192,7 @@ public class CliUsuarioService {
         }
     }
 
-    public Respuesta correoActivacion(CliUsuarioDto tarUsuarioDto, CliParametrosDto parametrosDto) {
+    public Respuesta correoActivacion(CliUsuarioDto cliUsuarioDto, CliParametrosDto cliParametrosDto) {
         try {
             //setea las propiedades del smtp para poder enviar los emails
             Properties props = new Properties();
@@ -204,13 +204,13 @@ public class CliUsuarioService {
             Session session = Session.getDefaultInstance(props);
 
             //proporciona el correo y contrasena del correo con el que va a ser enviado
-            String correoRemitente = parametrosDto.getParEmail();//"CineUna123@outlook.com";
-            String passwordRemitente = parametrosDto.getParClave();//"cine1234";
-            String correoReceptor = tarUsuarioDto.getUsuCorreo();
-            String asunto = "EvaComUNA";
+            String correoRemitente = cliParametrosDto.getParEmail();//"CineUna123@outlook.com";
+            String passwordRemitente = cliParametrosDto.getParClave();//"cine1234";
+            String correoReceptor = cliUsuarioDto.getUsuCorreo();
+            String asunto = "ClinicaUNA";
 
             //Mensaje que va a ser enviado
-            String mensaje = mensajeEmail(tarUsuarioDto, parametrosDto.getParHtml(), parametrosDto.getParLogo(), parametrosDto.getParNombre());
+            String mensaje = mensajeEmail(cliUsuarioDto, cliParametrosDto.getParHtml(), cliParametrosDto.getParLogo(), cliParametrosDto.getParNombre());
 
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(correoRemitente));
@@ -247,7 +247,7 @@ public class CliUsuarioService {
         return sb.toString();
     }
 
-    public Respuesta recuClave(CliUsuarioDto tarUsuarioDto, CliParametrosDto parametrosDto) {
+    public Respuesta recuClave(CliUsuarioDto cliUsuarioDto, CliParametrosDto cliParametrosDto) {
         int len = 8;
         //System.out.println(generateRandomPassword(len));
 
@@ -263,16 +263,16 @@ public class CliUsuarioService {
 
             //Llamada a los parametros
             //proporciona el correo y contrasena del correo con el que va a ser enviado
-            String correoRemitente = parametrosDto.getParEmail();//"CineUna123@outlook.com";
-            String passwordRemitente = parametrosDto.getParClave();//"cine1234";
+            String correoRemitente = cliParametrosDto.getParEmail();//"CineUna123@outlook.com";
+            String passwordRemitente = cliParametrosDto.getParClave();//"cine1234";
             //Optine el correo al cual va a ser enviado el mensaje
-            String correoReceptor = tarUsuarioDto.getUsuCorreo();
+            String correoReceptor = cliUsuarioDto.getUsuCorreo();
             String asunto = "EvaComUNA";
 
             //Llama al metodo de creacion de contrasena y se la manda a la persona y luego se la setea para que la cambie
             String claveRestaurada = generateRandomPassword(len);
 
-            String mensaje = mensajeClave(parametrosDto.getParHtml(), parametrosDto.getParLogo(), parametrosDto.getParNombre(), claveRestaurada);
+            String mensaje = mensajeClave(cliParametrosDto.getParHtml(), cliParametrosDto.getParLogo(), cliParametrosDto.getParNombre(), claveRestaurada);
 
             //Envio del mensaje
             MimeMessage message = new MimeMessage(session);
@@ -287,8 +287,8 @@ public class CliUsuarioService {
             t.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
             t.close();
 
-            tarUsuarioDto.setUsuClave(claveRestaurada);
-            tarUsuarioDto.setUsuTempClave(claveRestaurada);
+            cliUsuarioDto.setUsuClave(claveRestaurada);
+            cliUsuarioDto.setUsuTempClave(claveRestaurada);
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "");
 
         } catch (Exception ex) {
@@ -327,7 +327,7 @@ public class CliUsuarioService {
         return Base64.getEncoder().encodeToString(bytes);
     }
 
-    public String mensajeEmail(CliUsuarioDto tarUsuarioDto, byte[] html, byte[] logo, String nombre) throws UnknownHostException, IOException {
+    public String mensajeEmail(CliUsuarioDto cliUsuarioDto, byte[] html, byte[] logo, String nombre) throws UnknownHostException, IOException {
 
         String base64Image = convertirABase64(logo);
         String mensaje = convertirBytesAHTML(html);
@@ -335,8 +335,8 @@ public class CliUsuarioService {
                 + "<span style=\"font-size: 18px; line-height: 32.4px; color: #000000;\">"
                 + "<span style=\"line-height: 32.4px; font-family: Montserrat, sans-serif; font-size: 18px;\">"
                 + "Presione el link para activar su cuenta: "
-                + "<a href=\"http://" + obtenerIp() + ":8080/TODO/" + tarUsuarioDto.getUsuId() + "\">"
-                + "http://" + obtenerIp() + ":8080/EvaComUNAWs/activacion.html?id=" + tarUsuarioDto.getUsuId()
+                + "<a href=\"http://" + obtenerIp() + ":8080/ws/CliUsuarioController/todo" + cliUsuarioDto.getUsuId() + "\">"
+                + "http://" + obtenerIp() + ":8080/EvaComUNAWs/activacion.html?id=" + cliUsuarioDto.getUsuId()
                 + "</a>"
                 + "</span>"
                 + "</span>"
