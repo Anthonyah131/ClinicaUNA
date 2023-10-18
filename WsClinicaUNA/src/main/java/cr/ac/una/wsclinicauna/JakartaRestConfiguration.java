@@ -1,6 +1,8 @@
 package cr.ac.una.wsclinicauna;
 
 import cr.ac.una.wsclinicauna.controller.JsonbContextResolver;
+import cr.ac.una.wsclinicauna.controller.SecurityFilter;
+import cr.ac.una.wsclinicauna.util.ConstraintViolationExceptionMapper;
 import jakarta.ws.rs.ApplicationPath;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,6 +30,8 @@ public class JakartaRestConfiguration extends ResourceConfig {
         Set<String> providerClassNames = new HashSet() {
             {
                 add(JsonbContextResolver.class.getName());
+                add(ConstraintViolationExceptionMapper.class.getName());
+                add(SecurityFilter.class.getName());
             }
         };
      
