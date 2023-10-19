@@ -140,7 +140,7 @@ public class Request {
                         Thread.sleep(4000);
                         Platform.runLater(new Runnable() {
                             public void run() {
-                                //FlowController.getInstance().goLogInWindowModal(true);
+                                FlowController.getInstance().goLogInWindowModal(true);
                             }
                         });
                     } catch (InterruptedException ex) {
