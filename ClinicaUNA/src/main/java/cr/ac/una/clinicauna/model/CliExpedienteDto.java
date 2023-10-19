@@ -4,7 +4,11 @@
  */
 package cr.ac.una.clinicauna.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -16,8 +20,16 @@ public class CliExpedienteDto {
     private SimpleStringProperty expHospitalizaciones;
     private SimpleStringProperty expOperaciones;
     private SimpleStringProperty expAlergias;
-    private SimpleStringProperty expTipoAlergias;
+    private SimpleStringProperty expPatologicos;
+    private SimpleStringProperty expTipoalergias;
     private SimpleStringProperty expTratamientos;
+    private CliPacienteDto cliPacienteDto;
+    private ObservableList<CliExamenDto> cliExamenList;
+    private ObservableList<CliAtencionDto> cliAtencionList;
+    private ObservableList<CliAntecedenteDto> cliAntecedenteList;
+    private List<CliExamenDto> cliExamenListEliminados;
+    private List<CliAtencionDto> cliAtencionListEliminados;
+    private List<CliAntecedenteDto> cliAntecedenteListEliminados;
     private Long expVersion;
     private Boolean modificado;
 
@@ -26,8 +38,15 @@ public class CliExpedienteDto {
         this.expHospitalizaciones = new SimpleStringProperty();
         this.expOperaciones = new SimpleStringProperty();
         this.expAlergias = new SimpleStringProperty();
-        this.expTipoAlergias = new SimpleStringProperty();
+        this.expPatologicos = new SimpleStringProperty();
+        this.expTipoalergias = new SimpleStringProperty();
         this.expTratamientos = new SimpleStringProperty();
+        this.cliExamenList = FXCollections.observableArrayList();
+        this.cliAtencionList = FXCollections.observableArrayList();
+        this.cliAntecedenteList = FXCollections.observableArrayList();
+        this.cliExamenListEliminados = new ArrayList<>();
+        this.cliAtencionListEliminados = new ArrayList<>();
+        this.cliAntecedenteListEliminados = new ArrayList<>();
         this.modificado = false;
     }
 
@@ -79,12 +98,20 @@ public class CliExpedienteDto {
         this.expAlergias.set(expAlergias.toString());
     }
 
-    public String getExpTipoAlergias() {
-        return expTipoAlergias.get();
+    public String getExpPatologicos() {
+        return this.expPatologicos.get();
     }
 
-    public void setExpTipoAlergias(String expTipoAlergias) {
-        this.expTipoAlergias.set(expTipoAlergias);
+    public void setExpPatologicos(String expPatologicos) {
+        this.expPatologicos.set(expPatologicos);
+    }
+
+    public String getExpTipoAlergias() {
+        return expTipoalergias.get();
+    }
+
+    public void setExpTipoAlergias(String expTipoalergias) {
+        this.expTipoalergias.set(expTipoalergias);
     }
 
     public String getExpTratamientos() {
@@ -93,6 +120,62 @@ public class CliExpedienteDto {
 
     public void setExpTratamientos(String expTratamientos) {
         this.expTratamientos.set(expTratamientos);
+    }
+
+    public CliPacienteDto getCliPacienteDto() {
+        return cliPacienteDto;
+    }
+
+    public void setCliPacienteDto(CliPacienteDto cliPacienteDto) {
+        this.cliPacienteDto = cliPacienteDto;
+    }
+
+    public ObservableList<CliExamenDto> getCliExamenList() {
+        return cliExamenList;
+    }
+
+    public void setCliExamenList(List<CliExamenDto> cliExamenList) {
+        this.cliExamenList = FXCollections.observableArrayList(cliExamenList);
+    }
+
+    public ObservableList<CliAtencionDto> getCliAtencionList() {
+        return cliAtencionList;
+    }
+
+    public void setCliAtencionList(List<CliAtencionDto> cliAtencionList) {
+        this.cliAtencionList = FXCollections.observableArrayList(cliAtencionList);
+    }
+
+    public ObservableList<CliAntecedenteDto> getCliAntecedenteList() {
+        return cliAntecedenteList;
+    }
+
+    public void setCliAntecedenteList(List<CliAntecedenteDto> cliAntecedenteList) {
+        this.cliAntecedenteList = FXCollections.observableArrayList(cliAntecedenteList);
+    }
+
+    public List<CliExamenDto> getCliExamenListEliminados() {
+        return cliExamenListEliminados;
+    }
+
+    public void setCliExamenListEliminados(List<CliExamenDto> cliExamenListEliminados) {
+        this.cliExamenListEliminados = cliExamenListEliminados;
+    }
+
+    public List<CliAtencionDto> getCliAtencionListEliminados() {
+        return cliAtencionListEliminados;
+    }
+
+    public void setCliAtencionListEliminados(List<CliAtencionDto> cliAtencionListEliminados) {
+        this.cliAtencionListEliminados = cliAtencionListEliminados;
+    }
+
+    public List<CliAntecedenteDto> getCliAntecedenteListEliminados() {
+        return cliAntecedenteListEliminados;
+    }
+
+    public void setCliAntecedenteListEliminados(List<CliAntecedenteDto> cliAntecedenteListEliminados) {
+        this.cliAntecedenteListEliminados = cliAntecedenteListEliminados;
     }
 
     public Long getExpVersion() {

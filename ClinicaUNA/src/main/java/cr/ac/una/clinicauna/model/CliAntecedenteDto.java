@@ -15,6 +15,7 @@ public class CliAntecedenteDto {
     private SimpleStringProperty antDescripcion;
     private SimpleStringProperty antTipo;
     private SimpleStringProperty antParentesco;
+    private CliExpedienteDto cliExpedienteDto;
     private Long antVersion;
     private Boolean modificado;
 
@@ -60,6 +61,14 @@ public class CliAntecedenteDto {
 
     public void setAntParentesco(String antParentesco) {
         this.antParentesco.set(antParentesco);
+    }
+
+    public CliExpedienteDto getCliExpedienteDto() {
+        return cliExpedienteDto;
+    }
+
+    public void setCliExpedienteDto(CliExpedienteDto cliExpedienteDto) {
+        this.cliExpedienteDto = cliExpedienteDto;
     }
 
     public Long getAntVersion() {

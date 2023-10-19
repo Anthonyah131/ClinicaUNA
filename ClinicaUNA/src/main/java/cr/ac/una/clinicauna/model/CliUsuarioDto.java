@@ -4,8 +4,12 @@
  */
 package cr.ac.una.clinicauna.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -21,9 +25,13 @@ public class CliUsuarioDto {
     private SimpleStringProperty usuTipousuario;
     private SimpleStringProperty usuUsuario;
     private SimpleStringProperty usuClave;
-    private SimpleStringProperty usuTempClave;
+    private SimpleStringProperty usuTempclave;
     private SimpleStringProperty usuIdioma;
     private SimpleBooleanProperty usuActivo;
+    ObservableList<CliReporteusuariosDto> cliReporteusuariosList;
+    List<CliReporteusuariosDto> cliReporteusuariosListEliminados;
+    ObservableList<CliMedicoDto> cliMedicoList;
+    List<CliMedicoDto> cliMedicoListEliminados;
     private Long usuVersion;
     private Boolean modificado;
     private String token;
@@ -38,9 +46,13 @@ public class CliUsuarioDto {
         this.usuTipousuario = new SimpleStringProperty("R");
         this.usuUsuario = new SimpleStringProperty();
         this.usuClave = new SimpleStringProperty();
-        this.usuTempClave = new SimpleStringProperty();
+        this.usuTempclave = new SimpleStringProperty();
         this.usuIdioma = new SimpleStringProperty();
         this.usuActivo = new SimpleBooleanProperty(false);
+        this.cliReporteusuariosList = FXCollections.observableArrayList();
+        this.cliReporteusuariosListEliminados = new ArrayList<>();
+        this.cliMedicoList = FXCollections.observableArrayList();
+        this.cliMedicoListEliminados = new ArrayList<>();
         this.modificado = false;
     }
     
@@ -121,11 +133,11 @@ public class CliUsuarioDto {
     }
 
     public String getUsuTempClave() {
-        return usuTempClave.get();
+        return usuTempclave.get();
     }
 
-    public void setUsuTempClave(String usuTempClave) {
-        this.usuTempClave.set(usuTempClave);
+    public void setUsuTempClave(String usuTempclave) {
+        this.usuTempclave.set(usuTempclave);
     }
 
     public String getUsuIdioma() {
@@ -142,6 +154,38 @@ public class CliUsuarioDto {
 
     public void setUsuActivo(String usuActivo) {
         this.usuActivo.set(usuActivo.equals("A"));
+    }
+
+    public ObservableList<CliReporteusuariosDto> getCliReporteusuariosList() {
+        return cliReporteusuariosList;
+    }
+
+    public void setCliReporteusuariosList(List<CliReporteusuariosDto> cliReporteusuariosList) {
+        this.cliReporteusuariosList = FXCollections.observableArrayList(cliReporteusuariosList);
+    }
+
+    public List<CliReporteusuariosDto> getCliReporteusuariosListEliminados() {
+        return cliReporteusuariosListEliminados;
+    }
+
+    public void setCliReporteusuariosListEliminados(List<CliReporteusuariosDto> cliReporteusuariosListEliminados) {
+        this.cliReporteusuariosListEliminados = cliReporteusuariosListEliminados;
+    }
+
+    public ObservableList<CliMedicoDto> getCliMedicoList() {
+        return cliMedicoList;
+    }
+
+    public void setCliMedicoList(List<CliMedicoDto> cliMedicoList) {
+        this.cliMedicoList = FXCollections.observableArrayList(cliMedicoList);
+    }
+
+    public List<CliMedicoDto> getCliMedicoListEliminados() {
+        return cliMedicoListEliminados;
+    }
+
+    public void setCliMedicoListEliminados(List<CliMedicoDto> cliMedicoListEliminados) {
+        this.cliMedicoListEliminados = cliMedicoListEliminados;
     }
 
     public Long getUsuVersion() {

@@ -5,19 +5,27 @@
 package cr.ac.una.clinicauna.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
  * @author ANTHONY
  */
 public class CliAgendaDto {
+
     private SimpleStringProperty ageId;
     private ObjectProperty<LocalDate> ageFecha;
     private SimpleStringProperty ageTiempo;
     private SimpleStringProperty ageEspacios;
+    private CliMedicoDto cliMedicoDto;
+    private ObservableList<CliCitaDto> cliCitaList;
+    private List<CliCitaDto> cliCitaListEliminados;
     private Long ageVersion;
     private Boolean modificado;
 
@@ -26,6 +34,8 @@ public class CliAgendaDto {
         this.ageFecha = new SimpleObjectProperty();
         this.ageTiempo = new SimpleStringProperty();
         this.ageEspacios = new SimpleStringProperty();
+        this.cliCitaList = FXCollections.observableArrayList();
+        this.cliCitaListEliminados = new ArrayList<>();
         this.modificado = false;
     }
 
@@ -67,6 +77,30 @@ public class CliAgendaDto {
 
     public void setAgeEspacios(Long ageEspacios) {
         this.ageEspacios.set(ageEspacios.toString());
+    }
+
+    public CliMedicoDto getCliMedicoDto() {
+        return cliMedicoDto;
+    }
+
+    public void setCliMedicoDto(CliMedicoDto cliMedicoDto) {
+        this.cliMedicoDto = cliMedicoDto;
+    }
+
+    public ObservableList<CliCitaDto> getCliCitaList() {
+        return cliCitaList;
+    }
+
+    public void setCliCitaList(List<CliCitaDto> cliCitaList) {
+        this.cliCitaList = FXCollections.observableArrayList(cliCitaList);
+    }
+
+    public List<CliCitaDto> getCliCitaListEliminados() {
+        return cliCitaListEliminados;
+    }
+
+    public void setCliCitaListEliminados(List<CliCitaDto> cliCitaListEliminados) {
+        this.cliCitaListEliminados = cliCitaListEliminados;
     }
 
     public Long getAgeVersion() {

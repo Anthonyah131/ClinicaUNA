@@ -5,9 +5,13 @@
 package cr.ac.una.clinicauna.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -16,35 +20,40 @@ import javafx.beans.property.SimpleStringProperty;
 public class CliAtencionDto {
 
     private SimpleStringProperty ateId;
-    private ObjectProperty<LocalDate> ateFechaHora;
+    private ObjectProperty<LocalDate> ateFechahora;
     private SimpleStringProperty atePresion;
-    private SimpleStringProperty ateFrecuenciaCard;
+    private SimpleStringProperty ateFrecuenciacard;
     private SimpleStringProperty atePeso;
     private SimpleStringProperty ateTalla;
     private SimpleStringProperty ateTemperatura;
-    private SimpleStringProperty ateIMC;
-    private SimpleStringProperty ateAnotacionEnfermera;
-    private SimpleStringProperty ateRazonConsulta;
-    private SimpleStringProperty atePlanAtencion;
+    private SimpleStringProperty ateImc;
+    private SimpleStringProperty ateAnotacionenfe;
+    private SimpleStringProperty ateRazonconsulta;
+    private SimpleStringProperty atePlanatencion;
     private SimpleStringProperty ateObservaciones;
     private SimpleStringProperty ateTratamiento;
+    private CliExpedienteDto cliExpedienteDto;
+    private ObservableList<CliExamenDto> cliExamenList;
+    private List<CliExamenDto> cliExamenListEliminados;
     private Long ateVersion;
     private Boolean modificado;
 
     public CliAtencionDto() {
         this.ateId = new SimpleStringProperty();
-        this.ateFechaHora = new SimpleObjectProperty();
+        this.ateFechahora = new SimpleObjectProperty();
         this.atePresion = new SimpleStringProperty();
-        this.ateFrecuenciaCard = new SimpleStringProperty();
+        this.ateFrecuenciacard = new SimpleStringProperty();
         this.atePeso = new SimpleStringProperty();
         this.ateTalla = new SimpleStringProperty();
         this.ateTemperatura = new SimpleStringProperty();
-        this.ateIMC = new SimpleStringProperty();
-        this.ateAnotacionEnfermera = new SimpleStringProperty();
-        this.ateRazonConsulta = new SimpleStringProperty();
-        this.atePlanAtencion = new SimpleStringProperty();
+        this.ateImc = new SimpleStringProperty();
+        this.ateAnotacionenfe = new SimpleStringProperty();
+        this.ateRazonconsulta = new SimpleStringProperty();
+        this.atePlanatencion = new SimpleStringProperty();
         this.ateObservaciones = new SimpleStringProperty();
         this.ateTratamiento = new SimpleStringProperty();
+        this.cliExamenList = FXCollections.observableArrayList();
+        this.cliExamenListEliminados = new ArrayList<>();
         this.modificado = false;
     }
 
@@ -61,11 +70,11 @@ public class CliAtencionDto {
     }
 
     public LocalDate getAteFechaHora() {
-        return ateFechaHora.get();
+        return ateFechahora.get();
     }
 
-    public void setAteFechaHora(LocalDate ateFechaHora) {
-        this.ateFechaHora.set(ateFechaHora);
+    public void setAteFechaHora(LocalDate ateFechahora) {
+        this.ateFechahora.set(ateFechahora);
     }
 
     public String getAtePresion() {
@@ -77,11 +86,11 @@ public class CliAtencionDto {
     }
 
     public String getAteFrecuenciaCard() {
-        return ateFrecuenciaCard.get();
+        return ateFrecuenciacard.get();
     }
 
-    public void setAteFrecuenciaCard(String ateFrecuenciaCard) {
-        this.ateFrecuenciaCard.set(ateFrecuenciaCard);
+    public void setAteFrecuenciaCard(String ateFrecuenciacard) {
+        this.ateFrecuenciacard.set(ateFrecuenciacard);
     }
 
     public String getAtePeso() {
@@ -109,35 +118,35 @@ public class CliAtencionDto {
     }
 
     public String getAteIMC() {
-        return ateIMC.get();
+        return ateImc.get();
     }
 
-    public void setAteIMC(String ateIMC) {
-        this.ateIMC.set(ateIMC);
+    public void setAteIMC(String ateImc) {
+        this.ateImc.set(ateImc);
     }
 
     public String getAteAnotacionEnfermera() {
-        return ateAnotacionEnfermera.get();
+        return ateAnotacionenfe.get();
     }
 
-    public void setAteAnotacionEnfermera(String ateAnotacionEnfermera) {
-        this.ateAnotacionEnfermera.set(ateAnotacionEnfermera);
+    public void setAteAnotacionEnfermera(String ateAnotacionenfe) {
+        this.ateAnotacionenfe.set(ateAnotacionenfe);
     }
 
     public String getAteRazonConsulta() {
-        return ateRazonConsulta.get();
+        return ateRazonconsulta.get();
     }
 
-    public void setAteRazonConsulta(String ateRazonConsulta) {
-        this.ateRazonConsulta.set(ateRazonConsulta);
+    public void setAteRazonConsulta(String ateRazonconsulta) {
+        this.ateRazonconsulta.set(ateRazonconsulta);
     }
 
     public String getAtePlanAtencion() {
-        return atePlanAtencion.get();
+        return atePlanatencion.get();
     }
 
-    public void setAtePlanAtencion(String atePlanAtencion) {
-        this.atePlanAtencion.set(atePlanAtencion);
+    public void setAtePlanAtencion(String atePlanatencion) {
+        this.atePlanatencion.set(atePlanatencion);
     }
 
     public String getAteObservaciones() {
@@ -154,6 +163,30 @@ public class CliAtencionDto {
 
     public void setAteTratamiento(String ateTratamiento) {
         this.ateTratamiento.set(ateTratamiento);
+    }
+    
+    public CliExpedienteDto getCliExpedienteDto() {
+        return cliExpedienteDto;
+    }
+
+    public void setCliExpedienteDto(CliExpedienteDto cliExpedienteDto) {
+        this.cliExpedienteDto = cliExpedienteDto;
+    }
+
+    public ObservableList<CliExamenDto> getCliExamenList() {
+        return cliExamenList;
+    }
+
+    public void setCliExamenList(List<CliExamenDto> cliExamenList) {
+        this.cliExamenList = FXCollections.observableArrayList(cliExamenList);
+    }
+
+    public List<CliExamenDto> getCliExamenListEliminados() {
+        return cliExamenListEliminados;
+    }
+
+    public void setCliExamenListEliminados(List<CliExamenDto> cliExamenListEliminados) {
+        this.cliExamenListEliminados = cliExamenListEliminados;
     }
 
     public Long getAteVersion() {

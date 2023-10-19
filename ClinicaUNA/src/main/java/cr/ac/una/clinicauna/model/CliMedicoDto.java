@@ -5,10 +5,14 @@
 package cr.ac.una.clinicauna.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -22,6 +26,12 @@ public class CliMedicoDto {
     private SimpleBooleanProperty medEstado;
     private ObjectProperty<LocalDate> medFini;
     private ObjectProperty<LocalDate> medFfin;
+    private SimpleStringProperty medEspaciosxhora;
+    private CliUsuarioDto cliUsuarioDto;
+    private ObservableList<CliReporteagendaDto> cliReporteagendaList;
+    private ObservableList<CliAgendaDto> cliAgendaList;
+    private List<CliReporteagendaDto> cliReporteagendaListEliminados;
+    private List<CliAgendaDto> cliAgendaListEliminados;
     private Long medVersion;
     private Boolean modificado;
 
@@ -33,6 +43,11 @@ public class CliMedicoDto {
         this.medEstado = new SimpleBooleanProperty(false);
         this.medFini = new SimpleObjectProperty();
         this.medFfin = new SimpleObjectProperty();
+        this.medEspaciosxhora = new SimpleStringProperty();
+        this.cliAgendaList = FXCollections.observableArrayList();
+        this.cliReporteagendaList = FXCollections.observableArrayList();
+        this.cliAgendaListEliminados = new ArrayList<>();
+        this.cliReporteagendaListEliminados = new ArrayList<>();
         this.modificado = false;
     }
 
@@ -96,6 +111,58 @@ public class CliMedicoDto {
         this.medFfin.set(medFfin);
     }
 
+    public Long getMedEspaciosxhora() {
+        if (this.medEspaciosxhora.get() != null && !this.medEspaciosxhora.get().isEmpty()) {
+            return Long.valueOf(this.medEspaciosxhora.get());
+        } else {
+            return null;
+        }
+    }
+
+    public void setMedEspaciosxhora(Long medEspaciosxhora) {
+        this.medEspaciosxhora.set(medEspaciosxhora.toString());
+    }
+
+    public CliUsuarioDto getCliUsuarioDto() {
+        return cliUsuarioDto;
+    }
+
+    public void setCliUsuarioDto(CliUsuarioDto cliUsuarioDto) {
+        this.cliUsuarioDto = cliUsuarioDto;
+    }
+
+     public ObservableList<CliAgendaDto> getCliAgendaList() {
+        return cliAgendaList;
+    }
+
+    public void setCliAgendaList(List<CliAgendaDto> cliAgendaList) {
+        this.cliAgendaList = FXCollections.observableArrayList(cliAgendaList);
+    }
+    
+    public ObservableList<CliReporteagendaDto> getCliReporteagendaList() {
+        return cliReporteagendaList;
+    }
+
+    public void setCliReporteagendaList(List<CliReporteagendaDto> cliReporteagendaList) {
+        this.cliReporteagendaList = FXCollections.observableArrayList(cliReporteagendaList);
+    }
+    
+    public List<CliAgendaDto> getCliAgendaListEliminados() {
+        return cliAgendaListEliminados;
+    }
+
+    public void setCliAgendaListEliminados(List<CliAgendaDto> cliAgendaListEliminados) {
+        this.cliAgendaListEliminados = cliAgendaListEliminados;
+    }
+    
+    public List<CliReporteagendaDto> getCliReporteagendaListEliminados() {
+        return cliReporteagendaListEliminados;
+    }
+
+    public void setCliReporteagendaListEliminados(List<CliReporteagendaDto> cliReporteagendaListEliminados) {
+        this.cliReporteagendaListEliminados = cliReporteagendaListEliminados;
+    }
+    
     public Long getMedVersion() {
         return medVersion;
     }

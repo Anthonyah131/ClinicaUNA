@@ -17,7 +17,9 @@ public class CliExamenDto {
    private SimpleStringProperty exaId;
     private SimpleStringProperty exaNombre;
     private ObjectProperty<LocalDate> exaFecha;
-    private SimpleStringProperty exaAnotacionesMed;
+    private SimpleStringProperty exaAnotacionesmed;
+    private CliAtencionDto cliAtencionDto;
+    private CliExpedienteDto cliExpedienteDto;
     private Long exaVersion;
     private Boolean modificado;
 
@@ -25,7 +27,7 @@ public class CliExamenDto {
         this.exaId = new SimpleStringProperty();
         this.exaNombre = new SimpleStringProperty();
         this.exaFecha = new SimpleObjectProperty();
-        this.exaAnotacionesMed = new SimpleStringProperty();
+        this.exaAnotacionesmed = new SimpleStringProperty();
         this.modificado = false;
     }
 
@@ -58,11 +60,27 @@ public class CliExamenDto {
     }
 
     public String getExaAnotacionesMed() {
-        return exaAnotacionesMed.get();
+        return exaAnotacionesmed.get();
     }
 
-    public void setExaAnotacionesMed(String exaAnotacionesMed) {
-        this.exaAnotacionesMed.set(exaAnotacionesMed);
+    public void setExaAnotacionesMed(String exaAnotacionesmed) {
+        this.exaAnotacionesmed.set(exaAnotacionesmed);
+    }
+
+    public CliAtencionDto getCliAtencionDto() {
+        return cliAtencionDto;
+    }
+
+    public void setCliAtencionDto(CliAtencionDto cliAtencionDto) {
+        this.cliAtencionDto = cliAtencionDto;
+    }
+
+    public CliExpedienteDto getCliExpedienteDto() {
+        return cliExpedienteDto;
+    }
+
+    public void setCliExpedienteDto(CliExpedienteDto cliExpedienteDto) {
+        this.cliExpedienteDto = cliExpedienteDto;
     }
 
     public Long getExaVersion() {

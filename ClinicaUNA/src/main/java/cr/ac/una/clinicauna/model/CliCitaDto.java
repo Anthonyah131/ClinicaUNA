@@ -18,6 +18,8 @@ public class CliCitaDto {
     private SimpleStringProperty citUsuarioRegistra;
     private SimpleStringProperty citMotivo;
     private ObjectProperty<LocalDate> citFechaHora;
+    private CliAgendaDto cliAgendaDto;
+    private CliPacienteDto cliPacienteDto;
     private Long citVersion;
     private Boolean modificado;
 
@@ -63,6 +65,22 @@ public class CliCitaDto {
 
     public void setCitFechaHora(LocalDate citFechaHora) {
         this.citFechaHora.set(citFechaHora);
+    }
+
+    public CliAgendaDto getCliAgendaDto() {
+        return cliAgendaDto;
+    }
+
+    public void setCliAgendaDto(CliAgendaDto cliAgendaDto) {
+        this.cliAgendaDto = cliAgendaDto;
+    }
+
+    public CliPacienteDto getCliPacienteDto() {
+        return cliPacienteDto;
+    }
+
+    public void setCliPacienteDto(CliPacienteDto cliPacienteDto) {
+        this.cliPacienteDto = cliPacienteDto;
     }
 
     public Long getCitVersion() {
