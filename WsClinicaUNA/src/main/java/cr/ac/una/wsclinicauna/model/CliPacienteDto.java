@@ -5,6 +5,8 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,7 +31,35 @@ public class CliPacienteDto {
     private List<CliReporteexpedienteDto> cliReporteexpedienteListEliminados;
     private List<CliCitaDto> cliCitaListEliminados;
     private Boolean modificado;
+    private LocalDateTime fecha;
 
+    public CliPacienteDto( ) {
+        this.cliExpedienteList = new ArrayList<>();
+        this.cliReporteexpedienteList =  new ArrayList<>();
+        this.cliCitaList =  new ArrayList<>();
+        this.cliExpedienteListEliminados =  new ArrayList<>();
+        this.cliReporteexpedienteListEliminados =  new ArrayList<>();
+        this.cliCitaListEliminados =  new ArrayList<>();
+        this.modificado = false;
+        this.fecha = LocalDateTime.now();
+    }
+
+    public CliPacienteDto(CliPaciente cliPaciente ) {
+        this();
+        this.pacId = cliPaciente.getPacId();
+        this.pacNombre = cliPaciente.getPacNombre();
+        this.pacPapellido = cliPaciente.getPacPapellido();
+        this.pacSapellido = cliPaciente.getPacSapellido();
+        this.pacCedula = cliPaciente.getPacCedula();
+        this.pacTelefono = cliPaciente.getPacTelefono();
+        this.pacCorreo = cliPaciente.getPacCorreo();
+        this.pacGenero = cliPaciente.getPacGenero();
+        this.pacFnacimiento = cliPaciente.getPacFnacimiento();
+        this.pacVersion = cliPaciente.getPacVersion();
+    }
+
+    
+    
     public Long getPacId() {
         return pacId;
     }
@@ -164,6 +194,14 @@ public class CliPacienteDto {
 
     public void setModificado(Boolean modificado) {
         this.modificado = modificado;
+    }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
     }
     
     

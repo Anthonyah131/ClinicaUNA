@@ -4,6 +4,7 @@
  */
 package cr.ac.una.wsclinicauna.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,6 +30,28 @@ public class CliExpedienteDto {
     private List<CliAntecedenteDto> cliAntecedenteListEliminados;
     private Boolean modificado;
 
+    public CliExpedienteDto() {
+        this.cliExamenList = new ArrayList<>();
+        this.cliAtencionList = new ArrayList<>();
+        this.cliAntecedenteList = new ArrayList<>();
+        this.cliExamenListEliminados = new ArrayList<>();
+        this.cliAtencionListEliminados = new ArrayList<>();
+        this.cliAntecedenteListEliminados = new ArrayList<>();
+        this.modificado = false;
+    }
+
+    public CliExpedienteDto(CliExpediente cliExpediente) {
+        this();
+        this.expId = cliExpediente.getExpId();
+        this.expHospitalizaciones = cliExpediente.getExpHospitalizaciones();
+        this.expOperaciones = cliExpediente.getExpOperaciones();
+        this.expAlergias = cliExpediente.getExpAlergias();
+        this.expPatologicos = cliExpediente.getExpPatologicos();
+        this.expTratamientos = cliExpediente.getExpTratamientos();
+        this.expVersion = cliExpediente.getExpVersion();
+    }
+
+    
     public Long getExpId() {
         return expId;
     }
@@ -156,6 +179,5 @@ public class CliExpedienteDto {
     public void setExpTiposalergias(String expTiposalergias) {
         this.expTiposalergias = expTiposalergias;
     }
-    
-    
+
 }

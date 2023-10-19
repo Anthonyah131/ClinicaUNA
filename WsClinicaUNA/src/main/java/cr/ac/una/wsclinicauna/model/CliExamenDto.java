@@ -5,6 +5,7 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -20,7 +21,24 @@ public class CliExamenDto {
     private CliAtencionDto cliAtencionDto;
     private CliExpedienteDto cliExpedienteDto;
     private Boolean modificado;
+    private LocalDateTime fecha;
 
+    public CliExamenDto() {
+        this.modificado = false;
+        this.fecha = LocalDateTime.now();
+    }
+
+    public CliExamenDto(CliExamen cliExamen) {
+        this();
+        this.exaId = cliExamen.getExaId();
+        this.exaNombre = cliExamen.getExaNombre();
+        this.exaFecha = cliExamen.getExaFecha();
+        this.exaAnotacionesmed = cliExamen.getExaAnotacionesmed();
+        this.exaVersion = cliExamen.getExaVersion();
+    }
+
+    
+    
     public Long getExaId() {
         return exaId;
     }
@@ -83,6 +101,14 @@ public class CliExamenDto {
 
     public void setModificado(Boolean modificado) {
         this.modificado = modificado;
+    }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
     }
 
 }

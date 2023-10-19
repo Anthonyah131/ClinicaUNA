@@ -5,6 +5,8 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +30,32 @@ public class CliMedicoDto {
     private List<CliReporteagendaDto> cliReporteagendaList;
     private List<CliReporteagendaDto> cliReporteagendaListEliminados;
     private Boolean modificado;
+    private LocalDateTime fecha;
 
+    public CliMedicoDto() {
+        this.cliAgendaList = new ArrayList<>();
+        this.cliAgendaListEliminados = new ArrayList<>();
+        this.cliReporteagendaList = new ArrayList<>();
+        this.cliReporteagendaListEliminados = new ArrayList<>();
+        this.modificado = false;
+        this.fecha = LocalDateTime.now();
+    }
+
+    public CliMedicoDto(CliMedico cliMedico ) {
+        this();
+        this.medId = cliMedico.getMedId();
+        this.medCodigo = cliMedico.getMedCodigo();
+        this.medFolio = cliMedico.getMedFolio();
+        this.medCarne = cliMedico.getMedCarne();
+        this.medEstado = cliMedico.getMedEstado();
+        this.medFini = cliMedico.getMedFini();
+        this.medFfin = cliMedico.getMedFfin();
+        this.medEspaciosxhora = cliMedico.getMedEspaciosxhora();
+        this.medVersion = cliMedico.getMedVersion();
+    }
+
+    
+    
     public Long getMedId() {
         return medId;
     }
@@ -147,6 +174,14 @@ public class CliMedicoDto {
 
     public void setModificado(Boolean modificado) {
         this.modificado = modificado;
+    }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
     }
 
 }

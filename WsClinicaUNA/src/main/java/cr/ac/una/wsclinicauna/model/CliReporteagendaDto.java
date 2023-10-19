@@ -5,6 +5,7 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -19,7 +20,24 @@ public class CliReporteagendaDto {
     private Long repageVersion;
     private CliMedicoDto cliMedicoDto;
     private Boolean modificado;
+    private LocalDateTime fecha;
 
+    public CliReporteagendaDto() {
+        this.modificado = false;
+        this.fecha = LocalDateTime.now();
+    }
+
+    public CliReporteagendaDto(CliReporteagenda cliReporteagenda) {
+        this();
+        this.repageId = cliReporteagenda.getRepageId();
+        this.repageFechainicio = cliReporteagenda.getRepageFechainicio();
+        this.repageFechafinal = cliReporteagenda.getRepageFechafinal();
+        this.repageFechaemision = cliReporteagenda.getRepageFechaemision();
+        this.repageVersion = cliReporteagenda.getRepageVersion();
+    }
+
+    
+    
     public Long getRepageId() {
         return repageId;
     }
@@ -74,6 +92,14 @@ public class CliReporteagendaDto {
 
     public void setModificado(Boolean modificado) {
         this.modificado = modificado;
+    }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
     }
 
 }
