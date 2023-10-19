@@ -105,15 +105,21 @@ public class CliPaciente implements Serializable {
         this.pacId = pacId;
     }
 
-    public CliPaciente(Long pacId, String pacNombre, String pacPapellido, String pacCedula, String pacCorreo, String pacGenero, LocalDate pacFnacimiento, Long pacVersion) {
-        this.pacId = pacId;
-        this.pacNombre = pacNombre;
-        this.pacPapellido = pacPapellido;
-        this.pacCedula = pacCedula;
-        this.pacCorreo = pacCorreo;
-        this.pacGenero = pacGenero;
-        this.pacFnacimiento = pacFnacimiento;
-        this.pacVersion = pacVersion;
+    public CliPaciente(CliPacienteDto cliPacienteDto) {
+        this.pacId = cliPacienteDto.getPacId();
+        actualizar(cliPacienteDto);
+    }
+
+    public void actualizar(CliPacienteDto cliPacienteDto) {
+        this.pacNombre = cliPacienteDto.getPacNombre();
+        this.pacPapellido = cliPacienteDto.getPacPapellido();
+        this.pacSapellido = cliPacienteDto.getPacSapellido();
+        this.pacCedula = cliPacienteDto.getPacCedula();
+        this.pacTelefono = cliPacienteDto.getPacTelefono();
+        this.pacCorreo = cliPacienteDto.getPacCorreo();
+        this.pacGenero = cliPacienteDto.getPacGenero();
+        this.pacFnacimiento = cliPacienteDto.getPacFnacimiento();
+        this.pacVersion = cliPacienteDto.getPacVersion();
     }
 
     public Long getPacId() {

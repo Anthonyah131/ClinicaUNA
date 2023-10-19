@@ -75,9 +75,16 @@ public class CliAgenda implements Serializable {
         this.ageId = ageId;
     }
 
-    public CliAgenda(Long ageId, Long ageVersion) {
-        this.ageId = ageId;
-        this.ageVersion = ageVersion;
+    public CliAgenda(CliAgendaDto cliAgendaDto) {
+        this.ageId = cliAgendaDto.getAgeId();
+        actualizar(cliAgendaDto);
+    }
+
+    public void actualizar(CliAgendaDto cliAgendaDto) {
+        this.ageFecha = cliAgendaDto.getAgeFecha();
+        this.ageTiempo = cliAgendaDto.getAgeTiempo();
+        this.ageEspacios = cliAgendaDto.getAgeEspacios();
+        this.ageVersion = cliAgendaDto.getAgeVersion();
     }
 
     public Long getAgeId() {

@@ -61,11 +61,16 @@ public class CliReporteusuarios implements Serializable {
         this.repusuId = repusuId;
     }
 
-    public CliReporteusuarios(Long repusuId, Long repusuVersion) {
-        this.repusuId = repusuId;
-        this.repusuVersion = repusuVersion;
+    public CliReporteusuarios(CliReporteusuariosDto cliReporteusuariosDto) {
+        this.repusuId = cliReporteusuariosDto.getRepusuId();
+        actualizar(cliReporteusuariosDto);
     }
 
+    public void actualizar(CliReporteusuariosDto cliReporteusuariosDto) {
+        this.repusuFechaemision = cliReporteusuariosDto.getRepusuFechaemision();
+        this.repusuVersion = cliReporteusuariosDto.getRepusuVersion();
+    }
+    
     public Long getRepusuId() {
         return repusuId;
     }

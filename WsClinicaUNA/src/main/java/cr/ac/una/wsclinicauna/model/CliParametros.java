@@ -76,9 +76,19 @@ public class CliParametros implements Serializable {
         this.parId = parId;
     }
 
-    public CliParametros(Long parId, Long parVersion) {
-        this.parId = parId;
-        this.parVersion = parVersion;
+    public CliParametros(CliParametrosDto cliParametrosDto) {
+        this.parId = cliParametrosDto.getParId();
+        actualizar(cliParametrosDto);
+    }
+
+    public void actualizar(CliParametrosDto cliParametrosDto ) {
+        this.parNombre = cliParametrosDto.getParNombre();
+        this.parDescripcion = cliParametrosDto.getParDescripcion();
+        this.parEmail = cliParametrosDto.getParEmail();
+        this.parClave = cliParametrosDto.getParClave();
+        this.parFoto = cliParametrosDto.getParLogo();
+        this.parHtml = cliParametrosDto.getParHtml();
+        this.parVersion = cliParametrosDto.getParVersion();
     }
 
     public Long getParId() {

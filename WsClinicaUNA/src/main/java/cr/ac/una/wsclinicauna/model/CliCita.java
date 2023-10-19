@@ -77,10 +77,16 @@ public class CliCita implements Serializable {
         this.citId = citId;
     }
 
-    public CliCita(Long citId, String citUsuarioregistra, Long citVersion) {
-        this.citId = citId;
-        this.citUsuarioregistra = citUsuarioregistra;
-        this.citVersion = citVersion;
+    public CliCita(CliCitaDto cliCitaDto) {
+        this.citId = cliCitaDto.getCitId();
+        actualizar(cliCitaDto);
+    }
+
+    public void actualizar(CliCitaDto cliCitaDto) {
+        this.citUsuarioregistra = cliCitaDto.getCitUsuarioRegistra();
+        this.citMotivo = cliCitaDto.getCitMotivo();
+        this.citFechahora = cliCitaDto.getCitFechaHora();
+        this.citVersion = cliCitaDto.getCitVersion();
     }
 
     public Long getCitId() {

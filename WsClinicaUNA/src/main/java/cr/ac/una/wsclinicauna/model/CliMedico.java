@@ -99,13 +99,20 @@ public class CliMedico implements Serializable {
         this.medId = medId;
     }
 
-    public CliMedico(Long medId, String medCodigo, String medFolio, String medCarne, String medEstado, Long medVersion) {
-        this.medId = medId;
-        this.medCodigo = medCodigo;
-        this.medFolio = medFolio;
-        this.medCarne = medCarne;
-        this.medEstado = medEstado;
-        this.medVersion = medVersion;
+    public CliMedico(CliMedicoDto cliMedicoDto) {
+        this.medId = cliMedicoDto.getMedId();
+        actualizar(cliMedicoDto);
+    }
+
+    public void actualizar(CliMedicoDto cliMedicoDto) {
+        this.medCodigo = cliMedicoDto.getMedCodigo();
+        this.medFolio = cliMedicoDto.getMedFolio();
+        this.medCarne = cliMedicoDto.getMedCarne();
+        this.medEstado = cliMedicoDto.getMedEstado();
+        this.medFini = cliMedicoDto.getMedFini();
+        this.medFfin = cliMedicoDto.getMedFfin();
+        this.medEspaciosxhora = cliMedicoDto.getMedEspaciosxhora();
+        this.medVersion = cliMedicoDto.getMedVersion();
     }
 
     public Long getMedId() {

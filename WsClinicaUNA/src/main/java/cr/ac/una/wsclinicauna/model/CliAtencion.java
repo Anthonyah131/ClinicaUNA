@@ -113,9 +113,25 @@ public class CliAtencion implements Serializable {
         this.ateId = ateId;
     }
 
-    public CliAtencion(Long ateId, Long ateVersion) {
+    public CliAtencion(CliAtencionDto cliAtencionDto) {
         this.ateId = ateId;
-        this.ateVersion = ateVersion;
+        actualizar(cliAtencionDto);
+    }
+
+    public void actualizar(CliAtencionDto cliAtencionDto) {
+        this.ateFechahora = cliAtencionDto.getAteFechahora();
+        this.atePresion = cliAtencionDto.getAtePresion();
+        this.ateFrecuenciacard = cliAtencionDto.getAteFrecuenciacard();
+        this.atePeso = cliAtencionDto.getAtePeso();
+        this.ateTalla = cliAtencionDto.getAteTalla();
+        this.ateTemperatura = cliAtencionDto.getAteTemperatura();
+        this.ateImc = cliAtencionDto.getAteImc();
+        this.ateAnotacionenfe = cliAtencionDto.getAteAnotacionenfe();
+        this.ateRazonconsulta = cliAtencionDto.getAteRazonconsulta();
+        this.atePlanatencion = cliAtencionDto.getAtePlanatencion();
+        this.ateObservaciones = cliAtencionDto.getAteObservaciones();
+        this.ateTratamiento = cliAtencionDto.getAteTratamiento();
+        this.ateVersion = cliAtencionDto.getAteVersion();
     }
 
     public Long getAteId() {

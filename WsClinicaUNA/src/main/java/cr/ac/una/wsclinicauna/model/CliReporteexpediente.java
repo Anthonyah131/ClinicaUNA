@@ -63,9 +63,14 @@ public class CliReporteexpediente implements Serializable {
         this.repexpId = repexpId;
     }
 
-    public CliReporteexpediente(Long repexpId, Long repexpVersion) {
-        this.repexpId = repexpId;
-        this.repexpVersion = repexpVersion;
+    public CliReporteexpediente(CliReporteexpedienteDto cliReporteexpedienteDto) {
+        this.repexpId = cliReporteexpedienteDto.getRepexpId();
+        actualizar(cliReporteexpedienteDto);   
+    }
+
+    public void actualizar(CliReporteexpedienteDto cliReporteexpedienteDto) {
+        this.repexpFechaemision = cliReporteexpedienteDto.getRepexpFechaemision();
+        this.repexpVersion = cliReporteexpedienteDto.getRepexpVersion();
     }
 
     public Long getRepexpId() {
