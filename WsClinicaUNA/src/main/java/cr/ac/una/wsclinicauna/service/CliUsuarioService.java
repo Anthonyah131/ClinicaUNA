@@ -64,7 +64,7 @@ public class CliUsuarioService {
         }
     }
 
-    public Respuesta getEmpleado(Long id) {
+    public Respuesta getUsuario(Long id) {
         try {
 //            Query qryEmpleado = em.createNamedQuery("Empleado.findByEmpId", Empleado.class);
 //            qryEmpleado.setParameter("id", id);
@@ -82,7 +82,7 @@ public class CliUsuarioService {
         }
     }
 
-    public Respuesta getEmpleados() {
+    public Respuesta getUsuarios() {
         try {
 //            Query qryEmpleado = em.createNamedQuery("Empleado.findByCedulaNombrePapellido", Empleado.class);
 //            List<Empleado> empleados = qryEmpleado.getResultList();
@@ -101,7 +101,7 @@ public class CliUsuarioService {
         }
     }
 
-    public Respuesta guardarEmpleado(CliUsuarioDto empleadoDto) {
+    public Respuesta guardarUsuario(CliUsuarioDto empleadoDto) {
         try {
 //            Empleado empleado;
 //            if (empleadoDto.getId() != null && empleadoDto.getId() > 0) {
@@ -123,7 +123,7 @@ public class CliUsuarioService {
         }
     }
 
-    public Respuesta eliminarEmpleado(Long id) {
+    public Respuesta eliminarUsuario(Long id) {
         try {
 //            Empleado empleado;
 //            if (id != null && id > 0) {
@@ -230,7 +230,7 @@ public class CliUsuarioService {
         }
     }
 
-    public static String generateRandomPassword(int len) {
+    private static String generateRandomPassword(int len) {
         // Rango ASCII – alfanumérico (0-9, a-z, A-Z)
         final String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -297,12 +297,12 @@ public class CliUsuarioService {
         }
     }
 
-    public String obtenerIp() throws UnknownHostException {
+    private String obtenerIp() throws UnknownHostException {
         InetAddress ip = InetAddress.getLocalHost();
         return ip.getHostAddress();
     }
 
-    public String mensajeClave(byte[] html, byte[] logo, String nombre, String claveRestaurada) throws IOException {
+    private String mensajeClave(byte[] html, byte[] logo, String nombre, String claveRestaurada) throws IOException {
 
         String base64Image = convertirABase64(logo);
         String mensaje = convertirBytesAHTML(html);
@@ -317,17 +317,17 @@ public class CliUsuarioService {
         return mensaje;
     }
 
-    public static String convertirBytesAHTML(byte[] bytes) throws IOException {
+    private static String convertirBytesAHTML(byte[] bytes) throws IOException {
         InputStream inputStream = new ByteArrayInputStream(bytes);
         String html = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
         return html;
     }
 
-    public static String convertirABase64(byte[] bytes) {
+    private static String convertirABase64(byte[] bytes) {
         return Base64.getEncoder().encodeToString(bytes);
     }
 
-    public String mensajeEmail(CliUsuarioDto cliUsuarioDto, byte[] html, byte[] logo, String nombre) throws UnknownHostException, IOException {
+    private String mensajeEmail(CliUsuarioDto cliUsuarioDto, byte[] html, byte[] logo, String nombre) throws UnknownHostException, IOException {
 
         String base64Image = convertirABase64(logo);
         String mensaje = convertirBytesAHTML(html);
