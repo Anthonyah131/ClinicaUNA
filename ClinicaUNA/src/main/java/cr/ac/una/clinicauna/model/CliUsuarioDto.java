@@ -16,18 +16,18 @@ import javafx.collections.ObservableList;
  * @author ANTHONY
  */
 public class CliUsuarioDto {
-    private SimpleStringProperty usuId;
-    private SimpleStringProperty usuNombre;
-    private SimpleStringProperty usuPapellido;
-    private SimpleStringProperty usuSapellido;
-    private SimpleStringProperty usuCedula;
-    private SimpleStringProperty usuCorreo;
-    private SimpleStringProperty usuTipousuario;
-    private SimpleStringProperty usuUsuario;
-    private SimpleStringProperty usuClave;
-    private SimpleStringProperty usuTempclave;
-    private SimpleStringProperty usuIdioma;
-    private SimpleBooleanProperty usuActivo;
+    public SimpleStringProperty usuId;
+    public SimpleStringProperty usuNombre;
+    public SimpleStringProperty usuPapellido;
+    public SimpleStringProperty usuSapellido;
+    public SimpleStringProperty usuCedula;
+    public SimpleStringProperty usuCorreo;
+    public SimpleStringProperty usuTipousuario;
+    public SimpleStringProperty usuUsuario;
+    public SimpleStringProperty usuClave;
+    public SimpleStringProperty usuTempclave;
+    public SimpleStringProperty usuIdioma;
+    public SimpleBooleanProperty usuActivo;
     ObservableList<CliReporteusuariosDto> cliReporteusuariosList;
     List<CliReporteusuariosDto> cliReporteusuariosListEliminados;
     ObservableList<CliMedicoDto> cliMedicoList;
