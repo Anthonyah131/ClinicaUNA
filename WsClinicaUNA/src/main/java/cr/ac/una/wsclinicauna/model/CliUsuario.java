@@ -19,6 +19,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.QueryHint;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
@@ -41,6 +42,7 @@ import jakarta.validation.constraints.Size;
     @NamedQuery(name = "CliUsuario.findByUsuCorreo", query = "SELECT c FROM CliUsuario c WHERE c.usuCorreo = :usuCorreo"),
     @NamedQuery(name = "CliUsuario.findByUsuTipousuario", query = "SELECT c FROM CliUsuario c WHERE c.usuTipousuario = :usuTipousuario"),
     @NamedQuery(name = "CliUsuario.findByUsuUsuario", query = "SELECT c FROM CliUsuario c WHERE c.usuUsuario = :usuUsuario"),
+    @NamedQuery(name = "CliUsuario.findByUsuClave", query = "SELECT c FROM CliUsuario c WHERE c.usuUsuario = :usuUsuario and c.usuClave = :usuClave", hints = @QueryHint(name = "eclipselink.refresh", value = "true")),
     @NamedQuery(name = "CliUsuario.findByUsuClave", query = "SELECT c FROM CliUsuario c WHERE c.usuClave = :usuClave"),
     @NamedQuery(name = "CliUsuario.findByUsuTempclave", query = "SELECT c FROM CliUsuario c WHERE c.usuTempclave = :usuTempclave"),
     @NamedQuery(name = "CliUsuario.findByUsuIdioma", query = "SELECT c FROM CliUsuario c WHERE c.usuIdioma = :usuIdioma"),

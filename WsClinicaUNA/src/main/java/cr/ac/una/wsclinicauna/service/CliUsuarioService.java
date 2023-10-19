@@ -5,6 +5,7 @@
 package cr.ac.una.wsclinicauna.service;
 
 import cr.ac.una.wsclinicauna.model.CliParametrosDto;
+import cr.ac.una.wsclinicauna.model.CliUsuario;
 import cr.ac.una.wsclinicauna.model.CliUsuarioDto;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
@@ -19,6 +20,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.NonUniqueResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,7 +29,9 @@ import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,11 +51,11 @@ public class CliUsuarioService {
 
     public Respuesta validarUsuario(String usuario, String clave) {
         try {
-//            Query qryActividad = em.createNamedQuery("Empleado.findByUsuClave", Empleado.class);
-//            qryActividad.setParameter("usuario", usuario);
-//            qryActividad.setParameter("clave", clave);
+            Query qryActividad = em.createNamedQuery("CliUsuario.findByUsuClave", CliUsuario.class);
+            qryActividad.setParameter("usuario", usuario);
+            qryActividad.setParameter("clave", clave);
 
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Empleado", new EmpleadoDto((Empleado) qryActividad.getSingleResult()));
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuario", new CliUsuarioDto((CliUsuario) qryActividad.getSingleResult()));
 
         } catch (NoResultException ex) {
             return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un usuario con las credenciales ingresadas.", "validarUsuario NoResultException");
@@ -66,102 +70,102 @@ public class CliUsuarioService {
 
     public Respuesta getUsuario(Long id) {
         try {
-//            Query qryEmpleado = em.createNamedQuery("Empleado.findByEmpId", Empleado.class);
-//            qryEmpleado.setParameter("id", id);
+            Query qryEmpleado = em.createNamedQuery("CliUsuario.findByUsuId", CliUsuario.class);
+           qryEmpleado.setParameter("id", id);
 
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Empleado", new EmpleadoDto((Empleado) qryEmpleado.getSingleResult()));
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuario", new CliUsuarioDto((CliUsuario) qryEmpleado.getSingleResult()));
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un empleado con el código ingresado.", "getEmpleado NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un empleado con el código ingresado.", "getUsuario NoResultException");
         } catch (NonUniqueResultException ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el empleado.", "getEmpleado NonUniqueResultException");
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el usuario.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el usuario.", "getUsuario NonUniqueResultException");
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el empleado.", "getEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el usuario.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el usuario.", "getUsuario " + ex.getMessage());
         }
     }
 
     public Respuesta getUsuarios() {
         try {
-//            Query qryEmpleado = em.createNamedQuery("Empleado.findByCedulaNombrePapellido", Empleado.class);
-//            List<Empleado> empleados = qryEmpleado.getResultList();
-//            List<EmpleadoDto> empleadosDto = new ArrayList<>();
-//            for (Empleado empleado : empleados) {
-//                empleadosDto.add(new EmpleadoDto(empleado));
-//            }
+            Query qryEmpleado = em.createNamedQuery("CliUsuario.findAll", CliUsuario.class);
+            List<CliUsuario> cliUsuarios = qryEmpleado.getResultList();
+            List<CliUsuarioDto> cliUsuarioDtos = new ArrayList<>();
+            for (CliUsuario cliUsuario : cliUsuarios) {
+                cliUsuarioDtos.add(new CliUsuarioDto(cliUsuario));
+            }
 
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Empleados", empleadosDto);
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuarios", cliUsuarioDtos);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen empleados con los criterios ingresados.", "getEmpleados NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen empleados con los criterios ingresados.", "getUsuarios NoResultException");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el empleado.", "getEmpleado " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el usuario.", "getEmpleado " + ex.getMessage());
         }
     }
 
-    public Respuesta guardarUsuario(CliUsuarioDto empleadoDto) {
+    public Respuesta guardarUsuario(CliUsuarioDto cliUsuarioDto) {
         try {
-//            Empleado empleado;
-//            if (empleadoDto.getId() != null && empleadoDto.getId() > 0) {
-//                empleado = em.find(Empleado.class, empleadoDto.getId());
-//                if (empleado == null) {
-//                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el empleado a modificar.", "guardarEmpleado NoResultException");
-//                }
-//                empleado.actualizar(empleadoDto);
-//                empleado = em.merge(empleado);
-//            } else {
-//                empleado = new Empleado(empleadoDto);
-//                em.persist(empleado);
-//            }
-//            em.flush();
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Empleado", new EmpleadoDto(empleado));
+            CliUsuario cliUsuario;
+            if (cliUsuarioDto.getUsuId()!= null && cliUsuarioDto.getUsuId() > 0) {
+                cliUsuario = em.find(CliUsuario.class, cliUsuarioDto.getUsuId());
+                if (cliUsuario == null) {
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el usuario a modificar.", "guardarUsuario NoResultException");
+                }
+                cliUsuario.actualizar(cliUsuarioDto);
+                cliUsuario = em.merge(cliUsuario);
+            } else {
+                cliUsuario = new CliUsuario(cliUsuarioDto);
+                em.persist(cliUsuario);
+            }
+            em.flush();
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuario", new CliUsuarioDto(cliUsuario));
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el empleado.", "guardarEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el usuario.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el usuario.", "guardarUsuario " + ex.getMessage());
         }
     }
 
     public Respuesta eliminarUsuario(Long id) {
         try {
-//            Empleado empleado;
-//            if (id != null && id > 0) {
-//                empleado = em.find(Empleado.class, id);
-//                if (empleado == null) {
-//                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el empleado a eliminar.", "eliminarEmpleado NoResultException");
-//                }
-//                em.remove(empleado);
-//            } else {
-//                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el empleado a eliminar.", "eliminarEmpleado NoResultException");
-//            }
-//            em.flush();
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
+            CliUsuario cliUsuario;
+            if (id != null && id > 0) {
+                cliUsuario = em.find(CliUsuario.class, id);
+                if (cliUsuario == null) {
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el usuario a eliminar.", "eliminarUsuario NoResultException");
+                }
+                em.remove(cliUsuario);
+            } else {
+                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el usuario a eliminar.", "eliminarUsuario NoResultException");
+            }
+            em.flush();
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
             if (ex.getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class) {
-                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el empleado porque tiene relaciones con otros registros.", "eliminarEmpleado " + ex.getMessage());
+                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el usuario porque tiene relaciones con otros registros.", "eliminarUsuario " + ex.getMessage());
             }
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el empleado.", "eliminarEmpleado " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el usuario.", "eliminarUsuario " + ex.getMessage());
         }
     }
 
     public Respuesta activacionCuenta(Long usuId) {
         try {
-            /*Query qryActividad = em.createNamedQuery("TarUsuario.findByUsuId", TarUsuario.class);
+            Query qryActividad = em.createNamedQuery("CliUsuario.findByUsuId", CliUsuario.class);
             qryActividad.setParameter("usuId", usuId);
-            TarUsuarioDto tarUsuariosDto = new TarUsuarioDto((TarUsuario) qryActividad.getSingleResult());
-            tarUsuariosDto.setUsuActivo("A");
-            TarUsuario tarUsuario;
-            if (tarUsuariosDto.getUsuId() != null && tarUsuariosDto.getUsuId() > 0) {
-                tarUsuario = em.find(TarUsuario.class, tarUsuariosDto.getUsuId());
-                if (tarUsuario == null) {
+            CliUsuarioDto cliUsuarioDto = new CliUsuarioDto((CliUsuario) qryActividad.getSingleResult());
+            cliUsuarioDto.setUsuActivo("A");
+            CliUsuario cliUsuario;
+            if (cliUsuarioDto.getUsuId() != null && cliUsuarioDto.getUsuId() > 0) {
+                cliUsuario = em.find(CliUsuario.class, cliUsuarioDto.getUsuId());
+                if (cliUsuario == null) {
                     return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el usuario a modificar.", "activacionCuenta NoResultException");
                 }
-                tarUsuario.actualizar(tarUsuariosDto);
-                tarUsuario = em.merge(tarUsuario);
+                cliUsuario.actualizar(cliUsuarioDto);
+                cliUsuario = em.merge(cliUsuario);
             }
-            em.flush();*/
+            em.flush();
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el usuario.", ex);
@@ -171,20 +175,20 @@ public class CliUsuarioService {
 
     public Respuesta recuperarClave(String usuCorreo, CliParametrosDto parametrosDto) {
         try {
-            /*Query qryActividad = em.createNamedQuery("TarUsuario.findByUsuCorreo", TarUsuario.class);
+            Query qryActividad = em.createNamedQuery("CliUsuario.findByUsuCorreo", CliUsuario.class);
             qryActividad.setParameter("usuCorreo", usuCorreo);
-            TarUsuarioDto tarUsuarioDto = new TarUsuarioDto((TarUsuario) qryActividad.getSingleResult());
-            recuClave(tarUsuarioDto, parametrosDto);
-            TarUsuario tarUsuario;
-            if (tarUsuarioDto.getUsuId() != null && tarUsuarioDto.getUsuId() > 0) {
-                tarUsuario = em.find(TarUsuario.class, tarUsuarioDto.getUsuId());
-                if (tarUsuario == null) {
+            CliUsuarioDto cliUsuarioDto = new CliUsuarioDto((CliUsuario) qryActividad.getSingleResult());
+            recuClave(cliUsuarioDto, parametrosDto);
+            CliUsuario cliUsuario;
+            if (cliUsuarioDto.getUsuId() != null && cliUsuarioDto.getUsuId() > 0) {
+                cliUsuario = em.find(CliUsuario.class, cliUsuarioDto.getUsuId());
+                if (cliUsuario == null) {
                     return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el usuario a modificar.", "recuperarClave NoResultException");
                 }
-                tarUsuario.actualizar(tarUsuarioDto);
-                tarUsuario = em.merge(tarUsuario);
+                cliUsuario.actualizar(cliUsuarioDto);
+                cliUsuario = em.merge(cliUsuario);
             }
-            em.flush();*/
+            em.flush();
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el usuario.", ex);
