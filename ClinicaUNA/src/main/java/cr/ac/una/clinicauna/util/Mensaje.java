@@ -36,6 +36,19 @@ public class Mensaje {
 
         alert.show();
     }
+    
+    public void showModali18n(AlertType tipo, String tituloKey, Window padre, String mensajeKey) {
+        Alert alert = new Alert(tipo);
+        alert.setTitle(resourceBundle.getString(tituloKey));
+        alert.setHeaderText(null);
+        alert.initOwner(padre);
+        alert.setContentText(resourceBundle.getString(mensajeKey));
+        
+        ButtonType aceptarButton = new ButtonType(resourceBundle.getString("key.accept"), ButtonBar.ButtonData.OK_DONE);
+        alert.getButtonTypes().set(0, aceptarButton);
+        
+        alert.showAndWait();
+    }
 
     public void show(AlertType tipo, String titulo, String mensaje) {
         Alert alert = new Alert(tipo);

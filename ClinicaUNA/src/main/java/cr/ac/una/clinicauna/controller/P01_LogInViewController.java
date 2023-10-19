@@ -14,7 +14,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.MenuButton;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -48,12 +47,13 @@ public class P01_LogInViewController extends Controller implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+
+        iniciarScena();
     }
 
     @Override
     public void initialize() {
-        ResourceBundle resourceBundle = FlowController.getInstance().getIdioma();
-        new Mensaje(resourceBundle);
+        iniciarScena();
     }
 
     @FXML
@@ -61,13 +61,17 @@ public class P01_LogInViewController extends Controller implements Initializable
 //        ResourceBundle resourceBundle = FlowController.getInstance().getIdioma();
 //        Mensaje mensaje = new Mensaje(resourceBundle);
 //        mensaje.showi18n(Alert.AlertType.ERROR, "key.invalidUser", "key.mensajeInvalidUser");
-        FlowController.getInstance().goMain();
-        ((Stage) btnIngresar.getScene().getWindow()).close();
+
+        
+        if (getStage().getOwner() == null) {
+            FlowController.getInstance().goMain();
+        }
+        getStage().close();
     }
 
     @FXML
     private void onActionBtnSalir(ActionEvent event) {
-        ((Stage) btnSalir.getScene().getWindow()).close();
+        getStage().close();
     }
 
     @FXML
@@ -99,8 +103,7 @@ public class P01_LogInViewController extends Controller implements Initializable
 
         FlowController.getInstance().delete("P01_LogInView");
         FlowController.getInstance().goViewInWindow("P01_LogInView", false);
-
-        ((Stage) mbtnI18n.getScene().getWindow()).close();
+        getStage().close();
 
     }
 
@@ -111,8 +114,19 @@ public class P01_LogInViewController extends Controller implements Initializable
 
         FlowController.getInstance().delete("P01_LogInView");
         FlowController.getInstance().goViewInWindow("P01_LogInView", false);
+        getStage().close();
+    }
 
-        ((Stage) mbtnI18n.getScene().getWindow()).close();
+    public void iniciarScena() {
+        String padre = (String) AppContext.getInstance().get("PadreLogin");
+
+        if (padre != null) {
+            btnSalir.setVisible(false);
+            mbtnI18n.setVisible(false);
+            btnNuevaCuenta.setVisible(false);
+            btnRecuperarContra.setVisible(false);
+            btnAcercaDe.setVisible(false);
+        }
     }
 
 }
