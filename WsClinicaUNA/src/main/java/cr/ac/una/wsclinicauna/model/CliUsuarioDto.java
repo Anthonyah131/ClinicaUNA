@@ -4,6 +4,8 @@
  */
 package cr.ac.una.wsclinicauna.model;
 
+import java.util.List;
+
 /**
  *
  * @author ArauzKJ
@@ -18,10 +20,14 @@ public class CliUsuarioDto {
     private String usuTipousuario;
     private String usuUsuario;
     private String usuClave;
-    private String usuTempClave;
+    private String usuTempclave;
     private String usuIdioma;
     private String usuActivo;
     private Long usuVersion;
+    List<CliReporteusuariosDto> cliReporteusuariosList;
+    List<CliReporteusuariosDto> cliReporteusuariosListEliminados;
+    List<CliMedicoDto> cliMedicoList;
+    List<CliMedicoDto> cliMedicoListEliminados;
     private Boolean modificado;
     private String token;
 
@@ -39,7 +45,7 @@ public class CliUsuarioDto {
         this.usuTipousuario = usuTipousuario;
         this.usuUsuario = usuUsuario;
         this.usuClave = usuClave;
-        this.usuTempClave = usuTempClave;
+        this.usuTempclave = usuTempClave;
         this.usuIdioma = usuIdioma;
         this.usuActivo = usuActivo;
         this.usuVersion = usuVersion;
@@ -119,12 +125,12 @@ public class CliUsuarioDto {
         this.usuClave = usuClave;
     }
 
-    public String getUsuTempClave() {
-        return usuTempClave;
+    public String getUsuTempclave() {
+        return usuTempclave;
     }
 
-    public void setUsuTempClave(String usuTempClave) {
-        this.usuTempClave = usuTempClave;
+    public void setUsuTempclave(String usuTempclave) {
+        this.usuTempclave = usuTempclave;
     }
 
     public String getUsuIdioma() {
@@ -165,6 +171,38 @@ public class CliUsuarioDto {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public List<CliReporteusuariosDto> getCliReporteusuariosList() {
+        return cliReporteusuariosList;
+    }
+
+    public void setCliReporteusuariosList(List<CliReporteusuariosDto> cliReporteusuariosList) {
+        this.cliReporteusuariosList = cliReporteusuariosList;
+    }
+
+    public List<CliReporteusuariosDto> getCliReporteusuariosListEliminados() {
+        return cliReporteusuariosListEliminados;
+    }
+
+    public void setCliReporteusuariosListEliminados(List<CliReporteusuariosDto> cliReporteusuariosListEliminados) {
+        this.cliReporteusuariosListEliminados = cliReporteusuariosListEliminados;
+    }
+
+    public List<CliMedicoDto> getCliMedicoList() {
+        return cliMedicoList;
+    }
+
+    public void setCliMedicoList(List<CliMedicoDto> cliMedicoList) {
+        this.cliMedicoList = cliMedicoList;
+    }
+
+    public List<CliMedicoDto> getCliMedicoListEliminados() {
+        return cliMedicoListEliminados;
+    }
+
+    public void setCliMedicoListEliminados(List<CliMedicoDto> cliMedicoListEliminados) {
+        this.cliMedicoListEliminados = cliMedicoListEliminados;
     }
     
     

@@ -5,6 +5,7 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  *
@@ -16,6 +17,10 @@ public class CliAgendaDto {
     private String ageTiempo;
     private Long ageEspacios;
     private Long ageVersion;
+    private List<CliCitaDto> cliCitaList;
+    private List<CliCitaDto> cliCitaListEliminados;
+    private CliMedicoDto cliMedicoDto;
+    private Boolean modificado;
 
     public Long getAgeId() {
         return ageId;
@@ -55,6 +60,38 @@ public class CliAgendaDto {
 
     public void setAgeVersion(Long ageVersion) {
         this.ageVersion = ageVersion;
+    }
+
+    public List<CliCitaDto> getCliCitaList() {
+        return cliCitaList;
+    }
+
+    public void setCliCitaList(List<CliCitaDto> cliCitaList) {
+        this.cliCitaList = cliCitaList;
+    }
+
+    public List<CliCitaDto> getCliCitaListEliminados() {
+        return cliCitaListEliminados;
+    }
+
+    public void setCliCitaListEliminados(List<CliCitaDto> cliCitaListEliminados) {
+        this.cliCitaListEliminados = cliCitaListEliminados;
+    }
+
+    public CliMedicoDto getCliMedicoDto() {
+        return cliMedicoDto;
+    }
+
+    public void setCliMedicoDto(CliMedicoDto cliMedicoDto) {
+        this.cliMedicoDto = cliMedicoDto;
+    }
+
+    public Boolean getModificado() {
+        return modificado;
+    }
+
+    public void setModificado(Boolean modificado) {
+        this.modificado = modificado;
     }
 
   

@@ -9,12 +9,16 @@ import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
@@ -23,7 +27,7 @@ import java.time.LocalDate;
  * @author ArauzKJ
  */
 @Entity
-@Table(name = "CLI_REPORTEAGENDA")
+@Table(name = "CLI_REPORTEAGENDA",schema = "ClinicaUNA")
 @NamedQueries({
     @NamedQuery(name = "CliReporteagenda.findAll", query = "SELECT c FROM CliReporteagenda c"),
     @NamedQuery(name = "CliReporteagenda.findByRepageId", query = "SELECT c FROM CliReporteagenda c WHERE c.repageId = :repageId"),
@@ -36,6 +40,8 @@ public class CliReporteagenda implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
+    @SequenceGenerator(name = "CLI_REPORTEAGENDA_REPAGE_ID_GENERATOR", sequenceName = "CLI_REPORTEAGENDA_SEQ01", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLI_REPORTEAGENDA_REPAGE_ID_GENERATOR")
     @Basic(optional = false)
     @NotNull
     @Column(name = "REPAGE_ID")
@@ -46,6 +52,7 @@ public class CliReporteagenda implements Serializable {
     private LocalDate repageFechafinal;
     @Column(name = "REPAGE_FECHAEMISION")
     private LocalDate repageFechaemision;
+    @Version
     @Basic(optional = false)
     @NotNull
     @Column(name = "REPAGE_VERSION")

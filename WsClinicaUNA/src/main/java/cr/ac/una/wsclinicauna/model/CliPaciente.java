@@ -10,11 +10,15 @@ import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
@@ -24,7 +28,7 @@ import java.time.LocalDate;
  * @author ArauzKJ
  */
 @Entity
-@Table(name = "CLI_PACIENTE")
+@Table(name = "CLI_PACIENTE",schema = "ClinicaUNA")
 @NamedQueries({
     @NamedQuery(name = "CliPaciente.findAll", query = "SELECT c FROM CliPaciente c"),
     @NamedQuery(name = "CliPaciente.findByPacId", query = "SELECT c FROM CliPaciente c WHERE c.pacId = :pacId"),
@@ -42,6 +46,8 @@ public class CliPaciente implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
+    @SequenceGenerator(name = "CLI_PACIENTE_PAC_ID_GENERATOR", sequenceName = "CLI_PACIENTE_SEQ01", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLI_PACIENTE_PAC_ID_GENERATOR")
     @Basic(optional = false)
     @NotNull
     @Column(name = "PAC_ID")
@@ -80,6 +86,7 @@ public class CliPaciente implements Serializable {
     @NotNull
     @Column(name = "PAC_FNACIMIENTO")
     private LocalDate pacFnacimiento;
+    @Version
     @Basic(optional = false)
     @NotNull
     @Column(name = "PAC_VERSION")

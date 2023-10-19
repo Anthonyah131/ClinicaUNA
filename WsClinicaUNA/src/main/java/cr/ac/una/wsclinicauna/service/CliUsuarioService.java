@@ -288,7 +288,7 @@ public class CliUsuarioService {
             t.close();
 
             cliUsuarioDto.setUsuClave(claveRestaurada);
-            cliUsuarioDto.setUsuTempClave(claveRestaurada);
+            cliUsuarioDto.setUsuTempclave(claveRestaurada);
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "");
 
         } catch (Exception ex) {

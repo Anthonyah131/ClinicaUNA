@@ -8,12 +8,16 @@ import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
@@ -24,7 +28,7 @@ import java.time.LocalDate;
  * @author ArauzKJ
  */
 @Entity
-@Table(name = "CLI_EXAMEN")
+@Table(name = "CLI_EXAMEN", schema = "ClinicaUNA")
 @NamedQueries({
     @NamedQuery(name = "CliExamen.findAll", query = "SELECT c FROM CliExamen c"),
     @NamedQuery(name = "CliExamen.findByExaId", query = "SELECT c FROM CliExamen c WHERE c.exaId = :exaId"),
@@ -37,6 +41,8 @@ public class CliExamen implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
+    @SequenceGenerator(name = "CLI_EXAMEN_EXA_ID_GENERATOR", sequenceName = "CLI_EXAMEN_SEQ01", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLI_EXAMEN_EXA_ID_GENERATOR")
     @Basic(optional = false)
     @NotNull
     @Column(name = "EXA_ID")
@@ -51,6 +57,7 @@ public class CliExamen implements Serializable {
     @Size(max = 80)
     @Column(name = "EXA_ANOTACIONESMED")
     private String exaAnotacionesmed;
+    @Version
     @Basic(optional = false)
     @NotNull
     @Column(name = "EXA_VERSION")
@@ -155,5 +162,5 @@ public class CliExamen implements Serializable {
     public String toString() {
         return "cr.ac.una.wsclinicauna.model.CliExamen[ exaId=" + exaId + " ]";
     }
-    
+
 }

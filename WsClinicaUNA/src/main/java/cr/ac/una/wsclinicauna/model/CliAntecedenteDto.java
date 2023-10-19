@@ -14,6 +14,8 @@ public class CliAntecedenteDto {
     private String antTipo;
     private String antParentesco;
     private Long antVersion;
+    private CliExpedienteDto cliExpedienteDto;
+    private Boolean modificado;
 
     public Long getAntId() {
         return antId;
@@ -53,6 +55,22 @@ public class CliAntecedenteDto {
 
     public void setAntVersion(Long antVersion) {
         this.antVersion = antVersion;
+    }
+
+    public CliExpedienteDto getCliExpedienteDto() {
+        return cliExpedienteDto;
+    }
+
+    public void setCliExpedienteDto(CliExpedienteDto cliExpedienteDto) {
+        this.cliExpedienteDto = cliExpedienteDto;
+    }
+
+    public Boolean getModificado() {
+        return modificado;
+    }
+
+    public void setModificado(Boolean modificado) {
+        this.modificado = modificado;
     }
     
     

@@ -11,11 +11,15 @@ import java.time.LocalDate;
  * @author ArauzKJ
  */
 public class CliExamenDto {
-   private Long exaId;
+
+    private Long exaId;
     private String exaNombre;
     private LocalDate exaFecha;
-    private String exaAnotacionesMed;
+    private String exaAnotacionesmed;
     private Long exaVersion;
+    private CliAtencionDto cliAtencionDto;
+    private CliExpedienteDto cliExpedienteDto;
+    private Boolean modificado;
 
     public Long getExaId() {
         return exaId;
@@ -41,12 +45,12 @@ public class CliExamenDto {
         this.exaFecha = exaFecha;
     }
 
-    public String getExaAnotacionesMed() {
-        return exaAnotacionesMed;
+    public String getExaAnotacionesmed() {
+        return exaAnotacionesmed;
     }
 
-    public void setExaAnotacionesMed(String exaAnotacionesMed) {
-        this.exaAnotacionesMed = exaAnotacionesMed;
+    public void setExaAnotacionesmed(String exaAnotacionesmed) {
+        this.exaAnotacionesmed = exaAnotacionesmed;
     }
 
     public Long getExaVersion() {
@@ -56,6 +60,29 @@ public class CliExamenDto {
     public void setExaVersion(Long exaVersion) {
         this.exaVersion = exaVersion;
     }
-    
-    
+
+    public CliAtencionDto getCliAtencionDto() {
+        return cliAtencionDto;
+    }
+
+    public void setCliAtencionDto(CliAtencionDto cliAtencionDto) {
+        this.cliAtencionDto = cliAtencionDto;
+    }
+
+    public CliExpedienteDto getCliExpedienteDto() {
+        return cliExpedienteDto;
+    }
+
+    public void setCliExpedienteDto(CliExpedienteDto cliExpedienteDto) {
+        this.cliExpedienteDto = cliExpedienteDto;
+    }
+
+    public Boolean getModificado() {
+        return modificado;
+    }
+
+    public void setModificado(Boolean modificado) {
+        this.modificado = modificado;
+    }
+
 }

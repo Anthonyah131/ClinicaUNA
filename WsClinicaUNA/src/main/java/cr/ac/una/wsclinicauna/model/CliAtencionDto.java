@@ -5,26 +5,32 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  *
  * @author ArauzKJ
  */
 public class CliAtencionDto {
+
     private Long ateId;
-    private LocalDate ateFechaHora;
+    private LocalDate ateFechahora;
     private String atePresion;
-    private String ateFrecuenciaCard;
+    private String ateFrecuenciacard;
     private String atePeso;
     private String ateTalla;
     private String ateTemperatura;
-    private String ateIMC;
-    private String ateAnotacionEnfermera;
-    private String ateRazonConsulta;
-    private String atePlanAtencion;
+    private String ateImc;
+    private String ateAnotacionenfe;
+    private String ateRazonconsulta;
+    private String atePlanatencion;
     private String ateObservaciones;
     private String ateTratamiento;
     private Long ateVersion;
+    private List<CliExamenDto> cliExamenList;
+    private List<CliExamenDto> cliExamenListEliminados;
+    private CliExpedienteDto cliExpedienteDto;
+    private Boolean modificado;
 
     public Long getAteId() {
         return ateId;
@@ -34,12 +40,12 @@ public class CliAtencionDto {
         this.ateId = ateId;
     }
 
-    public LocalDate getAteFechaHora() {
-        return ateFechaHora;
+    public LocalDate getAteFechahora() {
+        return ateFechahora;
     }
 
-    public void setAteFechaHora(LocalDate ateFechaHora) {
-        this.ateFechaHora = ateFechaHora;
+    public void setAteFechahora(LocalDate ateFechahora) {
+        this.ateFechahora = ateFechahora;
     }
 
     public String getAtePresion() {
@@ -50,12 +56,12 @@ public class CliAtencionDto {
         this.atePresion = atePresion;
     }
 
-    public String getAteFrecuenciaCard() {
-        return ateFrecuenciaCard;
+    public String getAteFrecuenciacard() {
+        return ateFrecuenciacard;
     }
 
-    public void setAteFrecuenciaCard(String ateFrecuenciaCard) {
-        this.ateFrecuenciaCard = ateFrecuenciaCard;
+    public void setAteFrecuenciacard(String ateFrecuenciacard) {
+        this.ateFrecuenciacard = ateFrecuenciacard;
     }
 
     public String getAtePeso() {
@@ -82,36 +88,36 @@ public class CliAtencionDto {
         this.ateTemperatura = ateTemperatura;
     }
 
-    public String getAteIMC() {
-        return ateIMC;
+    public String getAteImc() {
+        return ateImc;
     }
 
-    public void setAteIMC(String ateIMC) {
-        this.ateIMC = ateIMC;
+    public void setAteImc(String ateImc) {
+        this.ateImc = ateImc;
     }
 
-    public String getAteAnotacionEnfermera() {
-        return ateAnotacionEnfermera;
+    public String getAteAnotacionenfe() {
+        return ateAnotacionenfe;
     }
 
-    public void setAteAnotacionEnfermera(String ateAnotacionEnfermera) {
-        this.ateAnotacionEnfermera = ateAnotacionEnfermera;
+    public void setAteAnotacionenfe(String ateAnotacionenfe) {
+        this.ateAnotacionenfe = ateAnotacionenfe;
     }
 
-    public String getAteRazonConsulta() {
-        return ateRazonConsulta;
+    public String getAteRazonconsulta() {
+        return ateRazonconsulta;
     }
 
-    public void setAteRazonConsulta(String ateRazonConsulta) {
-        this.ateRazonConsulta = ateRazonConsulta;
+    public void setAteRazonconsulta(String ateRazonconsulta) {
+        this.ateRazonconsulta = ateRazonconsulta;
     }
 
-    public String getAtePlanAtencion() {
-        return atePlanAtencion;
+    public String getAtePlanatencion() {
+        return atePlanatencion;
     }
 
-    public void setAtePlanAtencion(String atePlanAtencion) {
-        this.atePlanAtencion = atePlanAtencion;
+    public void setAtePlanatencion(String atePlanatencion) {
+        this.atePlanatencion = atePlanatencion;
     }
 
     public String getAteObservaciones() {
@@ -137,6 +143,37 @@ public class CliAtencionDto {
     public void setAteVersion(Long ateVersion) {
         this.ateVersion = ateVersion;
     }
-    
-    
+
+    public List<CliExamenDto> getCliExamenList() {
+        return cliExamenList;
+    }
+
+    public void setCliExamenList(List<CliExamenDto> cliExamenList) {
+        this.cliExamenList = cliExamenList;
+    }
+
+    public List<CliExamenDto> getCliExamenListEliminados() {
+        return cliExamenListEliminados;
+    }
+
+    public void setCliExamenListEliminados(List<CliExamenDto> cliExamenListEliminados) {
+        this.cliExamenListEliminados = cliExamenListEliminados;
+    }
+
+    public CliExpedienteDto getCliExpedienteDto() {
+        return cliExpedienteDto;
+    }
+
+    public void setCliExpedienteDto(CliExpedienteDto cliExpedienteDto) {
+        this.cliExpedienteDto = cliExpedienteDto;
+    }
+
+    public Boolean getModificado() {
+        return modificado;
+    }
+
+    public void setModificado(Boolean modificado) {
+        this.modificado = modificado;
+    }
+
 }

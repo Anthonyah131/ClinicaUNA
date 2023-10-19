@@ -10,11 +10,15 @@ import java.math.BigInteger;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -23,7 +27,7 @@ import jakarta.validation.constraints.Size;
  * @author ArauzKJ
  */
 @Entity
-@Table(name = "CLI_PARAMETROS")
+@Table(name = "CLI_PARAMETROS",schema = "ClinicaUNA")
 @NamedQueries({
     @NamedQuery(name = "CliParametros.findAll", query = "SELECT c FROM CliParametros c"),
     @NamedQuery(name = "CliParametros.findByParId", query = "SELECT c FROM CliParametros c WHERE c.parId = :parId"),
@@ -37,6 +41,8 @@ public class CliParametros implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
+    @SequenceGenerator(name = "CLI_PARAMETROS_PAR_ID_GENERATOR", sequenceName = "CLI_PARAMETROS_SEQ01", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLI_PARAMETROS_PAR_ID_GENERATOR")
     @Basic(optional = false)
     @NotNull
     @Column(name = "PAR_ID")
@@ -59,6 +65,7 @@ public class CliParametros implements Serializable {
     @Lob
     @Column(name = "PAR_HTML")
     private Serializable parHtml;
+    @Version
     @Basic(optional = false)
     @NotNull
     @Column(name = "PAR_VERSION")

@@ -8,13 +8,17 @@ import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
@@ -28,7 +32,7 @@ import java.util.List;
  * @author ArauzKJ
  */
 @Entity
-@Table(name = "CLI_ATENCION")
+@Table(name = "CLI_ATENCION", schema = "ClinicaUNA")
 @NamedQueries({
     @NamedQuery(name = "CliAtencion.findAll", query = "SELECT c FROM CliAtencion c"),
     @NamedQuery(name = "CliAtencion.findByAteId", query = "SELECT c FROM CliAtencion c WHERE c.ateId = :ateId"),
@@ -50,6 +54,8 @@ public class CliAtencion implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
+    @SequenceGenerator(name = "CLI_ATENCION_ATE_ID_GENERATOR", sequenceName = "CLI_ATENCION_SEQ01", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLI_ATENCION_ATE_ID_GENERATOR")
     @Basic(optional = false)
     @NotNull
     @Column(name = "ATE_ID")
@@ -89,6 +95,7 @@ public class CliAtencion implements Serializable {
     @Size(max = 50)
     @Column(name = "ATE_TRATAMIENTO")
     private String ateTratamiento;
+    @Version
     @Basic(optional = false)
     @NotNull
     @Column(name = "ATE_VERSION")

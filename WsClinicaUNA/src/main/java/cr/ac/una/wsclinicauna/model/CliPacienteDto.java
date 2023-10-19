@@ -5,6 +5,7 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  *
@@ -13,14 +14,21 @@ import java.time.LocalDate;
 public class CliPacienteDto {
     private Long pacId;
     private String pacNombre;
-    private String pacPrimerApellido;
-    private String pacSegundoApellido;
+    private String pacPapellido;
+    private String pacSapellido;
     private String pacCedula;
     private Long pacTelefono;
     private String pacCorreo;
     private String pacGenero;
-    private LocalDate pacFechaNacimiento;
+    private LocalDate pacFnacimiento;
     private Long pacVersion;
+    private List<CliExpedienteDto> cliExpedienteList;
+    private List<CliReporteexpedienteDto> cliReporteexpedienteList;
+    private List<CliCitaDto> cliCitaList;
+    private List<CliExpedienteDto> cliExpedienteListEliminados;
+    private List<CliReporteexpedienteDto> cliReporteexpedienteListEliminados;
+    private List<CliCitaDto> cliCitaListEliminados;
+    private Boolean modificado;
 
     public Long getPacId() {
         return pacId;
@@ -38,20 +46,20 @@ public class CliPacienteDto {
         this.pacNombre = pacNombre;
     }
 
-    public String getPacPrimerApellido() {
-        return pacPrimerApellido;
+    public String getPacPapellido() {
+        return pacPapellido;
     }
 
-    public void setPacPrimerApellido(String pacPrimerApellido) {
-        this.pacPrimerApellido = pacPrimerApellido;
+    public void setPacPapellido(String pacPapellido) {
+        this.pacPapellido = pacPapellido;
     }
 
-    public String getPacSegundoApellido() {
-        return pacSegundoApellido;
+    public String getPacSapellido() {
+        return pacSapellido;
     }
 
-    public void setPacSegundoApellido(String pacSegundoApellido) {
-        this.pacSegundoApellido = pacSegundoApellido;
+    public void setPacSapellido(String pacSapellido) {
+        this.pacSapellido = pacSapellido;
     }
 
     public String getPacCedula() {
@@ -86,12 +94,12 @@ public class CliPacienteDto {
         this.pacGenero = pacGenero;
     }
 
-    public LocalDate getPacFechaNacimiento() {
-        return pacFechaNacimiento;
+    public LocalDate getPacFnacimiento() {
+        return pacFnacimiento;
     }
 
-    public void setPacFechaNacimiento(LocalDate pacFechaNacimiento) {
-        this.pacFechaNacimiento = pacFechaNacimiento;
+    public void setPacFnacimiento(LocalDate pacFnacimiento) {
+        this.pacFnacimiento = pacFnacimiento;
     }
 
     public Long getPacVersion() {
@@ -101,6 +109,63 @@ public class CliPacienteDto {
     public void setPacVersion(Long pacVersion) {
         this.pacVersion = pacVersion;
     }
+
+    public List<CliExpedienteDto> getCliExpedienteList() {
+        return cliExpedienteList;
+    }
+
+    public void setCliExpedienteList(List<CliExpedienteDto> cliExpedienteList) {
+        this.cliExpedienteList = cliExpedienteList;
+    }
+
+    public List<CliReporteexpedienteDto> getCliReporteexpedienteList() {
+        return cliReporteexpedienteList;
+    }
+
+    public void setCliReporteexpedienteList(List<CliReporteexpedienteDto> cliReporteexpedienteList) {
+        this.cliReporteexpedienteList = cliReporteexpedienteList;
+    }
+
+    public List<CliCitaDto> getCliCitaList() {
+        return cliCitaList;
+    }
+
+    public void setCliCitaList(List<CliCitaDto> cliCitaList) {
+        this.cliCitaList = cliCitaList;
+    }
+
+    public List<CliExpedienteDto> getCliExpedienteListEliminados() {
+        return cliExpedienteListEliminados;
+    }
+
+    public void setCliExpedienteListEliminados(List<CliExpedienteDto> cliExpedienteListEliminados) {
+        this.cliExpedienteListEliminados = cliExpedienteListEliminados;
+    }
+
+    public List<CliReporteexpedienteDto> getCliReporteexpedienteListEliminados() {
+        return cliReporteexpedienteListEliminados;
+    }
+
+    public void setCliReporteexpedienteListEliminados(List<CliReporteexpedienteDto> cliReporteexpedienteListEliminados) {
+        this.cliReporteexpedienteListEliminados = cliReporteexpedienteListEliminados;
+    }
+
+    public List<CliCitaDto> getCliCitaListEliminados() {
+        return cliCitaListEliminados;
+    }
+
+    public void setCliCitaListEliminados(List<CliCitaDto> cliCitaListEliminados) {
+        this.cliCitaListEliminados = cliCitaListEliminados;
+    }
+
+    public Boolean getModificado() {
+        return modificado;
+    }
+
+    public void setModificado(Boolean modificado) {
+        this.modificado = modificado;
+    }
+    
     
     
 }

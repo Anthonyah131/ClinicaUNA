@@ -4,10 +4,76 @@
  */
 package cr.ac.una.wsclinicauna.model;
 
+import java.time.LocalDate;
+
 /**
  *
  * @author ArauzKJ
  */
 public class CliReporteagendaDto {
-    
+
+    private Long repageId;
+    private LocalDate repageFechainicio;
+    private LocalDate repageFechafinal;
+    private LocalDate repageFechaemision;
+    private Long repageVersion;
+    private CliMedicoDto cliMedicoDto;
+    private Boolean modificado;
+
+    public Long getRepageId() {
+        return repageId;
+    }
+
+    public void setRepageId(Long repageId) {
+        this.repageId = repageId;
+    }
+
+    public LocalDate getRepageFechainicio() {
+        return repageFechainicio;
+    }
+
+    public void setRepageFechainicio(LocalDate repageFechainicio) {
+        this.repageFechainicio = repageFechainicio;
+    }
+
+    public LocalDate getRepageFechafinal() {
+        return repageFechafinal;
+    }
+
+    public void setRepageFechafinal(LocalDate repageFechafinal) {
+        this.repageFechafinal = repageFechafinal;
+    }
+
+    public LocalDate getRepageFechaemision() {
+        return repageFechaemision;
+    }
+
+    public void setRepageFechaemision(LocalDate repageFechaemision) {
+        this.repageFechaemision = repageFechaemision;
+    }
+
+    public Long getRepageVersion() {
+        return repageVersion;
+    }
+
+    public void setRepageVersion(Long repageVersion) {
+        this.repageVersion = repageVersion;
+    }
+
+    public CliMedicoDto getCliMedicoDto() {
+        return cliMedicoDto;
+    }
+
+    public void setCliMedicoDto(CliMedicoDto cliMedicoDto) {
+        this.cliMedicoDto = cliMedicoDto;
+    }
+
+    public Boolean getModificado() {
+        return modificado;
+    }
+
+    public void setModificado(Boolean modificado) {
+        this.modificado = modificado;
+    }
+
 }

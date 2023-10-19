@@ -10,13 +10,17 @@ import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
@@ -26,7 +30,7 @@ import java.time.LocalDate;
  * @author ArauzKJ
  */
 @Entity
-@Table(name = "CLI_MEDICO")
+@Table(name = "CLI_MEDICO",schema = "ClinicaUNA")
 @NamedQueries({
     @NamedQuery(name = "CliMedico.findAll", query = "SELECT c FROM CliMedico c"),
     @NamedQuery(name = "CliMedico.findByMedId", query = "SELECT c FROM CliMedico c WHERE c.medId = :medId"),
@@ -43,6 +47,8 @@ public class CliMedico implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
+    @SequenceGenerator(name = "CLI_MEDICO_MED_ID_GENERATOR", sequenceName = "CLI_MEDICO_SEQ01", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLI_MEDICO_MED_ID_GENERATOR")
     @Basic(optional = false)
     @NotNull
     @Column(name = "MED_ID")
@@ -73,6 +79,7 @@ public class CliMedico implements Serializable {
     private LocalDate medFfin;
     @Column(name = "MED_ESPACIOSXHORA")
     private Long medEspaciosxhora;
+    @Version
     @Basic(optional = false)
     @NotNull
     @Column(name = "MED_VERSION")
