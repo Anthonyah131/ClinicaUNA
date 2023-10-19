@@ -58,6 +58,7 @@ public class CliAtencionDto {
         this.ateObservaciones = cliAtencion.getAteObservaciones();
         this.ateTratamiento = cliAtencion.getAteTratamiento();
         this.ateVersion = cliAtencion.getAteVersion();
+        this.fecha = LocalDateTime.now();
     }
 
     public Long getAteId() {

@@ -34,6 +34,7 @@ public class CliReporteagendaDto {
         this.repageFechafinal = cliReporteagenda.getRepageFechafinal();
         this.repageFechaemision = cliReporteagenda.getRepageFechaemision();
         this.repageVersion = cliReporteagenda.getRepageVersion();
+        this.fecha = LocalDateTime.now();
     }
 
     

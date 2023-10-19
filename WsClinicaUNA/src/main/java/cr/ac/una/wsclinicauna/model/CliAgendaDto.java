@@ -40,6 +40,7 @@ public class CliAgendaDto {
         this.ageTiempo = cliAgenda.getAgeTiempo();
         this.ageEspacios = cliAgenda.getAgeEspacios();
         this.ageVersion = cliAgenda.getAgeVersion();
+        this.fecha = LocalDateTime.now();
     }
 
     public Long getAgeId() {

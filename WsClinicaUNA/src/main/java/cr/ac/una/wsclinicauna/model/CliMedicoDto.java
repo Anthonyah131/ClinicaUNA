@@ -52,6 +52,7 @@ public class CliMedicoDto {
         this.medFfin = cliMedico.getMedFfin();
         this.medEspaciosxhora = cliMedico.getMedEspaciosxhora();
         this.medVersion = cliMedico.getMedVersion();
+        this.fecha = LocalDateTime.now();
     }
 
     

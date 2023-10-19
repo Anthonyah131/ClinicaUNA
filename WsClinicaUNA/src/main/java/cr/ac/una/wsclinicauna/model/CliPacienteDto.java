@@ -56,6 +56,7 @@ public class CliPacienteDto {
         this.pacGenero = cliPaciente.getPacGenero();
         this.pacFnacimiento = cliPaciente.getPacFnacimiento();
         this.pacVersion = cliPaciente.getPacVersion();
+        this.fecha = LocalDateTime.now();
     }
 
     

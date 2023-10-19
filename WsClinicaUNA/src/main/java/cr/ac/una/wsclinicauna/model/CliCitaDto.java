@@ -35,6 +35,7 @@ public class CliCitaDto {
         this.citMotivo = cliCita.getCitMotivo();
         this.citFechaHora = cliCita.getCitFechahora();
         this.citVersion = cliCita.getCitVersion();
+        this.fecha = LocalDateTime.now();
     }
     
     

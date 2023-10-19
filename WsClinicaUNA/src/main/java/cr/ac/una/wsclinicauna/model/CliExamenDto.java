@@ -35,6 +35,7 @@ public class CliExamenDto {
         this.exaFecha = cliExamen.getExaFecha();
         this.exaAnotacionesmed = cliExamen.getExaAnotacionesmed();
         this.exaVersion = cliExamen.getExaVersion();
+        this.fecha = LocalDateTime.now();
     }
 
     

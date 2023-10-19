@@ -34,6 +34,7 @@ public class CliReporteusuariosDto {
         this.repusuId = cliReporteusuarios.getRepusuId();
         this.repusuFechaemision = cliReporteusuarios.getRepusuFechaemision();
         this.repusuVersion = cliReporteusuarios.getRepusuVersion();
+        this.fecha = LocalDateTime.now();
     }
     
     public Long getRepusuId() {

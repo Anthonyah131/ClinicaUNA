@@ -29,6 +29,7 @@ public class CliReporteexpedienteDto {
         this.repexpId = cliReporteexpediente.getRepexpId();
         this.repexpFechaemision = cliReporteexpediente.getRepexpFechaemision();
         this.repexpVersion = cliReporteexpediente.getRepexpVersion();
+        this.fecha = LocalDateTime.now();
     }
     
     
