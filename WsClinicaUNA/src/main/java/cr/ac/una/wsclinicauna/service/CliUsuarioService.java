@@ -4,7 +4,11 @@
  */
 package cr.ac.una.wsclinicauna.service;
 
+import cr.ac.una.wsclinicauna.model.CliMedico;
+import cr.ac.una.wsclinicauna.model.CliMedicoDto;
 import cr.ac.una.wsclinicauna.model.CliParametrosDto;
+import cr.ac.una.wsclinicauna.model.CliReporteusuarios;
+import cr.ac.una.wsclinicauna.model.CliReporteusuariosDto;
 import cr.ac.una.wsclinicauna.model.CliUsuario;
 import cr.ac.una.wsclinicauna.model.CliUsuarioDto;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
@@ -71,7 +75,7 @@ public class CliUsuarioService {
     public Respuesta getUsuario(Long id) {
         try {
             Query qryEmpleado = em.createNamedQuery("CliUsuario.findByUsuId", CliUsuario.class);
-           qryEmpleado.setParameter("id", id);
+            qryEmpleado.setParameter("id", id);
 
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuario", new CliUsuarioDto((CliUsuario) qryEmpleado.getSingleResult()));
 
@@ -108,12 +112,34 @@ public class CliUsuarioService {
     public Respuesta guardarUsuario(CliUsuarioDto cliUsuarioDto) {
         try {
             CliUsuario cliUsuario;
-            if (cliUsuarioDto.getUsuId()!= null && cliUsuarioDto.getUsuId() > 0) {
+            if (cliUsuarioDto.getUsuId() != null && cliUsuarioDto.getUsuId() > 0) {
                 cliUsuario = em.find(CliUsuario.class, cliUsuarioDto.getUsuId());
                 if (cliUsuario == null) {
                     return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el usuario a modificar.", "guardarUsuario NoResultException");
                 }
                 cliUsuario.actualizar(cliUsuarioDto);
+                
+                for (CliMedicoDto cliMedicoDto : cliUsuarioDto.getCliMedicoListEliminados()) {
+                    cliUsuario.getCliMedicoList().remove(new CliMedico(cliMedicoDto.getMedId()));
+                }
+
+                if (!cliUsuarioDto.getCliMedicoList().isEmpty()) {
+                    for (CliMedicoDto cliMedicoDto : cliUsuarioDto.getCliMedicoList()) {
+                        CliMedico cliMedico = em.find(CliMedico.class, cliMedicoDto.getMedId());
+                        cliUsuario.getCliMedicoList().add(cliMedico);
+                    }
+                }
+
+                for (CliReporteusuariosDto cliReporteusuariosDto : cliUsuarioDto.getCliReporteusuariosListEliminados()) {
+                    cliUsuario.getCliReporteusuariosList().remove(new CliReporteusuarios(cliReporteusuariosDto.getRepusuId()));
+                }
+
+                if (!cliUsuarioDto.getCliReporteusuariosList().isEmpty()) {
+                    for (CliReporteusuariosDto cliReporteusuariosDto : cliUsuarioDto.getCliReporteusuariosList()) {
+                        CliReporteusuarios cliReporteusuarios = em.find(CliReporteusuarios.class, cliReporteusuariosDto.getRepusuId());
+                        cliUsuario.getCliReporteusuariosList().add(cliReporteusuarios);
+                    }
+                }
                 cliUsuario = em.merge(cliUsuario);
             } else {
                 cliUsuario = new CliUsuario(cliUsuarioDto);
@@ -251,7 +277,7 @@ public class CliUsuarioService {
         return sb.toString();
     }
 
-    public Respuesta recuClave(CliUsuarioDto cliUsuarioDto, CliParametrosDto cliParametrosDto) {
+    private Respuesta recuClave(CliUsuarioDto cliUsuarioDto, CliParametrosDto cliParametrosDto) {
         int len = 8;
         //System.out.println(generateRandomPassword(len));
 
