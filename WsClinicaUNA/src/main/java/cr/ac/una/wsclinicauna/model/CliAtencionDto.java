@@ -5,6 +5,8 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,6 +33,33 @@ public class CliAtencionDto {
     private List<CliExamenDto> cliExamenListEliminados;
     private CliExpedienteDto cliExpedienteDto;
     private Boolean modificado;
+    private LocalDateTime fecha;
+
+    public CliAtencionDto() {
+        this.cliExamenList = new ArrayList<>();
+        this.cliExamenListEliminados = new ArrayList<>();
+        this.modificado = false;
+        this.fecha = LocalDateTime.now();
+    }
+
+    public CliAtencionDto(CliAtencion cliAtencion) {
+        this();
+        this.ateId = cliAtencion.getAteId();
+        this.ateFechahora = cliAtencion.getAteFechahora();
+        this.atePresion = cliAtencion.getAtePresion();
+        this.ateFrecuenciacard = cliAtencion.getAteFrecuenciacard();
+        this.atePeso = cliAtencion.getAtePeso();
+        this.ateTalla = cliAtencion.getAteTalla();
+        this.ateTemperatura = cliAtencion.getAteTemperatura();
+        this.ateImc = cliAtencion.getAteImc();
+        this.ateAnotacionenfe = cliAtencion.getAteAnotacionenfe();
+        this.ateRazonconsulta = cliAtencion.getAteRazonconsulta();
+        this.atePlanatencion = cliAtencion.getAtePlanatencion();
+        this.ateObservaciones = cliAtencion.getAteObservaciones();
+        this.ateTratamiento = cliAtencion.getAteTratamiento();
+        this.ateVersion = cliAtencion.getAteVersion();
+        this.fecha = LocalDateTime.now();
+    }
 
     public Long getAteId() {
         return ateId;
@@ -174,6 +203,14 @@ public class CliAtencionDto {
 
     public void setModificado(Boolean modificado) {
         this.modificado = modificado;
+    }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
     }
 
 }

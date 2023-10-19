@@ -29,7 +29,7 @@ import java.util.List;
  * @author ArauzKJ
  */
 @Entity
-@Table(name = "CLI_EXPEDIENTE",schema = "ClinicaUNA")
+@Table(name = "CLI_EXPEDIENTE", schema = "ClinicaUNA")
 @NamedQueries({
     @NamedQuery(name = "CliExpediente.findAll", query = "SELECT c FROM CliExpediente c"),
     @NamedQuery(name = "CliExpediente.findByExpId", query = "SELECT c FROM CliExpediente c WHERE c.expId = :expId"),
@@ -88,9 +88,19 @@ public class CliExpediente implements Serializable {
         this.expId = expId;
     }
 
-    public CliExpediente(Long expId, Long expVersion) {
-        this.expId = expId;
-        this.expVersion = expVersion;
+    public CliExpediente(CliExpedienteDto cliExpedienteDto) {
+        this.expId = cliExpedienteDto.getExpId();
+        actualizar(cliExpedienteDto);
+    }
+
+    public void actualizar(CliExpedienteDto cliExpedienteDto) {
+        this.expHospitalizaciones = cliExpedienteDto.getExpHospitalizaciones();
+        this.expOperaciones = cliExpedienteDto.getExpOperaciones();
+        this.expAlergias = cliExpedienteDto.getExpAlergias();
+        this.expPatologicos = cliExpedienteDto.getExpPatologicos();
+        this.expTiposalergias = cliExpedienteDto.getExpTiposalergias();
+        this.expTratamientos = cliExpedienteDto.getExpTratamientos();
+        this.expVersion = cliExpedienteDto.getExpVersion();
     }
 
     public Long getExpId() {
@@ -213,5 +223,5 @@ public class CliExpediente implements Serializable {
     public String toString() {
         return "cr.ac.una.wsclinicauna.model.CliExpediente[ expId=" + expId + " ]";
     }
-    
+
 }

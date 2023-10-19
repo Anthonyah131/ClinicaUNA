@@ -5,6 +5,8 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,7 +20,23 @@ public class CliReporteusuariosDto {
     private List<CliUsuarioDto> cliUsuarioList;
     private List<CliUsuarioDto> cliUsuarioListEliminados;
     private Boolean modificado;
+    private LocalDateTime fecha;
 
+    public CliReporteusuariosDto() {
+        this.cliUsuarioList = new ArrayList<>();
+        this.cliUsuarioListEliminados = new ArrayList<>();
+        this.modificado = false;
+        this.fecha = LocalDateTime.now();
+    }
+
+    public CliReporteusuariosDto(CliReporteusuarios cliReporteusuarios) {
+        this();
+        this.repusuId = cliReporteusuarios.getRepusuId();
+        this.repusuFechaemision = cliReporteusuarios.getRepusuFechaemision();
+        this.repusuVersion = cliReporteusuarios.getRepusuVersion();
+        this.fecha = LocalDateTime.now();
+    }
+    
     public Long getRepusuId() {
         return repusuId;
     }
@@ -58,6 +76,23 @@ public class CliReporteusuariosDto {
     public void setCliUsuarioListEliminados(List<CliUsuarioDto> cliUsuarioListEliminados) {
         this.cliUsuarioListEliminados = cliUsuarioListEliminados;
     }
+
+    public Boolean getModificado() {
+        return modificado;
+    }
+
+    public void setModificado(Boolean modificado) {
+        this.modificado = modificado;
+    }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
+    }
+    
     
     
 }

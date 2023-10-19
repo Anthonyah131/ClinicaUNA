@@ -4,6 +4,7 @@
  */
 package cr.ac.una.wsclinicauna.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,25 +34,28 @@ public class CliUsuarioDto {
 
     public CliUsuarioDto() {
         this.modificado = false;
+        this.cliMedicoList = new ArrayList<>();
+        this.cliMedicoListEliminados = new ArrayList<>();
+        this.cliReporteusuariosList = new ArrayList<>();
+        this.cliReporteusuariosListEliminados = new ArrayList<>();
     }
 
-    public CliUsuarioDto(Long usuId, String usuNombre, String usuPapellido, String usuSapellido, String usuCedula, String usuCorreo, String usuTipousuario, String usuUsuario, String usuClave, String usuTempClave, String usuIdioma, String usuActivo, Long usuVersion) {
-        this.usuId = usuId;
-        this.usuNombre = usuNombre;
-        this.usuPapellido = usuPapellido;
-        this.usuSapellido = usuSapellido;
-        this.usuCedula = usuCedula;
-        this.usuCorreo = usuCorreo;
-        this.usuTipousuario = usuTipousuario;
-        this.usuUsuario = usuUsuario;
-        this.usuClave = usuClave;
-        this.usuTempclave = usuTempClave;
-        this.usuIdioma = usuIdioma;
-        this.usuActivo = usuActivo;
-        this.usuVersion = usuVersion;
+    public CliUsuarioDto(CliUsuario cliUsuario) {
+        this();
+        this.usuId = cliUsuario.getUsuId();
+        this.usuNombre = cliUsuario.getUsuNombre();
+        this.usuPapellido = cliUsuario.getUsuPapellido();
+        this.usuSapellido = cliUsuario.getUsuSapellido();
+        this.usuCedula = cliUsuario.getUsuCedula();
+        this.usuCorreo = cliUsuario.getUsuCorreo();
+        this.usuTipousuario = cliUsuario.getUsuTipousuario();
+        this.usuUsuario = cliUsuario.getUsuUsuario();
+        this.usuClave = cliUsuario.getUsuClave();
+        this.usuTempclave = cliUsuario.getUsuTempclave();
+        this.usuIdioma = cliUsuario.getUsuIdioma();
+        this.usuActivo = cliUsuario.getUsuActivo();
+        this.usuVersion = cliUsuario.getUsuVersion();
     }
-
-    
     
     public Long getUsuId() {
         return usuId;

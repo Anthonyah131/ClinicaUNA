@@ -72,9 +72,16 @@ public class CliAntecedente implements Serializable {
         this.antId = antId;
     }
 
-    public CliAntecedente(Long antId, Long antVersion) {
-        this.antId = antId;
-        this.antVersion = antVersion;
+    public CliAntecedente(CliAntecedenteDto cliAntecedenteDto) {
+        this.antId = cliAntecedenteDto.getAntId();
+        actualizar(cliAntecedenteDto);
+    }
+
+    public void actualizar(CliAntecedenteDto cliAntecedenteDto) {
+        this.antDescripcion = cliAntecedenteDto.getAntDescripcion();
+        this.antTipo = cliAntecedenteDto.getAntTipo();
+        this.antParentesco = cliAntecedenteDto.getAntParentesco();
+        this.antVersion = cliAntecedenteDto.getAntVersion();
     }
 
     public Long getAntId() {

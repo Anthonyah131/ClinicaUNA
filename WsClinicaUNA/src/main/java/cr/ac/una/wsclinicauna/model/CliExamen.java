@@ -76,10 +76,16 @@ public class CliExamen implements Serializable {
         this.exaId = exaId;
     }
 
-    public CliExamen(Long exaId, String exaNombre, Long exaVersion) {
+    public CliExamen(CliExamenDto cliExamenDto) {
         this.exaId = exaId;
-        this.exaNombre = exaNombre;
-        this.exaVersion = exaVersion;
+        actualizar(cliExamenDto);
+    }
+
+    public void actualizar(CliExamenDto cliExamenDto) {
+        this.exaNombre = cliExamenDto.getExaNombre();
+        this.exaFecha = cliExamenDto.getExaFecha();
+        this.exaAnotacionesmed = cliExamenDto.getExaAnotacionesmed();
+        this.exaVersion = cliExamenDto.getExaVersion();
     }
 
     public Long getExaId() {

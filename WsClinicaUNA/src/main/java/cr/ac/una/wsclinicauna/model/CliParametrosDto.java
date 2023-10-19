@@ -9,6 +9,7 @@ package cr.ac.una.wsclinicauna.model;
  * @author ArauzKJ
  */
 public class CliParametrosDto {
+
     private Long parId;
     private String parNombre;
     private String parEmail;
@@ -18,6 +19,22 @@ public class CliParametrosDto {
     private String parDescripcion;
     private Long parVersion;
     private Boolean modificado;
+
+    public CliParametrosDto() {
+        this.modificado = false;
+    }
+
+    public CliParametrosDto(CliParametros cliParametros) {
+        this();
+        this.parId = cliParametros.getParId();
+        this.parNombre = cliParametros.getParNombre();
+        this.parEmail = cliParametros.getParEmail();
+        this.parClave = cliParametros.getParClave();
+        this.parHtml = (byte[]) cliParametros.getParHtml();
+        this.parLogo = (byte[]) cliParametros.getParFoto();
+        this.parDescripcion = cliParametros.getParDescripcion();
+        this.parVersion = cliParametros.getParVersion();
+    }
 
     public Long getParId() {
         return parId;
@@ -90,7 +107,5 @@ public class CliParametrosDto {
     public void setModificado(Boolean modificado) {
         this.modificado = modificado;
     }
-    
-    
-    
+
 }

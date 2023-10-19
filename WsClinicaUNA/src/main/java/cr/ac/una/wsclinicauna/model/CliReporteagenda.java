@@ -68,9 +68,16 @@ public class CliReporteagenda implements Serializable {
         this.repageId = repageId;
     }
 
-    public CliReporteagenda(Long repageId, Long repageVersion) {
-        this.repageId = repageId;
-        this.repageVersion = repageVersion;
+    public CliReporteagenda(CliReporteagendaDto cliReporteagendaDto) {
+        this.repageId = cliReporteagendaDto.getRepageId();
+        actualizar(cliReporteagendaDto);
+    }
+
+    public void actualizar(CliReporteagendaDto cliReporteagendaDto) {
+        this.repageFechainicio = cliReporteagendaDto.getRepageFechainicio();
+        this.repageFechafinal = cliReporteagendaDto.getRepageFechaemision();
+        this.repageFechaemision = cliReporteagendaDto.getRepageFechaemision();
+        this.repageVersion = cliReporteagendaDto.getRepageVersion();
     }
 
     public Long getRepageId() {

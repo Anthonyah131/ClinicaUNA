@@ -5,6 +5,8 @@
 package cr.ac.una.wsclinicauna.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,6 +14,7 @@ import java.util.List;
  * @author ArauzKJ
  */
 public class CliAgendaDto {
+
     private Long ageId;
     private LocalDate ageFecha;
     private String ageTiempo;
@@ -21,6 +24,24 @@ public class CliAgendaDto {
     private List<CliCitaDto> cliCitaListEliminados;
     private CliMedicoDto cliMedicoDto;
     private Boolean modificado;
+    private LocalDateTime fecha;
+
+    public CliAgendaDto() {
+        this.cliCitaList = new ArrayList<>();
+        this.cliCitaListEliminados = new ArrayList<>();
+        this.modificado = false;
+        this.fecha = LocalDateTime.now();
+    }
+
+    public CliAgendaDto(CliAgenda cliAgenda) {
+        this();
+        this.ageId = cliAgenda.getAgeId();
+        this.ageFecha = cliAgenda.getAgeFecha();
+        this.ageTiempo = cliAgenda.getAgeTiempo();
+        this.ageEspacios = cliAgenda.getAgeEspacios();
+        this.ageVersion = cliAgenda.getAgeVersion();
+        this.fecha = LocalDateTime.now();
+    }
 
     public Long getAgeId() {
         return ageId;
@@ -94,6 +115,12 @@ public class CliAgendaDto {
         this.modificado = modificado;
     }
 
-  
- 
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
+    }
+
 }

@@ -9,6 +9,7 @@ package cr.ac.una.wsclinicauna.model;
  * @author ArauzKJ
  */
 public class CliAntecedenteDto {
+
     private Long antId;
     private String antDescripcion;
     private String antTipo;
@@ -16,6 +17,19 @@ public class CliAntecedenteDto {
     private Long antVersion;
     private CliExpedienteDto cliExpedienteDto;
     private Boolean modificado;
+
+    public CliAntecedenteDto() {
+        this.modificado = false;
+    }
+
+    public CliAntecedenteDto(CliAntecedente cliAntecedente) {
+        this();
+        this.antId = cliAntecedente.getAntId();
+        this.antDescripcion = cliAntecedente.getAntDescripcion();
+        this.antTipo = cliAntecedente.getAntTipo();
+        this.antParentesco = cliAntecedente.getAntParentesco();
+        this.antVersion = cliAntecedente.getAntVersion();
+    }
 
     public Long getAntId() {
         return antId;
@@ -72,6 +86,5 @@ public class CliAntecedenteDto {
     public void setModificado(Boolean modificado) {
         this.modificado = modificado;
     }
-    
-    
+
 }
