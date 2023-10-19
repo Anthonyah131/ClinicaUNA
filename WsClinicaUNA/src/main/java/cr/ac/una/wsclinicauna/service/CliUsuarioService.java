@@ -55,7 +55,7 @@ public class CliUsuarioService {
 
     public Respuesta validarUsuario(String usuario, String clave) {
         try {
-            Query qryActividad = em.createNamedQuery("CliUsuario.findByUsuClave", CliUsuario.class);
+            Query qryActividad = em.createNamedQuery("CliUsuario.findByUsuarioClave", CliUsuario.class);
             qryActividad.setParameter("usuario", usuario);
             qryActividad.setParameter("clave", clave);
 
