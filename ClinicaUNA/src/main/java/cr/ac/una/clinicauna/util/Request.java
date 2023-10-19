@@ -5,7 +5,6 @@
  */
 package cr.ac.una.clinicauna.util;
 
-
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
@@ -31,7 +30,7 @@ import javafx.application.Platform;
 
 /**
  *
- * @author 
+ * @author
  */
 public class Request {
 
@@ -114,7 +113,7 @@ public class Request {
     }
 
     public void put(Object clazz) {
-        
+
         if (verifyTokenExp()) {
             Entity<?> entity = Entity.entity(clazz, "application/json; charset=UTF-8");
             response = builder.put(entity);
@@ -122,7 +121,7 @@ public class Request {
     }
 
     public void delete() {
- 
+
         if (verifyTokenExp()) {
             response = builder.delete();
         }
@@ -137,11 +136,10 @@ public class Request {
             new Thread() {
                 public void run() {
                     try {
-                        Thread.sleep(4000);
-                        Platform.runLater(new Runnable() {
-                            public void run() {
-                                FlowController.getInstance().goLogInWindowModal(true);
-                            }
+                        Thread.sleep(3000);
+                        Platform.runLater(() -> {
+                            AppContext.getInstance().set("PadreLogin", "Request");
+                            FlowController.getInstance().goLogInWindowModal(false);
                         });
                     } catch (InterruptedException ex) {
                         Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
@@ -185,7 +183,6 @@ public class Request {
         return response.readEntity(genericType);
     }
 
-
     private boolean verifyTokenExp() {
         if (AppContext.getInstance().get("Token") == null) {
             return true;//No se ha logeado.
@@ -210,7 +207,6 @@ public class Request {
             return false;
         }
     }
-
 
     private JsonObject getPayloadToken(String token) {
         if (token != null && !token.isEmpty()) {
