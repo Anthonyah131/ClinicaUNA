@@ -4,6 +4,13 @@
  */
 package cr.ac.una.wsclinicauna.service;
 
+import cr.ac.una.wsclinicauna.model.CliAgenda;
+import cr.ac.una.wsclinicauna.model.CliAgendaDto;
+import cr.ac.una.wsclinicauna.model.CliMedico;
+import cr.ac.una.wsclinicauna.model.CliMedicoDto;
+import cr.ac.una.wsclinicauna.model.CliReporteagenda;
+import cr.ac.una.wsclinicauna.model.CliReporteagendaDto;
+import cr.ac.una.wsclinicauna.model.CliUsuario;
 import cr.ac.una.wsclinicauna.model.CliUsuarioDto;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
@@ -13,7 +20,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.NonUniqueResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,89 +34,137 @@ import java.util.logging.Logger;
 @Stateless
 @LocalBean
 public class CliMedicoService {
+
     private static final Logger LOG = Logger.getLogger(CliMedicoService.class.getName());
-    @PersistenceContext(unitName="WsClinicaUNAPU")
+    @PersistenceContext(unitName = "WsClinicaUNAPU")
     private EntityManager em;
-    
-    public Respuesta getEmpleado(Long id) {
-        try {
-//            Query qryEmpleado = em.createNamedQuery("Empleado.findByEmpId", Empleado.class);
-//            qryEmpleado.setParameter("id", id);
 
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Empleado", new EmpleadoDto((Empleado) qryEmpleado.getSingleResult()));
+    public Respuesta getMedico(Long id) {
+        try {
+            Query qryUsuario = em.createNamedQuery("CliMedico.findByMedId", CliMedico.class);
+            qryUsuario.setParameter("id", id);
+            CliMedico cliMedico = (CliMedico) qryUsuario.getSingleResult();
+
+            CliMedicoDto cliMedicoDto = new CliMedicoDto(cliMedico);
+            cliMedicoDto.setCliUsuarioDto(new CliUsuarioDto(cliMedico.getUsuId()));
+
+            for (CliAgenda cliAgenda : cliMedico.getCliAgendaList()) {
+                cliMedicoDto.getCliAgendaList().add(new CliAgendaDto(cliAgenda));
+            }
+
+            for (CliReporteagenda cliReporteagenda : cliMedico.getCliReporteagendaList()) {
+                cliMedicoDto.getCliReporteagendaList().add(new CliReporteagendaDto(cliReporteagenda));
+            }
+
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Medico", cliMedicoDto);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un empleado con el código ingresado.", "getEmpleado NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un medico con el código ingresado.", "getMedico NoResultException");
         } catch (NonUniqueResultException ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el empleado.", "getEmpleado NonUniqueResultException");
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el medico.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el medico.", "getMedico NonUniqueResultException");
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el empleado.", "getEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el medico.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el medico.", "getMedico " + ex.getMessage());
         }
     }
 
-    public Respuesta getEmpleados() {
+    public Respuesta getMedicos() {
         try {
-//            Query qryEmpleado = em.createNamedQuery("Empleado.findByCedulaNombrePapellido", Empleado.class);
-//            List<Empleado> empleados = qryEmpleado.getResultList();
-//            List<EmpleadoDto> empleadosDto = new ArrayList<>();
-//            for (Empleado empleado : empleados) {
-//                empleadosDto.add(new EmpleadoDto(empleado));
-//            }
+            Query qryUsuario = em.createNamedQuery("CliMedico.findAll", CliMedico.class);
+            List<CliMedico> cliMedicos = qryUsuario.getResultList();
+            List<CliMedicoDto> cliMedicoDtos = new ArrayList<>();
+            for (CliMedico cliMedico : cliMedicos) {
+                CliMedicoDto cliMedicoDto = new CliMedicoDto(cliMedico);
 
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Empleados", empleadosDto);
+                cliMedicoDto.setCliUsuarioDto(new CliUsuarioDto(cliMedico.getUsuId()));
+                for (CliAgenda cliAgenda : cliMedico.getCliAgendaList()) {
+                    cliMedicoDto.getCliAgendaList().add(new CliAgendaDto(cliAgenda));
+                }
+
+                for (CliReporteagenda cliReporteagenda : cliMedico.getCliReporteagendaList()) {
+                    cliMedicoDto.getCliReporteagendaList().add(new CliReporteagendaDto(cliReporteagenda));
+                }
+                cliMedicoDtos.add(cliMedicoDto);
+            }
+
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Medicos", cliMedicoDtos);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen empleados con los criterios ingresados.", "getEmpleados NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen medico con los criterios ingresados.", "getMedicos NoResultException");
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el empleado.", "getEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el medico.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el medico.", "getMedicos " + ex.getMessage());
         }
     }
 
-    public Respuesta guardarEmpleado(CliUsuarioDto empleadoDto) {
+    public Respuesta guardarMedico(CliMedicoDto cliMedicoDto) {
         try {
-//            Empleado empleado;
-//            if (empleadoDto.getId() != null && empleadoDto.getId() > 0) {
-//                empleado = em.find(Empleado.class, empleadoDto.getId());
-//                if (empleado == null) {
-//                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el empleado a modificar.", "guardarEmpleado NoResultException");
-//                }
-//                empleado.actualizar(empleadoDto);
-//                empleado = em.merge(empleado);
-//            } else {
-//                empleado = new Empleado(empleadoDto);
-//                em.persist(empleado);
-//            }
-//            em.flush();
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Empleado", new EmpleadoDto(empleado));
+            CliMedico cliMedico;
+            if (cliMedicoDto.getMedId() != null && cliMedicoDto.getMedId() > 0) {
+                cliMedico = em.find(CliMedico.class, cliMedicoDto.getMedId());
+                if (cliMedico == null) {
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el medico a modificar.", "guardarMedico NoResultException");
+                }
+                cliMedico.actualizar(cliMedicoDto);
+
+                CliUsuario cliUsuario = em.find(CliUsuario.class, cliMedicoDto.getCliUsuarioDto().getUsuId());
+                cliMedico.setUsuId(cliUsuario);
+
+                for (CliReporteagendaDto cliReporteagendaDto : cliMedicoDto.getCliReporteagendaList()) {
+                    if (cliReporteagendaDto.getModificado()) {
+                        CliReporteagenda cliReporteagenda = em.find(CliReporteagenda.class, cliReporteagendaDto.getRepageId());
+                        cliMedico.getCliReporteagendaList().add(cliReporteagenda);
+                    }
+                }
+
+                for (CliReporteagendaDto cliReporteagendaDto : cliMedicoDto.getCliReporteagendaListEliminados()) {
+                    cliMedico.getCliReporteagendaList().remove(new CliReporteagenda(cliReporteagendaDto.getRepageId()));
+                }
+
+                for (CliAgendaDto cliAgendaDto : cliMedicoDto.getCliAgendaList()) {
+                    if (cliAgendaDto.getModificado()) {
+                        CliAgenda cliAgenda = em.find(CliAgenda.class, cliAgendaDto.getAgeId());
+                        cliMedico.getCliAgendaList().add(cliAgenda);
+                    }
+                }
+
+                for (CliAgendaDto cliAgendaDto : cliMedicoDto.getCliAgendaListEliminados()) {
+                    cliMedico.getCliAgendaList().remove(new CliAgenda(cliAgendaDto.getAgeId()));
+                }
+                cliMedico = em.merge(cliMedico);
+            } else {
+                cliMedico = new CliMedico(cliMedicoDto);
+                em.persist(cliMedico);
+            }
+            em.flush();
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Medico", new CliMedicoDto(cliMedico));
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el empleado.", "guardarEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el medico.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el medico.", "guardarMedico " + ex.getMessage());
         }
     }
 
-    public Respuesta eliminarEmpleado(Long id) {
+    public Respuesta eliminarMedico(Long id) {
         try {
-//            Empleado empleado;
-//            if (id != null && id > 0) {
-//                empleado = em.find(Empleado.class, id);
-//                if (empleado == null) {
-//                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el empleado a eliminar.", "eliminarEmpleado NoResultException");
-//                }
-//                em.remove(empleado);
-//            } else {
-//                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el empleado a eliminar.", "eliminarEmpleado NoResultException");
-//            }
-//            em.flush();
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
+            CliMedico cliMedico;
+            if (id != null && id > 0) {
+                cliMedico = em.find(CliMedico.class, id);
+                if (cliMedico == null) {
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el medico a eliminar.", "eliminarMedico NoResultException");
+                }
+                em.remove(cliMedico);
+            } else {
+                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el medico a eliminar.", "eliminarMedico NoResultException");
+            }
+            em.flush();
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
             if (ex.getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class) {
-                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el empleado porque tiene relaciones con otros registros.", "eliminarEmpleado " + ex.getMessage());
+                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el medico porque tiene relaciones con otros registros.", "eliminarMedico " + ex.getMessage());
             }
-            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el empleado.", "eliminarEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el medico.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el medico.", "eliminarMedico " + ex.getMessage());
         }
     }
 }

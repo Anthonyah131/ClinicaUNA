@@ -4,7 +4,12 @@
  */
 package cr.ac.una.wsclinicauna.service;
 
-import cr.ac.una.wsclinicauna.model.CliUsuarioDto;
+import cr.ac.una.wsclinicauna.model.CliAgenda;
+import cr.ac.una.wsclinicauna.model.CliAgendaDto;
+import cr.ac.una.wsclinicauna.model.CliCita;
+import cr.ac.una.wsclinicauna.model.CliCitaDto;
+import cr.ac.una.wsclinicauna.model.CliMedico;
+import cr.ac.una.wsclinicauna.model.CliMedicoDto;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import jakarta.ejb.LocalBean;
@@ -13,7 +18,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.NonUniqueResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,89 +32,119 @@ import java.util.logging.Logger;
 @Stateless
 @LocalBean
 public class CliAgendaService {
+
     private static final Logger LOG = Logger.getLogger(CliAgendaService.class.getName());
-    @PersistenceContext(unitName="WsClinicaUNAPU")
+    @PersistenceContext(unitName = "WsClinicaUNAPU")
     private EntityManager em;
-    
+
     public Respuesta getAgenda(Long id) {
         try {
-//            Query qryEmpleado = em.createNamedQuery("Empleado.findByEmpId", Empleado.class);
-//            qryEmpleado.setParameter("id", id);
+            Query qryUsuario = em.createNamedQuery("CliAgenda.findByAgeId", CliAgenda.class);
+            qryUsuario.setParameter("id", id);
+            CliAgenda cliAgenda = (CliAgenda) qryUsuario.getSingleResult();
 
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Empleado", new EmpleadoDto((Empleado) qryEmpleado.getSingleResult()));
+            CliAgendaDto cliAgendaDto = new CliAgendaDto(cliAgenda);
+            cliAgendaDto.setCliMedicoDto(new CliMedicoDto(cliAgenda.getMedId()));
+
+            for (CliCita cliCita : cliAgenda.getCliCitaList()) {
+                cliAgendaDto.getCliCitaList().add(new CliCitaDto(cliCita));
+            }
+
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Agenda", cliAgendaDto);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un empleado con el código ingresado.", "getEmpleado NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un agenda con el código ingresado.", "getAgenda NoResultException");
         } catch (NonUniqueResultException ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el empleado.", "getEmpleado NonUniqueResultException");
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el agenda.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el agenda.", "getAgenda NonUniqueResultException");
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el empleado.", "getAgenda " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el agenda.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el agenda.", "getAgenda " + ex.getMessage());
         }
     }
 
     public Respuesta getAgendas() {
         try {
-//            Query qryEmpleado = em.createNamedQuery("Empleado.findByCedulaNombrePapellido", Empleado.class);
-//            List<Empleado> empleados = qryEmpleado.getResultList();
-//            List<EmpleadoDto> empleadosDto = new ArrayList<>();
-//            for (Empleado empleado : empleados) {
-//                empleadosDto.add(new EmpleadoDto(empleado));
-//            }
+            Query qryUsuario = em.createNamedQuery("CliAgenda.findAll", CliAgenda.class);
+            List<CliAgenda> cliAgendas = qryUsuario.getResultList();
+            List<CliAgendaDto> cliAgendaDtos = new ArrayList<>();
+            for (CliAgenda cliAgenda : cliAgendas) {
+                CliAgendaDto cliAgendaDto = new CliAgendaDto(cliAgenda);
 
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Empleados", empleadosDto);
+                cliAgendaDto.setCliMedicoDto(new CliMedicoDto(cliAgenda.getMedId()));
+
+                for (CliCita cliCita : cliAgenda.getCliCitaList()) {
+                    cliAgendaDto.getCliCitaList().add(new CliCitaDto(cliCita));
+                }
+                cliAgendaDtos.add(cliAgendaDto);
+            }
+
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Agendas", cliAgendaDtos);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen empleados con los criterios ingresados.", "getEmpleados NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen agenda con los criterios ingresados.", "getAgendas NoResultException");
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el empleado.", "getEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el agenda.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el agenda.", "getAgendas " + ex.getMessage());
         }
     }
 
-    public Respuesta guardarAgenda(CliUsuarioDto empleadoDto) {
+    public Respuesta guardarAgenda(CliAgendaDto cliAgendaDto) {
         try {
-//            Empleado empleado;
-//            if (empleadoDto.getId() != null && empleadoDto.getId() > 0) {
-//                empleado = em.find(Empleado.class, empleadoDto.getId());
-//                if (empleado == null) {
-//                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el empleado a modificar.", "guardarEmpleado NoResultException");
-//                }
-//                empleado.actualizar(empleadoDto);
-//                empleado = em.merge(empleado);
-//            } else {
-//                empleado = new Empleado(empleadoDto);
-//                em.persist(empleado);
-//            }
-//            em.flush();
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Empleado", new EmpleadoDto(empleado));
+            CliAgenda cliAgenda;
+            if (cliAgendaDto.getAgeId() != null && cliAgendaDto.getAgeId() > 0) {
+                cliAgenda = em.find(CliAgenda.class, cliAgendaDto.getAgeId());
+                if (cliAgenda == null) {
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el agenda a modificar.", "guardarAgenda NoResultException");
+                }
+                cliAgenda.actualizar(cliAgendaDto);
+                CliMedico cliMedico = em.find(CliMedico.class, cliAgendaDto.getCliMedicoDto().getMedId());
+                cliAgenda.setMedId(cliMedico);
+                
+                for (CliCitaDto cliCitaDto : cliAgendaDto.getCliCitaList()) {
+                    if (cliCitaDto.getModificado()) {
+                        CliCita cliCita = em.find(CliCita.class, cliCitaDto.getCitId());
+                        cliAgenda.getCliCitaList().add(cliCita);
+                    }
+                }
+
+                for (CliCitaDto cliCitaDto : cliAgendaDto.getCliCitaListEliminados()) {
+                    cliAgenda.getCliCitaList().remove(new CliCita(cliCitaDto.getCitId()));
+                }
+
+                cliAgenda = em.merge(cliAgenda);
+            } else {
+                cliAgenda = new CliAgenda(cliAgendaDto);
+                em.persist(cliAgenda);
+            }
+            em.flush();
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Agenda", new CliAgendaDto(cliAgenda));
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el empleado.", "guardarEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el agenda.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el agenda.", "guardarAgenda " + ex.getMessage());
         }
     }
 
     public Respuesta eliminarAgenda(Long id) {
         try {
-//            Empleado empleado;
-//            if (id != null && id > 0) {
-//                empleado = em.find(Empleado.class, id);
-//                if (empleado == null) {
-//                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el empleado a eliminar.", "eliminarEmpleado NoResultException");
-//                }
-//                em.remove(empleado);
-//            } else {
-//                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el empleado a eliminar.", "eliminarEmpleado NoResultException");
-//            }
-//            em.flush();
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
+            CliAgenda cliAgenda;
+            if (id != null && id > 0) {
+                cliAgenda = em.find(CliAgenda.class, id);
+                if (cliAgenda == null) {
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el agenda a eliminar.", "eliminarAgenda NoResultException");
+                }
+                em.remove(cliAgenda);
+            } else {
+                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el agenda a eliminar.", "eliminarAgenda NoResultException");
+            }
+            em.flush();
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
             if (ex.getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class) {
-                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el empleado porque tiene relaciones con otros registros.", "eliminarEmpleado " + ex.getMessage());
+                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el agenda porque tiene relaciones con otros registros.", "eliminarAgenda " + ex.getMessage());
             }
-            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el empleado.", "eliminarEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el agenda.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el agenda.", "eliminarAgenda " + ex.getMessage());
         }
     }
 }

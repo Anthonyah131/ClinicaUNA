@@ -4,6 +4,17 @@
  */
 package cr.ac.una.wsclinicauna.service;
 
+import cr.ac.una.wsclinicauna.model.CliAntecedente;
+import cr.ac.una.wsclinicauna.model.CliAntecedenteDto;
+import cr.ac.una.wsclinicauna.model.CliAtencion;
+import cr.ac.una.wsclinicauna.model.CliAtencionDto;
+import cr.ac.una.wsclinicauna.model.CliExamen;
+import cr.ac.una.wsclinicauna.model.CliExamenDto;
+import cr.ac.una.wsclinicauna.model.CliExpediente;
+import cr.ac.una.wsclinicauna.model.CliExpedienteDto;
+import cr.ac.una.wsclinicauna.model.CliPaciente;
+import cr.ac.una.wsclinicauna.model.CliPacienteDto;
+import cr.ac.una.wsclinicauna.model.CliReporteagenda;
 import cr.ac.una.wsclinicauna.model.CliUsuarioDto;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
@@ -13,7 +24,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.NonUniqueResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,89 +38,154 @@ import java.util.logging.Logger;
 @Stateless
 @LocalBean
 public class CliExpedienteService {
+
     private static final Logger LOG = Logger.getLogger(CliExpedienteService.class.getName());
-    @PersistenceContext(unitName="WsClinicaUNAPU")
+    @PersistenceContext(unitName = "WsClinicaUNAPU")
     private EntityManager em;
-    
-    public Respuesta getEmpleado(Long id) {
-        try {
-//            Query qryEmpleado = em.createNamedQuery("Empleado.findByEmpId", Empleado.class);
-//            qryEmpleado.setParameter("id", id);
 
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Empleado", new EmpleadoDto((Empleado) qryEmpleado.getSingleResult()));
+    public Respuesta getExpediente(Long id) {
+        try {
+            Query qryUsuario = em.createNamedQuery("CliExpediente.findByExpId", CliExpediente.class);
+            qryUsuario.setParameter("id", id);
+            CliExpediente cliExpediente = (CliExpediente) qryUsuario.getSingleResult();
+
+            CliExpedienteDto cliExpedienteDto = new CliExpedienteDto(cliExpediente);
+            cliExpedienteDto.setCliPacienteDto(new CliPacienteDto(cliExpediente.getPacId()));
+
+            for (CliExamen cliExamen : cliExpediente.getCliExamenList()) {
+                cliExpedienteDto.getCliExamenList().add(new CliExamenDto(cliExamen));
+            }
+            for (CliAtencion cliAtencion : cliExpediente.getCliAtencionList()) {
+                cliExpedienteDto.getCliAtencionList().add(new CliAtencionDto(cliAtencion));
+            }
+            for (CliAntecedente cliAntecedente : cliExpediente.getCliAntecedenteList()) {
+                cliExpedienteDto.getCliAntecedenteList().add(new CliAntecedenteDto(cliAntecedente));
+            }
+
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Expediente", cliExpedienteDto);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un empleado con el código ingresado.", "getEmpleado NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un expediente con el código ingresado.", "getExpediente NoResultException");
         } catch (NonUniqueResultException ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el empleado.", "getEmpleado NonUniqueResultException");
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el expediente.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el expediente.", "getExpediente NonUniqueResultException");
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el empleado.", "getEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el expediente.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el expediente.", "getExpediente " + ex.getMessage());
         }
     }
 
-    public Respuesta getEmpleados() {
+    public Respuesta getExpedientes() {
         try {
-//            Query qryEmpleado = em.createNamedQuery("Empleado.findByCedulaNombrePapellido", Empleado.class);
-//            List<Empleado> empleados = qryEmpleado.getResultList();
-//            List<EmpleadoDto> empleadosDto = new ArrayList<>();
-//            for (Empleado empleado : empleados) {
-//                empleadosDto.add(new EmpleadoDto(empleado));
-//            }
+            Query qryUsuario = em.createNamedQuery("CliExpediente.findAll", CliExpediente.class);
+            List<CliExpediente> cliExpedientes = qryUsuario.getResultList();
+            List<CliExpedienteDto> cliExpedienteDtos = new ArrayList<>();
+            for (CliExpediente cliExpediente : cliExpedientes) {
+                CliExpedienteDto cliExpedienteDto = new CliExpedienteDto(cliExpediente);
 
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Empleados", empleadosDto);
+                cliExpedienteDto.setCliPacienteDto(new CliPacienteDto(cliExpediente.getPacId()));
+
+                for (CliExamen cliExamen : cliExpediente.getCliExamenList()) {
+                    cliExpedienteDto.getCliExamenList().add(new CliExamenDto(cliExamen));
+                }
+                for (CliAtencion cliAtencion : cliExpediente.getCliAtencionList()) {
+                    cliExpedienteDto.getCliAtencionList().add(new CliAtencionDto(cliAtencion));
+                }
+                for (CliAntecedente cliAntecedente : cliExpediente.getCliAntecedenteList()) {
+                    cliExpedienteDto.getCliAntecedenteList().add(new CliAntecedenteDto(cliAntecedente));
+                }
+
+                cliExpedienteDtos.add(cliExpedienteDto);
+            }
+
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Expedientes", cliExpedienteDtos);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen empleados con los criterios ingresados.", "getEmpleados NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen expediente con los criterios ingresados.", "getExpedientes NoResultException");
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el empleado.", "getEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el expediente.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el expediente.", "getExpedientes " + ex.getMessage());
         }
     }
 
-    public Respuesta guardarEmpleado(CliUsuarioDto empleadoDto) {
+    public Respuesta guardarExpediente(CliExpedienteDto cliExpedienteDto) {
         try {
-//            Empleado empleado;
-//            if (empleadoDto.getId() != null && empleadoDto.getId() > 0) {
-//                empleado = em.find(Empleado.class, empleadoDto.getId());
-//                if (empleado == null) {
-//                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el empleado a modificar.", "guardarEmpleado NoResultException");
-//                }
-//                empleado.actualizar(empleadoDto);
-//                empleado = em.merge(empleado);
-//            } else {
-//                empleado = new Empleado(empleadoDto);
-//                em.persist(empleado);
-//            }
-//            em.flush();
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Empleado", new EmpleadoDto(empleado));
+            CliExpediente cliExpediente;
+            if (cliExpedienteDto.getExpId() != null && cliExpedienteDto.getExpId() > 0) {
+                cliExpediente = em.find(CliExpediente.class, cliExpedienteDto.getExpId());
+                if (cliExpediente == null) {
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el expediente a modificar.", "guardarExpediente NoResultException");
+                }
+                cliExpediente.actualizar(cliExpedienteDto);
+                CliPaciente cliPaciente = em.find(CliPaciente.class, cliExpedienteDto.getCliPacienteDto().getPacId());
+                cliExpediente.setPacId(cliPaciente);
+
+                for (CliExamenDto cliExamenDto : cliExpedienteDto.getCliExamenList()) {
+                    if (cliExamenDto.getModificado()) {
+                        CliExamen cliExamen = em.find(CliExamen.class, cliExamenDto.getExaId());
+                        cliExpediente.getCliExamenList().add(cliExamen);
+                    }
+                }
+
+                for (CliExamenDto cliExamenDto : cliExpedienteDto.getCliExamenListEliminados()) {
+                    cliExpediente.getCliExamenList().remove(new CliExamen(cliExamenDto.getExaId()));
+                }
+
+                for (CliAtencionDto cliAtencionDto : cliExpedienteDto.getCliAtencionList()) {
+                    if (cliAtencionDto.getModificado()) {
+                        CliAtencion cliAtencion = em.find(CliAtencion.class, cliAtencionDto.getAteId());
+                        cliExpediente.getCliAtencionList().add(cliAtencion);
+                    }
+                }
+
+                for (CliAtencionDto cliAtencionDto : cliExpedienteDto.getCliAtencionListEliminados()) {
+                    cliExpediente.getCliAtencionList().remove(new CliAtencion(cliAtencionDto.getAteId()));
+                }
+
+                for (CliAntecedenteDto cliAntecedenteDto : cliExpedienteDto.getCliAntecedenteList()) {
+                    if (cliAntecedenteDto.getModificado()) {
+                        CliAntecedente cliAntecedente = em.find(CliAntecedente.class, cliAntecedenteDto.getAntId());
+                        cliExpediente.getCliAntecedenteList().add(cliAntecedente);
+                    }
+                }
+
+                for (CliAntecedenteDto cliAntecedenteDto : cliExpedienteDto.getCliAntecedenteListEliminados()) {
+                    cliExpediente.getCliAntecedenteList().remove(new CliAntecedente(cliAntecedenteDto.getAntId()));
+                }
+
+                cliExpediente = em.merge(cliExpediente);
+            } else {
+                cliExpediente = new CliExpediente(cliExpedienteDto);
+                em.persist(cliExpediente);
+            }
+            em.flush();
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Expediente", new CliExpedienteDto(cliExpediente));
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el empleado.", "guardarEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el expediente.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el expediente.", "guardarExpediente " + ex.getMessage());
         }
     }
 
-    public Respuesta eliminarEmpleado(Long id) {
+    public Respuesta eliminarExpediente(Long id) {
         try {
-//            Empleado empleado;
-//            if (id != null && id > 0) {
-//                empleado = em.find(Empleado.class, id);
-//                if (empleado == null) {
-//                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el empleado a eliminar.", "eliminarEmpleado NoResultException");
-//                }
-//                em.remove(empleado);
-//            } else {
-//                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el empleado a eliminar.", "eliminarEmpleado NoResultException");
-//            }
-//            em.flush();
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
+            CliExpediente cliExpediente;
+            if (id != null && id > 0) {
+                cliExpediente = em.find(CliExpediente.class, id);
+                if (cliExpediente == null) {
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el expediente a eliminar.", "eliminarExpediente NoResultException");
+                }
+                em.remove(cliExpediente);
+            } else {
+                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el expediente a eliminar.", "eliminarExpediente NoResultException");
+            }
+            em.flush();
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
             if (ex.getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class) {
-                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el empleado porque tiene relaciones con otros registros.", "eliminarEmpleado " + ex.getMessage());
+                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el expediente porque tiene relaciones con otros registros.", "eliminarExpediente " + ex.getMessage());
             }
-            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el empleado.", "eliminarEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el expediente.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el expediente.", "eliminarExpediente " + ex.getMessage());
         }
     }
 }

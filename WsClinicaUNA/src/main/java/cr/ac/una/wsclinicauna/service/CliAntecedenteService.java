@@ -4,6 +4,11 @@
  */
 package cr.ac.una.wsclinicauna.service;
 
+import cr.ac.una.wsclinicauna.model.CliAntecedente;
+import cr.ac.una.wsclinicauna.model.CliAntecedenteDto;
+import cr.ac.una.wsclinicauna.model.CliExpediente;
+import cr.ac.una.wsclinicauna.model.CliExpedienteDto;
+import cr.ac.una.wsclinicauna.model.CliReporteagenda;
 import cr.ac.una.wsclinicauna.model.CliUsuarioDto;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
@@ -13,7 +18,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.NonUniqueResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,89 +32,100 @@ import java.util.logging.Logger;
 @Stateless
 @LocalBean
 public class CliAntecedenteService {
+
     private static final Logger LOG = Logger.getLogger(CliAntecedenteService.class.getName());
-    @PersistenceContext(unitName="WsClinicaUNAPU")
+    @PersistenceContext(unitName = "WsClinicaUNAPU")
     private EntityManager em;
-    
-    public Respuesta getEmpleado(Long id) {
-        try {
-//            Query qryEmpleado = em.createNamedQuery("Empleado.findByEmpId", Empleado.class);
-//            qryEmpleado.setParameter("id", id);
 
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Empleado", new EmpleadoDto((Empleado) qryEmpleado.getSingleResult()));
+    public Respuesta getAntecedente(Long id) {
+        try {
+            Query qryUsuario = em.createNamedQuery("CliAntecedente.findByAntId", CliAntecedente.class);
+            qryUsuario.setParameter("id", id);
+            CliAntecedente cliAntecedente = (CliAntecedente) qryUsuario.getSingleResult();
+
+            CliAntecedenteDto cliAntecedenteDto = new CliAntecedenteDto(cliAntecedente);
+            cliAntecedenteDto.setCliExpedienteDto(new CliExpedienteDto(cliAntecedente.getExpId()));
+
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Antecedente", cliAntecedenteDto);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un empleado con el código ingresado.", "getEmpleado NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un antecedente con el código ingresado.", "getAntecedente NoResultException");
         } catch (NonUniqueResultException ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el empleado.", "getEmpleado NonUniqueResultException");
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el antecedente.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el antecedente.", "getAntecedente NonUniqueResultException");
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el empleado.", "getEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el antecedente.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el antecedente.", "getAntecedente " + ex.getMessage());
         }
     }
 
-    public Respuesta getEmpleados() {
+    public Respuesta getAntecedentes() {
         try {
-//            Query qryEmpleado = em.createNamedQuery("Empleado.findByCedulaNombrePapellido", Empleado.class);
-//            List<Empleado> empleados = qryEmpleado.getResultList();
-//            List<EmpleadoDto> empleadosDto = new ArrayList<>();
-//            for (Empleado empleado : empleados) {
-//                empleadosDto.add(new EmpleadoDto(empleado));
-//            }
+            Query qryUsuario = em.createNamedQuery("CliAntecedente.findAll", CliAntecedente.class);
+            List<CliAntecedente> cliAntecedentes = qryUsuario.getResultList();
+            List<CliAntecedenteDto> cliAntecedenteDtos = new ArrayList<>();
+            for (CliAntecedente cliAntecedente : cliAntecedentes) {
+                CliAntecedenteDto cliAntecedenteDto = new CliAntecedenteDto(cliAntecedente);
 
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Empleados", empleadosDto);
+                cliAntecedenteDto.setCliExpedienteDto(new CliExpedienteDto(cliAntecedente.getExpId()));
+
+                cliAntecedenteDtos.add(cliAntecedenteDto);
+            }
+
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Antecedentes", cliAntecedenteDtos);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen empleados con los criterios ingresados.", "getEmpleados NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen antecedente con los criterios ingresados.", "getAntecedentes NoResultException");
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el empleado.", "getEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el antecedente.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el antecedente.", "getAntecedentes " + ex.getMessage());
         }
     }
 
-    public Respuesta guardarEmpleado(CliUsuarioDto empleadoDto) {
+    public Respuesta guardarAntecedente(CliAntecedenteDto cliAntecedenteDto) {
         try {
-//            Empleado empleado;
-//            if (empleadoDto.getId() != null && empleadoDto.getId() > 0) {
-//                empleado = em.find(Empleado.class, empleadoDto.getId());
-//                if (empleado == null) {
-//                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el empleado a modificar.", "guardarEmpleado NoResultException");
-//                }
-//                empleado.actualizar(empleadoDto);
-//                empleado = em.merge(empleado);
-//            } else {
-//                empleado = new Empleado(empleadoDto);
-//                em.persist(empleado);
-//            }
-//            em.flush();
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Empleado", new EmpleadoDto(empleado));
+            CliAntecedente cliAntecedente;
+            if (cliAntecedenteDto.getAntId()!= null && cliAntecedenteDto.getAntId()> 0) {
+                cliAntecedente = em.find(CliAntecedente.class, cliAntecedenteDto.getAntId());
+                if (cliAntecedente == null) {
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el antecedente a modificar.", "guardarAntecedente NoResultException");
+                }
+                cliAntecedente.actualizar(cliAntecedenteDto);
+                CliExpediente cliExpediente = em.find(CliExpediente.class, cliAntecedenteDto.getCliExpedienteDto().getExpId());
+                cliAntecedente.setExpId(cliExpediente);
+                cliAntecedente = em.merge(cliAntecedente);
+            } else {
+                cliAntecedente = new CliAntecedente(cliAntecedenteDto);
+                em.persist(cliAntecedente);
+            }
+            em.flush();
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Antecedente", new CliAntecedenteDto(cliAntecedente));
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el empleado.", "guardarEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el antecedente.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el antecedente.", "guardarAntecedente " + ex.getMessage());
         }
     }
 
-    public Respuesta eliminarEmpleado(Long id) {
+    public Respuesta eliminarAntecedente(Long id) {
         try {
-//            Empleado empleado;
-//            if (id != null && id > 0) {
-//                empleado = em.find(Empleado.class, id);
-//                if (empleado == null) {
-//                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el empleado a eliminar.", "eliminarEmpleado NoResultException");
-//                }
-//                em.remove(empleado);
-//            } else {
-//                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el empleado a eliminar.", "eliminarEmpleado NoResultException");
-//            }
-//            em.flush();
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
+            CliAntecedente cliAntecedente;
+            if (id != null && id > 0) {
+                cliAntecedente = em.find(CliAntecedente.class, id);
+                if (cliAntecedente == null) {
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el antecedente a eliminar.", "eliminarAntecedente NoResultException");
+                }
+                em.remove(cliAntecedente);
+            } else {
+                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el antecedente a eliminar.", "eliminarAntecedente NoResultException");
+            }
+            em.flush();
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
             if (ex.getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class) {
-                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el empleado porque tiene relaciones con otros registros.", "eliminarEmpleado " + ex.getMessage());
+                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el antecedente porque tiene relaciones con otros registros.", "eliminarAntecedente " + ex.getMessage());
             }
-            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el empleado.", "eliminarEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el antecedente.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el antecedente.", "eliminarAntecedente " + ex.getMessage());
         }
     }
 }

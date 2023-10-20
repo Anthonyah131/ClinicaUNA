@@ -4,7 +4,13 @@
  */
 package cr.ac.una.wsclinicauna.service;
 
-import cr.ac.una.wsclinicauna.model.CliUsuarioDto;
+import cr.ac.una.wsclinicauna.model.CliAtencion;
+import cr.ac.una.wsclinicauna.model.CliAtencionDto;
+import cr.ac.una.wsclinicauna.model.CliExamen;
+import cr.ac.una.wsclinicauna.model.CliExamenDto;
+import cr.ac.una.wsclinicauna.model.CliExpediente;
+import cr.ac.una.wsclinicauna.model.CliExpedienteDto;
+import cr.ac.una.wsclinicauna.model.CliReporteagenda;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import jakarta.ejb.LocalBean;
@@ -13,7 +19,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.NonUniqueResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,89 +33,120 @@ import java.util.logging.Logger;
 @Stateless
 @LocalBean
 public class CliAtencionService {
+
     private static final Logger LOG = Logger.getLogger(CliAtencionService.class.getName());
-    @PersistenceContext(unitName="WsClinicaUNAPU")
+    @PersistenceContext(unitName = "WsClinicaUNAPU")
     private EntityManager em;
-    
-    public Respuesta getEmpleado(Long id) {
-        try {
-//            Query qryEmpleado = em.createNamedQuery("Empleado.findByEmpId", Empleado.class);
-//            qryEmpleado.setParameter("id", id);
 
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Empleado", new EmpleadoDto((Empleado) qryEmpleado.getSingleResult()));
+    public Respuesta getAtencion(Long id) {
+        try {
+            Query qryUsuario = em.createNamedQuery("CliAtencion.findByAteId", CliAtencion.class);
+            qryUsuario.setParameter("id", id);
+            CliAtencion cliAtencion = (CliAtencion) qryUsuario.getSingleResult();
+
+            CliAtencionDto cliAtencionDto = new CliAtencionDto(cliAtencion);
+            cliAtencionDto.setCliExpedienteDto(new CliExpedienteDto(cliAtencion.getExpId()));
+
+            for (CliExamen cliExamen : cliAtencion.getCliExamenList()) {
+                cliAtencionDto.getCliExamenList().add(new CliExamenDto(cliExamen));
+            }
+
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Atencion", cliAtencionDto);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un empleado con el código ingresado.", "getEmpleado NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un atencion con el código ingresado.", "getAtencion NoResultException");
         } catch (NonUniqueResultException ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el empleado.", "getEmpleado NonUniqueResultException");
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el atencion.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el atencion.", "getAtencion NonUniqueResultException");
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el empleado.", "getEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el atencion.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el atencion.", "getAtencion " + ex.getMessage());
         }
     }
 
-    public Respuesta getEmpleados() {
+    public Respuesta getAtenciones() {
         try {
-//            Query qryEmpleado = em.createNamedQuery("Empleado.findByCedulaNombrePapellido", Empleado.class);
-//            List<Empleado> empleados = qryEmpleado.getResultList();
-//            List<EmpleadoDto> empleadosDto = new ArrayList<>();
-//            for (Empleado empleado : empleados) {
-//                empleadosDto.add(new EmpleadoDto(empleado));
-//            }
+            Query qryUsuario = em.createNamedQuery("CliAtencion.findAll", CliAtencion.class);
+            List<CliAtencion> cliAtencions = qryUsuario.getResultList();
+            List<CliAtencionDto> cliAtencionDtos = new ArrayList<>();
+            for (CliAtencion cliAtencion : cliAtencions) {
+                CliAtencionDto cliAtencionDto = new CliAtencionDto(cliAtencion);
 
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Empleados", empleadosDto);
+                cliAtencionDto.setCliExpedienteDto(new CliExpedienteDto(cliAtencion.getExpId()));
+
+                for (CliExamen cliExamen : cliAtencion.getCliExamenList()) {
+                    cliAtencionDto.getCliExamenList().add(new CliExamenDto(cliExamen));
+                }
+
+                cliAtencionDtos.add(cliAtencionDto);
+            }
+
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Atenciones", cliAtencionDtos);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen empleados con los criterios ingresados.", "getEmpleados NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen atencion con los criterios ingresados.", "getAtenciones NoResultException");
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el empleado.", "getEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el atencion.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el atencion.", "getAtenciones " + ex.getMessage());
         }
     }
 
-    public Respuesta guardarEmpleado(CliUsuarioDto empleadoDto) {
+    public Respuesta guardarAtencion(CliAtencionDto cliAtencionDto) {
         try {
-//            Empleado empleado;
-//            if (empleadoDto.getId() != null && empleadoDto.getId() > 0) {
-//                empleado = em.find(Empleado.class, empleadoDto.getId());
-//                if (empleado == null) {
-//                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el empleado a modificar.", "guardarEmpleado NoResultException");
-//                }
-//                empleado.actualizar(empleadoDto);
-//                empleado = em.merge(empleado);
-//            } else {
-//                empleado = new Empleado(empleadoDto);
-//                em.persist(empleado);
-//            }
-//            em.flush();
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Empleado", new EmpleadoDto(empleado));
+            CliAtencion cliAtencion;
+            if (cliAtencionDto.getAteId() != null && cliAtencionDto.getAteId() > 0) {
+                cliAtencion = em.find(CliAtencion.class, cliAtencionDto.getAteId());
+                if (cliAtencion == null) {
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el atencion a modificar.", "guardarAtencion NoResultException");
+                }
+                cliAtencion.actualizar(cliAtencionDto);
+                CliExpediente cliExpediente = em.find(CliExpediente.class, cliAtencionDto.getCliExpedienteDto().getExpId());
+                cliAtencion.setExpId(cliExpediente);
+
+                for (CliExamenDto cliExamenDto : cliAtencionDto.getCliExamenList()) {
+                    if (cliExamenDto.getModificado()) {
+                        CliExamen cliExamen = em.find(CliExamen.class, cliExamenDto.getExaId());
+                        cliAtencion.getCliExamenList().add(cliExamen);
+                    }
+                }
+
+                for (CliExamenDto cliExamenDto : cliAtencionDto.getCliExamenListEliminados()) {
+                    cliAtencion.getCliExamenList().remove(new CliExamen(cliExamenDto.getExaId()));
+                }
+
+                cliAtencion = em.merge(cliAtencion);
+            } else {
+                cliAtencion = new CliAtencion(cliAtencionDto);
+                em.persist(cliAtencion);
+            }
+            em.flush();
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Atencion", new CliAtencionDto(cliAtencion));
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el empleado.", "guardarEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el atencion.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el atencion.", "guardarAtencion " + ex.getMessage());
         }
     }
 
-    public Respuesta eliminarEmpleado(Long id) {
+    public Respuesta eliminarAtencion(Long id) {
         try {
-//            Empleado empleado;
-//            if (id != null && id > 0) {
-//                empleado = em.find(Empleado.class, id);
-//                if (empleado == null) {
-//                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el empleado a eliminar.", "eliminarEmpleado NoResultException");
-//                }
-//                em.remove(empleado);
-//            } else {
-//                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el empleado a eliminar.", "eliminarEmpleado NoResultException");
-//            }
-//            em.flush();
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
+            CliAtencion cliAtencion;
+            if (id != null && id > 0) {
+                cliAtencion = em.find(CliAtencion.class, id);
+                if (cliAtencion == null) {
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el atencion a eliminar.", "eliminarAtencion NoResultException");
+                }
+                em.remove(cliAtencion);
+            } else {
+                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el atencion a eliminar.", "eliminarAtencion NoResultException");
+            }
+            em.flush();
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
             if (ex.getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class) {
-                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el empleado porque tiene relaciones con otros registros.", "eliminarEmpleado " + ex.getMessage());
+                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el atencion porque tiene relaciones con otros registros.", "eliminarAtencion " + ex.getMessage());
             }
-            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el empleado.", "eliminarEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el atencion.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el atencion.", "eliminarAtencion " + ex.getMessage());
         }
     }
 }
