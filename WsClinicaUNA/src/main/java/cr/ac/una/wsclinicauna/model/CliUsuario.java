@@ -49,7 +49,7 @@ import jakarta.validation.constraints.Size;
     @NamedQuery(name = "CliUsuario.findByUsuActivo", query = "SELECT c FROM CliUsuario c WHERE c.usuActivo = :usuActivo"),
     @NamedQuery(name = "CliUsuario.findByUsuVersion", query = "SELECT c FROM CliUsuario c WHERE c.usuVersion = :usuVersion")})
 public class CliUsuario implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -120,15 +120,19 @@ public class CliUsuario implements Serializable {
     private List<CliReporteusuarios> cliReporteusuariosList;
     @OneToMany(mappedBy = "usuId", fetch = FetchType.LAZY)
     private List<CliMedico> cliMedicoList;
-    
+
     public CliUsuario() {
     }
-    
+
+    public CliUsuario(Long usuId) {
+        this.usuId = usuId;
+    }
+
     public CliUsuario(CliUsuarioDto cliUsuarioDto) {
         this.usuId = cliUsuarioDto.getUsuId();
         actualizar(cliUsuarioDto);
     }
-    
+
     public void actualizar(CliUsuarioDto cliUsuarioDto) {
         this.usuNombre = cliUsuarioDto.getUsuNombre();
         this.usuPapellido = cliUsuarioDto.getUsuPapellido();
@@ -143,134 +147,134 @@ public class CliUsuario implements Serializable {
         this.usuActivo = cliUsuarioDto.getUsuActivo();
         this.usuVersion = cliUsuarioDto.getUsuVersion();
     }
-    
+
     public Long getUsuId() {
         return usuId;
     }
-    
+
     public void setUsuId(Long usuId) {
         this.usuId = usuId;
     }
-    
+
     public String getUsuNombre() {
         return usuNombre;
     }
-    
+
     public void setUsuNombre(String usuNombre) {
         this.usuNombre = usuNombre;
     }
-    
+
     public String getUsuPapellido() {
         return usuPapellido;
     }
-    
+
     public void setUsuPapellido(String usuPapellido) {
         this.usuPapellido = usuPapellido;
     }
-    
+
     public String getUsuSapellido() {
         return usuSapellido;
     }
-    
+
     public void setUsuSapellido(String usuSapellido) {
         this.usuSapellido = usuSapellido;
     }
-    
+
     public String getUsuCedula() {
         return usuCedula;
     }
-    
+
     public void setUsuCedula(String usuCedula) {
         this.usuCedula = usuCedula;
     }
-    
+
     public String getUsuCorreo() {
         return usuCorreo;
     }
-    
+
     public void setUsuCorreo(String usuCorreo) {
         this.usuCorreo = usuCorreo;
     }
-    
+
     public String getUsuTipousuario() {
         return usuTipousuario;
     }
-    
+
     public void setUsuTipousuario(String usuTipousuario) {
         this.usuTipousuario = usuTipousuario;
     }
-    
+
     public String getUsuUsuario() {
         return usuUsuario;
     }
-    
+
     public void setUsuUsuario(String usuUsuario) {
         this.usuUsuario = usuUsuario;
     }
-    
+
     public String getUsuClave() {
         return usuClave;
     }
-    
+
     public void setUsuClave(String usuClave) {
         this.usuClave = usuClave;
     }
-    
+
     public String getUsuTempclave() {
         return usuTempclave;
     }
-    
+
     public void setUsuTempclave(String usuTempclave) {
         this.usuTempclave = usuTempclave;
     }
-    
+
     public String getUsuIdioma() {
         return usuIdioma;
     }
-    
+
     public void setUsuIdioma(String usuIdioma) {
         this.usuIdioma = usuIdioma;
     }
-    
+
     public String getUsuActivo() {
         return usuActivo;
     }
-    
+
     public void setUsuActivo(String usuActivo) {
         this.usuActivo = usuActivo;
     }
-    
+
     public Long getUsuVersion() {
         return usuVersion;
     }
-    
+
     public void setUsuVersion(Long usuVersion) {
         this.usuVersion = usuVersion;
     }
-    
+
     public List<CliReporteusuarios> getCliReporteusuariosList() {
         return cliReporteusuariosList;
     }
-    
+
     public void setCliReporteusuariosList(List<CliReporteusuarios> cliReporteusuariosList) {
         this.cliReporteusuariosList = cliReporteusuariosList;
     }
-    
+
     public List<CliMedico> getCliMedicoList() {
         return cliMedicoList;
     }
-    
+
     public void setCliMedicoList(List<CliMedico> cliMedicoList) {
         this.cliMedicoList = cliMedicoList;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (usuId != null ? usuId.hashCode() : 0);
         return hash;
     }
-    
+
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -283,10 +287,10 @@ public class CliUsuario implements Serializable {
         }
         return true;
     }
-    
+
     @Override
     public String toString() {
         return "cr.ac.una.wsclinicauna.model.CliUsuario[ usuId=" + usuId + " ]";
     }
-    
+
 }

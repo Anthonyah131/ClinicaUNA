@@ -114,7 +114,7 @@ public class CliAtencion implements Serializable {
     }
 
     public CliAtencion(CliAtencionDto cliAtencionDto) {
-        this.ateId = ateId;
+        this.ateId =cliAtencionDto.getAteId();
         actualizar(cliAtencionDto);
     }
 
