@@ -11,6 +11,8 @@ import cr.ac.una.wsclinicauna.model.CliReporteagendaDto;
 import cr.ac.una.wsclinicauna.model.CliReporteexpedienteDto;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
+import jakarta.ejb.LocalBean;
+import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.NonUniqueResultException;
@@ -26,6 +28,8 @@ import java.util.logging.Logger;
  *
  * @author ArauzKJ
  */
+@Stateless
+@LocalBean
 public class CliReporteagendaService {
     private static final Logger LOG = Logger.getLogger(CliReporteagendaService.class.getName());
     @PersistenceContext(unitName = "WsClinicaUNAPU")
