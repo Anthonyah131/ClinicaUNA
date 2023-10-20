@@ -8,7 +8,6 @@ import cr.ac.una.wsclinicauna.model.CliMedico;
 import cr.ac.una.wsclinicauna.model.CliMedicoDto;
 import cr.ac.una.wsclinicauna.model.CliReporteagenda;
 import cr.ac.una.wsclinicauna.model.CliReporteagendaDto;
-import cr.ac.una.wsclinicauna.model.CliReporteexpedienteDto;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import jakarta.ejb.LocalBean;
