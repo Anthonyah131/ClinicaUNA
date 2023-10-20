@@ -7,6 +7,7 @@ package cr.ac.una.wsclinicauna.controller;
 import cr.ac.una.wsclinicauna.model.CliPacienteDto;
 import cr.ac.una.wsclinicauna.service.CliPacienteService;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
+import cr.ac.una.wsclinicauna.util.Respuesta;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.Consumes;
@@ -16,8 +17,10 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.GenericEntity;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,7 +42,12 @@ public class CliPacienteController {
     public Response getPaciente(@PathParam("id") Long id) {
         try {
 
-            return Response.ok().build();//TODO
+            Respuesta res = cliPacienteService.getPaciente(id);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
+            }
+            CliPacienteDto cliPacienteDto = (CliPacienteDto) res.getResultado("Paciente");
+            return Response.ok(cliPacienteDto).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(CliPacienteController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el paciente").build();//TODO
@@ -50,8 +58,13 @@ public class CliPacienteController {
     @Path("/pacientes")
     public Response getPacientes() {
         try {
+            Respuesta res = cliPacienteService.getPacientes();
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
+            }
+            return Response.ok(new GenericEntity<List<CliPacienteDto>>((List<CliPacienteDto>) res.getResultado("Pacientes")) {
+            }).build();
 
-            return Response.ok().build();
         } catch (Exception ex) {
             Logger.getLogger(CliPacienteController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo los paciente").build();//TODO
@@ -63,8 +76,11 @@ public class CliPacienteController {
     @Path("/paciente")
     public Response guardarPaciente(CliPacienteDto cliPacienteDto) {
         try {
-
-            return Response.ok().build();//TODO
+            Respuesta res = cliPacienteService.guardarPaciente(cliPacienteDto);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
+            }
+            return Response.ok((CliPacienteDto) res.getResultado("Paciente")).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(CliPacienteController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando el paciente").build();//TODO
@@ -75,6 +91,10 @@ public class CliPacienteController {
     @Path("/eliminarPaciente/{id}")
     public Response eliminarPaciente(@PathParam("id") Long id) {
         try {
+            Respuesta res = cliPacienteService.eliminarPaciente(id);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
+            }
             return Response.ok().build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(CliPacienteController.class.getName()).log(Level.SEVERE, null, ex);

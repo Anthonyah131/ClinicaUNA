@@ -7,6 +7,7 @@ package cr.ac.una.wsclinicauna.controller;
 import cr.ac.una.wsclinicauna.model.CliExpedienteDto;
 import cr.ac.una.wsclinicauna.service.CliExpedienteService;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
+import cr.ac.una.wsclinicauna.util.Respuesta;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.Consumes;
@@ -16,8 +17,10 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.GenericEntity;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,8 +41,12 @@ public class CliExpedienteController {
     @Path("/expediente/{id}")
     public Response getExpediente(@PathParam("id") Long id) {
         try {
-
-            return Response.ok().build();//TODO
+            Respuesta res = cliExpedienteService.getExpediente(id);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
+            }
+            CliExpedienteDto cliPacienteDto = (CliExpedienteDto) res.getResultado("Expediente");
+            return Response.ok(cliPacienteDto).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(CliExpedienteController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el expediente").build();//TODO
@@ -50,8 +57,12 @@ public class CliExpedienteController {
     @Path("/expedientes")
     public Response getExpedientes() {
         try {
-
-            return Response.ok().build();
+            Respuesta res = cliExpedienteService.getExpedientes();
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
+            }
+            return Response.ok(new GenericEntity<List<CliExpedienteDto>>((List<CliExpedienteDto>) res.getResultado("Expedientes")) {
+            }).build();
         } catch (Exception ex) {
             Logger.getLogger(CliExpedienteController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo los expediente").build();//TODO
@@ -63,8 +74,11 @@ public class CliExpedienteController {
     @Path("/expediente")
     public Response guardarExpediente(CliExpedienteDto cliExpedienteDto) {
         try {
-
-            return Response.ok().build();//TODO
+            Respuesta res = cliExpedienteService.guardarExpediente(cliExpedienteDto);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
+            }
+            return Response.ok((CliExpedienteDto) res.getResultado("Expediente")).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(CliExpedienteController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando el expediente").build();//TODO
@@ -75,6 +89,10 @@ public class CliExpedienteController {
     @Path("/eliminarExpediente/{id}")
     public Response eliminarExpediente(@PathParam("id") Long id) {
         try {
+            Respuesta res = cliExpedienteService.eliminarExpediente(id);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
+            }
             return Response.ok().build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(CliExpedienteController.class.getName()).log(Level.SEVERE, null, ex);

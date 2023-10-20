@@ -7,6 +7,7 @@ package cr.ac.una.wsclinicauna.controller;
 import cr.ac.una.wsclinicauna.model.CliMedicoDto;
 import cr.ac.una.wsclinicauna.service.CliMedicoService;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
+import cr.ac.una.wsclinicauna.util.Respuesta;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.Consumes;
@@ -16,8 +17,10 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.GenericEntity;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,8 +39,12 @@ public class CliMedicoController {
     @Path("/medico/{id}")
     public Response getMedico(@PathParam("id") Long id) {
         try {
-            
-            return Response.ok().build();//TODO
+            Respuesta res = cliMedicoService.getMedico(id);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
+            }
+            CliMedicoDto cliPacienteDto = (CliMedicoDto) res.getResultado("Medico");
+            return Response.ok(cliPacienteDto).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(CliMedicoController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el medico").build();//TODO
@@ -48,8 +55,12 @@ public class CliMedicoController {
     @Path("/medicos")
     public Response getMedicos() {
         try {
-            
-            return Response.ok().build();
+            Respuesta res = cliMedicoService.getMedicos();
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
+            }
+            return Response.ok(new GenericEntity<List<CliMedicoDto>>((List<CliMedicoDto>) res.getResultado("Medicos")) {
+            }).build();
         } catch (Exception ex) {
             Logger.getLogger(CliMedicoController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo los medico").build();//TODO
@@ -62,7 +73,11 @@ public class CliMedicoController {
     public Response guardarMedico(CliMedicoDto cliMedicoDto) {
         try {
             
-            return Response.ok().build();//TODO
+            Respuesta res = cliMedicoService.guardarMedico(cliMedicoDto);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
+            }
+            return Response.ok((CliMedicoDto) res.getResultado("Medico")).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(CliMedicoController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando el medico").build();//TODO
@@ -73,6 +88,10 @@ public class CliMedicoController {
     @Path("/eliminarMedico/{id}")
     public Response eliminarMedico(@PathParam("id") Long id) {
         try {
+            Respuesta res = cliMedicoService.eliminarMedico(id);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
+            }
             return Response.ok().build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(CliMedicoController.class.getName()).log(Level.SEVERE, null, ex);

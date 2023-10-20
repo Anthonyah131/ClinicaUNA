@@ -7,6 +7,7 @@ package cr.ac.una.wsclinicauna.controller;
 import cr.ac.una.wsclinicauna.model.CliCitaDto;
 import cr.ac.una.wsclinicauna.service.CliCitaService;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
+import cr.ac.una.wsclinicauna.util.Respuesta;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.Consumes;
@@ -16,8 +17,10 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.GenericEntity;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,8 +40,12 @@ public class CliCitaController {
     @Path("/cita/{id}")
     public Response getCita(@PathParam("id") Long id) {
         try {
-            
-            return Response.ok().build();//TODO
+           Respuesta res = cliCitaService.getCita(id);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
+            }
+            CliCitaDto cliPacienteDto = (CliCitaDto) res.getResultado("Cita");
+            return Response.ok(cliPacienteDto).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(CliCitaController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el cita").build();//TODO
@@ -49,8 +56,12 @@ public class CliCitaController {
     @Path("/citas")
     public Response getCitas() {
         try {
-            
-            return Response.ok().build();
+            Respuesta res = cliCitaService.getCitas();
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
+            }
+            return Response.ok(new GenericEntity<List<CliCitaDto>>((List<CliCitaDto>) res.getResultado("Citas")) {
+            }).build();
         } catch (Exception ex) {
             Logger.getLogger(CliCitaController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo los cita").build();//TODO
@@ -62,8 +73,11 @@ public class CliCitaController {
     @Path("/cita")
     public Response guardarCita(CliCitaDto cliCitaDto) {
         try {
-            
-            return Response.ok().build();//TODO
+            Respuesta res = cliCitaService.guardarCita(cliCitaDto);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
+            }
+            return Response.ok((CliCitaDto) res.getResultado("Citas")).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(CliCitaController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando el cita").build();//TODO
@@ -74,6 +88,10 @@ public class CliCitaController {
     @Path("/eliminarCita/{id}")
     public Response eliminarCita(@PathParam("id") Long id) {
         try {
+            Respuesta res = cliCitaService.eliminarCita(id);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
+            }
             return Response.ok().build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(CliCitaController.class.getName()).log(Level.SEVERE, null, ex);

@@ -93,7 +93,7 @@ public class CliUsuarioController {
             if (cliUsuarioDto.getUsuId() == null) {
                 cliUsuarioService.correoActivacion(cliUsuarioDto, cliParametrosDto);
             }
-            return Response.ok().build();
+            return Response.ok(cliUsuarioDto).build();
         } catch (Exception ex) {
             Logger.getLogger(CliUsuarioController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando el usuario").build();

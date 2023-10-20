@@ -7,6 +7,7 @@ package cr.ac.una.wsclinicauna.controller;
 import cr.ac.una.wsclinicauna.model.CliAntecedenteDto;
 import cr.ac.una.wsclinicauna.service.CliAntecedenteService;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
+import cr.ac.una.wsclinicauna.util.Respuesta;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.Consumes;
@@ -16,8 +17,10 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.GenericEntity;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,8 +41,12 @@ public class CliAntecedenteController {
     @Path("/antecedente/{id}")
     public Response getAntecedente(@PathParam("id") Long id) {
         try {
-
-            return Response.ok().build();//TODO
+            Respuesta res = cliAntecedenteService.getAntecedente(id);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
+            }
+            CliAntecedenteDto cliPacienteDto = (CliAntecedenteDto) res.getResultado("Antecedente");
+            return Response.ok(cliPacienteDto).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(CliAntecedenteController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el antecedente").build();//TODO
@@ -51,7 +58,12 @@ public class CliAntecedenteController {
     public Response getAntecedentes() {
         try {
 
-            return Response.ok().build();
+            Respuesta res = cliAntecedenteService.getAntecedentes();
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
+            }
+            return Response.ok(new GenericEntity<List<CliAntecedenteDto>>((List<CliAntecedenteDto>) res.getResultado("Antecedentes")) {
+            }).build();
         } catch (Exception ex) {
             Logger.getLogger(CliAntecedenteController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo los antecedente").build();//TODO
@@ -63,8 +75,11 @@ public class CliAntecedenteController {
     @Path("/antecedente")
     public Response guardarAntecedente(CliAntecedenteDto cliAntecedenteDto) {
         try {
-
-            return Response.ok().build();//TODO
+            Respuesta res = cliAntecedenteService.guardarAntecedente(cliAntecedenteDto);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
+            }
+            return Response.ok((CliAntecedenteDto) res.getResultado("Antecedente")).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(CliAntecedenteController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando el antecedente").build();//TODO
@@ -75,6 +90,10 @@ public class CliAntecedenteController {
     @Path("/eliminarAntecedente/{id}")
     public Response eliminarAntecedente(@PathParam("id") Long id) {
         try {
+            Respuesta res = cliAntecedenteService.eliminarAntecedente(id);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
+            }
             return Response.ok().build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(CliAntecedenteController.class.getName()).log(Level.SEVERE, null, ex);

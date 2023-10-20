@@ -7,6 +7,7 @@ package cr.ac.una.wsclinicauna.controller;
 import cr.ac.una.wsclinicauna.model.CliExamenDto;
 import cr.ac.una.wsclinicauna.service.CliExamenService;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
+import cr.ac.una.wsclinicauna.util.Respuesta;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.Consumes;
@@ -16,8 +17,10 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.GenericEntity;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,14 +33,20 @@ import java.util.logging.Logger;
 @Consumes(MediaType.APPLICATION_JSON)
 @Tag(name = "Examen", description = "Operaciones sobre examen")
 public class CliExamenController {
+
     @EJB
     CliExamenService cliExamenService;
+
     @GET
     @Path("/examen/{id}")
     public Response getExamen(@PathParam("id") Long id) {
         try {
-            
-            return Response.ok().build();//TODO
+            Respuesta res = cliExamenService.getExamen(id);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
+            }
+            CliExamenDto cliPacienteDto = (CliExamenDto) res.getResultado("Examen");
+            return Response.ok(cliPacienteDto).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(CliExamenController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el examen").build();//TODO
@@ -48,8 +57,12 @@ public class CliExamenController {
     @Path("/examenes")
     public Response getExamens() {
         try {
-            
-            return Response.ok().build();
+            Respuesta res = cliExamenService.getExamenes();
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
+            }
+            return Response.ok(new GenericEntity<List<CliExamenDto>>((List<CliExamenDto>) res.getResultado("Examenes")) {
+            }).build();
         } catch (Exception ex) {
             Logger.getLogger(CliExamenController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo los examen").build();//TODO
@@ -61,8 +74,11 @@ public class CliExamenController {
     @Path("/examen")
     public Response guardarExamen(CliExamenDto cliExamenDto) {
         try {
-            
-            return Response.ok().build();//TODO
+            Respuesta res = cliExamenService.guardarExamen(cliExamenDto);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
+            }
+            return Response.ok((CliExamenDto) res.getResultado("Examen")).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(CliExamenController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando el examen").build();//TODO
@@ -73,6 +89,11 @@ public class CliExamenController {
     @Path("/eliminarExamen/{id}")
     public Response eliminarExamen(@PathParam("id") Long id) {
         try {
+
+            Respuesta res = cliExamenService.eliminarExamen(id);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
+            }
             return Response.ok().build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(CliExamenController.class.getName()).log(Level.SEVERE, null, ex);

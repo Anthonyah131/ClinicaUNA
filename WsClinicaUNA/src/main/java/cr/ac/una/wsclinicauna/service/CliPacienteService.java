@@ -90,7 +90,7 @@ public class CliPacienteService {
                 cliPacienteDtos.add(cliPacienteDto);
             }
 
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Paciente", cliPacienteDtos);
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Pacientes", cliPacienteDtos);
 
         } catch (NoResultException ex) {
             return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen paciente con los criterios ingresados.", "getPacientes NoResultException");

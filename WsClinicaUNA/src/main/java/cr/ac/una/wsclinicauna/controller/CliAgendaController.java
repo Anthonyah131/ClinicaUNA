@@ -4,8 +4,10 @@
  */
 package cr.ac.una.wsclinicauna.controller;
 
+import cr.ac.una.wsclinicauna.model.CliAgendaDto;
 import cr.ac.una.wsclinicauna.service.CliAgendaService;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
+import cr.ac.una.wsclinicauna.util.Respuesta;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.Consumes;
@@ -15,8 +17,10 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.GenericEntity;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,8 +41,12 @@ public class CliAgendaController {
     @Path("/agenda/{id}")
     public Response getAgenda(@PathParam("id") Long id) {
         try {
-
-            return Response.ok().build();//TODO
+            Respuesta res = cliAgendaService.getAgenda(id);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
+            }
+            CliAgendaDto cliPacienteDto = (CliAgendaDto) res.getResultado("Agenda");
+            return Response.ok(cliPacienteDto).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(CliAgendaController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el agenda").build();//TODO
@@ -49,8 +57,12 @@ public class CliAgendaController {
     @Path("/agendas")
     public Response getAgendas() {
         try {
-
-            return Response.ok().build();
+            Respuesta res = cliAgendaService.getAgendas();
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
+            }
+            return Response.ok(new GenericEntity<List<CliAgendaDto>>((List<CliAgendaDto>) res.getResultado("Agendas")) {
+            }).build();
         } catch (Exception ex) {
             Logger.getLogger(CliAgendaController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo los agenda").build();//TODO
@@ -60,10 +72,13 @@ public class CliAgendaController {
     //TODO
     @POST
     @Path("/agenda")
-    public Response guardarAgenda() {
+    public Response guardarAgenda(CliAgendaDto cliAgendaDto) {
         try {
-
-            return Response.ok().build();//TODO
+            Respuesta res = cliAgendaService.guardarAgenda(cliAgendaDto);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
+            }
+            return Response.ok((CliAgendaDto) res.getResultado("Agenda")).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(CliAgendaController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando el agenda").build();//TODO
@@ -74,6 +89,10 @@ public class CliAgendaController {
     @Path("/eliminarAgenda/{id}")
     public Response eliminarAgenda(@PathParam("id") Long id) {
         try {
+            Respuesta res = cliAgendaService.eliminarAgenda(id);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
+            }
             return Response.ok().build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(CliAgendaController.class.getName()).log(Level.SEVERE, null, ex);
