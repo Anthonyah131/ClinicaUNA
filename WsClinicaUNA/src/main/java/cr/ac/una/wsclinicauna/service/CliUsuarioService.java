@@ -58,8 +58,16 @@ public class CliUsuarioService {
             Query qryActividad = em.createNamedQuery("CliUsuario.findByUsuarioClave", CliUsuario.class);
             qryActividad.setParameter("usuario", usuario);
             qryActividad.setParameter("clave", clave);
+            CliUsuario cliUsuario = (CliUsuario) qryActividad.getSingleResult();
+            CliUsuarioDto cliUsuarioDto = new CliUsuarioDto(cliUsuario);
+            for (CliReporteusuarios cliReporteusuarios : cliUsuario.getCliReporteusuariosList()) {
+                cliUsuarioDto.getCliReporteusuariosList().add(new CliReporteusuariosDto(cliReporteusuarios));
+            }
+            for (CliMedico cliMedico : cliUsuario.getCliMedicoList()) {
+                cliUsuarioDto.getCliMedicoList().add(new CliMedicoDto(cliMedico));
+            }
 
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuario", new CliUsuarioDto((CliUsuario) qryActividad.getSingleResult()));
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuario", cliUsuarioDto);
 
         } catch (NoResultException ex) {
             return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un usuario con las credenciales ingresadas.", "validarUsuario NoResultException");
@@ -74,10 +82,19 @@ public class CliUsuarioService {
 
     public Respuesta getUsuario(Long id) {
         try {
-            Query qryEmpleado = em.createNamedQuery("CliUsuario.findByUsuId", CliUsuario.class);
-            qryEmpleado.setParameter("id", id);
+            Query qryUsuario = em.createNamedQuery("CliUsuario.findByUsuId", CliUsuario.class);
+            qryUsuario.setParameter("id", id);
+            CliUsuario cliUsuario = (CliUsuario) qryUsuario.getSingleResult();
 
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuario", new CliUsuarioDto((CliUsuario) qryEmpleado.getSingleResult()));
+            CliUsuarioDto cliUsuarioDto = new CliUsuarioDto(cliUsuario);
+            for (CliReporteusuarios cliReporteusuarios : cliUsuario.getCliReporteusuariosList()) {
+                cliUsuarioDto.getCliReporteusuariosList().add(new CliReporteusuariosDto(cliReporteusuarios));
+            }
+            for (CliMedico cliMedico : cliUsuario.getCliMedicoList()) {
+                cliUsuarioDto.getCliMedicoList().add(new CliMedicoDto(cliMedico));
+            }
+
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuario", cliUsuarioDto);
 
         } catch (NoResultException ex) {
             return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un empleado con el código ingresado.", "getUsuario NoResultException");
@@ -92,11 +109,21 @@ public class CliUsuarioService {
 
     public Respuesta getUsuarios() {
         try {
-            Query qryEmpleado = em.createNamedQuery("CliUsuario.findAll", CliUsuario.class);
-            List<CliUsuario> cliUsuarios = qryEmpleado.getResultList();
+            Query qryUsuario = em.createNamedQuery("CliUsuario.findAll", CliUsuario.class);
+            List<CliUsuario> cliUsuarios = qryUsuario.getResultList();
             List<CliUsuarioDto> cliUsuarioDtos = new ArrayList<>();
             for (CliUsuario cliUsuario : cliUsuarios) {
-                cliUsuarioDtos.add(new CliUsuarioDto(cliUsuario));
+                CliUsuarioDto cliUsuarioDto = new CliUsuarioDto(cliUsuario);
+
+                for (CliReporteusuarios cliReporteusuarios : cliUsuario.getCliReporteusuariosList()) {
+                    cliUsuarioDto.getCliReporteusuariosList().add(new CliReporteusuariosDto(cliReporteusuarios));
+                }
+
+                for (CliMedico cliMedico : cliUsuario.getCliMedicoList()) {
+                    cliUsuarioDto.getCliMedicoList().add(new CliMedicoDto(cliMedico));
+                }
+
+                cliUsuarioDtos.add(cliUsuarioDto);
             }
 
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuarios", cliUsuarioDtos);
@@ -118,7 +145,7 @@ public class CliUsuarioService {
                     return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el usuario a modificar.", "guardarUsuario NoResultException");
                 }
                 cliUsuario.actualizar(cliUsuarioDto);
-                
+
                 for (CliMedicoDto cliMedicoDto : cliUsuarioDto.getCliMedicoListEliminados()) {
                     cliUsuario.getCliMedicoList().remove(new CliMedico(cliMedicoDto.getMedId()));
                 }
@@ -136,8 +163,12 @@ public class CliUsuarioService {
 
                 if (!cliUsuarioDto.getCliReporteusuariosList().isEmpty()) {
                     for (CliReporteusuariosDto cliReporteusuariosDto : cliUsuarioDto.getCliReporteusuariosList()) {
-                        CliReporteusuarios cliReporteusuarios = em.find(CliReporteusuarios.class, cliReporteusuariosDto.getRepusuId());
-                        cliUsuario.getCliReporteusuariosList().add(cliReporteusuarios);
+                        if (cliReporteusuariosDto.getModificado()) {
+                            CliReporteusuarios cliReporteusuarios = em.find(CliReporteusuarios.class, cliReporteusuariosDto.getRepusuId());
+                            cliUsuario.getCliReporteusuariosList().add(cliReporteusuarios);
+                            cliReporteusuarios.getCliUsuarioList().add(cliUsuario);
+                        }
+
                     }
                 }
                 cliUsuario = em.merge(cliUsuario);
@@ -297,7 +328,7 @@ public class CliUsuarioService {
             String passwordRemitente = cliParametrosDto.getParClave();//"cine1234";
             //Optine el correo al cual va a ser enviado el mensaje
             String correoReceptor = cliUsuarioDto.getUsuCorreo();
-            String asunto = "EvaComUNA";
+            String asunto = "ClinicaUNA";
 
             //Llama al metodo de creacion de contrasena y se la manda a la persona y luego se la setea para que la cambie
             String claveRestaurada = generateRandomPassword(len);
@@ -365,8 +396,8 @@ public class CliUsuarioService {
                 + "<span style=\"font-size: 18px; line-height: 32.4px; color: #000000;\">"
                 + "<span style=\"line-height: 32.4px; font-family: Montserrat, sans-serif; font-size: 18px;\">"
                 + "Presione el link para activar su cuenta: "
-                + "<a href=\"http://" + obtenerIp() + ":8080/ws/CliUsuarioController/todo" + cliUsuarioDto.getUsuId() + "\">"
-                + "http://" + obtenerIp() + ":8080/EvaComUNAWs/activacion.html?id=" + cliUsuarioDto.getUsuId()
+                + "<a href=\"http://" + obtenerIp() + ":8080/ws/CliUsuarioController/activacion/" + cliUsuarioDto.getUsuId() + "\">"
+                + "http://" + obtenerIp() + ":8080/ws/CliUsuarioController/activacion/" + cliUsuarioDto.getUsuId()
                 + "</a>"
                 + "</span>"
                 + "</span>"

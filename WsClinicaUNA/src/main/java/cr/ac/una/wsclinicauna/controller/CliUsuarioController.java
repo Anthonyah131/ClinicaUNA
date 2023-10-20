@@ -38,7 +38,7 @@ public class CliUsuarioController {
     @EJB
     CliUsuarioService cliUsuarioService;
     @EJB
-    CliParametrosService cliParametrosService ;
+    CliParametrosService cliParametrosService;
     @Context
     SecurityContext securityContext;
 
@@ -50,7 +50,7 @@ public class CliUsuarioController {
             if (!res.getEstado()) {
                 return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
             }
-            CliUsuarioDto cliUsuarioDto = (CliUsuarioDto) res.getResultado("");
+            CliUsuarioDto cliUsuarioDto = (CliUsuarioDto) res.getResultado("Usuario");
             return Response.ok(cliUsuarioDto).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(CliUsuarioController.class.getName()).log(Level.SEVERE, null, ex);
@@ -66,7 +66,7 @@ public class CliUsuarioController {
             if (!res.getEstado()) {
                 return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
             }
-            return Response.ok(new GenericEntity<List<CliUsuarioDto>>((List<CliUsuarioDto>) res.getResultado("")) {
+            return Response.ok(new GenericEntity<List<CliUsuarioDto>>((List<CliUsuarioDto>) res.getResultado("Usuarios")) {
             }).build();
         } catch (Exception ex) {
             Logger.getLogger(CliUsuarioController.class.getName()).log(Level.SEVERE, null, ex);
@@ -83,14 +83,14 @@ public class CliUsuarioController {
             if (!res.getEstado()) {
                 return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
             }
-            
-            cliUsuarioDto = (CliUsuarioDto) res.getResultado("");
-            
-            Respuesta re2 = cliParametrosService.getEmpleados();
-            List<CliParametrosDto> cliParametrosDtoList = (List<CliParametrosDto>) res.getResultado("");
+
+            cliUsuarioDto = (CliUsuarioDto) res.getResultado("Usuario");
+
+            Respuesta re2 = cliParametrosService.getParametros();
+            List<CliParametrosDto> cliParametrosDtoList = (List<CliParametrosDto>) re2.getResultado("Parametros");
             CliParametrosDto cliParametrosDto = cliParametrosDtoList.get(0);
-            
-            if(cliUsuarioDto.getUsuId()== null){
+
+            if (cliUsuarioDto.getUsuId() == null) {
                 cliUsuarioService.correoActivacion(cliUsuarioDto, cliParametrosDto);
             }
             return Response.ok().build();
@@ -123,12 +123,48 @@ public class CliUsuarioController {
             if (!res.getEstado()) {
                 return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
             }
-            CliUsuarioDto cliUsuarioDto = (CliUsuarioDto) res.getResultado("");
+            CliUsuarioDto cliUsuarioDto = (CliUsuarioDto) res.getResultado("Usuario");
             cliUsuarioDto.setToken(JwTokenHelper.getInstance().generatePrivateKey(usuario));
             return Response.ok(cliUsuarioDto).build();
         } catch (Exception ex) {
             Logger.getLogger(CliUsuarioController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el usuario").build();
+        }
+    }
+
+    @GET
+    @Path("/activacion/{id}")
+    public Response activacionUsuario(@PathParam("id") Long id) {
+        try {
+            Respuesta res = cliUsuarioService.activacionCuenta(id);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
+            }
+
+            return Response.ok().build();//TODO
+        } catch (Exception ex) {
+            Logger.getLogger(CliUsuarioController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el usuario").build();//TODO
+        }
+    }
+
+    @GET
+    @Path("/recuperarClave/{correo}")
+    public Response recuperarClave(@PathParam("correo") String correo) {
+        try {
+            Respuesta re2 = cliParametrosService.getParametros();
+            List<CliParametrosDto> cliParametrosDtoList = (List<CliParametrosDto>) re2.getResultado("Parametros");
+            CliParametrosDto cliParametrosDto = cliParametrosDtoList.get(0);
+
+            Respuesta res = cliUsuarioService.recuperarClave(correo,cliParametrosDto);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
+            }
+
+            return Response.ok().build();//TODO
+        } catch (Exception ex) {
+            Logger.getLogger(CliUsuarioController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el usuario").build();//TODO
         }
     }
 

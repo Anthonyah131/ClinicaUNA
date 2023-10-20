@@ -4,7 +4,8 @@
  */
 package cr.ac.una.wsclinicauna.service;
 
-import cr.ac.una.wsclinicauna.model.CliUsuarioDto;
+import cr.ac.una.wsclinicauna.model.CliParametros;
+import cr.ac.una.wsclinicauna.model.CliParametrosDto;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import jakarta.ejb.LocalBean;
@@ -13,7 +14,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.NonUniqueResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,85 +32,85 @@ public class CliParametrosService {
     @PersistenceContext(unitName="WsClinicaUNAPU")
     private EntityManager em;
     
-    public Respuesta getEmpleado(Long id) {
+    public Respuesta getParametro(Long id) {
         try {
-//            Query qryEmpleado = em.createNamedQuery("Empleado.findByEmpId", Empleado.class);
-//            qryEmpleado.setParameter("id", id);
+            Query qryEmpleado = em.createNamedQuery("CliParametros.findByParId", CliParametros.class);
+            qryEmpleado.setParameter("id", id);
 
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Empleado", new EmpleadoDto((Empleado) qryEmpleado.getSingleResult()));
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Parametro", new CliParametrosDto((CliParametros) qryEmpleado.getSingleResult()));
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un empleado con el código ingresado.", "getEmpleado NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un parametro con el código ingresado.", "getParametro NoResultException");
         } catch (NonUniqueResultException ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el empleado.", "getEmpleado NonUniqueResultException");
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el parametro.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el parametro.", "getParametro NonUniqueResultException");
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el empleado.", "getEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el parametro.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el parametro.", "getParametro " + ex.getMessage());
         }
     }
 
-    public Respuesta getEmpleados() {
+    public Respuesta getParametros() {
         try {
-//            Query qryEmpleado = em.createNamedQuery("Empleado.findByCedulaNombrePapellido", Empleado.class);
-//            List<Empleado> empleados = qryEmpleado.getResultList();
-//            List<EmpleadoDto> empleadosDto = new ArrayList<>();
-//            for (Empleado empleado : empleados) {
-//                empleadosDto.add(new EmpleadoDto(empleado));
-//            }
+            Query qryParametro = em.createNamedQuery("CliParametros.findAll", CliParametros.class);
+            List<CliParametros> cliParametroses = qryParametro.getResultList();
+            List<CliParametrosDto> cliParametrosDtos = new ArrayList<>();
+            for (CliParametros cliParametros : cliParametroses) {
+                cliParametrosDtos.add(new CliParametrosDto(cliParametros));
+            }
 
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Empleados", empleadosDto);
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Parametros", cliParametrosDtos);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen empleados con los criterios ingresados.", "getEmpleados NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen empleados con los criterios ingresados.", "getParametros NoResultException");
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el empleado.", "getEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el parametro.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el parametro.", "getParametros " + ex.getMessage());
         }
     }
 
-    public Respuesta guardarEmpleado(CliUsuarioDto empleadoDto) {
+    public Respuesta guardarParametro(CliParametrosDto cliParametrosDto) {
         try {
-//            Empleado empleado;
-//            if (empleadoDto.getId() != null && empleadoDto.getId() > 0) {
-//                empleado = em.find(Empleado.class, empleadoDto.getId());
-//                if (empleado == null) {
-//                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el empleado a modificar.", "guardarEmpleado NoResultException");
-//                }
-//                empleado.actualizar(empleadoDto);
-//                empleado = em.merge(empleado);
-//            } else {
-//                empleado = new Empleado(empleadoDto);
-//                em.persist(empleado);
-//            }
-//            em.flush();
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Empleado", new EmpleadoDto(empleado));
+            CliParametros cliParametros;
+            if (cliParametrosDto.getParId()!= null && cliParametrosDto.getParId()> 0) {
+                cliParametros = em.find(CliParametros.class, cliParametrosDto.getParId());
+                if (cliParametros == null) {
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el parametro a modificar.", "guardarParametro NoResultException");
+                }
+                cliParametros.actualizar(cliParametrosDto);
+                cliParametros = em.merge(cliParametros);
+            } else {
+                cliParametros = new CliParametros(cliParametrosDto);
+                em.persist(cliParametros);
+            }
+            em.flush();
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Parametro", new CliParametrosDto(cliParametros));
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el empleado.", "guardarEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el parametro.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el parametro.", "guardarParametro " + ex.getMessage());
         }
     }
 
-    public Respuesta eliminarEmpleado(Long id) {
+    public Respuesta eliminarParametro(Long id) {
         try {
-//            Empleado empleado;
-//            if (id != null && id > 0) {
-//                empleado = em.find(Empleado.class, id);
-//                if (empleado == null) {
-//                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el empleado a eliminar.", "eliminarEmpleado NoResultException");
-//                }
-//                em.remove(empleado);
-//            } else {
-//                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el empleado a eliminar.", "eliminarEmpleado NoResultException");
-//            }
-//            em.flush();
-            return null;//new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
+            CliParametros cliParametros;
+            if (id != null && id > 0) {
+                cliParametros = em.find(CliParametros.class, id);
+                if (cliParametros == null) {
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el parametro a eliminar.", "eliminarParametro NoResultException");
+                }
+                em.remove(cliParametros);
+            } else {
+                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el parametro a eliminar.", "eliminarParametro NoResultException");
+            }
+            em.flush();
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
             if (ex.getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class) {
-                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el empleado porque tiene relaciones con otros registros.", "eliminarEmpleado " + ex.getMessage());
+                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el parametro porque tiene relaciones con otros registros.", "eliminarParametro " + ex.getMessage());
             }
-            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el empleado.", "eliminarEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el parametro.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el parametro.", "eliminarParametro " + ex.getMessage());
         }
     }
 }
