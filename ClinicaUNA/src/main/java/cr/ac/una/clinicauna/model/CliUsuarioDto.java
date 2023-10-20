@@ -43,7 +43,7 @@ public class CliUsuarioDto {
         this.usuSapellido = new SimpleStringProperty();
         this.usuCedula = new SimpleStringProperty();
         this.usuCorreo = new SimpleStringProperty();
-        this.usuTipousuario = new SimpleStringProperty("R");
+        this.usuTipousuario = new SimpleStringProperty();
         this.usuUsuario = new SimpleStringProperty();
         this.usuClave = new SimpleStringProperty();
         this.usuTempclave = new SimpleStringProperty();

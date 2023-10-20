@@ -9,18 +9,23 @@ import cr.ac.una.clinicauna.model.CliUsuarioDto;
 import cr.ac.una.clinicauna.util.AppContext;
 import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Formato;
+import cr.ac.una.clinicauna.util.Mensaje;
+import cr.ac.una.clinicauna.util.Respuesta;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -62,7 +67,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
     private JFXCheckBox chkActivo;
     @FXML
     private AnchorPane root;
-    
+
     CliUsuarioDto usuarioDto;
     List<Node> requeridos = new ArrayList<>();
 
@@ -92,24 +97,111 @@ public class P03_RegistroViewController extends Controller implements Initializa
 
     @FXML
     private void onActionBtnRegistrar(ActionEvent event) {
+        /*try {
+            String invalidos = validarRequeridos();
+            if (!invalidos.isEmpty()) {
+                new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar usuario", getStage(), invalidos);
+            } else {
+                UsuarioService usuarioService = new UsuarioService();
+                if (cboxTipoUsuario.getValue() != null) {
+                    String tipo = cboxTipoUsuario.getValue();
+                    if(tipo == "Medico") {
+                        tipo = "M";
+                    } else if(tipo == "Recepcionista") {
+                        tipo = "R";
+                    } else if(tipo == "Admin") {
+                        tipo = "A";
+                    }
+                    usuarioDto.usuTipousuario = tipo;
+                }
+                if (cboxIdioma.getValue() != null) {
+                    String idioma = cboxIdioma.getValue();
+                    if(idioma == "Español") {
+                        idioma = "E";
+                    } else if(idioma == "Ingles") {
+                        idioma = "I";
+                    }
+                    usuarioDto.usuIdioma = idioma;
+                }
+
+                Respuesta respuesta = usuarioService.guardarUsuario(usuarioDto);
+                if (!respuesta.getEstado()) {
+                    new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar usuario", getStage(), respuesta.getMensaje());
+                } else {
+                    unbindUsuario();
+                    this.usuarioDto = (CliUsuarioDto) respuesta.getResultado("Usuario");
+                    bindUsuario();
+                    new Mensaje().showModal(Alert.AlertType.INFORMATION, "Guardar usuario", getStage(), "Usuario actualizado correctamente.");
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error guardando el usuario.", ex);
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar Usuario", getStage(), "Ocurrio un error guardando el usuario.");
+        }*/
     }
 
     @FXML
     private void onActionBtnBuscar(ActionEvent event) {
+        /*BusquedaViewController busquedaController = (BusquedaViewController) FlowController.getInstance().getController("BusquedaView");
+        busquedaController.busquedaUsuarios();
+        FlowController.getInstance().goViewInWindowModal("BusquedaView", getStage(), true);
+        CliUsuarioDto usuarioDto = (CliUsuarioDto) busquedaController.getResultado();
+        if (usuarioDto != null) {
+            cargarUsuario(usuarioDto.getUsuId());
+        }*/
     }
 
     @FXML
     private void onActionBtnLimpiarCampos(ActionEvent event) {
-        cleanNodes();
+        /*if (new Mensaje().showConfirmation("Limpiar Usuario", getStage(), "¿Esta seguro que desea limpiar el registro?")) {
+            nuevoUsuario();
+//            cleanNodes();
+        }*/
     }
 
     @FXML
     private void onActionBtnEliminarUsuario(ActionEvent event) {
+        /*try {
+            if (this.usuarioDto.getUsuId() == null) {
+                new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar usuario", getStage(), "Debe cargar el usuario que desea eliminar.");
+            } else {
+
+                UsuarioService service = new UsuarioService();
+                Respuesta respuesta = service.eliminarUsuario(this.usuarioDto.getUsuId());
+                if (!respuesta.getEstado()) {
+                    new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar usuario", getStage(), respuesta.getMensaje());
+                } else {
+                    new Mensaje().showModal(Alert.AlertType.INFORMATION, "Eliminar usuario", getStage(), "Usuario eliminado correctamente.");
+                    nuevoUsuario();
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error eliminando el usuario.", ex);
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar usuario", getStage(), "Ocurrio un error eliminando el usuario.");
+        }*/
     }
 
     @FXML
     private void onActionBtnSalir(ActionEvent event) {
         FlowController.getInstance().goView("P06_MenuPrincipalView");
+    }
+
+    private void cargarUsuario(Long id) {
+        /*try {
+            UsuarioService service = new UsuarioService();
+            Respuesta respuesta = service.getUsuario(id);
+            if (respuesta.getEstado()) {
+                unbindUsuario();
+                this.usuarioDto = (CliUsuarioDto) respuesta.getResultado("Usuario");
+                bindUsuario();
+                validarRequeridos();
+            } else {
+                new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar usuario", getStage(), respuesta.getMensaje());
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error consultando el usuario.", ex);
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Usuario", getStage(), "Ocurrio un error consultando el usuario.");
+        }*/
     }
 
     public void iniciarScena() {
@@ -169,7 +261,62 @@ public class P03_RegistroViewController extends Controller implements Initializa
         requeridos.clear();
         requeridos.addAll(Arrays.asList(txfCedula, txfNombre, txfPapellido, txfUsuario, txfContrasena));
     }
+
+    private void seleccionarTipoPorNombre(String nombreTipo) {
+        OUTER:
+        for (String tipo : cboxTipoUsuario.getItems()) {
+            switch (nombreTipo) {
+                case "M" -> {
+                    if ("Medico".equals(tipo)) {
+                        cboxTipoUsuario.getSelectionModel().select(tipo);
+                        break OUTER; // Termina el bucle una vez que se encuentra una coincidencia.
+                    }
+                    break;
+                }
+                case "R" -> {
+                    if ("Recepcionista".equals(tipo)) {
+                        cboxTipoUsuario.getSelectionModel().select(tipo);
+                        break OUTER; // Termina el bucle una vez que se encuentra una coincidencia.
+                    }
+                    break;
+                }
+                case "A" -> {
+                    if ("Admin".equals(tipo)) {
+                        cboxTipoUsuario.getSelectionModel().select(tipo);
+                        break OUTER; // Termina el bucle una vez que se encuentra una coincidencia.
+                    }
+                    break;
+                }
+                default -> {
+                }
+            }
+        }
+    }
     
+    private void seleccionarIdiomaPorNombre(String nombreIdioma) {
+        OUTER:
+        for (String idioma : cboxIdioma.getItems()) {
+            switch (nombreIdioma) {
+                case "E" -> {
+                    if ("Español".equals(idioma)) {
+                        cboxIdioma.getSelectionModel().select(idioma);
+                        break OUTER; // Termina el bucle una vez que se encuentra una coincidencia.
+                    }
+                    break;
+                }
+                case "I" -> {
+                    if ("Ingles".equals(idioma)) {
+                        cboxIdioma.getSelectionModel().select(idioma);
+                        break OUTER; // Termina el bucle una vez que se encuentra una coincidencia.
+                    }
+                    break;
+                }
+                default -> {
+                }
+            }
+        }
+    }
+
     private void bindUsuario() {
         txfNombre.textProperty().bindBidirectional(usuarioDto.usuPapellido);
         txfCedula.textProperty().bindBidirectional(usuarioDto.usuCedula);
@@ -179,6 +326,16 @@ public class P03_RegistroViewController extends Controller implements Initializa
         txfContrasena.textProperty().bindBidirectional(usuarioDto.usuClave);
         txfCorreo.textProperty().bindBidirectional(usuarioDto.usuCorreo);
         chkActivo.selectedProperty().bindBidirectional(usuarioDto.usuActivo);
+        if (usuarioDto.getUsuTipousuario() != null) {
+            seleccionarTipoPorNombre(usuarioDto.getUsuTipousuario());
+        } else {
+            cboxTipoUsuario.getSelectionModel().clearSelection();
+        }
+        if (usuarioDto.getUsuIdioma()!= null) {
+            seleccionarIdiomaPorNombre(usuarioDto.getUsuIdioma());
+        } else {
+            cboxIdioma.getSelectionModel().clearSelection();
+        }
     }
 
     private void unbindUsuario() {
@@ -191,19 +348,19 @@ public class P03_RegistroViewController extends Controller implements Initializa
         txfCorreo.textProperty().unbindBidirectional(usuarioDto.usuCorreo);
         chkActivo.selectedProperty().unbindBidirectional(usuarioDto.usuActivo);
     }
-    
+
     public String validarRequeridos() {
         Boolean validos = true;
         String invalidos = "";
         for (Node node : requeridos) {
-            if (node instanceof JFXTextField && (((JFXTextField) node).getText()==null || ((JFXTextField) node).getText().isBlank())) {
+            if (node instanceof JFXTextField && (((JFXTextField) node).getText() == null || ((JFXTextField) node).getText().isBlank())) {
                 if (validos) {
                     invalidos += ((JFXTextField) node).getPromptText();
                 } else {
                     invalidos += "," + ((JFXTextField) node).getPromptText();
                 }
                 validos = false;
-            } else if (node instanceof JFXPasswordField && (((JFXPasswordField) node).getText()==null || ((JFXPasswordField) node).getText().isBlank())) {
+            } else if (node instanceof JFXPasswordField && (((JFXPasswordField) node).getText() == null || ((JFXPasswordField) node).getText().isBlank())) {
                 if (validos) {
                     invalidos += ((JFXPasswordField) node).getPromptText();
                 } else {
