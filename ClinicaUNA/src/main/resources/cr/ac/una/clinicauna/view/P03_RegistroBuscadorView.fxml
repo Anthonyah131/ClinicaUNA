@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/20.0.1" fx:controller="cr.ac.una.clinicauna.controller.P03_RegistroBuscadorViewController">
+    <stylesheets>
+        <URL value="@styles.css" />
+    </stylesheets>
+    <children>
+      <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+         <children>
+            <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="250.0" spacing="25.0">
+               <children>
+                  <Label maxWidth="1.7976931348623157E308" styleClass="labels-text" text="%key.parameters" />
+                  <JFXTextField fx:id="txfCedula" promptText="%key.identification" styleClass="jfx-text-field-edit" />
+                  <JFXTextField fx:id="txfNombre" promptText="%key.name" styleClass="jfx-text-field-edit" />
+                  <JFXTextField fx:id="txfApellido" promptText="%key.papellido" styleClass="jfx-text-field-edit" />
+                  <JFXComboBox fx:id="cboxTipoUsuario" maxWidth="1.7976931348623157E308" promptText="%key.usertype" styleClass="jfx-combo-box" />
+                  <MFXButton fx:id="btnLimpiarCampos" onAction="#onActionBtnLimpiarCampos" styleClass="mfx-button-Image">
+                     <graphic>
+                        <ImageView fitHeight="40.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/media/icons/clearIcon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip text="%key.clear" />
+                     </tooltip>
+                  </MFXButton>
+                  <Pane VBox.vgrow="ALWAYS" />
+                  <MFXButton fx:id="btnFiltrar" onAction="#onActionBtnFiltrar" prefHeight="45.0" prefWidth="200.0" styleClass="mfx-button-menu" text="%key.filter" />
+               </children>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <padding>
+                  <Insets top="35.0" />
+               </padding>
+            </VBox>
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="15.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label styleClass="labels-text" text="%key.userSearch" />
+                  <TableView fx:id="tbvResultados" onMousePressed="#onMousePressenTbvResultados" prefWidth="520.0" VBox.vgrow="ALWAYS" />
+                  <HBox>
+                     <children>
+                        <Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                        <MFXButton fx:id="onActionBtnAceptar" onAction="#onActionBtnAceptar" prefHeight="45.0" prefWidth="200.0" styleClass="mfx-button-menu" text="%key.accept" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

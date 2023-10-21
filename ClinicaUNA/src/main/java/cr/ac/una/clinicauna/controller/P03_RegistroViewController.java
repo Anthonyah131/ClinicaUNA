@@ -142,6 +142,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
 
     @FXML
     private void onActionBtnBuscar(ActionEvent event) {
+        FlowController.getInstance().goViewInWindowModal("P03_RegistroBuscadorView", stage, Boolean.FALSE);
         /*BusquedaViewController busquedaController = (BusquedaViewController) FlowController.getInstance().getController("BusquedaView");
         busquedaController.busquedaUsuarios();
         FlowController.getInstance().goViewInWindowModal("BusquedaView", getStage(), true);
@@ -388,5 +389,12 @@ public class P03_RegistroViewController extends Controller implements Initializa
         } else {
             return "Campos requeridos o con problemas de formato [" + invalidos + "].";
         }
+    }
+    
+    public void bindBuscar() {
+        P03_RegistroBuscadorViewController buscadorRegistroController = (P03_RegistroBuscadorViewController) FlowController.getInstance().getController("P03_RegistroBuscadorView");
+        unbindUsuario();
+        usuarioDto = (CliUsuarioDto) buscadorRegistroController.getSeleccionado();
+        bindUsuario();
     }
 }

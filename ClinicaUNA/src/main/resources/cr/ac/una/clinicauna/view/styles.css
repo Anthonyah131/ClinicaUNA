@@ -32,9 +32,10 @@
     -fx-border-width: 2px;
     -fx-padding: 0;  /*Elimina el relleno del botón */
 }
-.mfx-button-Log .ripple-container .mfx-ripple-generator{
+.mfx-button-Log .mfx-ripple-generator{
     -mfx-paused: true;
 }
+
 .mfx-button-Log:hover{
     -fx-background-color: #FFFFFF; /* Establece el fondo del botón como transparente */
     -fx-text-fill: #000000;
@@ -259,3 +260,9 @@
     -fx-text-fill: #000000; /* Color del texto */
 }
 /*-----------------------------------------------------------------------------------------------------------------*/
+.labels-text{
+    -fx-font: 20px "Arial Rounded MT Bold";
+    -fx-text-fill: #000000; /* Color del texto */
+    -fx-alignment: CENTER;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
