@@ -3,16 +3,21 @@ package cr.ac.una.clinicauna.controller;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import cr.ac.una.clinicauna.model.CliUsuarioDto;
+import cr.ac.una.clinicauna.service.CliUsuarioService;
 import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Formato;
+import cr.ac.una.clinicauna.util.Mensaje;
+import cr.ac.una.clinicauna.util.Respuesta;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
@@ -42,6 +47,7 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
     private MFXButton btnLimpiarCampos;
 
     Object resultado;
+    private ObservableList<CliUsuarioDto> usuarios = FXCollections.observableArrayList();
 
     /**
      * Initializes the controller class.
@@ -63,6 +69,18 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
 
     @FXML
     private void onActionBtnFiltrar(ActionEvent event) {
+//        CliUsuarioService service = new CliUsuarioService();
+//        Respuesta respuesta = service.getUsuarios();
+//
+//        if (respuesta.getEstado()) {
+//            tbvResultados.getItems().clear();
+//            usuarios.clear();
+//            usuarios.addAll((List<CliUsuarioDto>) respuesta.getResultado("TarUsuario"));
+//            tbvResultados.setItems(usuarios);
+//            tbvResultados.refresh();
+//        } else {
+//            new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Usuarios", getStage(), respuesta.getMensaje());
+//        }
     }
 
     @FXML

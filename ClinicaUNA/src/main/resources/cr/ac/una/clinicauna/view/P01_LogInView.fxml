@@ -40,7 +40,7 @@
                <children>
                   <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
                   <MFXTextField fx:id="txfUsuario" floatingText="%key.user" maxWidth="1.7976931348623157E308" styleClass="mfx-text-field-edit" />
-                  <MFXPasswordField fx:id="txfCrontasena" floatingText="%key.password" maxWidth="1.7976931348623157E308" styleClass="mfx-text-field-edit" />
+                  <MFXPasswordField fx:id="txfContrasena" floatingText="%key.password" maxWidth="1.7976931348623157E308" styleClass="mfx-text-field-edit" />
                   <MFXButton fx:id="btnIngresar" onAction="#onActionBtnIngresar" prefHeight="45.0" prefWidth="300.0" styleClass="mfx-button-Log" text="%key.login" />
                   <HBox alignment="CENTER" spacing="10.0">
                      <children>

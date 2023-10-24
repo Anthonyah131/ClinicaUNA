@@ -20,6 +20,9 @@ import javafx.stage.Window;
 public class Mensaje {
     
     private ResourceBundle resourceBundle;
+//    
+//    public Mensaje() {
+//    }
     
     public Mensaje(ResourceBundle resourceBundle) {
         this.resourceBundle = resourceBundle;

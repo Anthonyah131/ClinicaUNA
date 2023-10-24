@@ -1,13 +1,19 @@
 package cr.ac.una.clinicauna.controller;
 
+import cr.ac.una.clinicauna.model.CliUsuarioDto;
+import cr.ac.una.clinicauna.service.CliUsuarioService;
 import cr.ac.una.clinicauna.util.AppContext;
 import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Mensaje;
+import cr.ac.una.clinicauna.util.Respuesta;
+import cr.ac.una.clinicauna.util.SoundUtil;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -29,7 +35,7 @@ public class P01_LogInViewController extends Controller implements Initializable
     @FXML
     private MFXTextField txfUsuario;
     @FXML
-    private MFXPasswordField txfCrontasena;
+    private MFXPasswordField txfContrasena;
     @FXML
     private MFXButton btnIngresar;
     @FXML
@@ -58,15 +64,43 @@ public class P01_LogInViewController extends Controller implements Initializable
 
     @FXML
     private void onActionBtnIngresar(ActionEvent event) {
-//        ResourceBundle resourceBundle = FlowController.getInstance().getIdioma();
-//        Mensaje mensaje = new Mensaje(resourceBundle);
-//        mensaje.showi18n(Alert.AlertType.ERROR, "key.invalidUser", "key.mensajeInvalidUser");
+        ResourceBundle resourceBundle = FlowController.getInstance().getIdioma();
+        Mensaje mensaje = new Mensaje(resourceBundle);
 
-        
-        if (getStage().getOwner() == null) {
-            FlowController.getInstance().goMain();
+        SoundUtil.mouseEnterSound();
+        try {
+            if (txfUsuario.getText() == null || txfUsuario.getText().isEmpty()) {
+                mensaje.showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "key.noEnterUser");
+            } else if (txfContrasena.getText() == null || txfContrasena.getText().isEmpty()) {
+                mensaje.showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "key.noEnterPass");
+            } else {
+                CliUsuarioService cliUsuarioService = new CliUsuarioService();
+                Respuesta respuesta = cliUsuarioService.getUsuario(txfUsuario.getText(), txfContrasena.getText());
+                if (respuesta.getEstado()) {
+                    CliUsuarioDto cliUsuarioDto = (CliUsuarioDto) respuesta.getResultado("TarUsuario");
+                    //AppContext.getInstance().set("UsuarioId", cliUsuarioDto.getUsuId()); Para que esto??
+                    AppContext.getInstance().set("Token", cliUsuarioDto.getToken());
+                    AppContext.getInstance().set("Usuario", cliUsuarioDto);
+                    if (cliUsuarioDto.getUsuClave().equals(cliUsuarioDto.getUsuTempClave())) {
+                        mensaje.showModali18n(Alert.AlertType.WARNING, "key.userValidation", getStage(), "key.changePass");
+                        FlowController.getInstance().goViewInWindowModal("P05_CambioClaveView", stage, false);
+                    } else {
+                        if ("A".equals(cliUsuarioDto.getUsuActivo())) {//compruba que el usuario este activo
+                            if (getStage().getOwner() == null) {
+                                FlowController.getInstance().goMain();
+                            }
+                            getStage().close();
+                        } else {
+                            mensaje.showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "key.activeAccount");
+                        }
+                    }
+                } else {
+                    mensaje.showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "key.wrongUser");
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(P01_LogInViewController.class.getName()).log(Level.SEVERE, "Error ingresando.", ex);
         }
-        getStage().close();
     }
 
     @FXML
