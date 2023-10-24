@@ -47,14 +47,18 @@ public class P01_LogInViewController extends Controller implements Initializable
     @FXML
     private MenuButton mbtnI18n;
 
+    ResourceBundle resourceBundle;
+    Mensaje mensaje;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-
         iniciarScena();
+        resourceBundle = FlowController.getInstance().getIdioma();
+        mensaje = new Mensaje(resourceBundle);
     }
 
     @Override
@@ -64,8 +68,6 @@ public class P01_LogInViewController extends Controller implements Initializable
 
     @FXML
     private void onActionBtnIngresar(ActionEvent event) {
-        ResourceBundle resourceBundle = FlowController.getInstance().getIdioma();
-        Mensaje mensaje = new Mensaje(resourceBundle);
 
         SoundUtil.mouseEnterSound();
         try {
@@ -78,7 +80,7 @@ public class P01_LogInViewController extends Controller implements Initializable
                 Respuesta respuesta = cliUsuarioService.getUsuario(txfUsuario.getText(), txfContrasena.getText());
                 if (respuesta.getEstado()) {
                     CliUsuarioDto cliUsuarioDto = (CliUsuarioDto) respuesta.getResultado("TarUsuario");
-                    //AppContext.getInstance().set("UsuarioId", cliUsuarioDto.getUsuId()); Para que esto??
+                    //AppContext.getInstance().set("UsuarioId", cliUsuarioDto.getUsuId()); Para que es esto??
                     AppContext.getInstance().set("Token", cliUsuarioDto.getToken());
                     AppContext.getInstance().set("Usuario", cliUsuarioDto);
                     if (cliUsuarioDto.getUsuClave().equals(cliUsuarioDto.getUsuTempClave())) {
