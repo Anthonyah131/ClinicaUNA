@@ -43,9 +43,9 @@ public class AppContext {
 //            if (appProperties.getProperty("propiedades.rutalog") != null) {
 //                this.set("rutalog",appProperties.getProperty("propiedades.rutalog"));
 //            }
-//            if (appProperties.getProperty("propiedades.resturl") != null) {
-//                this.set("resturl",appProperties.getProperty("propiedades.resturl"));
-  //          }
+            if (appProperties.getProperty("propiedades.resturl") != null) {
+                this.set("resturl",appProperties.getProperty("propiedades.resturl"));
+            }
         } catch (IOException io) {
             System.out.println("Archivo de configuración no encontrado.");
         }

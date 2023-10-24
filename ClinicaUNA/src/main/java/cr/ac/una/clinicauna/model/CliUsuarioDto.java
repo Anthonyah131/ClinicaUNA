@@ -69,7 +69,7 @@ public class CliUsuarioDto {
     }
 
     public String getUsuNombre() {
-        return usuNombre.get();
+        return this.usuNombre.get();
     }
 
     public void setUsuNombre(String usuNombre) {
@@ -77,7 +77,7 @@ public class CliUsuarioDto {
     }
 
     public String getUsuPapellido() {
-        return usuPapellido.get();
+        return this.usuPapellido.get();
     }
 
     public void setUsuPapellido(String usuPapellido) {
@@ -85,7 +85,7 @@ public class CliUsuarioDto {
     }
 
     public String getUsuSapellido() {
-        return usuSapellido.get();
+        return this.usuSapellido.get();
     }
 
     public void setUsuSapellido(String usuSapellido) {
@@ -93,7 +93,7 @@ public class CliUsuarioDto {
     }
 
     public String getUsuCedula() {
-        return usuCedula.get();
+        return this.usuCedula.get();
     }
 
     public void setUsuCedula(String usuCedula) {
@@ -101,7 +101,7 @@ public class CliUsuarioDto {
     }
 
     public String getUsuCorreo() {
-        return usuCorreo.get();
+        return this.usuCorreo.get();
     }
 
     public void setUsuCorreo(String usuCorreo) {
@@ -109,7 +109,7 @@ public class CliUsuarioDto {
     }
 
     public String getUsuTipousuario() {
-        return usuTipousuario.get();
+        return this.usuTipousuario.get();
     }
 
     public void setUsuTipousuario(String usuTipousuario) {
@@ -117,7 +117,7 @@ public class CliUsuarioDto {
     }
 
     public String getUsuUsuario() {
-        return usuUsuario.get();
+        return this.usuUsuario.get();
     }
 
     public void setUsuUsuario(String usuUsuario) {
@@ -125,7 +125,7 @@ public class CliUsuarioDto {
     }
 
     public String getUsuClave() {
-        return usuClave.get();
+        return this.usuClave.get();
     }
 
     public void setUsuClave(String usuClave) {
@@ -133,7 +133,7 @@ public class CliUsuarioDto {
     }
 
     public String getUsuTempClave() {
-        return usuTempclave.get();
+        return this.usuTempclave.get();
     }
 
     public void setUsuTempClave(String usuTempclave) {
@@ -141,7 +141,7 @@ public class CliUsuarioDto {
     }
 
     public String getUsuIdioma() {
-        return usuIdioma.get();
+        return this.usuIdioma.get();
     }
 
     public void setUsuIdioma(String usuIdioma) {
@@ -149,7 +149,7 @@ public class CliUsuarioDto {
     }
 
     public String getUsuActivo() {
-        return usuActivo.get() ? "A" : "I";
+        return this.usuActivo.get() ? "A" : "I";
     }
 
     public void setUsuActivo(String usuActivo) {
@@ -157,7 +157,7 @@ public class CliUsuarioDto {
     }
 
     public ObservableList<CliReporteusuariosDto> getCliReporteusuariosList() {
-        return cliReporteusuariosList;
+        return this.cliReporteusuariosList;
     }
 
     public void setCliReporteusuariosList(List<CliReporteusuariosDto> cliReporteusuariosList) {
@@ -165,7 +165,7 @@ public class CliUsuarioDto {
     }
 
     public List<CliReporteusuariosDto> getCliReporteusuariosListEliminados() {
-        return cliReporteusuariosListEliminados;
+        return this.cliReporteusuariosListEliminados;
     }
 
     public void setCliReporteusuariosListEliminados(List<CliReporteusuariosDto> cliReporteusuariosListEliminados) {
@@ -173,7 +173,7 @@ public class CliUsuarioDto {
     }
 
     public ObservableList<CliMedicoDto> getCliMedicoList() {
-        return cliMedicoList;
+        return this.cliMedicoList;
     }
 
     public void setCliMedicoList(List<CliMedicoDto> cliMedicoList) {
@@ -181,7 +181,7 @@ public class CliUsuarioDto {
     }
 
     public List<CliMedicoDto> getCliMedicoListEliminados() {
-        return cliMedicoListEliminados;
+        return this.cliMedicoListEliminados;
     }
 
     public void setCliMedicoListEliminados(List<CliMedicoDto> cliMedicoListEliminados) {
@@ -189,7 +189,7 @@ public class CliUsuarioDto {
     }
 
     public Long getUsuVersion() {
-        return usuVersion;
+        return this.usuVersion;
     }
 
     public void setUsuVersion(Long usuVersion) {

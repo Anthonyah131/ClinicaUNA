@@ -56,8 +56,8 @@ public class CliUsuarioService {
     public Respuesta validarUsuario(String usuario, String clave) {
         try {
             Query qryActividad = em.createNamedQuery("CliUsuario.findByUsuarioClave", CliUsuario.class);
-            qryActividad.setParameter("usuario", usuario);
-            qryActividad.setParameter("clave", clave);
+            qryActividad.setParameter("usuUsuario", usuario);
+            qryActividad.setParameter("usuClave", clave);
             CliUsuario cliUsuario = (CliUsuario) qryActividad.getSingleResult();
             CliUsuarioDto cliUsuarioDto = new CliUsuarioDto(cliUsuario);
             for (CliReporteusuarios cliReporteusuarios : cliUsuario.getCliReporteusuariosList()) {

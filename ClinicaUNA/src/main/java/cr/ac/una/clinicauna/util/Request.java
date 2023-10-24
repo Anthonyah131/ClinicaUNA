@@ -5,6 +5,7 @@
  */
 package cr.ac.una.clinicauna.util;
 
+import cr.ac.una.clinicauna.service.CliUsuarioService;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
@@ -193,8 +194,8 @@ public class Request {
         } else {
             payload = getPayloadToken(payload.getString("rnt"));
             if (payload != null && payload.getJsonNumber("exp").longValue() > System.currentTimeMillis() / 1000) {
-                //EmpleadoService empleadoService = new EmpleadoService();
-                Respuesta respuesta = null;//empleadoService.renovarToken();
+                CliUsuarioService cliUsuarioService = new CliUsuarioService();
+                Respuesta respuesta = cliUsuarioService.renovarToken();
                 if (respuesta.getEstado()) {
                     AppContext.getInstance().set("Token", respuesta.getResultado("Token").toString());
                     MultivaluedMap<String, Object> headers = new MultivaluedHashMap<>();
