@@ -101,7 +101,7 @@ public class CliUsuarioDto {
     }
 
     public String getUsuCorreo() {
-        return this.usuCorreo.get();
+        return usuCorreo.get();
     }
 
     public void setUsuCorreo(String usuCorreo) {

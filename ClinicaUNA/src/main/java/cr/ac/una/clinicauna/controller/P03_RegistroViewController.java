@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import cr.ac.una.clinicauna.model.CliUsuarioDto;
+import cr.ac.una.clinicauna.service.CliUsuarioService;
 import cr.ac.una.clinicauna.util.AppContext;
 import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Formato;
@@ -97,31 +98,36 @@ public class P03_RegistroViewController extends Controller implements Initializa
 
     @FXML
     private void onActionBtnRegistrar(ActionEvent event) {
-        /*try {
+        try {
             String invalidos = validarRequeridos();
             if (!invalidos.isEmpty()) {
                 new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar usuario", getStage(), invalidos);
             } else {
-                UsuarioService usuarioService = new UsuarioService();
+                CliUsuarioService usuarioService = new CliUsuarioService();
                 if (cboxTipoUsuario.getValue() != null) {
                     String tipo = cboxTipoUsuario.getValue();
-                    if(tipo == "Medico") {
-                        tipo = "M";
-                    } else if(tipo == "Recepcionista") {
-                        tipo = "R";
-                    } else if(tipo == "Admin") {
-                        tipo = "A";
+                    if (tipo != null) {
+                        switch (tipo) {
+                            case "Medico" ->
+                                tipo = "M";
+                            case "Recepcionista" ->
+                                tipo = "R";
+                            case "Admin" ->
+                                tipo = "A";
+                            default -> {
+                            }
+                        }
                     }
-                    usuarioDto.usuTipousuario = tipo;
+                    usuarioDto.setUsuTipousuario(tipo);
                 }
                 if (cboxIdioma.getValue() != null) {
                     String idioma = cboxIdioma.getValue();
-                    if(idioma == "Español") {
+                    if ("Español".equals(idioma)) {
                         idioma = "E";
-                    } else if(idioma == "Ingles") {
+                    } else if ("Ingles".equals(idioma)) {
                         idioma = "I";
                     }
-                    usuarioDto.usuIdioma = idioma;
+                    usuarioDto.setUsuIdioma(idioma);
                 }
 
                 Respuesta respuesta = usuarioService.guardarUsuario(usuarioDto);
@@ -137,37 +143,36 @@ public class P03_RegistroViewController extends Controller implements Initializa
         } catch (Exception ex) {
             Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error guardando el usuario.", ex);
             new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar Usuario", getStage(), "Ocurrio un error guardando el usuario.");
-        }*/
+        }
     }
 
     @FXML
     private void onActionBtnBuscar(ActionEvent event) {
         FlowController.getInstance().goViewInWindowModal("P03_RegistroBuscadorView", stage, Boolean.FALSE);
-        /*BusquedaViewController busquedaController = (BusquedaViewController) FlowController.getInstance().getController("BusquedaView");
-        busquedaController.busquedaUsuarios();
+        P03_RegistroBuscadorViewController busquedaController = (P03_RegistroBuscadorViewController) FlowController.getInstance().getController("P03_RegistroBuscadorView");
         FlowController.getInstance().goViewInWindowModal("BusquedaView", getStage(), true);
-        CliUsuarioDto usuarioDto = (CliUsuarioDto) busquedaController.getResultado();
+//        CliUsuarioDto usuarioDto = (CliUsuarioDto) busquedaController.getResultado();
         if (usuarioDto != null) {
             cargarUsuario(usuarioDto.getUsuId());
-        }*/
+        }
     }
 
     @FXML
     private void onActionBtnLimpiarCampos(ActionEvent event) {
-        /*if (new Mensaje().showConfirmation("Limpiar Usuario", getStage(), "¿Esta seguro que desea limpiar el registro?")) {
+        if (new Mensaje().showConfirmation("Limpiar Usuario", getStage(), "¿Esta seguro que desea limpiar el registro?")) {
             nuevoUsuario();
 //            cleanNodes();
-        }*/
+        }
     }
 
     @FXML
     private void onActionBtnEliminarUsuario(ActionEvent event) {
-        /*try {
+        try {
             if (this.usuarioDto.getUsuId() == null) {
                 new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar usuario", getStage(), "Debe cargar el usuario que desea eliminar.");
             } else {
 
-                UsuarioService service = new UsuarioService();
+                CliUsuarioService service = new CliUsuarioService();
                 Respuesta respuesta = service.eliminarUsuario(this.usuarioDto.getUsuId());
                 if (!respuesta.getEstado()) {
                     new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar usuario", getStage(), respuesta.getMensaje());
@@ -179,7 +184,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
         } catch (Exception ex) {
             Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error eliminando el usuario.", ex);
             new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar usuario", getStage(), "Ocurrio un error eliminando el usuario.");
-        }*/
+        }
     }
 
     @FXML
@@ -188,8 +193,8 @@ public class P03_RegistroViewController extends Controller implements Initializa
     }
 
     private void cargarUsuario(Long id) {
-        /*try {
-            UsuarioService service = new UsuarioService();
+        try {
+            CliUsuarioService service = new CliUsuarioService();
             Respuesta respuesta = service.getUsuario(id);
             if (respuesta.getEstado()) {
                 unbindUsuario();
@@ -202,7 +207,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
         } catch (Exception ex) {
             Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error consultando el usuario.", ex);
             new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Usuario", getStage(), "Ocurrio un error consultando el usuario.");
-        }*/
+        }
     }
 
     public void iniciarScena() {
@@ -293,7 +298,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
             }
         }
     }
-    
+
     private void seleccionarIdiomaPorNombre(String nombreIdioma) {
         OUTER:
         for (String idioma : cboxIdioma.getItems()) {
@@ -332,7 +337,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
         } else {
             cboxTipoUsuario.getSelectionModel().clearSelection();
         }
-        if (usuarioDto.getUsuIdioma()!= null) {
+        if (usuarioDto.getUsuIdioma() != null) {
             seleccionarIdiomaPorNombre(usuarioDto.getUsuIdioma());
         } else {
             cboxIdioma.getSelectionModel().clearSelection();
@@ -390,7 +395,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
             return "Campos requeridos o con problemas de formato [" + invalidos + "].";
         }
     }
-    
+
     public void bindBuscar() {
         P03_RegistroBuscadorViewController buscadorRegistroController = (P03_RegistroBuscadorViewController) FlowController.getInstance().getController("P03_RegistroBuscadorView");
         unbindUsuario();
