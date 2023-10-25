@@ -87,19 +87,16 @@ public class P03_RegistroViewController extends Controller implements Initializa
         txfPapellido.setTextFormatter(Formato.getInstance().letrasFormat(15));
         txfSapellido.setTextFormatter(Formato.getInstance().letrasFormat(15));
         this.usuarioDto = new CliUsuarioDto();
+        iniciarScena();
         nuevoUsuario();
         indicarRequeridos();
         fillCbox();
-        iniciarScena();
-        resourceBundle = FlowController.getInstance().getIdioma();
-        mensaje = new Mensaje(resourceBundle);
+
     }
 
     @Override
     public void initialize() {
         iniciarScena();
-        resourceBundle = FlowController.getInstance().getIdioma();
-        mensaje = new Mensaje(resourceBundle);
     }
 
     @FXML
@@ -107,7 +104,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
         try {
             String invalidos = validarRequeridos();
             if (!invalidos.isEmpty()) {
-                mensaje.showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), invalidos);
+                mensaje.showModali18n2(Alert.AlertType.ERROR, "key.saveUser", getStage(), invalidos);
             } else {
                 CliUsuarioService usuarioService = new CliUsuarioService();
                 if (cboxTipoUsuario.getValue() != null) {
@@ -138,7 +135,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
 
                 Respuesta respuesta = usuarioService.guardarUsuario(usuarioDto);
                 if (!respuesta.getEstado()) {
-                    mensaje.showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
+                    mensaje.showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
                 } else {
                     unbindUsuario();
                     this.usuarioDto = (CliUsuarioDto) respuesta.getResultado("Usuario");
@@ -155,19 +152,13 @@ public class P03_RegistroViewController extends Controller implements Initializa
     @FXML
     private void onActionBtnBuscar(ActionEvent event) {
         FlowController.getInstance().goViewInWindowModal("P03_RegistroBuscadorView", stage, Boolean.FALSE);
-        P03_RegistroBuscadorViewController busquedaController = (P03_RegistroBuscadorViewController) FlowController.getInstance().getController("P03_RegistroBuscadorView");
-        FlowController.getInstance().goViewInWindowModal("BusquedaView", getStage(), true);
-//        CliUsuarioDto usuarioDto = (CliUsuarioDto) busquedaController.getResultado();
-        if (usuarioDto != null) {
-            cargarUsuario(usuarioDto.getUsuId());
-        }
     }
 
     @FXML
     private void onActionBtnLimpiarCampos(ActionEvent event) {
         if (mensaje.showConfirmationi18n("key.clear", getStage(), "key.cleanRegistry")) {
             nuevoUsuario();
-//            cleanNodes();
+            cleanNodes();
         }
     }
 
@@ -175,21 +166,21 @@ public class P03_RegistroViewController extends Controller implements Initializa
     private void onActionBtnEliminarUsuario(ActionEvent event) {
         try {
             if (this.usuarioDto.getUsuId() == null) {
-                mensaje.showModali18n(Alert.AlertType.ERROR, "Eliminar usuario", getStage(), "Debe cargar el usuario que desea eliminar.");
+                mensaje.showModali18n(Alert.AlertType.ERROR, "key.deleteUser", getStage(), "key.loadUserDelete");
             } else {
 
                 CliUsuarioService service = new CliUsuarioService();
                 Respuesta respuesta = service.eliminarUsuario(this.usuarioDto.getUsuId());
                 if (!respuesta.getEstado()) {
-                    mensaje.showModali18n(Alert.AlertType.ERROR, "Eliminar usuario", getStage(), respuesta.getMensaje());
+                    mensaje.showModali18n(Alert.AlertType.ERROR, "key.deleteUser", getStage(), respuesta.getMensaje());
                 } else {
-                    mensaje.showModali18n(Alert.AlertType.INFORMATION, "Eliminar usuario", getStage(), "Usuario eliminado correctamente.");
+                    mensaje.showModali18n(Alert.AlertType.INFORMATION, "key.deleteUser", getStage(), "key.deleteUserSuccess");
                     nuevoUsuario();
                 }
             }
         } catch (Exception ex) {
             Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error eliminando el usuario.", ex);
-            mensaje.showModali18n(Alert.AlertType.ERROR, "Eliminar usuario", getStage(), "Ocurrio un error eliminando el usuario.");
+            mensaje.showModali18n(Alert.AlertType.ERROR, "key.deleteUser", getStage(), "key.deleteUserError");
         }
     }
 
@@ -208,15 +199,18 @@ public class P03_RegistroViewController extends Controller implements Initializa
                 bindUsuario();
                 validarRequeridos();
             } else {
-                mensaje.showModali18n(Alert.AlertType.ERROR, "Cargar usuario", getStage(), respuesta.getMensaje());
+                mensaje.showModali18n(Alert.AlertType.ERROR, "key.loadUser", getStage(), respuesta.getMensaje());
             }
         } catch (Exception ex) {
             Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error consultando el usuario.", ex);
-            mensaje.showModali18n(Alert.AlertType.ERROR, "Cargar Usuario", getStage(), "Ocurrio un error consultando el usuario.");
+            mensaje.showModali18n(Alert.AlertType.ERROR, "key.loadUser", getStage(), "key.errorQuerying");
         }
     }
 
     public void iniciarScena() {
+        resourceBundle = FlowController.getInstance().getIdioma();
+        mensaje = new Mensaje(resourceBundle);
+        
         String padre = (String) AppContext.getInstance().get("Padre");
 
         if (padre.equals("P01_LogInView")) {
@@ -236,7 +230,6 @@ public class P03_RegistroViewController extends Controller implements Initializa
         cboxTipoUsuario.getItems().clear();
         cboxIdioma.getItems().clear();
 
-        ResourceBundle resourceBundle = FlowController.getInstance().getIdioma();
         String admin = resourceBundle.getString("key.admin");
         String doctor = resourceBundle.getString("key.doctor");
         String receptionist = resourceBundle.getString("key.receptionist");
@@ -271,7 +264,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
 
     private void indicarRequeridos() {
         requeridos.clear();
-        requeridos.addAll(Arrays.asList(txfCedula, txfNombre, txfPapellido, txfUsuario, txfContrasena));
+        requeridos.addAll(Arrays.asList(txfCedula, txfNombre, txfPapellido, txfUsuario, txfContrasena, cboxTipoUsuario));
     }
 
     private void seleccionarTipoPorNombre(String nombreTipo) {
@@ -369,28 +362,28 @@ public class P03_RegistroViewController extends Controller implements Initializa
                 if (validos) {
                     invalidos += ((JFXTextField) node).getPromptText();
                 } else {
-                    invalidos += "," + ((JFXTextField) node).getPromptText();
+                    invalidos += ", " + ((JFXTextField) node).getPromptText();
                 }
                 validos = false;
             } else if (node instanceof JFXPasswordField && (((JFXPasswordField) node).getText() == null || ((JFXPasswordField) node).getText().isBlank())) {
                 if (validos) {
                     invalidos += ((JFXPasswordField) node).getPromptText();
                 } else {
-                    invalidos += "," + ((JFXPasswordField) node).getPromptText();
+                    invalidos += ", " + ((JFXPasswordField) node).getPromptText();
                 }
                 validos = false;
             } else if (node instanceof JFXDatePicker && ((JFXDatePicker) node).getValue() == null) {
                 if (validos) {
                     invalidos += ((JFXDatePicker) node).getAccessibleText();
                 } else {
-                    invalidos += "," + ((JFXDatePicker) node).getAccessibleText();
+                    invalidos += ", " + ((JFXDatePicker) node).getAccessibleText();
                 }
                 validos = false;
             } else if (node instanceof JFXComboBox && ((JFXComboBox) node).getSelectionModel().getSelectedIndex() < 0) {
                 if (validos) {
                     invalidos += ((JFXComboBox) node).getPromptText();
                 } else {
-                    invalidos += "," + ((JFXComboBox) node).getPromptText();
+                    invalidos += ", " + ((JFXComboBox) node).getPromptText();
                 }
                 validos = false;
             }
@@ -398,7 +391,8 @@ public class P03_RegistroViewController extends Controller implements Initializa
         if (validos) {
             return "";
         } else {
-            return "Campos requeridos o con problemas de formato [" + invalidos + "].";
+            String message = resourceBundle.getString("key.invalidFields") + invalidos + "].";
+            return message;
         }
     }
 

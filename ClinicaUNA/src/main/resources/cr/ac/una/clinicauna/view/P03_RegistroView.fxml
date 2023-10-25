@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" fx:id="root" prefHeight="720" prefWidth="600" styleClass="fondo-registro-modal" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/20.0.1" fx:controller="cr.ac.una.clinicauna.controller.P03_RegistroViewController">
+<AnchorPane id="AnchorPane" fx:id="root" prefHeight="720" prefWidth="600" styleClass="fondo-registro-modal" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.clinicauna.controller.P03_RegistroViewController">
     <stylesheets>
         <URL value="@styles.css" />
     </stylesheets>
@@ -41,6 +41,7 @@
                <children>
                   <VBox alignment="CENTER" prefWidth="475.0" spacing="25.0" styleClass="panel-transparencia">
                      <children>
+                        <JFXTextField fx:id="txfCedula" promptText="%key.identification" styleClass="jfx-text-field-edit" />
                         <JFXTextField fx:id="txfNombre" focusColor="BLACK" labelFloat="true" promptText="%key.name" styleClass="jfx-text-field-edit">
                            <opaqueInsets>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -52,7 +53,6 @@
                               <JFXTextField fx:id="txfSapellido" labelFloat="true" promptText="%key.sapellido" styleClass="jfx-text-field-edit" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
-                        <JFXTextField fx:id="txfCedula" promptText="%key.identification" styleClass="jfx-text-field-edit" />
                         <JFXTextField fx:id="txfCorreo" maxWidth="1.7976931348623157E308" promptText="%key.mail" styleClass="jfx-text-field-edit" />
                         <HBox alignment="CENTER" prefWidth="200.0" spacing="10.0">
                            <children>

@@ -79,7 +79,7 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
 //            tbvResultados.setItems(usuarios);
 //            tbvResultados.refresh();
 //        } else {
-//            new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Usuarios", getStage(), respuesta.getMensaje());
+//            //new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Usuarios", getStage(), respuesta.getMensaje());
 //        }
     }
 

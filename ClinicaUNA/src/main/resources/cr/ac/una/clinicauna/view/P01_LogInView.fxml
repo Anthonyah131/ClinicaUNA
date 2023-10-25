@@ -28,9 +28,9 @@
                <children>
                   <MFXButton fx:id="btnSalir" onAction="#onActionBtnSalir" styleClass="mfx-button-Image-salir">
                      <graphic>
-                        <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true" styleClass="mfx-button-Image">
+                        <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="mfx-button-Image">
                            <image>
-                              <Image url="@../resources/media/icons/Icono_Salir.png" />
+                              <Image url="@../resources/media/icons/Icono_Salir1.png" />
                            </image></ImageView>
                      </graphic>
                   </MFXButton>
@@ -53,7 +53,7 @@
             </VBox>
             <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="150.0" HBox.hgrow="ALWAYS">
                <children>
-                  <MenuButton fx:id="mbtnI18n" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="MenuButton">
+                  <MenuButton fx:id="mbtnI18n" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="50.0" prefWidth="90.0" styleClass="menu-button-Image" text="MenuButton" textAlignment="RIGHT">
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#onActionMitSpanish" text="Español" />
                       <MenuItem mnemonicParsing="false" onAction="#onActionMitEnglish" text="English" />

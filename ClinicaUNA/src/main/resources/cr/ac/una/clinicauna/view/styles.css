@@ -266,3 +266,28 @@
     -fx-alignment: CENTER;
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
 }
+/*-----------------------------------------------------------------------------------------------------------------*/
+.menu-button-Image{
+
+    -fx-background-color: transparent;
+    -fx-content-display: graphic-only;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-font: 17px "Arial Rounded MT Bold";
+    -fx-text-fill: #FFFFFF;
+    -fx-alignment: CENTER;
+}
+
+.menu-button-Image:hover{
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+
+.menu-button-Image .context-menu{
+     -fx-background-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+    -fx-alignment: CENTER;
+}
+
+/*-----------------------------------------------------------------------------------------------------------------*/

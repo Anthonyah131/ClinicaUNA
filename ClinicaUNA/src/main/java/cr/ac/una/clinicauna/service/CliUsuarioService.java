@@ -48,7 +48,7 @@ public class CliUsuarioService {
             return new Respuesta(true, "", "", "Usuario", usuarioDto);
         } catch (Exception ex) {
             Logger.getLogger(CliUsuarioService.class.getName()).log(Level.SEVERE, "Error obteniendo el usuario [" + usuario + "]", ex);
-            return new Respuesta(false, "Error obteniendo el usuario.", "getUsuario " + ex.getMessage());
+            return new Respuesta(false, "key.errorQuerying", "getUsuario " + ex.getMessage());
         }
     }
 
@@ -65,7 +65,7 @@ public class CliUsuarioService {
             return new Respuesta(true, "", "", "Usuario", usuarioDto);
         } catch (Exception ex) {
             Logger.getLogger(CliUsuarioService.class.getName()).log(Level.SEVERE, "Error obteniendo el usuario [" + id + "]", ex);
-            return new Respuesta(false, "Error obteniendo el usuario.", "getUsuario " + ex.getMessage());
+            return new Respuesta(false, "key.errorQuerying", "getUsuario " + ex.getMessage());
         }
     }
 
@@ -81,7 +81,7 @@ public class CliUsuarioService {
             return new Respuesta(true, "", "", "Usuarios", usuarios);
         } catch (Exception ex) {
             Logger.getLogger(CliUsuarioService.class.getName()).log(Level.SEVERE, "Error obteniendo usuarios.", ex);
-            return new Respuesta(false, "Error obteniendo usuarios.", "getUsuarios " + ex.getMessage());
+            return new Respuesta(false, "key.errorQuerying", "getUsuarios " + ex.getMessage());
         }
     }
 
@@ -96,7 +96,7 @@ public class CliUsuarioService {
             return new Respuesta(true, "", "", "Usuario", usuarioDto);
         } catch (Exception ex) {
             Logger.getLogger(CliUsuarioService.class.getName()).log(Level.SEVERE, "Error guardando el usuario.", ex);
-            return new Respuesta(false, "Error guardando el usuario.", "guardarUsuario " + ex.getMessage());
+            return new Respuesta(false, "key.errorSavingUser", "guardarUsuario " + ex.getMessage());
         }
     }
 
@@ -112,7 +112,7 @@ public class CliUsuarioService {
             return new Respuesta(true, "", "");
         } catch (Exception ex) {
             Logger.getLogger(CliUsuarioService.class.getName()).log(Level.SEVERE, "Error eliminando el usuario.", ex);
-            return new Respuesta(false, "Error eliminando el usuario.", "eliminarUsuario " + ex.getMessage());
+            return new Respuesta(false, "key.deleteUserError", "eliminarUsuario " + ex.getMessage());
         }
     }
 }
