@@ -38,7 +38,7 @@ public class CliReporteexpedienteService {
     public Respuesta getReporteexpediente(Long id) {
         try {
             Query qryUsuario = em.createNamedQuery("CliReporteexpediente.findByRepexpId", CliReporteexpediente.class);
-            qryUsuario.setParameter("id", id);
+            qryUsuario.setParameter("repexpId", id);
             CliReporteexpediente cliReporteusuarios = (CliReporteexpediente) qryUsuario.getSingleResult();
 
             CliReporteexpedienteDto cliReporteusuariosDto = new CliReporteexpedienteDto(cliReporteusuarios);

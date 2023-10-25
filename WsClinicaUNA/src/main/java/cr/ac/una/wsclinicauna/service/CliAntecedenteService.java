@@ -40,7 +40,7 @@ public class CliAntecedenteService {
     public Respuesta getAntecedente(Long id) {
         try {
             Query qryUsuario = em.createNamedQuery("CliAntecedente.findByAntId", CliAntecedente.class);
-            qryUsuario.setParameter("id", id);
+            qryUsuario.setParameter("antId", id);
             CliAntecedente cliAntecedente = (CliAntecedente) qryUsuario.getSingleResult();
 
             CliAntecedenteDto cliAntecedenteDto = new CliAntecedenteDto(cliAntecedente);

@@ -35,7 +35,7 @@ public class CliParametrosService {
     public Respuesta getParametro(Long id) {
         try {
             Query qryEmpleado = em.createNamedQuery("CliParametros.findByParId", CliParametros.class);
-            qryEmpleado.setParameter("id", id);
+            qryEmpleado.setParameter("parId", id);
 
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Parametro", new CliParametrosDto((CliParametros) qryEmpleado.getSingleResult()));
 

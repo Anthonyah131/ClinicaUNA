@@ -38,7 +38,7 @@ public class CliReporteusuariosService {
     public Respuesta getReporteusuario(Long id) {
         try {
             Query qryUsuario = em.createNamedQuery("CliReporteusuarios.findByRepusuId", CliReporteusuarios.class);
-            qryUsuario.setParameter("id", id);
+            qryUsuario.setParameter("repusuId", id);
             CliReporteusuarios cliReporteusuarios = (CliReporteusuarios) qryUsuario.getSingleResult();
 
             CliReporteusuariosDto cliReporteusuariosDto = new CliReporteusuariosDto(cliReporteusuarios);

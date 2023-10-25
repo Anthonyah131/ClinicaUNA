@@ -37,7 +37,7 @@ public class CliReporteagendaService {
     public Respuesta getReporteagenda(Long id) {
         try {
             Query qryUsuario = em.createNamedQuery("CliReporteagenda.findByRepageId", CliReporteagenda.class);
-            qryUsuario.setParameter("id", id);
+            qryUsuario.setParameter("repageId", id);
             CliReporteagenda cliReporteusuarios = (CliReporteagenda) qryUsuario.getSingleResult();
 
             CliReporteagendaDto cliReporteusuariosDto = new CliReporteagendaDto(cliReporteusuarios);

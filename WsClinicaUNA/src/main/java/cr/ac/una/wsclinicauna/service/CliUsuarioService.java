@@ -80,10 +80,10 @@ public class CliUsuarioService {
         }
     }
 
-    public Respuesta getUsuario(Long id) {
+    public Respuesta getUsuario(Long usuId) {
         try {
             Query qryUsuario = em.createNamedQuery("CliUsuario.findByUsuId", CliUsuario.class);
-            qryUsuario.setParameter("id", id);
+            qryUsuario.setParameter("usuId", usuId);
             CliUsuario cliUsuario = (CliUsuario) qryUsuario.getSingleResult();
 
             CliUsuarioDto cliUsuarioDto = new CliUsuarioDto(cliUsuario);

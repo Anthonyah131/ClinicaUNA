@@ -42,7 +42,7 @@ public class CliMedicoService {
     public Respuesta getMedico(Long id) {
         try {
             Query qryUsuario = em.createNamedQuery("CliMedico.findByMedId", CliMedico.class);
-            qryUsuario.setParameter("id", id);
+            qryUsuario.setParameter("medId", id);
             CliMedico cliMedico = (CliMedico) qryUsuario.getSingleResult();
 
             CliMedicoDto cliMedicoDto = new CliMedicoDto(cliMedico);

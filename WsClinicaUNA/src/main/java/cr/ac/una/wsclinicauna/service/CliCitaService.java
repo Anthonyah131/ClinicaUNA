@@ -42,7 +42,7 @@ public class CliCitaService {
     public Respuesta getCita(Long id) {
         try {
             Query qryUsuario = em.createNamedQuery("CliCita.findByCitId", CliCita.class);
-            qryUsuario.setParameter("id", id);
+            qryUsuario.setParameter("citId", id);
             CliCita cliCita = (CliCita) qryUsuario.getSingleResult();
 
             CliCitaDto cliCitaDto = new CliCitaDto(cliCita);

@@ -40,7 +40,7 @@ public class CliAgendaService {
     public Respuesta getAgenda(Long id) {
         try {
             Query qryUsuario = em.createNamedQuery("CliAgenda.findByAgeId", CliAgenda.class);
-            qryUsuario.setParameter("id", id);
+            qryUsuario.setParameter("ageId", id);
             CliAgenda cliAgenda = (CliAgenda) qryUsuario.getSingleResult();
 
             CliAgendaDto cliAgendaDto = new CliAgendaDto(cliAgenda);

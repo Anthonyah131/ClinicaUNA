@@ -46,7 +46,7 @@ public class CliExpedienteService {
     public Respuesta getExpediente(Long id) {
         try {
             Query qryUsuario = em.createNamedQuery("CliExpediente.findByExpId", CliExpediente.class);
-            qryUsuario.setParameter("id", id);
+            qryUsuario.setParameter("expId", id);
             CliExpediente cliExpediente = (CliExpediente) qryUsuario.getSingleResult();
 
             CliExpedienteDto cliExpedienteDto = new CliExpedienteDto(cliExpediente);

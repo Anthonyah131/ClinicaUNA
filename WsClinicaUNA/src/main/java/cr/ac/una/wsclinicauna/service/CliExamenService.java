@@ -42,7 +42,7 @@ public class CliExamenService {
     public Respuesta getExamen(Long id) {
         try {
             Query qryUsuario = em.createNamedQuery("CliExamen.findByExaId", CliExamen.class);
-            qryUsuario.setParameter("id", id);
+            qryUsuario.setParameter("exaId", id);
             CliExamen cliExamen = (CliExamen) qryUsuario.getSingleResult();
 
             CliExamenDto cliExamenDto = new CliExamenDto(cliExamen);

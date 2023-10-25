@@ -41,7 +41,7 @@ public class CliAtencionService {
     public Respuesta getAtencion(Long id) {
         try {
             Query qryUsuario = em.createNamedQuery("CliAtencion.findByAteId", CliAtencion.class);
-            qryUsuario.setParameter("id", id);
+            qryUsuario.setParameter("ateId", id);
             CliAtencion cliAtencion = (CliAtencion) qryUsuario.getSingleResult();
 
             CliAtencionDto cliAtencionDto = new CliAtencionDto(cliAtencion);

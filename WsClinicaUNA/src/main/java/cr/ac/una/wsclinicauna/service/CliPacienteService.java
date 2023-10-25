@@ -42,7 +42,7 @@ public class CliPacienteService {
     public Respuesta getPaciente(Long id) {
         try {
             Query qryUsuario = em.createNamedQuery("CliPaciente.findByPacId", CliPaciente.class);
-            qryUsuario.setParameter("id", id);
+            qryUsuario.setParameter("pacId", id);
             CliPaciente cliPaciente = (CliPaciente) qryUsuario.getSingleResult();
 
             CliPacienteDto cliPacienteDto = new CliPacienteDto(cliPaciente);
