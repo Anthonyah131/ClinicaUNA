@@ -79,13 +79,13 @@ public class P03_RegistroViewController extends Controller implements Initializa
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        txfNombre.setTextFormatter(Formato.getInstance().letrasFormat(30));
-        txfCedula.setTextFormatter(Formato.getInstance().cedulaFormat(40));
+        txfCedula.setTextFormatter(Formato.getInstance().cedulaFormat(9));
+        txfNombre.setTextFormatter(Formato.getInstance().letrasFormat(25));
+        txfPapellido.setTextFormatter(Formato.getInstance().letrasFormat(25));
+        txfSapellido.setTextFormatter(Formato.getInstance().letrasFormat(25));
         txfCorreo.setTextFormatter(Formato.getInstance().maxLengthFormat(80));
-        txfUsuario.setTextFormatter(Formato.getInstance().letrasFormat(15));
-        txfContrasena.setTextFormatter(Formato.getInstance().maxLengthFormat(8));
-        txfPapellido.setTextFormatter(Formato.getInstance().letrasFormat(15));
-        txfSapellido.setTextFormatter(Formato.getInstance().letrasFormat(15));
+        txfUsuario.setTextFormatter(Formato.getInstance().letrasFormat(20));
+        txfContrasena.setTextFormatter(Formato.getInstance().maxLengthFormat(15));
         this.usuarioDto = new CliUsuarioDto();
         iniciarScena();
         nuevoUsuario();
@@ -111,11 +111,11 @@ public class P03_RegistroViewController extends Controller implements Initializa
                     String tipo = cboxTipoUsuario.getValue();
                     if (tipo != null) {
                         switch (tipo) {
-                            case "Medico", "Doctor" ->
+                            case "Médico", "Doctor" ->
                                 tipo = "M";
                             case "Recepcionista", "Receptionist" ->
                                 tipo = "R";
-                            case "Admin", "Administrator" ->
+                            case "Administrador", "Administrator" ->
                                 tipo = "A";
                             default -> {
                             }
@@ -127,7 +127,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
                     String idioma = cboxIdioma.getValue();
                     if ("Español".equals(idioma)) {
                         idioma = "E";
-                    } else if ("Ingles".equals(idioma)) {
+                    } else if ("English".equals(idioma)) {
                         idioma = "I";
                     }
                     usuarioDto.setUsuIdioma(idioma);
@@ -168,7 +168,6 @@ public class P03_RegistroViewController extends Controller implements Initializa
             if (this.usuarioDto.getUsuId() == null) {
                 mensaje.showModali18n(Alert.AlertType.ERROR, "key.deleteUser", getStage(), "key.loadUserDelete");
             } else {
-
                 CliUsuarioService service = new CliUsuarioService();
                 Respuesta respuesta = service.eliminarUsuario(this.usuarioDto.getUsuId());
                 if (!respuesta.getEstado()) {
@@ -264,7 +263,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
 
     private void indicarRequeridos() {
         requeridos.clear();
-        requeridos.addAll(Arrays.asList(txfCedula, txfNombre, txfPapellido, txfUsuario, txfContrasena, cboxTipoUsuario));
+        requeridos.addAll(Arrays.asList(txfCedula, txfNombre, txfPapellido, txfSapellido, txfCorreo, txfUsuario, txfContrasena));
     }
 
     private void seleccionarTipoPorNombre(String nombreTipo) {

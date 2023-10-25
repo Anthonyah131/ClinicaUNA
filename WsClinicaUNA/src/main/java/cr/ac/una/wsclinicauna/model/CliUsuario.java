@@ -53,8 +53,8 @@ public class CliUsuario implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
-    @SequenceGenerator(name = "CLI_USUARIOS_USU_ID_GENERATOR", sequenceName = "CLI_USUARIOS_SEQ01", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLI_USUARIOS_USU_ID_GENERATOR")
+    @SequenceGenerator(name = "CLI_USUARIO_USU_ID_GENERATOR", sequenceName = "CLI_USUARIO_SEQ01", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLI_USUARIO_USU_ID_GENERATOR")
     @Basic(optional = false)
     @NotNull
     @Column(name = "USU_ID")

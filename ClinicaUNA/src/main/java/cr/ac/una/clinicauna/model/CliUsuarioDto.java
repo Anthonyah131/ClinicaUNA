@@ -133,11 +133,11 @@ public class CliUsuarioDto {
         this.usuClave.set(usuClave);
     }
 
-    public String getUsuTempClave() {
+    public String getUsuTempclave() {
         return this.usuTempclave.get();
     }
 
-    public void setUsuTempClave(String usuTempclave) {
+    public void setUsuTempclave(String usuTempclave) {
         this.usuTempclave.set(usuTempclave);
     }
 

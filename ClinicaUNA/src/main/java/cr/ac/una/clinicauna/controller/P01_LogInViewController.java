@@ -83,7 +83,7 @@ public class P01_LogInViewController extends Controller implements Initializable
                     //AppContext.getInstance().set("UsuarioId", cliUsuarioDto.getUsuId()); Para que es esto??
                     AppContext.getInstance().set("Token", cliUsuarioDto.getToken());
                     AppContext.getInstance().set("Usuario", cliUsuarioDto);
-                    if (cliUsuarioDto.getUsuClave().equals(cliUsuarioDto.getUsuTempClave())) {
+                    if (cliUsuarioDto.getUsuClave().equals(cliUsuarioDto.getUsuTempclave())) {
                         mensaje.showModali18n(Alert.AlertType.WARNING, "key.userValidation", getStage(), "key.changePass");
                         FlowController.getInstance().goViewInWindowModal("P05_CambioClaveView", stage, false);
                     } else {
