@@ -131,7 +131,7 @@ CREATE TABLE CLI_USUARIO(
   usu_activo Varchar2(1 ) NOT NULL,
   usu_version Number DEFAULT 1 NOT NULL,
   CONSTRAINT CLI_USUARIO_CK01 CHECK (usu_activo in ('A','I')),
-  CONSTRAINT CLI_USUARIO_CK02 CHECK (usu_idioma in ('E','I'))
+  CONSTRAINT CLI_USUARIO_CK02 CHECK (usu_idioma in ('E','I')),
   CONSTRAINT CLI_USUARIO_CK03 CHECK (usu_tipousuario in ('M','R','A'))
 )
 ;
