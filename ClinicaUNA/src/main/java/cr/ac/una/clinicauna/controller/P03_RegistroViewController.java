@@ -111,11 +111,11 @@ public class P03_RegistroViewController extends Controller implements Initializa
                     String tipo = cboxTipoUsuario.getValue();
                     if (tipo != null) {
                         switch (tipo) {
-                            case "Medico" ->
+                            case "Medico", "Doctor" ->
                                 tipo = "M";
-                            case "Recepcionista" ->
+                            case "Recepcionista", "Receptionist" ->
                                 tipo = "R";
-                            case "Admin" ->
+                            case "Admin", "Administrator" ->
                                 tipo = "A";
                             default -> {
                             }
@@ -210,7 +210,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
     public void iniciarScena() {
         resourceBundle = FlowController.getInstance().getIdioma();
         mensaje = new Mensaje(resourceBundle);
-        
+
         String padre = (String) AppContext.getInstance().get("Padre");
 
         if (padre.equals("P01_LogInView")) {
@@ -272,7 +272,10 @@ public class P03_RegistroViewController extends Controller implements Initializa
         for (String tipo : cboxTipoUsuario.getItems()) {
             switch (nombreTipo) {
                 case "M" -> {
-                    if ("Medico".equals(tipo)) {
+                    if ("Médico".equals(tipo)) {
+                        cboxTipoUsuario.getSelectionModel().select(tipo);
+                        break OUTER; // Termina el bucle una vez que se encuentra una coincidencia.
+                    } else if ("Doctor".equals(tipo)) {
                         cboxTipoUsuario.getSelectionModel().select(tipo);
                         break OUTER; // Termina el bucle una vez que se encuentra una coincidencia.
                     }
@@ -282,11 +285,17 @@ public class P03_RegistroViewController extends Controller implements Initializa
                     if ("Recepcionista".equals(tipo)) {
                         cboxTipoUsuario.getSelectionModel().select(tipo);
                         break OUTER; // Termina el bucle una vez que se encuentra una coincidencia.
+                    } else if ("Receptionist".equals(tipo)) {
+                        cboxTipoUsuario.getSelectionModel().select(tipo);
+                        break OUTER; // Termina el bucle una vez que se encuentra una coincidencia.
                     }
                     break;
                 }
                 case "A" -> {
-                    if ("Admin".equals(tipo)) {
+                    if ("Administrador".equals(tipo)) {
+                        cboxTipoUsuario.getSelectionModel().select(tipo);
+                        break OUTER; // Termina el bucle una vez que se encuentra una coincidencia.
+                    } else if ("Administrator".equals(tipo)) {
                         cboxTipoUsuario.getSelectionModel().select(tipo);
                         break OUTER; // Termina el bucle una vez que se encuentra una coincidencia.
                     }
@@ -310,7 +319,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
                     break;
                 }
                 case "I" -> {
-                    if ("Ingles".equals(idioma)) {
+                    if ("English".equals(idioma)) {
                         cboxIdioma.getSelectionModel().select(idioma);
                         break OUTER; // Termina el bucle una vez que se encuentra una coincidencia.
                     }

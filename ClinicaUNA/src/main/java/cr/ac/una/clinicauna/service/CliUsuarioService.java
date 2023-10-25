@@ -13,12 +13,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import javafx.collections.FXCollections;
 
 /**
  *
  * @author ANTHONY
  */
 public class CliUsuarioService {
+
     public Respuesta renovarToken() {
         try {
             Request request = new Request("CliUsuarioController/renovar");
@@ -69,7 +72,7 @@ public class CliUsuarioService {
         }
     }
 
-    public Respuesta getUsuarios() {
+    public Respuesta getUsuarios(String cedula, String nombre, String pApellido, String tipoUsuario) {
         try {
             Request request = new Request("CliUsuarioController/usuarios");
             request.get();
@@ -78,6 +81,44 @@ public class CliUsuarioService {
             }
             List<CliUsuarioDto> usuarios = (List<CliUsuarioDto>) request.readEntity(new GenericType<List<CliUsuarioDto>>() {
             });
+
+            if (cedula != null && !cedula.isBlank()) {
+                String cedulaBuscado = cedula.toLowerCase();
+                usuarios = usuarios.stream()
+                        .filter(p -> p.getUsuCedula().toLowerCase().contains(cedulaBuscado))
+                        .collect(Collectors.toCollection(FXCollections::observableArrayList));
+            }
+            if (nombre != null && !nombre.isBlank()) {
+                String nombreBuscado = nombre.toLowerCase();
+                usuarios = usuarios.stream()
+                        .filter(p -> p.getUsuNombre().toLowerCase().contains(nombreBuscado))
+                        .collect(Collectors.toCollection(FXCollections::observableArrayList));
+            }
+            if (pApellido != null && !pApellido.isBlank()) {
+                String apellidoBuscada = pApellido.toLowerCase();
+                usuarios = usuarios.stream()
+                        .filter(p -> p.getUsuPapellido().toLowerCase().contains(apellidoBuscada))
+                        .collect(Collectors.toCollection(FXCollections::observableArrayList));
+            }
+            if (tipoUsuario != null && !tipoUsuario.isBlank()) {
+                System.out.println(tipoUsuario);
+                switch (tipoUsuario) {
+                    case "Médico", "Doctor" ->
+                        usuarios = usuarios.stream()
+                                .filter(p -> p.getUsuTipousuario().contains("M"))
+                                .collect(Collectors.toCollection(FXCollections::observableArrayList));
+                    case "Recepcionista", "Receptionist" ->
+                        usuarios = usuarios.stream()
+                                .filter(p -> p.getUsuTipousuario().contains("R"))
+                                .collect(Collectors.toCollection(FXCollections::observableArrayList));
+                    case "Administrador", "Administrator" ->
+                        usuarios = usuarios.stream()
+                                .filter(p -> p.getUsuTipousuario().contains("A"))
+                                .collect(Collectors.toCollection(FXCollections::observableArrayList));
+                    default -> {
+                    }
+                }
+            }
             return new Respuesta(true, "", "", "Usuarios", usuarios);
         } catch (Exception ex) {
             Logger.getLogger(CliUsuarioService.class.getName()).log(Level.SEVERE, "Error obteniendo usuarios.", ex);

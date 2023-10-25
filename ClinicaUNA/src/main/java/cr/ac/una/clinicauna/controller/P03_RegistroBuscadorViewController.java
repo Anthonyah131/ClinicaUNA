@@ -69,18 +69,18 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
 
     @FXML
     private void onActionBtnFiltrar(ActionEvent event) {
-//        CliUsuarioService service = new CliUsuarioService();
-//        Respuesta respuesta = service.getUsuarios();
-//
-//        if (respuesta.getEstado()) {
-//            tbvResultados.getItems().clear();
-//            usuarios.clear();
-//            usuarios.addAll((List<CliUsuarioDto>) respuesta.getResultado("TarUsuario"));
-//            tbvResultados.setItems(usuarios);
-//            tbvResultados.refresh();
-//        } else {
-//            //new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Usuarios", getStage(), respuesta.getMensaje());
-//        }
+        CliUsuarioService service = new CliUsuarioService();
+        Respuesta respuesta = service.getUsuarios(txfCedula.getText(), txfNombre.getText(), txfApellido.getText(), cboxTipoUsuario.getValue());
+
+        if (respuesta.getEstado()) {
+            tbvResultados.getItems().clear();
+            usuarios.clear();
+            usuarios.addAll((List<CliUsuarioDto>) respuesta.getResultado("Usuarios"));
+            tbvResultados.setItems(usuarios);
+            tbvResultados.refresh();
+        } else {
+            //new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Usuarios", getStage(), respuesta.getMensaje());
+        }
     }
 
     @FXML
