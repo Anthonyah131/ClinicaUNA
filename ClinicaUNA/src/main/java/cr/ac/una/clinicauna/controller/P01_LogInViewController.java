@@ -125,8 +125,12 @@ public class P01_LogInViewController extends Controller implements Initializable
 
     @FXML
     private void onActionBtnAcercaDe(ActionEvent event) {
-        FlowController.getInstance().delete("P05_CambioClaveView");
-        FlowController.getInstance().goViewInWindowModal("P05_CambioClaveView", stage, false);
+        if (getStage().getOwner() == null) {
+            FlowController.getInstance().goMain();
+        }
+        getStage().close();
+//        FlowController.getInstance().delete("P05_CambioClaveView");
+//        FlowController.getInstance().goViewInWindowModal("P05_CambioClaveView", stage, false);
 
 //        AppContext.getInstance().set("Padre", "");
 //        FlowController.getInstance().goViewInWindowModal("P03_RegistroView", stage, false);

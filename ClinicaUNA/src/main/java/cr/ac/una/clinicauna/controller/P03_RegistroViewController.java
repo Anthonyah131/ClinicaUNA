@@ -71,6 +71,8 @@ public class P03_RegistroViewController extends Controller implements Initializa
 
     CliUsuarioDto usuarioDto;
     List<Node> requeridos = new ArrayList<>();
+    ResourceBundle resourceBundle;
+    Mensaje mensaje;
 
     /**
      * Initializes the controller class.
@@ -89,11 +91,15 @@ public class P03_RegistroViewController extends Controller implements Initializa
         indicarRequeridos();
         fillCbox();
         iniciarScena();
+        resourceBundle = FlowController.getInstance().getIdioma();
+        mensaje = new Mensaje(resourceBundle);
     }
 
     @Override
     public void initialize() {
         iniciarScena();
+        resourceBundle = FlowController.getInstance().getIdioma();
+        mensaje = new Mensaje(resourceBundle);
     }
 
     @FXML
@@ -101,7 +107,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
         try {
             String invalidos = validarRequeridos();
             if (!invalidos.isEmpty()) {
-                new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar usuario", getStage(), invalidos);
+                mensaje.showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), invalidos);
             } else {
                 CliUsuarioService usuarioService = new CliUsuarioService();
                 if (cboxTipoUsuario.getValue() != null) {
@@ -132,17 +138,17 @@ public class P03_RegistroViewController extends Controller implements Initializa
 
                 Respuesta respuesta = usuarioService.guardarUsuario(usuarioDto);
                 if (!respuesta.getEstado()) {
-                    new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar usuario", getStage(), respuesta.getMensaje());
+                    mensaje.showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
                 } else {
                     unbindUsuario();
                     this.usuarioDto = (CliUsuarioDto) respuesta.getResultado("Usuario");
                     bindUsuario();
-                    new Mensaje().showModal(Alert.AlertType.INFORMATION, "Guardar usuario", getStage(), "Usuario actualizado correctamente.");
+                    mensaje.showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
                 }
             }
         } catch (Exception ex) {
             Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error guardando el usuario.", ex);
-            new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar Usuario", getStage(), "Ocurrio un error guardando el usuario.");
+            mensaje.showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
         }
     }
 
@@ -159,7 +165,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
 
     @FXML
     private void onActionBtnLimpiarCampos(ActionEvent event) {
-        if (new Mensaje().showConfirmation("Limpiar Usuario", getStage(), "¿Esta seguro que desea limpiar el registro?")) {
+        if (mensaje.showConfirmationi18n("key.clear", getStage(), "key.cleanRegistry")) {
             nuevoUsuario();
 //            cleanNodes();
         }
@@ -169,21 +175,21 @@ public class P03_RegistroViewController extends Controller implements Initializa
     private void onActionBtnEliminarUsuario(ActionEvent event) {
         try {
             if (this.usuarioDto.getUsuId() == null) {
-                new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar usuario", getStage(), "Debe cargar el usuario que desea eliminar.");
+                mensaje.showModali18n(Alert.AlertType.ERROR, "Eliminar usuario", getStage(), "Debe cargar el usuario que desea eliminar.");
             } else {
 
                 CliUsuarioService service = new CliUsuarioService();
                 Respuesta respuesta = service.eliminarUsuario(this.usuarioDto.getUsuId());
                 if (!respuesta.getEstado()) {
-                    new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar usuario", getStage(), respuesta.getMensaje());
+                    mensaje.showModali18n(Alert.AlertType.ERROR, "Eliminar usuario", getStage(), respuesta.getMensaje());
                 } else {
-                    new Mensaje().showModal(Alert.AlertType.INFORMATION, "Eliminar usuario", getStage(), "Usuario eliminado correctamente.");
+                    mensaje.showModali18n(Alert.AlertType.INFORMATION, "Eliminar usuario", getStage(), "Usuario eliminado correctamente.");
                     nuevoUsuario();
                 }
             }
         } catch (Exception ex) {
             Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error eliminando el usuario.", ex);
-            new Mensaje().showModal(Alert.AlertType.ERROR, "Eliminar usuario", getStage(), "Ocurrio un error eliminando el usuario.");
+            mensaje.showModali18n(Alert.AlertType.ERROR, "Eliminar usuario", getStage(), "Ocurrio un error eliminando el usuario.");
         }
     }
 
@@ -202,11 +208,11 @@ public class P03_RegistroViewController extends Controller implements Initializa
                 bindUsuario();
                 validarRequeridos();
             } else {
-                new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar usuario", getStage(), respuesta.getMensaje());
+                mensaje.showModali18n(Alert.AlertType.ERROR, "Cargar usuario", getStage(), respuesta.getMensaje());
             }
         } catch (Exception ex) {
             Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error consultando el usuario.", ex);
-            new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Usuario", getStage(), "Ocurrio un error consultando el usuario.");
+            mensaje.showModali18n(Alert.AlertType.ERROR, "Cargar Usuario", getStage(), "Ocurrio un error consultando el usuario.");
         }
     }
 
@@ -324,7 +330,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
     }
 
     private void bindUsuario() {
-        txfNombre.textProperty().bindBidirectional(usuarioDto.usuPapellido);
+        txfNombre.textProperty().bindBidirectional(usuarioDto.usuNombre);
         txfCedula.textProperty().bindBidirectional(usuarioDto.usuCedula);
         txfPapellido.textProperty().bindBidirectional(usuarioDto.usuPapellido);
         txfSapellido.textProperty().bindBidirectional(usuarioDto.usuSapellido);
@@ -345,7 +351,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
     }
 
     private void unbindUsuario() {
-        txfNombre.textProperty().unbindBidirectional(usuarioDto.usuPapellido);
+        txfNombre.textProperty().unbindBidirectional(usuarioDto.usuNombre);
         txfCedula.textProperty().unbindBidirectional(usuarioDto.usuCedula);
         txfPapellido.textProperty().unbindBidirectional(usuarioDto.usuPapellido);
         txfSapellido.textProperty().unbindBidirectional(usuarioDto.usuSapellido);

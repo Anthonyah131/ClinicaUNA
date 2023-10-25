@@ -52,6 +52,18 @@ public class Mensaje {
         
         alert.showAndWait();
     }
+    
+    public Boolean showConfirmationi18n(String tituloKey, Window padre, String mensajeKey) {
+        
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle(resourceBundle.getString(tituloKey));
+        alert.setHeaderText(null);
+        alert.initOwner(padre);
+        alert.setContentText(resourceBundle.getString(mensajeKey));
+        
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.get() == ButtonType.OK;
+    }
 
     public void show(AlertType tipo, String titulo, String mensaje) {
         Alert alert = new Alert(tipo);
