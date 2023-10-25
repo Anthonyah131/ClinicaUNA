@@ -6,6 +6,7 @@ package cr.ac.una.clinicauna.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -211,4 +212,32 @@ public class CliUsuarioDto {
     public void setToken(String token) {
         this.token = token;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 61 * hash + Objects.hashCode(this.usuId);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final CliUsuarioDto other = (CliUsuarioDto) obj;
+        return Objects.equals(this.usuId, other.usuId);
+    }
+    
+    @Override
+    public String toString() {
+        return "CliUsuarioDto{" + "usuId=" + usuId + ", usuNombre=" + usuNombre + ", usuPapellido=" + usuPapellido + ", usuSapellido=" + usuSapellido + ", usuCedula=" + usuCedula + ", usuCorreo=" + usuCorreo + ", usuTipousuario=" + usuTipousuario + ", usuUsuario=" + usuUsuario + ", usuClave=" + usuClave + ", usuTempclave=" + usuTempclave + ", usuIdioma=" + usuIdioma + ", usuActivo=" + usuActivo + ", cliReporteusuariosList=" + cliReporteusuariosList + ", cliReporteusuariosListEliminados=" + cliReporteusuariosListEliminados + ", cliMedicoList=" + cliMedicoList + ", cliMedicoListEliminados=" + cliMedicoListEliminados + ", usuVersion=" + usuVersion + ", modificado=" + modificado + ", token=" + token + '}';
+    }
+    
 }

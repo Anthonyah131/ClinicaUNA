@@ -79,7 +79,7 @@ public class P01_LogInViewController extends Controller implements Initializable
                 CliUsuarioService cliUsuarioService = new CliUsuarioService();
                 Respuesta respuesta = cliUsuarioService.getUsuario(txfUsuario.getText(), txfContrasena.getText());
                 if (respuesta.getEstado()) {
-                    CliUsuarioDto cliUsuarioDto = (CliUsuarioDto) respuesta.getResultado("TarUsuario");
+                    CliUsuarioDto cliUsuarioDto = (CliUsuarioDto) respuesta.getResultado("Usuario");
                     //AppContext.getInstance().set("UsuarioId", cliUsuarioDto.getUsuId()); Para que es esto??
                     AppContext.getInstance().set("Token", cliUsuarioDto.getToken());
                     AppContext.getInstance().set("Usuario", cliUsuarioDto);

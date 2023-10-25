@@ -18,4 +18,5 @@ module clinicauna {
     exports cr.ac.una.clinicauna;
     exports cr.ac.una.clinicauna.controller;
     exports cr.ac.una.clinicauna.util;
+    exports cr.ac.una.clinicauna.model;
 }
