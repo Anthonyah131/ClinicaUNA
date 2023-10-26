@@ -57,47 +57,34 @@ public class CliAtencion implements Serializable {
     @SequenceGenerator(name = "CLI_ATENCION_ATE_ID_GENERATOR", sequenceName = "CLI_ATENCION_SEQ01", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLI_ATENCION_ATE_ID_GENERATOR")
     @Basic(optional = false)
-    @NotNull
     @Column(name = "ATE_ID")
     private Long ateId;
     @Column(name = "ATE_FECHAHORA")
     private LocalDate ateFechahora;
-    @Size(max = 5)
     @Column(name = "ATE_PRESION")
     private String atePresion;
-    @Size(max = 5)
     @Column(name = "ATE_FRECUENCIACARD")
     private String ateFrecuenciacard;
-    @Size(max = 5)
     @Column(name = "ATE_PESO")
     private String atePeso;
-    @Size(max = 5)
     @Column(name = "ATE_TALLA")
     private String ateTalla;
-    @Size(max = 5)
     @Column(name = "ATE_TEMPERATURA")
     private String ateTemperatura;
-    @Size(max = 5)
     @Column(name = "ATE_IMC")
     private String ateImc;
-    @Size(max = 80)
     @Column(name = "ATE_ANOTACIONENFE")
     private String ateAnotacionenfe;
-    @Size(max = 50)
     @Column(name = "ATE_RAZONCONSULTA")
     private String ateRazonconsulta;
-    @Size(max = 1)
     @Column(name = "ATE_PLANATENCION")
     private String atePlanatencion;
-    @Size(max = 80)
     @Column(name = "ATE_OBSERVACIONES")
     private String ateObservaciones;
-    @Size(max = 50)
     @Column(name = "ATE_TRATAMIENTO")
     private String ateTratamiento;
     @Version
     @Basic(optional = false)
-    @NotNull
     @Column(name = "ATE_VERSION")
     private Long ateVersion;
     @OneToMany(mappedBy = "ateId", fetch = FetchType.LAZY)

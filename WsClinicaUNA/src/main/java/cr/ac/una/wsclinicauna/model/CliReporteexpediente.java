@@ -42,14 +42,12 @@ public class CliReporteexpediente implements Serializable {
     @SequenceGenerator(name = "CLI_REPORTEEXPEDIENTE_REPEXP_ID_GENERATOR", sequenceName = "CLI_REPORTEEXPEDIENTE_SEQ01", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLI_REPORTEEXPEDIENTE_REPEXP_ID_GENERATOR")
     @Basic(optional = false)
-    @NotNull
     @Column(name = "REPEXP_ID")
     private Long repexpId;
     @Column(name = "REPEXP_FECHAEMISION")
     private LocalDate repexpFechaemision;
     @Version
     @Basic(optional = false)
-    @NotNull
     @Column(name = "REPEXP_VERSION")
     private Long repexpVersion;
     @JoinColumn(name = "PAC_ID", referencedColumnName = "PAC_ID")

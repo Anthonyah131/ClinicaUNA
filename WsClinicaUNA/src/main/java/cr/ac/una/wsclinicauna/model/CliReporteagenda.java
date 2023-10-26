@@ -43,7 +43,6 @@ public class CliReporteagenda implements Serializable {
     @SequenceGenerator(name = "CLI_REPORTEAGENDA_REPAGE_ID_GENERATOR", sequenceName = "CLI_REPORTEAGENDA_SEQ01", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLI_REPORTEAGENDA_REPAGE_ID_GENERATOR")
     @Basic(optional = false)
-    @NotNull
     @Column(name = "REPAGE_ID")
     private Long repageId;
     @Column(name = "REPAGE_FECHAINICIO")
@@ -54,7 +53,6 @@ public class CliReporteagenda implements Serializable {
     private LocalDate repageFechaemision;
     @Version
     @Basic(optional = false)
-    @NotNull
     @Column(name = "REPAGE_VERSION")
     private Long repageVersion;
     @JoinColumn(name = "MED_ID", referencedColumnName = "MED_ID")

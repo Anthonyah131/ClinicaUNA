@@ -47,19 +47,16 @@ public class CliAgenda implements Serializable {
     @SequenceGenerator(name = "CLI_AGENDA_AGE_ID_GENERATOR", sequenceName = "CLI_AGENDA_SEQ01", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLI_AGENDA_AGE_ID_GENERATOR")
     @Basic(optional = false)
-    @NotNull
     @Column(name = "AGE_ID")
     private Long ageId;
     @Column(name = "AGE_FECHA")
     private LocalDate ageFecha;
-    @Size(max = 20)
     @Column(name = "AGE_TIEMPO")
     private String ageTiempo;
     @Column(name = "AGE_ESPACIOS")
     private Long ageEspacios;
     @Version
     @Basic(optional = false)
-    @NotNull
     @Column(name = "AGE_VERSION")
     private Long ageVersion;
     @OneToMany(mappedBy = "ageId", fetch = FetchType.LAZY)

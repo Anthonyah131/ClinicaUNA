@@ -41,14 +41,11 @@ public class CliReporteusuarios implements Serializable {
     @SequenceGenerator(name = "CLI_REPORTEUSUARIOS_REPUSU_ID_GENERATOR", sequenceName = "CLI_REPORTEUSUARIOS_SEQ01", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLI_REPORTEUSUARIOS_REPUSU_ID_GENERATOR")
     @Basic(optional = false)
-    @NotNull
     @Column(name = "REPUSU_ID")
     private Long repusuId;
     @Column(name = "REPUSU_FECHAEMISION")
     private LocalDate repusuFechaemision;
-    @Version
     @Basic(optional = false)
-    @NotNull
     @Column(name = "REPUSU_VERSION")
     private Long repusuVersion;
     @ManyToMany(mappedBy = "cliReporteusuariosList", fetch = FetchType.LAZY)

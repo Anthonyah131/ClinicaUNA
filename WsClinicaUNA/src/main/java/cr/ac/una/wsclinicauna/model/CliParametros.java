@@ -42,19 +42,14 @@ public class CliParametros implements Serializable {
     @SequenceGenerator(name = "CLI_PARAMETROS_PAR_ID_GENERATOR", sequenceName = "CLI_PARAMETROS_SEQ01", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLI_PARAMETROS_PAR_ID_GENERATOR")
     @Basic(optional = false)
-    @NotNull
     @Column(name = "PAR_ID")
     private Long parId;
-    @Size(max = 30)
     @Column(name = "PAR_NOMBRE")
     private String parNombre;
-    @Size(max = 30)
     @Column(name = "PAR_DESCRIPCION")
     private String parDescripcion;
-    @Size(max = 30)
     @Column(name = "PAR_EMAIL")
     private String parEmail;
-    @Size(max = 30)
     @Column(name = "PAR_CLAVE")
     private String parClave;
     @Lob
@@ -65,7 +60,6 @@ public class CliParametros implements Serializable {
     private Serializable parHtml;
     @Version
     @Basic(optional = false)
-    @NotNull
     @Column(name = "PAR_VERSION")
     private Long parVersion;
 

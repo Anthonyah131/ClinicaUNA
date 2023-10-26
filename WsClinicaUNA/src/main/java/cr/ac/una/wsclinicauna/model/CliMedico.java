@@ -50,27 +50,18 @@ public class CliMedico implements Serializable {
     @SequenceGenerator(name = "CLI_MEDICO_MED_ID_GENERATOR", sequenceName = "CLI_MEDICO_SEQ01", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLI_MEDICO_MED_ID_GENERATOR")
     @Basic(optional = false)
-    @NotNull
     @Column(name = "MED_ID")
     private Long medId;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 15)
     @Column(name = "MED_CODIGO")
     private String medCodigo;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 10)
     @Column(name = "MED_FOLIO")
     private String medFolio;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 15)
     @Column(name = "MED_CARNE")
     private String medCarne;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 1)
     @Column(name = "MED_ESTADO")
     private String medEstado;
     @Column(name = "MED_FINI")
@@ -81,7 +72,6 @@ public class CliMedico implements Serializable {
     private Long medEspaciosxhora;
     @Version
     @Basic(optional = false)
-    @NotNull
     @Column(name = "MED_VERSION")
     private Long medVersion;
     @OneToMany(mappedBy = "medId", fetch = FetchType.LAZY)

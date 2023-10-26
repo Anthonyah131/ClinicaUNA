@@ -44,22 +44,17 @@ public class CliExamen implements Serializable {
     @SequenceGenerator(name = "CLI_EXAMEN_EXA_ID_GENERATOR", sequenceName = "CLI_EXAMEN_SEQ01", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLI_EXAMEN_EXA_ID_GENERATOR")
     @Basic(optional = false)
-    @NotNull
     @Column(name = "EXA_ID")
     private Long exaId;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 30)
     @Column(name = "EXA_NOMBRE")
     private String exaNombre;
     @Column(name = "EXA_FECHA")
     private LocalDate exaFecha;
-    @Size(max = 80)
     @Column(name = "EXA_ANOTACIONESMED")
     private String exaAnotacionesmed;
     @Version
     @Basic(optional = false)
-    @NotNull
     @Column(name = "EXA_VERSION")
     private Long exaVersion;
     @JoinColumn(name = "ATE_ID", referencedColumnName = "ATE_ID")

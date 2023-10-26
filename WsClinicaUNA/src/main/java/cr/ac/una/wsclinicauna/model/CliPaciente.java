@@ -49,46 +49,32 @@ public class CliPaciente implements Serializable {
     @SequenceGenerator(name = "CLI_PACIENTE_PAC_ID_GENERATOR", sequenceName = "CLI_PACIENTE_SEQ01", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLI_PACIENTE_PAC_ID_GENERATOR")
     @Basic(optional = false)
-    @NotNull
     @Column(name = "PAC_ID")
     private Long pacId;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 25)
     @Column(name = "PAC_NOMBRE")
     private String pacNombre;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 25)
     @Column(name = "PAC_PAPELLIDO")
     private String pacPapellido;
-    @Size(max = 25)
     @Column(name = "PAC_SAPELLIDO")
     private String pacSapellido;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 9)
     @Column(name = "PAC_CEDULA")
     private String pacCedula;
     @Column(name = "PAC_TELEFONO")
     private Long pacTelefono;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 80)
     @Column(name = "PAC_CORREO")
     private String pacCorreo;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 1)
     @Column(name = "PAC_GENERO")
     private String pacGenero;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "PAC_FNACIMIENTO")
     private LocalDate pacFnacimiento;
     @Version
     @Basic(optional = false)
-    @NotNull
     @Column(name = "PAC_VERSION")
     private Long pacVersion;
     @OneToMany(mappedBy = "pacId", fetch = FetchType.LAZY)

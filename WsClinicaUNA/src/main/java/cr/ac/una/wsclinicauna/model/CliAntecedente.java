@@ -44,21 +44,16 @@ public class CliAntecedente implements Serializable {
     @SequenceGenerator(name = "CLI_ANTECEDENTE_ANT_ID_GENERATOR", sequenceName = "CLI_ANTECEDENTE_SEQ01", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLI_ANTECEDENTE_ANT_ID_GENERATOR")
     @Basic(optional = false)
-    @NotNull
     @Column(name = "ANT_ID")
     private Long antId;
-    @Size(max = 100)
     @Column(name = "ANT_DESCRIPCION")
     private String antDescripcion;
-    @Size(max = 10)
     @Column(name = "ANT_TIPO")
     private String antTipo;
-    @Size(max = 20)
     @Column(name = "ANT_PARENTESCO")
     private String antParentesco;
     @Version
     @Basic(optional = false)
-    @NotNull
     @Column(name = "ANT_VERSION")
     private Long antVersion;
     @JoinColumn(name = "EXP_ID", referencedColumnName = "EXP_ID")

@@ -45,22 +45,17 @@ public class CliCita implements Serializable {
     @SequenceGenerator(name = "CLI_CITA_CIT_ID_GENERATOR", sequenceName = "CLI_CITA_SEQ01", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLI_CITA_CIT_ID_GENERATOR")
     @Basic(optional = false)
-    @NotNull
     @Column(name = "CIT_ID")
     private Long citId;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 20)
     @Column(name = "CIT_USUARIOREGISTRA")
     private String citUsuarioregistra;
-    @Size(max = 80)
     @Column(name = "CIT_MOTIVO")
     private String citMotivo;
     @Column(name = "CIT_FECHAHORA")
     private LocalDate citFechahora;
     @Version
     @Basic(optional = false)
-    @NotNull
     @Column(name = "CIT_VERSION")
     private Long citVersion;
     @JoinColumn(name = "AGE_ID", referencedColumnName = "AGE_ID")

@@ -48,7 +48,6 @@ public class CliExpediente implements Serializable {
     @SequenceGenerator(name = "CLI_EXPEDIENTE_EXP_ID_GENERATOR", sequenceName = "CLI_EXPEDIENTE_SEQ01", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLI_EXPEDIENTE_EXP_ID_GENERATOR")
     @Basic(optional = false)
-    @NotNull
     @Column(name = "EXP_ID")
     private Long expId;
     @Column(name = "EXP_HOSPITALIZACIONES")
@@ -57,18 +56,14 @@ public class CliExpediente implements Serializable {
     private Long expOperaciones;
     @Column(name = "EXP_ALERGIAS")
     private Long expAlergias;
-    @Size(max = 500)
     @Column(name = "EXP_PATOLOGICOS")
     private String expPatologicos;
-    @Size(max = 500)
     @Column(name = "EXP_TIPOSALERGIAS")
     private String expTiposalergias;
-    @Size(max = 500)
     @Column(name = "EXP_TRATAMIENTOS")
     private String expTratamientos;
     @Version
     @Basic(optional = false)
-    @NotNull
     @Column(name = "EXP_VERSION")
     private Long expVersion;
     @JoinColumn(name = "PAC_ID", referencedColumnName = "PAC_ID")
