@@ -10,6 +10,7 @@ module clinicauna {
     requires jakarta.json;
     requires java.sql;
     requires jakarta.xml.bind;
+    requires org.apache.commons.compress;
 
     opens cr.ac.una.clinicauna to javafx.fxml, com.jfoenix;
     opens cr.ac.una.clinicauna.controller to javafx.fxml;

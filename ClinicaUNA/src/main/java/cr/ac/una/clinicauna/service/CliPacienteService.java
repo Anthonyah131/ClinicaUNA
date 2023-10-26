@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import javafx.collections.FXCollections;
 
 /**
  *
@@ -36,7 +38,7 @@ public class CliPacienteService {
         }
     }
 
-    public Respuesta getPacientes() {
+    public Respuesta getPacientes(String cedula, String nombre, String pApellido) {
         try {
             Request request = new Request("CliPacienteController/pacientes");
             request.get();
@@ -45,6 +47,24 @@ public class CliPacienteService {
             }
             List<CliPacienteDto> pacientes = (List<CliPacienteDto>) request.readEntity(new GenericType<List<CliPacienteDto>>() {
             });
+            if (cedula != null && !cedula.isBlank()) {
+                String cedulaBuscado = cedula.toLowerCase();
+                pacientes = pacientes.stream()
+                        .filter(p -> p.getPacCedula().toLowerCase().contains(cedulaBuscado))
+                        .collect(Collectors.toCollection(FXCollections::observableArrayList));
+            }
+            if (nombre != null && !nombre.isBlank()) {
+                String nombreBuscado = nombre.toLowerCase();
+                pacientes = pacientes.stream()
+                        .filter(p -> p.getPacNombre().toLowerCase().contains(nombreBuscado))
+                        .collect(Collectors.toCollection(FXCollections::observableArrayList));
+            }
+            if (pApellido != null && !pApellido.isBlank()) {
+                String apellidoBuscada = pApellido.toLowerCase();
+                pacientes = pacientes.stream()
+                        .filter(p -> p.getPacPapellido().toLowerCase().contains(apellidoBuscada))
+                        .collect(Collectors.toCollection(FXCollections::observableArrayList));
+            }
             return new Respuesta(true, "", "", "Pacientes", pacientes);
         } catch (Exception ex) {
             Logger.getLogger(CliPacienteService.class.getName()).log(Level.SEVERE, "Error obteniendo pacientes.", ex);

@@ -71,7 +71,7 @@ public class CliPacienteService {
 
     public Respuesta getPacientes() {
         try {
-            Query qryUsuario = em.createNamedQuery("CliUsuario.findAll", CliPaciente.class);
+            Query qryUsuario = em.createNamedQuery("CliPaciente.findAll", CliPaciente.class);
             List<CliPaciente> cliPacientes = qryUsuario.getResultList();
             List<CliPacienteDto> cliPacienteDtos = new ArrayList<>();
             for (CliPaciente cliPaciente : cliPacientes) {

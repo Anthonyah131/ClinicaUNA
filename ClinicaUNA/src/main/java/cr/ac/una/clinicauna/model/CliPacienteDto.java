@@ -72,19 +72,19 @@ public class CliPacienteDto {
         this.pacNombre.set(pacNombre);
     }
 
-    public String getPacPrimerApellido() {
+    public String getPacPapellido() {
         return pacPapellido.get();
     }
 
-    public void setPacPrimerApellido(String pacPapellido) {
+    public void setPacPapellido(String pacPapellido) {
         this.pacPapellido.set(pacPapellido);
     }
 
-    public String getPacSegundoApellido() {
+    public String getPacSapellido() {
         return pacSapellido.get();
     }
 
-    public void setPacSegundoApellido(String pacSapellido) {
+    public void setPacSapellido(String pacSapellido) {
         this.pacSapellido.set(pacSapellido);
     }
 
@@ -120,11 +120,11 @@ public class CliPacienteDto {
         this.pacGenero.set(pacGenero);
     }
 
-    public LocalDate getPacFechaNacimiento() {
+    public LocalDate getPacFnacimiento() {
         return pacFnacimiento.get();
     }
 
-    public void setPacFechaNacimiento(LocalDate pacFnacimiento) {
+    public void setPacFnacimiento(LocalDate pacFnacimiento) {
         this.pacFnacimiento.set(pacFnacimiento);
     }
 
