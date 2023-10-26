@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.clinicauna.model;
 
 import java.util.ArrayList;
@@ -16,20 +12,20 @@ import javafx.collections.ObservableList;
  */
 public class CliExpedienteDto {
 
-    private SimpleStringProperty expId;
-    private SimpleStringProperty expHospitalizaciones;
-    private SimpleStringProperty expOperaciones;
-    private SimpleStringProperty expAlergias;
-    private SimpleStringProperty expPatologicos;
-    private SimpleStringProperty expTipoalergias;
-    private SimpleStringProperty expTratamientos;
-    private CliPacienteDto cliPacienteDto;
-    private ObservableList<CliExamenDto> cliExamenList;
-    private ObservableList<CliAtencionDto> cliAtencionList;
-    private ObservableList<CliAntecedenteDto> cliAntecedenteList;
-    private List<CliExamenDto> cliExamenListEliminados;
-    private List<CliAtencionDto> cliAtencionListEliminados;
-    private List<CliAntecedenteDto> cliAntecedenteListEliminados;
+    public SimpleStringProperty expId;
+    public SimpleStringProperty expHospitalizaciones;
+    public SimpleStringProperty expOperaciones;
+    public SimpleStringProperty expAlergias;
+    public SimpleStringProperty expPatologicos;
+    public SimpleStringProperty expTipoalergias;
+    public SimpleStringProperty expTratamientos;
+    public CliPacienteDto cliPacienteDto;
+    public ObservableList<CliExamenDto> cliExamenList;
+    public ObservableList<CliAtencionDto> cliAtencionList;
+    public ObservableList<CliAntecedenteDto> cliAntecedenteList;
+    public List<CliExamenDto> cliExamenListEliminados;
+    public List<CliAtencionDto> cliAtencionListEliminados;
+    public List<CliAntecedenteDto> cliAntecedenteListEliminados;
     private Long expVersion;
     private Boolean modificado;
 

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.clinicauna.model;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -11,11 +7,12 @@ import javafx.beans.property.SimpleStringProperty;
  * @author ANTHONY
  */
 public class CliAntecedenteDto {
-    private SimpleStringProperty antId;
-    private SimpleStringProperty antDescripcion;
-    private SimpleStringProperty antTipo;
-    private SimpleStringProperty antParentesco;
-    private CliExpedienteDto cliExpedienteDto;
+
+    public SimpleStringProperty antId;
+    public SimpleStringProperty antDescripcion;
+    public SimpleStringProperty antTipo;
+    public SimpleStringProperty antParentesco;
+    public CliExpedienteDto cliExpedienteDto;
     private Long antVersion;
     private Boolean modificado;
 

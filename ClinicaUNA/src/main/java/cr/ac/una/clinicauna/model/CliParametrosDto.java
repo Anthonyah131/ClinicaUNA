@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.clinicauna.model;
 
 import javafx.beans.property.ObjectProperty;
@@ -13,16 +9,17 @@ import javafx.beans.property.SimpleStringProperty;
  * @author ANTHONY
  */
 public class CliParametrosDto {
-    private SimpleStringProperty parId;
-    private SimpleStringProperty parNombre;
-    private SimpleStringProperty parEmail;
-    private SimpleStringProperty parClave;
+
+    public SimpleStringProperty parId;
+    public SimpleStringProperty parNombre;
+    public SimpleStringProperty parEmail;
+    public SimpleStringProperty parClave;
     public ObjectProperty<byte[]> parHtml;
     public ObjectProperty<byte[]> parLogo;
-    private SimpleStringProperty parDescripcion;
+    public SimpleStringProperty parDescripcion;
     private Long parVersion;
     private Boolean modificado;
-    
+
     public CliParametrosDto() {
         this.parId = new SimpleStringProperty();
         this.parNombre = new SimpleStringProperty();

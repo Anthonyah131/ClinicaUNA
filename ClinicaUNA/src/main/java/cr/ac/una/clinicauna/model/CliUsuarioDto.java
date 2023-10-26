@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.clinicauna.model;
 
 import java.util.ArrayList;
@@ -17,6 +13,7 @@ import javafx.collections.ObservableList;
  * @author ANTHONY
  */
 public class CliUsuarioDto {
+
     public SimpleStringProperty usuId;
     public SimpleStringProperty usuNombre;
     public SimpleStringProperty usuPapellido;
@@ -56,7 +53,7 @@ public class CliUsuarioDto {
         this.cliMedicoListEliminados = new ArrayList<>();
         this.modificado = false;
     }
-    
+
     public Long getUsuId() {
         if (this.usuId.get() != null && !this.usuId.get().isEmpty()) {
             return Long.valueOf(this.usuId.get());
@@ -234,10 +231,10 @@ public class CliUsuarioDto {
         final CliUsuarioDto other = (CliUsuarioDto) obj;
         return Objects.equals(this.usuId, other.usuId);
     }
-    
+
     @Override
     public String toString() {
         return "CliUsuarioDto{" + "usuId=" + usuId + ", usuNombre=" + usuNombre + ", usuPapellido=" + usuPapellido + ", usuSapellido=" + usuSapellido + ", usuCedula=" + usuCedula + ", usuCorreo=" + usuCorreo + ", usuTipousuario=" + usuTipousuario + ", usuUsuario=" + usuUsuario + ", usuClave=" + usuClave + ", usuTempclave=" + usuTempclave + ", usuIdioma=" + usuIdioma + ", usuActivo=" + usuActivo + ", cliReporteusuariosList=" + cliReporteusuariosList + ", cliReporteusuariosListEliminados=" + cliReporteusuariosListEliminados + ", cliMedicoList=" + cliMedicoList + ", cliMedicoListEliminados=" + cliMedicoListEliminados + ", usuVersion=" + usuVersion + ", modificado=" + modificado + ", token=" + token + '}';
     }
-    
+
 }

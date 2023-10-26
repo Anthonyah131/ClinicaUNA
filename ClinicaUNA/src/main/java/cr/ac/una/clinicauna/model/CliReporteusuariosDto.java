@@ -1,11 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.clinicauna.model;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.ObjectProperty;
@@ -20,10 +15,10 @@ import javafx.collections.ObservableList;
  */
 public class CliReporteusuariosDto {
 
-    private SimpleStringProperty repusuId;
-    private ObjectProperty<LocalDate> repusuFechaemision;
-    private ObservableList<CliUsuarioDto> cliUsuarioList;
-    private List<CliUsuarioDto> cliUsuarioListEliminados;
+    public SimpleStringProperty repusuId;
+    public ObjectProperty<LocalDate> repusuFechaemision;
+    public ObservableList<CliUsuarioDto> cliUsuarioList;
+    public List<CliUsuarioDto> cliUsuarioListEliminados;
     private Long repusuVersion;
     private Boolean modificado;
 

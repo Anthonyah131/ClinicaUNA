@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.clinicauna.model;
 
 import java.time.LocalDate;
@@ -15,11 +11,11 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class CliReporteagendaDto {
 
-    private SimpleStringProperty repageId;
-    private ObjectProperty<LocalDate> repageFechainicio;
-    private ObjectProperty<LocalDate> repageFechafinal;
-    private ObjectProperty<LocalDate> repageFechaemision;
-    private CliMedicoDto cliMedicoDto;
+    public SimpleStringProperty repageId;
+    public ObjectProperty<LocalDate> repageFechainicio;
+    public ObjectProperty<LocalDate> repageFechafinal;
+    public ObjectProperty<LocalDate> repageFechaemision;
+    public CliMedicoDto cliMedicoDto;
     private Long repageVersion;
     private Boolean modificado;
 
@@ -30,7 +26,7 @@ public class CliReporteagendaDto {
         this.repageFechaemision = new SimpleObjectProperty();
         this.modificado = false;
     }
-    
+
     public Long getRepageId() {
         if (this.repageId.get() != null && !this.repageId.get().isEmpty()) {
             return Long.valueOf(this.repageId.get());
@@ -74,7 +70,7 @@ public class CliReporteagendaDto {
     public void setCliMedicoDto(CliMedicoDto cliMedicoDto) {
         this.cliMedicoDto = cliMedicoDto;
     }
-    
+
     public Long getRepageVersion() {
         return repageVersion;
     }

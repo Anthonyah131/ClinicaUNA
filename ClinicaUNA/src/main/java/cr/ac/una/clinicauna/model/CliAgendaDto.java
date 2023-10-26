@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.clinicauna.model;
 
 import java.time.LocalDate;
@@ -19,13 +15,13 @@ import javafx.collections.ObservableList;
  */
 public class CliAgendaDto {
 
-    private SimpleStringProperty ageId;
-    private ObjectProperty<LocalDate> ageFecha;
-    private SimpleStringProperty ageTiempo;
-    private SimpleStringProperty ageEspacios;
-    private CliMedicoDto cliMedicoDto;
-    private ObservableList<CliCitaDto> cliCitaList;
-    private List<CliCitaDto> cliCitaListEliminados;
+    public SimpleStringProperty ageId;
+    public ObjectProperty<LocalDate> ageFecha;
+    public SimpleStringProperty ageTiempo;
+    public SimpleStringProperty ageEspacios;
+    public CliMedicoDto cliMedicoDto;
+    public ObservableList<CliCitaDto> cliCitaList;
+    public List<CliCitaDto> cliCitaListEliminados;
     private Long ageVersion;
     private Boolean modificado;
 

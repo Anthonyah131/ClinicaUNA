@@ -221,6 +221,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
             btnSalir.setVisible(false);
             btnEliminar.setDisable(true);
             btnBuscar.setDisable(true);
+            chkActivo.setDisable(true);
         } else {
             root.setPrefWidth(1280);
             root.getStyleClass().add("fondo-registro-completa");

@@ -51,14 +51,17 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
 
     @FXML
     private void onActionBtnGenerales(ActionEvent event) {
+          FlowController.getInstance().goView("P07_MantenimientoGeneralesView");
     }
 
     @FXML
     private void onActionBtnMantenimientoMedicos(ActionEvent event) {
+        FlowController.getInstance().goView("P08_MantenimientoMedicosView");
     }
 
     @FXML
     private void onActionBtnRegistroPacientes(ActionEvent event) {
+        FlowController.getInstance().goView("P09_MantenimientoPacientesView");
     }
 
     @FXML

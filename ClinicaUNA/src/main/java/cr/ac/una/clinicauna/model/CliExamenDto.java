@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.clinicauna.model;
 
 import java.time.LocalDate;
@@ -14,12 +10,13 @@ import javafx.beans.property.SimpleStringProperty;
  * @author ANTHONY
  */
 public class CliExamenDto {
-   private SimpleStringProperty exaId;
-    private SimpleStringProperty exaNombre;
-    private ObjectProperty<LocalDate> exaFecha;
-    private SimpleStringProperty exaAnotacionesmed;
-    private CliAtencionDto cliAtencionDto;
-    private CliExpedienteDto cliExpedienteDto;
+
+    public SimpleStringProperty exaId;
+    public SimpleStringProperty exaNombre;
+    public ObjectProperty<LocalDate> exaFecha;
+    public SimpleStringProperty exaAnotacionesmed;
+    public CliAtencionDto cliAtencionDto;
+    public CliExpedienteDto cliExpedienteDto;
     private Long exaVersion;
     private Boolean modificado;
 
@@ -97,5 +94,5 @@ public class CliExamenDto {
 
     public void setModificado(Boolean modificado) {
         this.modificado = modificado;
-    }   
+    }
 }

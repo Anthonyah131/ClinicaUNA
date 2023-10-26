@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.clinicauna.model;
 
 import java.time.LocalDate;
@@ -19,19 +15,20 @@ import javafx.collections.ObservableList;
  * @author ANTHONY
  */
 public class CliMedicoDto {
-    private SimpleStringProperty medId;
-    private SimpleStringProperty medCodigo;
-    private SimpleStringProperty medFolio;
-    private SimpleStringProperty medCarne;
-    private SimpleBooleanProperty medEstado;
-    private ObjectProperty<LocalDate> medFini;
-    private ObjectProperty<LocalDate> medFfin;
-    private SimpleStringProperty medEspaciosxhora;
-    private CliUsuarioDto cliUsuarioDto;
-    private ObservableList<CliReporteagendaDto> cliReporteagendaList;
-    private ObservableList<CliAgendaDto> cliAgendaList;
-    private List<CliReporteagendaDto> cliReporteagendaListEliminados;
-    private List<CliAgendaDto> cliAgendaListEliminados;
+
+    public SimpleStringProperty medId;
+    public SimpleStringProperty medCodigo;
+    public SimpleStringProperty medFolio;
+    public SimpleStringProperty medCarne;
+    public SimpleBooleanProperty medEstado;
+    public ObjectProperty<LocalDate> medFini;
+    public ObjectProperty<LocalDate> medFfin;
+    public SimpleStringProperty medEspaciosxhora;
+    public CliUsuarioDto cliUsuarioDto;
+    public ObservableList<CliReporteagendaDto> cliReporteagendaList;
+    public ObservableList<CliAgendaDto> cliAgendaList;
+    public List<CliReporteagendaDto> cliReporteagendaListEliminados;
+    public List<CliAgendaDto> cliAgendaListEliminados;
     private Long medVersion;
     private Boolean modificado;
 
@@ -131,14 +128,14 @@ public class CliMedicoDto {
         this.cliUsuarioDto = cliUsuarioDto;
     }
 
-     public ObservableList<CliAgendaDto> getCliAgendaList() {
+    public ObservableList<CliAgendaDto> getCliAgendaList() {
         return cliAgendaList;
     }
 
     public void setCliAgendaList(List<CliAgendaDto> cliAgendaList) {
         this.cliAgendaList = FXCollections.observableArrayList(cliAgendaList);
     }
-    
+
     public ObservableList<CliReporteagendaDto> getCliReporteagendaList() {
         return cliReporteagendaList;
     }
@@ -146,7 +143,7 @@ public class CliMedicoDto {
     public void setCliReporteagendaList(List<CliReporteagendaDto> cliReporteagendaList) {
         this.cliReporteagendaList = FXCollections.observableArrayList(cliReporteagendaList);
     }
-    
+
     public List<CliAgendaDto> getCliAgendaListEliminados() {
         return cliAgendaListEliminados;
     }
@@ -154,7 +151,7 @@ public class CliMedicoDto {
     public void setCliAgendaListEliminados(List<CliAgendaDto> cliAgendaListEliminados) {
         this.cliAgendaListEliminados = cliAgendaListEliminados;
     }
-    
+
     public List<CliReporteagendaDto> getCliReporteagendaListEliminados() {
         return cliReporteagendaListEliminados;
     }
@@ -162,7 +159,7 @@ public class CliMedicoDto {
     public void setCliReporteagendaListEliminados(List<CliReporteagendaDto> cliReporteagendaListEliminados) {
         this.cliReporteagendaListEliminados = cliReporteagendaListEliminados;
     }
-    
+
     public Long getMedVersion() {
         return medVersion;
     }

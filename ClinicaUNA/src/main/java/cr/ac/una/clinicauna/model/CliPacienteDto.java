@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.clinicauna.model;
 
 import java.time.LocalDate;
@@ -19,21 +15,21 @@ import javafx.collections.ObservableList;
  */
 public class CliPacienteDto {
 
-    private SimpleStringProperty pacId;
-    private SimpleStringProperty pacNombre;
-    private SimpleStringProperty pacPapellido;
-    private SimpleStringProperty pacSapellido;
-    private SimpleStringProperty pacCedula;
-    private SimpleStringProperty pacTelefono;
-    private SimpleStringProperty pacCorreo;
-    private ObjectProperty<String> pacGenero;
-    private ObjectProperty<LocalDate> pacFnacimiento;
-    private ObservableList<CliExpedienteDto> cliExpedienteList;
-    private ObservableList<CliReporteexpedienteDto> cliReporteexpedienteList;
-    private ObservableList<CliCitaDto> cliCitaList;
-    private List<CliExpedienteDto> cliExpedienteListEliminados;
-    private List<CliReporteexpedienteDto> cliReporteexpedienteListEliminados;
-    private List<CliCitaDto> cliCitaListEliminados;
+    public SimpleStringProperty pacId;
+    public SimpleStringProperty pacNombre;
+    public SimpleStringProperty pacPapellido;
+    public SimpleStringProperty pacSapellido;
+    public SimpleStringProperty pacCedula;
+    public SimpleStringProperty pacTelefono;
+    public SimpleStringProperty pacCorreo;
+    public ObjectProperty<String> pacGenero;
+    public ObjectProperty<LocalDate> pacFnacimiento;
+    public ObservableList<CliExpedienteDto> cliExpedienteList;
+    public ObservableList<CliReporteexpedienteDto> cliReporteexpedienteList;
+    public ObservableList<CliCitaDto> cliCitaList;
+    public List<CliExpedienteDto> cliExpedienteListEliminados;
+    public List<CliReporteexpedienteDto> cliReporteexpedienteListEliminados;
+    public List<CliCitaDto> cliCitaListEliminados;
     private Long pacVersion;
     private Boolean modificado;
 
@@ -131,7 +127,7 @@ public class CliPacienteDto {
     public void setPacFechaNacimiento(LocalDate pacFnacimiento) {
         this.pacFnacimiento.set(pacFnacimiento);
     }
-    
+
     public ObservableList<CliExpedienteDto> getCliExpedienteList() {
         return cliExpedienteList;
     }

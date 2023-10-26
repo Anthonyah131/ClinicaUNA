@@ -141,6 +141,7 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
         ObservableList<String> tiposUsuarios = FXCollections.observableArrayList();
         tiposUsuarios.addAll(admin, doctor, receptionist);
         cboxTipoUsuario.setItems(tiposUsuarios);
+        
     }
 
     public void cleanNodes() {

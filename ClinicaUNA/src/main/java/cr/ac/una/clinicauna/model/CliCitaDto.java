@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.clinicauna.model;
 
 import java.time.LocalDate;
@@ -14,12 +10,13 @@ import javafx.beans.property.SimpleStringProperty;
  * @author ANTHONY
  */
 public class CliCitaDto {
-    private SimpleStringProperty citId;
-    private SimpleStringProperty citUsuarioRegistra;
-    private SimpleStringProperty citMotivo;
-    private ObjectProperty<LocalDate> citFechaHora;
-    private CliAgendaDto cliAgendaDto;
-    private CliPacienteDto cliPacienteDto;
+
+    public SimpleStringProperty citId;
+    public SimpleStringProperty citUsuarioRegistra;
+    public SimpleStringProperty citMotivo;
+    public ObjectProperty<LocalDate> citFechaHora;
+    public CliAgendaDto cliAgendaDto;
+    public CliPacienteDto cliPacienteDto;
     private Long citVersion;
     private Boolean modificado;
 

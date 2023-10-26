@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTimePicker?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="AnchorPane" fx:id="root" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="fondo-registro-completa" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.clinicauna.controller.P08_MantenimientoMedicosViewController">
+    <stylesheets>
+        <URL value="@styles.css" />
+    </stylesheets>
+   <children>
+      <HBox prefHeight="100.0" prefWidth="200.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+         <children>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <MFXButton fx:id="btnSalir" onAction="#onActionBtnSalir" styleClass="mfx-button-Image-salir">
+                     <graphic>
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/media/icons/Back_Icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MFXButton>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="630.0" spacing="15.0" styleClass="panel-transparencia" HBox.hgrow="ALWAYS">
+               <children>
+                  <HBox alignment="CENTER" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <JFXTextField fx:id="txfBuscarCodigo" promptText="%key.searchCode" styleClass="jfx-text-field-edit" HBox.hgrow="ALWAYS" />
+                        <JFXTextField fx:id="txfBuscarFolio" promptText="%key.searchFolio" styleClass="jfx-text-field-edit" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <JFXTextField fx:id="txfBuscarNombre" promptText="%key.searchName" styleClass="jfx-text-field-edit" HBox.hgrow="ALWAYS" />
+                        <JFXTextField fx:id="txfBuscarPapellido" promptText="%key.searchFName" styleClass="jfx-text-field-edit" HBox.hgrow="ALWAYS" />
+                        <JFXCheckBox fx:id="chkBuscarActivas" styleClass="jfx-check-box" text="%key.selectActive" />
+                        <MFXButton fx:id="btnLimpiarBusquedaMedico" onAction="#onActionBtnLimpiarBusquedaMedico" styleClass="mfx-button-Image">
+                           <graphic>
+                              <ImageView fitHeight="50.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../resources/media/icons/clearIcon.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip text="Limpiar campos" />
+                           </tooltip>
+                        </MFXButton>
+                     </children>
+                  </HBox>
+                  <TableView fx:id="tbvResultados" prefHeight="220.0" prefWidth="1006.0" VBox.vgrow="ALWAYS" />
+                  <HBox alignment="CENTER" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <JFXTextField fx:id="txfCodigoMedico" promptText="%key.code" styleClass="jfx-text-field-edit" HBox.hgrow="ALWAYS" />
+                        <JFXTextField fx:id="txfFolioMedico" promptText="%key.folio" styleClass="jfx-text-field-edit" HBox.hgrow="ALWAYS" />
+                        <JFXTextField fx:id="txfLicencia" promptText="%key.license" styleClass="jfx-text-field-edit" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" layoutX="22.0" layoutY="594.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <JFXTimePicker fx:id="tpkHoraInicio" promptText="%key.startDay" styleClass="jfx-pickers" />
+                        <JFXTimePicker fx:id="tpkHoraLlegada" layoutX="167.0" layoutY="16.0" promptText="%key.endDay" styleClass="jfx-pickers" />
+                        <JFXComboBox fx:id="cboxCantidadCitas" maxWidth="1.7976931348623157E308" promptText="%key.shifts" styleClass="jfx-combo-box" />
+                        <JFXCheckBox fx:id="chkActivo" styleClass="jfx-check-box" text="%key.active" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <MFXButton fx:id="btnLimpiarCampos" layoutX="290.0" layoutY="10.0" onAction="#onActionBtnLimpiarCampos" styleClass="mfx-button-Image">
+                           <graphic>
+                              <ImageView fitHeight="50.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../resources/media/icons/clearIcon.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip text="Limpiar campos" />
+                           </tooltip>
+                        </MFXButton>
+                        <MFXButton fx:id="btnGuardar" onAction="#onActionBtnGuardar" prefHeight="45.0" prefWidth="250.0" styleClass="mfx-button-Log" text="%key.addon" />
+                     </children>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </VBox>
+            <VBox layoutX="20.0" layoutY="20.0" prefHeight="200.0" prefWidth="100.0" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

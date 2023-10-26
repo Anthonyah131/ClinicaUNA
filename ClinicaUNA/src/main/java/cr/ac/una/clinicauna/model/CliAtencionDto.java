@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.clinicauna.model;
 
 import java.time.LocalDate;
@@ -19,22 +15,22 @@ import javafx.collections.ObservableList;
  */
 public class CliAtencionDto {
 
-    private SimpleStringProperty ateId;
-    private ObjectProperty<LocalDate> ateFechahora;
-    private SimpleStringProperty atePresion;
-    private SimpleStringProperty ateFrecuenciacard;
-    private SimpleStringProperty atePeso;
-    private SimpleStringProperty ateTalla;
-    private SimpleStringProperty ateTemperatura;
-    private SimpleStringProperty ateImc;
-    private SimpleStringProperty ateAnotacionenfe;
-    private SimpleStringProperty ateRazonconsulta;
-    private SimpleStringProperty atePlanatencion;
-    private SimpleStringProperty ateObservaciones;
-    private SimpleStringProperty ateTratamiento;
-    private CliExpedienteDto cliExpedienteDto;
-    private ObservableList<CliExamenDto> cliExamenList;
-    private List<CliExamenDto> cliExamenListEliminados;
+    public SimpleStringProperty ateId;
+    public ObjectProperty<LocalDate> ateFechahora;
+    public SimpleStringProperty atePresion;
+    public SimpleStringProperty ateFrecuenciacard;
+    public SimpleStringProperty atePeso;
+    public SimpleStringProperty ateTalla;
+    public SimpleStringProperty ateTemperatura;
+    public SimpleStringProperty ateImc;
+    public SimpleStringProperty ateAnotacionenfe;
+    public SimpleStringProperty ateRazonconsulta;
+    public SimpleStringProperty atePlanatencion;
+    public SimpleStringProperty ateObservaciones;
+    public SimpleStringProperty ateTratamiento;
+    public CliExpedienteDto cliExpedienteDto;
+    public ObservableList<CliExamenDto> cliExamenList;
+    public List<CliExamenDto> cliExamenListEliminados;
     private Long ateVersion;
     private Boolean modificado;
 
@@ -164,7 +160,7 @@ public class CliAtencionDto {
     public void setAteTratamiento(String ateTratamiento) {
         this.ateTratamiento.set(ateTratamiento);
     }
-    
+
     public CliExpedienteDto getCliExpedienteDto() {
         return cliExpedienteDto;
     }

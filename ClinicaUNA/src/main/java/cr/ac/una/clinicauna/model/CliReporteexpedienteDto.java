@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.clinicauna.model;
 
 import java.time.LocalDate;
@@ -15,9 +11,9 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class CliReporteexpedienteDto {
 
-    private SimpleStringProperty repexpId;
-    private ObjectProperty<LocalDate> repexpFechaemision;
-    private CliPacienteDto cliPacienteDto;
+    public SimpleStringProperty repexpId;
+    public ObjectProperty<LocalDate> repexpFechaemision;
+    public CliPacienteDto cliPacienteDto;
     private Long repexpVersion;
     private Boolean modificado;
 

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.clinicauna.controller.P06_MenuPrincipalViewController">
+<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" styleClass="fondo-menuPrin" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.clinicauna.controller.P06_MenuPrincipalViewController">
     <stylesheets>
         <URL value="@styles.css" />
     </stylesheets>
@@ -19,7 +19,7 @@
                   <MFXButton fx:id="btnMantUsuarios" maxWidth="1.7976931348623157E308" onAction="#onActionBtnMantUsuarios" styleClass="mfx-button-menu" text="%key.mantUsuarios" />
                   <MFXButton fx:id="btnGenerales" maxWidth="1.7976931348623157E308" onAction="#onActionBtnGenerales" styleClass="mfx-button-menu" text="%key.mantGenerales" />
                   <MFXButton fx:id="btnMantenimientoMedicos" maxWidth="1.7976931348623157E308" onAction="#onActionBtnMantenimientoMedicos" styleClass="mfx-button-menu" text="%key.mantMedicos" />
-                  <MFXButton fx:id="btnRegistroPacientes" maxWidth="1.7976931348623157E308" onAction="#onActionBtnRegistroPacientes" styleClass="mfx-button-menu" text="%key.regPacientes" />
+                  <MFXButton fx:id="btnRegistroPacientes" maxWidth="1.7976931348623157E308" onAction="#onActionBtnRegistroPacientes" styleClass="mfx-button-menu" text="%key.manPacientes" />
                   <MFXButton fx:id="btnEvaluaciones" layoutX="10.0" layoutY="595.0" maxWidth="1.7976931348623157E308" styleClass="mfx-button-menu" />
                   <MFXButton fx:id="btnCerrarSesion" layoutX="10.0" layoutY="595.0" maxWidth="1.7976931348623157E308" onAction="#onActionBtnCerrarSesion" styleClass="mfx-button-menu" text="%key.cerrarSesion" />
                   <MFXButton fx:id="btnSalir" maxWidth="1.7976931348623157E308" onAction="#onActionBtnSalir" styleClass="mfx-button-salir" text="%key.salir" />
