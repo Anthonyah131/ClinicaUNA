@@ -28,7 +28,7 @@ public class CliUsuarioDto {
     public SimpleStringProperty usuClave;
     public SimpleStringProperty usuTempclave;
     public SimpleStringProperty usuIdioma;
-    public SimpleBooleanProperty usuActivo;
+    public SimpleStringProperty usuActivo;
     ObservableList<CliReporteusuariosDto> cliReporteusuariosList;
     List<CliReporteusuariosDto> cliReporteusuariosListEliminados;
     ObservableList<CliMedicoDto> cliMedicoList;
@@ -49,7 +49,7 @@ public class CliUsuarioDto {
         this.usuClave = new SimpleStringProperty();
         this.usuTempclave = new SimpleStringProperty();
         this.usuIdioma = new SimpleStringProperty();
-        this.usuActivo = new SimpleBooleanProperty(false);
+        this.usuActivo = new SimpleStringProperty();
         this.cliReporteusuariosList = FXCollections.observableArrayList();
         this.cliReporteusuariosListEliminados = new ArrayList<>();
         this.cliMedicoList = FXCollections.observableArrayList();
@@ -150,11 +150,11 @@ public class CliUsuarioDto {
     }
 
     public String getUsuActivo() {
-        return this.usuActivo.get() ? "A" : "I";
+        return this.usuActivo.get();
     }
 
     public void setUsuActivo(String usuActivo) {
-        this.usuActivo.set(usuActivo.equals("A"));
+        this.usuActivo.set(usuActivo);
     }
 
     public ObservableList<CliReporteusuariosDto> getCliReporteusuariosList() {

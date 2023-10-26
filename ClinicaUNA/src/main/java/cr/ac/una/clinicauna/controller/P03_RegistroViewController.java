@@ -132,6 +132,11 @@ public class P03_RegistroViewController extends Controller implements Initializa
                     }
                     usuarioDto.setUsuIdioma(idioma);
                 }
+                if (chkActivo.isSelected()) {
+                    usuarioDto.setUsuActivo("A");
+                } else {
+                    usuarioDto.setUsuActivo("I");
+                }
 
                 Respuesta respuesta = usuarioService.guardarUsuario(usuarioDto);
                 if (!respuesta.getEstado()) {
@@ -338,7 +343,11 @@ public class P03_RegistroViewController extends Controller implements Initializa
         txfUsuario.textProperty().bindBidirectional(usuarioDto.usuUsuario);
         txfContrasena.textProperty().bindBidirectional(usuarioDto.usuClave);
         txfCorreo.textProperty().bindBidirectional(usuarioDto.usuCorreo);
-        chkActivo.selectedProperty().bindBidirectional(usuarioDto.usuActivo);
+        if ("A".equals(usuarioDto.getUsuActivo())) {
+            chkActivo.setSelected(true);
+        } else {
+            chkActivo.setSelected(false);
+        }
         if (usuarioDto.getUsuTipousuario() != null) {
             seleccionarTipoPorNombre(usuarioDto.getUsuTipousuario());
         } else {
@@ -359,7 +368,6 @@ public class P03_RegistroViewController extends Controller implements Initializa
         txfUsuario.textProperty().unbindBidirectional(usuarioDto.usuUsuario);
         txfContrasena.textProperty().unbindBidirectional(usuarioDto.usuClave);
         txfCorreo.textProperty().unbindBidirectional(usuarioDto.usuCorreo);
-        chkActivo.selectedProperty().unbindBidirectional(usuarioDto.usuActivo);
     }
 
     public String validarRequeridos() {

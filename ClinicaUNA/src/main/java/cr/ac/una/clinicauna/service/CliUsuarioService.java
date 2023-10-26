@@ -156,4 +156,20 @@ public class CliUsuarioService {
             return new Respuesta(false, "key.deleteUserError", "eliminarUsuario " + ex.getMessage());
         }
     }
+
+    public Respuesta recuperarClave(String correo) {
+        try {
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("correo", correo);
+            Request request = new Request("CliUsuarioController/recuperarClave", "/{correo}", parametros);
+            request.get();
+            if (request.isError()) {
+                return new Respuesta(false, request.getError(), "");
+            }
+            return new Respuesta(true, "", "");
+        } catch (Exception ex) {
+            Logger.getLogger(CliUsuarioService.class.getName()).log(Level.SEVERE, "Error recuperando la clave", ex);
+            return new Respuesta(false, "key.errorQuerying", "RecuperarClave " + ex.getMessage());
+        }
+    }
 }
