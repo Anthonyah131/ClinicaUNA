@@ -56,7 +56,6 @@ public class CliUsuario implements Serializable {
     @SequenceGenerator(name = "CLI_USUARIO_USU_ID_GENERATOR", sequenceName = "CLI_USUARIO_SEQ01", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLI_USUARIO_USU_ID_GENERATOR")
     @Basic(optional = false)
-    @NotNull
     @Column(name = "USU_ID")
     private Long usuId;
     @Basic(optional = false)
@@ -65,52 +64,34 @@ public class CliUsuario implements Serializable {
     @Column(name = "USU_NOMBRE")
     private String usuNombre;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 25)
     @Column(name = "USU_PAPELLIDO")
     private String usuPapellido;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 25)
     @Column(name = "USU_SAPELLIDO")
     private String usuSapellido;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 9)
     @Column(name = "USU_CEDULA")
     private String usuCedula;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 80)
     @Column(name = "USU_CORREO")
     private String usuCorreo;
-    @Size(max = 1)
     @Column(name = "USU_TIPOUSUARIO")
     private String usuTipousuario;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 20)
     @Column(name = "USU_USUARIO")
     private String usuUsuario;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 15)
     @Column(name = "USU_CLAVE")
     private String usuClave;
-    @Size(max = 15)
     @Column(name = "USU_TEMPCLAVE")
     private String usuTempclave;
-    @Size(max = 1)
     @Column(name = "USU_IDIOMA")
     private String usuIdioma;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 1)
     @Column(name = "USU_ACTIVO")
     private String usuActivo;
     @Version
     @Basic(optional = false)
-    @NotNull
     @Column(name = "USU_VERSION")
     private Long usuVersion;
     @JoinTable(name = "CLI_USUARIOREPORTEUSUARIOS", joinColumns = {
