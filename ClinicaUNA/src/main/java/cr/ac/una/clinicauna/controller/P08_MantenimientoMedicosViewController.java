@@ -2,21 +2,36 @@ package cr.ac.una.clinicauna.controller;
 
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTimePicker;
 import cr.ac.una.clinicauna.model.CliMedicoDto;
-import cr.ac.una.clinicauna.model.CliUsuarioDto;
+import cr.ac.una.clinicauna.model.CliMedicoDto;
+import cr.ac.una.clinicauna.model.CliMedicoDto;
+import cr.ac.una.clinicauna.model.CliMedicoDto;
+import cr.ac.una.clinicauna.service.CliMedicoService;
+import cr.ac.una.clinicauna.service.CliMedicoService;
 import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Formato;
+import cr.ac.una.clinicauna.util.Mensaje;
+import cr.ac.una.clinicauna.util.Respuesta;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -64,9 +79,13 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
     @FXML
     private AnchorPane root;
     @FXML
-    private TableView<CliUsuarioDto> tbvResultados;
+    private TableView<CliMedicoDto> tbvResultados;
 
-    CliMedicoDto CliMedicoDto;
+    CliMedicoDto medicoDto;
+    private ObservableList<CliMedicoDto> medicos = FXCollections.observableArrayList();
+    List<Node> requeridos = new ArrayList<>();
+    ResourceBundle resourceBundle;
+    Mensaje mensaje;
 
     /**
      * Initializes the controller class.
@@ -77,13 +96,15 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         txfBuscarFolio.setTextFormatter(Formato.getInstance().letrasFormat(10));
         txfBuscarNombre.setTextFormatter(Formato.getInstance().letrasFormat(25));
         txfBuscarPapellido.setTextFormatter(Formato.getInstance().letrasFormat(25));
-        
+
         txfCodigoMedico.setTextFormatter(Formato.getInstance().letrasFormat(15));
         txfFolioMedico.setTextFormatter(Formato.getInstance().letrasFormat(10));
         txfLicencia.setTextFormatter(Formato.getInstance().letrasFormat(15));
-        CliMedicoDto = new CliMedicoDto();
+        medicoDto = new CliMedicoDto();
         fillCbox();
         fillTableView();
+        nuevoMedico();
+        cargarMedicos();
     }
 
     @Override
@@ -97,16 +118,154 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
 
     @FXML
     private void onActionBtnLimpiarBusquedaMedico(ActionEvent event) {
+        txfBuscarCodigo.clear();
+        txfBuscarFolio.clear();
+        txfBuscarNombre.clear();
+        txfBuscarPapellido.clear();
+        chkBuscarActivas.setSelected(false);
+        tbvResultados.getItems().clear();
+        medicos.clear();
     }
 
     @FXML
     private void onActionBtnLimpiarCampos(ActionEvent event) {
+        nuevoMedico();
     }
 
     @FXML
     private void onActionBtnGuardar(ActionEvent event) {
+        try {
+            String invalidos = validarRequeridos();
+            if (!invalidos.isEmpty()) {
+                mensaje.showModali18n2(Alert.AlertType.ERROR, "key.saveUser", getStage(), invalidos);
+            } else {
+                if (medicoDto.getMedId() != null) {
+                    CliMedicoService medicoService = new CliMedicoService();
+                    if (cboxCantidadCitas.getValue() != null) {;
+                        medicoDto.setMedEspaciosxhora((long) cboxCantidadCitas.getValue());
+                    }
+                    if (chkActivo.isSelected()) {
+                        medicoDto.setMedEstado("A");
+                    } else {
+                        medicoDto.setMedEstado("I");
+                    }
+
+                    Respuesta respuesta = medicoService.guardarMedico(medicoDto);
+                    if (!respuesta.getEstado()) {
+                        mensaje.showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
+                    } else {
+                        unbindMedico();
+                        this.medicoDto = (CliMedicoDto) respuesta.getResultado("Medico");
+                        bindMedico();
+                        mensaje.showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
+                    }
+                } else {
+                    // Se pone un mensaje que se debe cargar un medico para actualizarlo
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(P08_MantenimientoMedicosViewController.class.getName()).log(Level.SEVERE, "Error guardando el medico.", ex);
+            mensaje.showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
+        }
     }
-    
+
+    private void nuevoMedico() {
+        unbindMedico();
+        this.medicoDto = new CliMedicoDto();
+        bindMedico();
+    }
+
+    private void seleccionarTipoPorCantidad(Integer cantXjora) {
+        for (Integer tipo : cboxCantidadCitas.getItems()) {
+            if (Objects.equals(tipo, cantXjora)) {
+                cboxCantidadCitas.getSelectionModel().select(tipo);
+            }
+        }
+    }
+
+    private void bindMedico() {
+        txfCodigoMedico.textProperty().bindBidirectional(medicoDto.medCodigo);
+        txfFolioMedico.textProperty().bindBidirectional(medicoDto.medFolio);
+        txfLicencia.textProperty().bindBidirectional(medicoDto.medCarne);
+//        tpkHoraInicio.valueProperty().bindBidirectional(medicoDto.medFini);
+//        tpkHoraLlegada.valueProperty().bindBidirectional(medicoDto.medFfin);
+        if ("A".equals(medicoDto.getMedEstado())) {
+            chkActivo.setSelected(true);
+        } else {
+            chkActivo.setSelected(false);
+        }
+        if (medicoDto.getMedEspaciosxhora() != null) {
+            seleccionarTipoPorCantidad(Math.toIntExact(medicoDto.getMedEspaciosxhora()));
+        } else {
+            cboxCantidadCitas.getSelectionModel().clearSelection();
+        }
+    }
+
+    private void unbindMedico() {
+        txfCodigoMedico.textProperty().unbindBidirectional(medicoDto.medCodigo);
+        txfFolioMedico.textProperty().unbindBidirectional(medicoDto.medFolio);
+        txfLicencia.textProperty().unbindBidirectional(medicoDto.medCarne);
+//        tpkHoraInicio.valueProperty().unbindBidirectional(medicoDto.medFini);
+//        tpkHoraLlegada.valueProperty().unbindBidirectional(medicoDto.medFfin);
+    }
+
+    public void cargarMedicos() {
+        CliMedicoService service = new CliMedicoService();
+        Respuesta respuesta = service.getMedicos(txfBuscarCodigo.getText(), txfBuscarFolio.getText(), txfBuscarNombre.getText(), txfBuscarPapellido.getText());
+
+        if (respuesta.getEstado()) {
+            tbvResultados.getItems().clear();
+            medicos.clear();
+            medicos.addAll((List<CliMedicoDto>) respuesta.getResultado("Medicos"));
+            tbvResultados.setItems(medicos);
+            tbvResultados.refresh();
+        } else {
+            //new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Medicos", getStage(), respuesta.getMensaje());
+        }
+    }
+
+    public String validarRequeridos() {
+        Boolean validos = true;
+        String invalidos = "";
+        for (Node node : requeridos) {
+            if (node instanceof JFXTextField && (((JFXTextField) node).getText() == null || ((JFXTextField) node).getText().isBlank())) {
+                if (validos) {
+                    invalidos += ((JFXTextField) node).getPromptText();
+                } else {
+                    invalidos += ", " + ((JFXTextField) node).getPromptText();
+                }
+                validos = false;
+            } else if (node instanceof JFXPasswordField && (((JFXPasswordField) node).getText() == null || ((JFXPasswordField) node).getText().isBlank())) {
+                if (validos) {
+                    invalidos += ((JFXPasswordField) node).getPromptText();
+                } else {
+                    invalidos += ", " + ((JFXPasswordField) node).getPromptText();
+                }
+                validos = false;
+            } else if (node instanceof JFXDatePicker && ((JFXDatePicker) node).getValue() == null) {
+                if (validos) {
+                    invalidos += ((JFXDatePicker) node).getAccessibleText();
+                } else {
+                    invalidos += ", " + ((JFXDatePicker) node).getAccessibleText();
+                }
+                validos = false;
+            } else if (node instanceof JFXComboBox && ((JFXComboBox) node).getSelectionModel().getSelectedIndex() < 0) {
+                if (validos) {
+                    invalidos += ((JFXComboBox) node).getPromptText();
+                } else {
+                    invalidos += ", " + ((JFXComboBox) node).getPromptText();
+                }
+                validos = false;
+            }
+        }
+        if (validos) {
+            return "";
+        } else {
+            String message = resourceBundle.getString("key.invalidFields") + invalidos + "].";
+            return message;
+        }
+    }
+
     public void fillCbox() {
         cboxCantidadCitas.getItems().clear();
 //
@@ -115,7 +274,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
 //        String receptionist = resourceBundle.getString("key.receptionist");
 
         ObservableList<Integer> citasHora = FXCollections.observableArrayList();
-        citasHora.addAll(1, 2, 3,4);
+        citasHora.addAll(1, 2, 3, 4);
         cboxCantidadCitas.setItems(citasHora);
     }
 
@@ -124,33 +283,43 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
 
         tbvResultados.getItems().clear();
 
-        TableColumn<CliUsuarioDto, String> tbcId = new TableColumn<>("Id");
+        TableColumn<CliMedicoDto, String> tbcId = new TableColumn<>("Id");
         tbcId.setPrefWidth(50);
-        tbcId.setCellValueFactory(cd -> cd.getValue().usuId);
+        tbcId.setCellValueFactory(cd -> cd.getValue().getCliUsuarioDto().usuId);
 
-        TableColumn<CliUsuarioDto, String> tbcCedula = new TableColumn<>(resourceBundle.getString("key.identification"));
+        TableColumn<CliMedicoDto, String> tbcCedula = new TableColumn<>(resourceBundle.getString("key.identification"));
         tbcCedula.setPrefWidth(100);
-        tbcCedula.setCellValueFactory(cd -> cd.getValue().usuCedula);
+        tbcCedula.setCellValueFactory(cd -> cd.getValue().getCliUsuarioDto().usuCedula);
 
-        TableColumn<CliUsuarioDto, String> tbcNombre = new TableColumn<>(resourceBundle.getString("key.name"));
+        TableColumn<CliMedicoDto, String> tbcNombre = new TableColumn<>(resourceBundle.getString("key.name"));
         tbcNombre.setPrefWidth(100);
-        tbcNombre.setCellValueFactory(cd -> cd.getValue().usuNombre);
+        tbcNombre.setCellValueFactory(cd -> cd.getValue().getCliUsuarioDto().usuNombre);
 
-        TableColumn<CliUsuarioDto, String> tbcApellido = new TableColumn<>(resourceBundle.getString("key.papellido"));
+        TableColumn<CliMedicoDto, String> tbcApellido = new TableColumn<>(resourceBundle.getString("key.papellido"));
         tbcApellido.setPrefWidth(150);
-        tbcApellido.setCellValueFactory(cd -> cd.getValue().usuPapellido);
+        tbcApellido.setCellValueFactory(cd -> cd.getValue().getCliUsuarioDto().usuPapellido);
 
-        TableColumn<CliUsuarioDto, Boolean> tbcEliminar = new TableColumn<>("Eliminar");
+        TableColumn<CliMedicoDto, Boolean> tbcEliminar = new TableColumn<>("Eliminar");
         tbcEliminar.setPrefWidth(100);
-        tbcEliminar.setCellValueFactory((TableColumn.CellDataFeatures<CliUsuarioDto, Boolean> p) -> new SimpleBooleanProperty(p.getValue() != null));
-        tbcEliminar.setCellFactory((TableColumn<CliUsuarioDto, Boolean> p) -> new ButtonCell());
+        tbcEliminar.setCellValueFactory((TableColumn.CellDataFeatures<CliMedicoDto, Boolean> p) -> new SimpleBooleanProperty(p.getValue() != null));
+        tbcEliminar.setCellFactory((TableColumn<CliMedicoDto, Boolean> p) -> new ButtonCell());
 
         tbvResultados.getColumns().addAll(tbcId, tbcCedula, tbcNombre, tbcApellido, tbcEliminar);
 
         tbvResultados.refresh();
+        
+        tbvResultados.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                unbindMedico();
+                medicoDto = newValue;
+                bindMedico();
+            } else {
+                nuevoMedico();
+            }
+        });
     }
 
-    private class ButtonCell extends TableCell<CliUsuarioDto, Boolean> {
+    private class ButtonCell extends TableCell<CliMedicoDto, Boolean> {
 
         final MFXButton cellButton = new MFXButton();
 
@@ -160,7 +329,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
             cellButton.getStyleClass().add("mfx-button-menuSalir");
 
             cellButton.setOnAction((ActionEvent t) -> {
-                CliUsuarioDto car = (CliUsuarioDto) ButtonCell.this.getTableView().getItems().get(ButtonCell.this.getIndex());
+                CliMedicoDto car = (CliMedicoDto) ButtonCell.this.getTableView().getItems().get(ButtonCell.this.getIndex());
                 if (!car.getModificado()) {
                     //  CliPacienteDto.getTarCaracteristicaEliminados().add(car);
                 }

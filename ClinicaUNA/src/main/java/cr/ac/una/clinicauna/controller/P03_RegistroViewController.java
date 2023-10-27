@@ -283,7 +283,6 @@ public class P03_RegistroViewController extends Controller implements Initializa
         unbindUsuario();
         this.usuarioDto = new CliUsuarioDto();
         bindUsuario();
-
     }
 
     private void indicarRequeridos() {

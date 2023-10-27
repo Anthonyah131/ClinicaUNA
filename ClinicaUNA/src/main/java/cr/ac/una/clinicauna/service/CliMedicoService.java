@@ -13,12 +13,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import javafx.collections.FXCollections;
 
 /**
  *
  * @author ANTHONY
  */
 public class CliMedicoService {
+
     public Respuesta getMedico(Long id) {
         try {
             Map<String, Object> parametros = new HashMap<>();
@@ -36,7 +39,7 @@ public class CliMedicoService {
         }
     }
 
-    public Respuesta getMedicos() {
+    public Respuesta getMedicos(String codigo, String folio, String nombre, String pApellido) {
         try {
             Request request = new Request("CliMedicoController/medicos");
             request.get();
@@ -45,6 +48,30 @@ public class CliMedicoService {
             }
             List<CliMedicoDto> medicos = (List<CliMedicoDto>) request.readEntity(new GenericType<List<CliMedicoDto>>() {
             });
+            if (codigo != null && !codigo.isBlank()) {
+                String codigoBuscado = codigo.toLowerCase();
+                medicos = medicos.stream()
+                        .filter(p -> p.getMedCodigo().toLowerCase().contains(codigoBuscado))
+                        .collect(Collectors.toCollection(FXCollections::observableArrayList));
+            }
+            if (folio != null && !folio.isBlank()) {
+                String folioBuscado = folio.toLowerCase();
+                medicos = medicos.stream()
+                        .filter(p -> p.getMedFolio().toLowerCase().contains(folioBuscado))
+                        .collect(Collectors.toCollection(FXCollections::observableArrayList));
+            }
+            if (nombre != null && !nombre.isBlank()) {
+                String nombreBuscado = nombre.toLowerCase();
+                medicos = medicos.stream()
+                        .filter(p -> p.getCliUsuarioDto().getUsuNombre().toLowerCase().contains(nombreBuscado))
+                        .collect(Collectors.toCollection(FXCollections::observableArrayList));
+            }
+            if (pApellido != null && !pApellido.isBlank()) {
+                String apellidoBuscada = pApellido.toLowerCase();
+                medicos = medicos.stream()
+                        .filter(p -> p.getCliUsuarioDto().getUsuPapellido().toLowerCase().contains(apellidoBuscada))
+                        .collect(Collectors.toCollection(FXCollections::observableArrayList));
+            }
             return new Respuesta(true, "", "", "Medicos", medicos);
         } catch (Exception ex) {
             Logger.getLogger(CliMedicoService.class.getName()).log(Level.SEVERE, "Error obteniendo medicos.", ex);
