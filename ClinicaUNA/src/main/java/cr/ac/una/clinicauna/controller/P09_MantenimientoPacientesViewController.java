@@ -144,7 +144,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
         try {
             String invalidos = validarRequeridos();
             if (!invalidos.isEmpty()) {
-                mensaje.showModali18n2(Alert.AlertType.ERROR, "key.saveUser", getStage(), invalidos);
+                mensaje.showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), invalidos);
             } else {
                 CliPacienteService pacienteService = new CliPacienteService();
                 Respuesta respuesta = pacienteService.guardarPaciente(pacienteDto);

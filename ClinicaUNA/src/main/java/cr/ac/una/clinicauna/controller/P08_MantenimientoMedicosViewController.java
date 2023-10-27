@@ -86,6 +86,8 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
     List<Node> requeridos = new ArrayList<>();
     ResourceBundle resourceBundle;
     Mensaje mensaje;
+    @FXML
+    private MFXButton btnFiltrar;
 
     /**
      * Initializes the controller class.
@@ -112,8 +114,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
     }
 
     @FXML
-    private void onActionBtnSalir(ActionEvent event) {
-        FlowController.getInstance().goView("P06_MenuPrincipalView");
+    private void onActionBtnFiltrar(ActionEvent event) {
     }
 
     @FXML
@@ -137,7 +138,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         try {
             String invalidos = validarRequeridos();
             if (!invalidos.isEmpty()) {
-                mensaje.showModali18n2(Alert.AlertType.ERROR, "key.saveUser", getStage(), invalidos);
+                mensaje.showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), invalidos);
             } else {
                 if (medicoDto.getMedId() != null) {
                     CliMedicoService medicoService = new CliMedicoService();
@@ -167,6 +168,11 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
             Logger.getLogger(P08_MantenimientoMedicosViewController.class.getName()).log(Level.SEVERE, "Error guardando el medico.", ex);
             mensaje.showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
         }
+    }
+
+    @FXML
+    private void onActionBtnSalir(ActionEvent event) {
+        FlowController.getInstance().goView("P06_MenuPrincipalView");
     }
 
     private void nuevoMedico() {
@@ -307,7 +313,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         tbvResultados.getColumns().addAll(tbcId, tbcCedula, tbcNombre, tbcApellido, tbcEliminar);
 
         tbvResultados.refresh();
-        
+
         tbvResultados.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 unbindMedico();

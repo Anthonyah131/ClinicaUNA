@@ -47,9 +47,6 @@ public class P01_LogInViewController extends Controller implements Initializable
     @FXML
     private MenuButton mbtnI18n;
 
-    ResourceBundle resourceBundle;
-    Mensaje mensaje;
-
     /**
      * Initializes the controller class.
      */
@@ -57,8 +54,6 @@ public class P01_LogInViewController extends Controller implements Initializable
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         iniciarScena();
-        resourceBundle = FlowController.getInstance().getIdioma();
-        mensaje = new Mensaje(resourceBundle);
     }
 
     @Override
@@ -72,9 +67,9 @@ public class P01_LogInViewController extends Controller implements Initializable
         SoundUtil.mouseEnterSound();
         try {
             if (txfUsuario.getText() == null || txfUsuario.getText().isEmpty()) {
-                mensaje.showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "key.noEnterUser");
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "key.noEnterUser");
             } else if (txfContrasena.getText() == null || txfContrasena.getText().isEmpty()) {
-                mensaje.showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "key.noEnterPass");
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "key.noEnterPass");
             } else {
                 CliUsuarioService cliUsuarioService = new CliUsuarioService();
                 Respuesta respuesta = cliUsuarioService.getUsuario(txfUsuario.getText(), txfContrasena.getText());
@@ -83,7 +78,7 @@ public class P01_LogInViewController extends Controller implements Initializable
                     AppContext.getInstance().set("Token", cliUsuarioDto.getToken());
                     AppContext.getInstance().set("Usuario", cliUsuarioDto);
                     if (cliUsuarioDto.getUsuClave().equals(cliUsuarioDto.getUsuTempclave())) {
-                        mensaje.showModali18n(Alert.AlertType.WARNING, "key.userValidation", getStage(), "key.changePassLog");
+                        new Mensaje().showModali18n(Alert.AlertType.WARNING, "key.userValidation", getStage(), "key.changePassLog");
                         FlowController.getInstance().goViewInWindowModal("P05_CambioClaveView", stage, false);
                     } else {
                         if ("A".equals(cliUsuarioDto.getUsuActivo())) {//compruba que el usuario este activo
@@ -92,11 +87,11 @@ public class P01_LogInViewController extends Controller implements Initializable
                             }
                             getStage().close();
                         } else {
-                            mensaje.showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "key.activeAccount");
+                            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "key.activeAccount");
                         }
                     }
                 } else {
-                    mensaje.showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "key.wrongUser");
+                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "key.wrongUser");
                 }
             }
         } catch (Exception ex) {

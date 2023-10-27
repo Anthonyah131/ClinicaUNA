@@ -49,12 +49,14 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
     Object resultado;
     private ObservableList<CliUsuarioDto> usuarios = FXCollections.observableArrayList();
 
+    ResourceBundle resourceBundle;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+
         txfNombre.setTextFormatter(Formato.getInstance().letrasFormat(30));
         txfCedula.setTextFormatter(Formato.getInstance().cedulaFormat(40));
         txfApellido.setTextFormatter(Formato.getInstance().letrasFormat(15));
@@ -69,6 +71,7 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
 
     @FXML
     private void onActionBtnFiltrar(ActionEvent event) {
+
         CliUsuarioService service = new CliUsuarioService();
         Respuesta respuesta = service.getUsuarios(txfCedula.getText(), txfNombre.getText(), txfApellido.getText(), cboxTipoUsuario.getValue());
 
@@ -79,7 +82,7 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
             tbvResultados.setItems(usuarios);
             tbvResultados.refresh();
         } else {
-            //new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Usuarios", getStage(), respuesta.getMensaje());
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Usuarios", getStage(), respuesta.getMensaje());
         }
     }
 
@@ -90,9 +93,9 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
     @FXML
     private void onActionBtnAceptar(ActionEvent event) {
         resultado = tbvResultados.getSelectionModel().getSelectedItem();
-        if (resultado != null){
-        P03_RegistroViewController registroController = (P03_RegistroViewController) FlowController.getInstance().getController("P03_RegistroView");
-        registroController.bindBuscar();
+        if (resultado != null) {
+            P03_RegistroViewController registroController = (P03_RegistroViewController) FlowController.getInstance().getController("P03_RegistroView");
+            registroController.bindBuscar();
         }
         getStage().close();
     }
@@ -103,8 +106,6 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
     }
 
     public void fillTableView() {
-        ResourceBundle resourceBundle = FlowController.getInstance().getIdioma();
-        
         tbvResultados.getItems().clear();
 
         TableColumn<CliUsuarioDto, String> tbcId = new TableColumn<>("Id");
@@ -132,8 +133,8 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
 
     public void fillCbox() {
         cboxTipoUsuario.getItems().clear();
+        resourceBundle = FlowController.getInstance().getIdioma();
 
-        ResourceBundle resourceBundle = FlowController.getInstance().getIdioma();
         String admin = resourceBundle.getString("key.admin");
         String doctor = resourceBundle.getString("key.doctor");
         String receptionist = resourceBundle.getString("key.receptionist");
@@ -141,7 +142,7 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
         ObservableList<String> tiposUsuarios = FXCollections.observableArrayList();
         tiposUsuarios.addAll(admin, doctor, receptionist);
         cboxTipoUsuario.setItems(tiposUsuarios);
-        
+
     }
 
     public void cleanNodes() {

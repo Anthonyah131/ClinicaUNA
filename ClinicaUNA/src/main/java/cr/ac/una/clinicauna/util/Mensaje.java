@@ -22,18 +22,16 @@ public class Mensaje {
 
     private ResourceBundle resourceBundle;
 //    
-//    public Mensaje() {
-//    }
 
-    public Mensaje(ResourceBundle resourceBundle) {
-        this.resourceBundle = resourceBundle;
+    public Mensaje() {
+        this.resourceBundle = resourceBundle = FlowController.getInstance().getIdioma();
     }
 
     public void showi18n(Alert.AlertType tipo, String tituloKey, String mensajeKey) {
         Alert alert = new Alert(tipo);
         alert.setTitle(resourceBundle.getString(tituloKey));
         alert.setHeaderText(null);
-        
+
         String mensaje = comprobarMensaje(mensajeKey);
         alert.setContentText(mensaje);
 
@@ -42,13 +40,13 @@ public class Mensaje {
 
         alert.show();
     }
-    
+
     public void showModali18n(AlertType tipo, String tituloKey, Window padre, String mensajeKey) {
         Alert alert = new Alert(tipo);
         alert.setTitle(resourceBundle.getString(tituloKey));
         alert.setHeaderText(null);
         alert.initOwner(padre);
-        
+
         String mensaje = comprobarMensaje(mensajeKey);
         alert.setContentText(mensaje);
 
@@ -58,51 +56,35 @@ public class Mensaje {
         alert.showAndWait();
     }
 
-    public String comprobarMensaje(String mensaje) {
-       
-        if (mensaje.equals("")) {
-            return mensaje;
-        }
-        
-        String iniMensaje = mensaje.substring(0, 3);
-        if (iniMensaje.equals("key")) {
-            return resourceBundle.getString(mensaje);
-        }
-        return mensaje;
-    }
-
-    
-
-    public void showModali18n2(AlertType tipo, String tituloKey, Window padre, String mensajeKey) {
-        Alert alert = new Alert(tipo);
-        alert.setTitle(resourceBundle.getString(tituloKey));
-        alert.setHeaderText(null);
-        alert.initOwner(padre);
-        alert.setContentText(mensajeKey);
-
-        ButtonType aceptarButton = new ButtonType(resourceBundle.getString("key.accept"), ButtonBar.ButtonData.OK_DONE);
-        alert.getButtonTypes().set(0, aceptarButton);
-
-        alert.showAndWait();
-    }
-
     public Boolean showConfirmationi18n(String tituloKey, Window padre, String mensajeKey) {
-
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle(resourceBundle.getString(tituloKey));
         alert.setHeaderText(null);
         alert.initOwner(padre);
-        alert.setContentText(resourceBundle.getString(mensajeKey));
+
+        String mensaje = comprobarMensaje(mensajeKey);
+        alert.setContentText(mensaje);
 
         // Crea botones personalizados con los textos obtenidos del ResourceBundle
         ButtonType okButton = new ButtonType(resourceBundle.getString("key.accept"), ButtonData.OK_DONE);
         ButtonType cancelButton = new ButtonType(resourceBundle.getString("key.cancel"), ButtonData.CANCEL_CLOSE);
 
         alert.getButtonTypes().setAll(okButton, cancelButton);
-
         Optional<ButtonType> result = alert.showAndWait();
-
         return result.isPresent() && result.get() == okButton;
+    }
+
+    public String comprobarMensaje(String mensaje) {
+
+        if (mensaje.equals("")) {
+            return mensaje;
+        }
+
+        String iniMensaje = mensaje.substring(0, 3);
+        if (iniMensaje.equals("key")) {
+            return resourceBundle.getString(mensaje);
+        }
+        return mensaje;
     }
 
     public void show(AlertType tipo, String titulo, String mensaje) {
