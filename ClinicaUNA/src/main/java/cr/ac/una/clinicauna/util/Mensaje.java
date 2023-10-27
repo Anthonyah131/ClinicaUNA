@@ -33,27 +33,46 @@ public class Mensaje {
         Alert alert = new Alert(tipo);
         alert.setTitle(resourceBundle.getString(tituloKey));
         alert.setHeaderText(null);
-        alert.setContentText(resourceBundle.getString(mensajeKey));
+        
+        String mensaje = comprobarMensaje(mensajeKey);
+        alert.setContentText(mensaje);
 
         ButtonType aceptarButton = new ButtonType(resourceBundle.getString("key.accept"), ButtonBar.ButtonData.OK_DONE);
         alert.getButtonTypes().set(0, aceptarButton);
 
         alert.show();
     }
-
+    
     public void showModali18n(AlertType tipo, String tituloKey, Window padre, String mensajeKey) {
         Alert alert = new Alert(tipo);
         alert.setTitle(resourceBundle.getString(tituloKey));
         alert.setHeaderText(null);
         alert.initOwner(padre);
-        alert.setContentText(resourceBundle.getString(mensajeKey));
+        
+        String mensaje = comprobarMensaje(mensajeKey);
+        alert.setContentText(mensaje);
 
         ButtonType aceptarButton = new ButtonType(resourceBundle.getString("key.accept"), ButtonBar.ButtonData.OK_DONE);
         alert.getButtonTypes().set(0, aceptarButton);
 
         alert.showAndWait();
     }
+
+    public String comprobarMensaje(String mensaje) {
+       
+        if (mensaje.equals("")) {
+            return mensaje;
+        }
+        
+        String iniMensaje = mensaje.substring(0, 3);
+        if (iniMensaje.equals("key")) {
+            return resourceBundle.getString(mensaje);
+        }
+        return mensaje;
+    }
+
     
+
     public void showModali18n2(AlertType tipo, String tituloKey, Window padre, String mensajeKey) {
         Alert alert = new Alert(tipo);
         alert.setTitle(resourceBundle.getString(tituloKey));

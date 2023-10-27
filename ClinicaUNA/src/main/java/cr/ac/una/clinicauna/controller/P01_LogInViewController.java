@@ -80,11 +80,10 @@ public class P01_LogInViewController extends Controller implements Initializable
                 Respuesta respuesta = cliUsuarioService.getUsuario(txfUsuario.getText(), txfContrasena.getText());
                 if (respuesta.getEstado()) {
                     CliUsuarioDto cliUsuarioDto = (CliUsuarioDto) respuesta.getResultado("Usuario");
-                    //AppContext.getInstance().set("UsuarioId", cliUsuarioDto.getUsuId()); Para que es esto??
                     AppContext.getInstance().set("Token", cliUsuarioDto.getToken());
                     AppContext.getInstance().set("Usuario", cliUsuarioDto);
                     if (cliUsuarioDto.getUsuClave().equals(cliUsuarioDto.getUsuTempclave())) {
-                        mensaje.showModali18n(Alert.AlertType.WARNING, "key.userValidation", getStage(), "key.changePass");
+                        mensaje.showModali18n(Alert.AlertType.WARNING, "key.userValidation", getStage(), "key.changePassLog");
                         FlowController.getInstance().goViewInWindowModal("P05_CambioClaveView", stage, false);
                     } else {
                         if ("A".equals(cliUsuarioDto.getUsuActivo())) {//compruba que el usuario este activo

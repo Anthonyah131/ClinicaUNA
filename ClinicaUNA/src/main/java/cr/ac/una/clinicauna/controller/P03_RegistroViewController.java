@@ -14,6 +14,7 @@ import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Formato;
 import cr.ac.una.clinicauna.util.Mensaje;
 import cr.ac.una.clinicauna.util.Respuesta;
+import cr.ac.una.clinicauna.util.ValidarRequeridos;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.util.ArrayList;
@@ -104,9 +105,10 @@ public class P03_RegistroViewController extends Controller implements Initializa
     @FXML
     private void onActionBtnRegistrar(ActionEvent event) {
         try {
-            String invalidos = validarRequeridos();
+            String invalidos = resourceBundle.getString("key.invalidFields") + ValidarRequeridos.validarRequeridos(requeridos);
+//validarRequeridos();
             if (!invalidos.isEmpty()) {
-                mensaje.showModali18n2(Alert.AlertType.ERROR, "key.saveUser", getStage(), invalidos);
+                mensaje.showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), invalidos);
             } else {
                 CliUsuarioService usuarioService = new CliUsuarioService();
                 if (cboxTipoUsuario.getValue() != null) {
@@ -119,8 +121,6 @@ public class P03_RegistroViewController extends Controller implements Initializa
                                 tipo = "R";
                             case "Administrador", "Administrator" ->
                                 tipo = "A";
-                            default -> {
-                            }
                         }
                     }
                     usuarioDto.setUsuTipousuario(tipo);
@@ -141,6 +141,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
                 }
 
                 Respuesta respuesta = usuarioService.guardarUsuario(usuarioDto);
+
                 if (!respuesta.getEstado()) {
                     mensaje.showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
                 } else {

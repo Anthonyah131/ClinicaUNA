@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.wsclinicauna.service;
 
 import cr.ac.una.wsclinicauna.model.CliMedico;
@@ -70,13 +66,13 @@ public class CliUsuarioService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuario", cliUsuarioDto);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un usuario con las credenciales ingresadas.", "validarUsuario NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noUserExist", "validarUsuario NoResultException");
         } catch (NonUniqueResultException ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el usuario.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el usuario.", "validarUsuario NonUniqueResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorQueryUser", "validarUsuario NonUniqueResultException");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el usuario.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el usuario.", "validarUsuario " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorQueryUser", "validarUsuario " + ex.getMessage());
         }
     }
 
@@ -97,13 +93,13 @@ public class CliUsuarioService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuario", cliUsuarioDto);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un empleado con el código ingresado.", "getUsuario NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noUserCodeExist", "getUsuario NoResultException");
         } catch (NonUniqueResultException ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el usuario.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el usuario.", "getUsuario NonUniqueResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorQueryGetUser", "getUsuario NonUniqueResultException");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el usuario.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el usuario.", "getUsuario " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorQueryGetUser", "getUsuario " + ex.getMessage());
         }
     }
 
@@ -129,10 +125,10 @@ public class CliUsuarioService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuarios", cliUsuarioDtos);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen empleados con los criterios ingresados.", "getUsuarios NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noUsersCodeExist", "getUsuarios NoResultException");
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el usuario.", "getEmpleado " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar los usuarios.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorQueryGetUsers", "getUsuarios " + ex.getMessage());
         }
     }
 
@@ -142,7 +138,7 @@ public class CliUsuarioService {
             if (cliUsuarioDto.getUsuId() != null && cliUsuarioDto.getUsuId() > 0) {
                 cliUsuario = em.find(CliUsuario.class, cliUsuarioDto.getUsuId());
                 if (cliUsuario == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el usuario a modificar.", "guardarUsuario NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noFoundUserMod", "guardarUsuario NoResultException");
                 }
                 cliUsuario.actualizar(cliUsuarioDto);
 
@@ -181,7 +177,7 @@ public class CliUsuarioService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuario", new CliUsuarioDto(cliUsuario));
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el usuario.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el usuario.", "guardarUsuario " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorSavingUser", "guardarUsuario " + ex.getMessage());
         }
     }
 
@@ -191,20 +187,20 @@ public class CliUsuarioService {
             if (id != null && id > 0) {
                 cliUsuario = em.find(CliUsuario.class, id);
                 if (cliUsuario == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el usuario a eliminar.", "eliminarUsuario NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.userDeleteNotFound", "eliminarUsuario NoResultException");
                 }
                 em.remove(cliUsuario);
             } else {
-                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el usuario a eliminar.", "eliminarUsuario NoResultException");
+                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.loadUserDelete", "eliminarUsuario NoResultException");
             }
             em.flush();
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
             if (ex.getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class) {
-                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el usuario porque tiene relaciones con otros registros.", "eliminarUsuario " + ex.getMessage());
+                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorDeleteUserRelations", "eliminarUsuario " + ex.getMessage());
             }
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el empleado.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el usuario.", "eliminarUsuario " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.deleteUserError", "eliminarUsuario " + ex.getMessage());
         }
     }
 
@@ -218,7 +214,7 @@ public class CliUsuarioService {
             if (cliUsuarioDto.getUsuId() != null && cliUsuarioDto.getUsuId() > 0) {
                 cliUsuario = em.find(CliUsuario.class, cliUsuarioDto.getUsuId());
                 if (cliUsuario == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el usuario a modificar.", "activacionCuenta NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noFoundUserMod", "activacionCuenta NoResultException");
                 }
                 cliUsuario.actualizar(cliUsuarioDto);
                 cliUsuario = em.merge(cliUsuario);
@@ -227,7 +223,7 @@ public class CliUsuarioService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el usuario.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el usuario.", "activacionCuenta " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "errorSavingUser", "activacionCuenta " + ex.getMessage());
         }
     }
 
@@ -241,7 +237,7 @@ public class CliUsuarioService {
             if (cliUsuarioDto.getUsuId() != null && cliUsuarioDto.getUsuId() > 0) {
                 cliUsuario = em.find(CliUsuario.class, cliUsuarioDto.getUsuId());
                 if (cliUsuario == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el usuario a modificar.", "recuperarClave NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noFoundUserMod", "recuperarClave NoResultException");
                 }
                 cliUsuario.actualizar(cliUsuarioDto);
                 cliUsuario = em.merge(cliUsuario);
@@ -250,7 +246,7 @@ public class CliUsuarioService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el usuario.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el usuario.", "recuperarClave " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorSavingUser", "recuperarClave " + ex.getMessage());
         }
     }
 
@@ -288,7 +284,7 @@ public class CliUsuarioService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el cliente.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el cliente.", "guardarCliente " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.saveClient", "guardarCliente " + ex.getMessage());
         }
     }
 
@@ -355,7 +351,7 @@ public class CliUsuarioService {
 
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el cliente.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el cliente.", "recuClave " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.saveClient", "recuClave " + ex.getMessage());
         }
     }
 
