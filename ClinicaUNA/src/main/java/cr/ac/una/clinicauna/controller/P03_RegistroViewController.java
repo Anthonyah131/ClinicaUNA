@@ -5,7 +5,9 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import cr.ac.una.clinicauna.model.CliMedicoDto;
 import cr.ac.una.clinicauna.model.CliUsuarioDto;
+import cr.ac.una.clinicauna.service.CliMedicoService;
 import cr.ac.una.clinicauna.service.CliUsuarioService;
 import cr.ac.una.clinicauna.util.AppContext;
 import cr.ac.una.clinicauna.util.FlowController;
@@ -145,6 +147,22 @@ public class P03_RegistroViewController extends Controller implements Initializa
                     unbindUsuario();
                     this.usuarioDto = (CliUsuarioDto) respuesta.getResultado("Usuario");
                     bindUsuario();
+                    if ("M".equals(usuarioDto.getUsuTipousuario()) && usuarioDto.getCliMedicoList().isEmpty()) {
+                        CliMedicoService medicoService = new CliMedicoService();
+                        CliMedicoDto medicoDto = new CliMedicoDto();
+                        medicoDto.setMedCodigo("Ingrese" + usuarioDto.getUsuId());
+                        medicoDto.setMedFolio("Ingrese" + usuarioDto.getUsuId());
+                        medicoDto.setMedCarne("Ingrese" + usuarioDto.getUsuId());
+                        medicoDto.setMedEstado("I");
+                        Respuesta respuestaMedico = medicoService.guardarMedico(medicoDto);
+                        medicoDto = (CliMedicoDto) respuestaMedico.getResultado("Medico");
+                        medicoDto.setModificado(true);
+                        usuarioDto.getCliMedicoList().add(medicoDto);
+                        respuesta = usuarioService.guardarUsuario(usuarioDto);
+                        unbindUsuario();
+                        this.usuarioDto = (CliUsuarioDto) respuesta.getResultado("Usuario");
+                        bindUsuario();
+                    }
                     mensaje.showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
                 }
             }

@@ -7,6 +7,7 @@ import com.jfoenix.controls.JFXTimePicker;
 import cr.ac.una.clinicauna.model.CliMedicoDto;
 import cr.ac.una.clinicauna.model.CliUsuarioDto;
 import cr.ac.una.clinicauna.util.FlowController;
+import cr.ac.una.clinicauna.util.Formato;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -72,7 +73,14 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        txfBuscarCodigo.setTextFormatter(Formato.getInstance().letrasFormat(15));
+        txfBuscarFolio.setTextFormatter(Formato.getInstance().letrasFormat(10));
+        txfBuscarNombre.setTextFormatter(Formato.getInstance().letrasFormat(25));
+        txfBuscarPapellido.setTextFormatter(Formato.getInstance().letrasFormat(25));
+        
+        txfCodigoMedico.setTextFormatter(Formato.getInstance().letrasFormat(15));
+        txfFolioMedico.setTextFormatter(Formato.getInstance().letrasFormat(10));
+        txfLicencia.setTextFormatter(Formato.getInstance().letrasFormat(15));
         CliMedicoDto = new CliMedicoDto();
         fillCbox();
         fillTableView();

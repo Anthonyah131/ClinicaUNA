@@ -153,6 +153,7 @@ public class CliUsuarioService {
                 if (!cliUsuarioDto.getCliMedicoList().isEmpty()) {
                     for (CliMedicoDto cliMedicoDto : cliUsuarioDto.getCliMedicoList()) {
                         CliMedico cliMedico = em.find(CliMedico.class, cliMedicoDto.getMedId());
+                        cliMedico.setUsuId(cliUsuario);
                         cliUsuario.getCliMedicoList().add(cliMedico);
                     }
                 }
