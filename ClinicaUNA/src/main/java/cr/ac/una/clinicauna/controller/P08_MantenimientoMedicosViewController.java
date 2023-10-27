@@ -67,6 +67,8 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
     private TableView<CliUsuarioDto> tbvResultados;
 
     CliMedicoDto CliMedicoDto;
+    @FXML
+    private MFXButton btnFiltrar;
 
     /**
      * Initializes the controller class.
@@ -148,6 +150,10 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         tbvResultados.getColumns().addAll(tbcId, tbcCedula, tbcNombre, tbcApellido, tbcEliminar);
 
         tbvResultados.refresh();
+    }
+
+    @FXML
+    private void onActionBtnFiltrar(ActionEvent event) {
     }
 
     private class ButtonCell extends TableCell<CliUsuarioDto, Boolean> {

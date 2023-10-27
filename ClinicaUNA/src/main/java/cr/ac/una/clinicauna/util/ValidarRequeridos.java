@@ -4,9 +4,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 import javafx.scene.Node;
 
 /**

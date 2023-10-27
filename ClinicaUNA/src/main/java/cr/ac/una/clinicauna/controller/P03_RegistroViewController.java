@@ -106,7 +106,6 @@ public class P03_RegistroViewController extends Controller implements Initializa
     private void onActionBtnRegistrar(ActionEvent event) {
         try {
             String invalidos = resourceBundle.getString("key.invalidFields") + ValidarRequeridos.validarRequeridos(requeridos);
-//validarRequeridos();
             if (!invalidos.isEmpty()) {
                 mensaje.showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), invalidos);
             } else {
@@ -220,7 +219,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
                 unbindUsuario();
                 this.usuarioDto = (CliUsuarioDto) respuesta.getResultado("Usuario");
                 bindUsuario();
-                validarRequeridos();
+                ValidarRequeridos.validarRequeridos(requeridos);
             } else {
                 mensaje.showModali18n(Alert.AlertType.ERROR, "key.loadUser", getStage(), respuesta.getMensaje());
             }
@@ -288,7 +287,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
 
     private void indicarRequeridos() {
         requeridos.clear();
-        requeridos.addAll(Arrays.asList(txfCedula, txfNombre, txfPapellido, txfSapellido, txfCorreo, txfUsuario, txfContrasena));
+        requeridos.addAll(Arrays.asList(txfCedula, txfNombre, txfPapellido, txfSapellido, txfCorreo, txfUsuario, cboxTipoUsuario, txfContrasena));
     }
 
     private void seleccionarTipoPorNombre(String nombreTipo) {
@@ -388,48 +387,6 @@ public class P03_RegistroViewController extends Controller implements Initializa
         txfUsuario.textProperty().unbindBidirectional(usuarioDto.usuUsuario);
         txfContrasena.textProperty().unbindBidirectional(usuarioDto.usuClave);
         txfCorreo.textProperty().unbindBidirectional(usuarioDto.usuCorreo);
-    }
-
-    public String validarRequeridos() {
-        Boolean validos = true;
-        String invalidos = "";
-        for (Node node : requeridos) {
-            if (node instanceof JFXTextField && (((JFXTextField) node).getText() == null || ((JFXTextField) node).getText().isBlank())) {
-                if (validos) {
-                    invalidos += ((JFXTextField) node).getPromptText();
-                } else {
-                    invalidos += ", " + ((JFXTextField) node).getPromptText();
-                }
-                validos = false;
-            } else if (node instanceof JFXPasswordField && (((JFXPasswordField) node).getText() == null || ((JFXPasswordField) node).getText().isBlank())) {
-                if (validos) {
-                    invalidos += ((JFXPasswordField) node).getPromptText();
-                } else {
-                    invalidos += ", " + ((JFXPasswordField) node).getPromptText();
-                }
-                validos = false;
-            } else if (node instanceof JFXDatePicker && ((JFXDatePicker) node).getValue() == null) {
-                if (validos) {
-                    invalidos += ((JFXDatePicker) node).getAccessibleText();
-                } else {
-                    invalidos += ", " + ((JFXDatePicker) node).getAccessibleText();
-                }
-                validos = false;
-            } else if (node instanceof JFXComboBox && ((JFXComboBox) node).getSelectionModel().getSelectedIndex() < 0) {
-                if (validos) {
-                    invalidos += ((JFXComboBox) node).getPromptText();
-                } else {
-                    invalidos += ", " + ((JFXComboBox) node).getPromptText();
-                }
-                validos = false;
-            }
-        }
-        if (validos) {
-            return "";
-        } else {
-            String message = resourceBundle.getString("key.invalidFields") + invalidos + "].";
-            return message;
-        }
     }
 
     public void bindBuscar() {
