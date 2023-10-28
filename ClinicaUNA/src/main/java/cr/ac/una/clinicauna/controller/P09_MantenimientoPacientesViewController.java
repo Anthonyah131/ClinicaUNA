@@ -10,11 +10,8 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import cr.ac.una.clinicauna.model.CliPacienteDto;
-import cr.ac.una.clinicauna.model.CliPacienteDto;
-import cr.ac.una.clinicauna.model.CliPacienteDto;
-import cr.ac.una.clinicauna.model.CliPacienteDto;
 import cr.ac.una.clinicauna.service.CliPacienteService;
-import cr.ac.una.clinicauna.service.CliPacienteService;
+import cr.ac.una.clinicauna.service.CliUsuarioService;
 import cr.ac.una.clinicauna.util.BindingUtils;
 import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Formato;
@@ -72,9 +69,9 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
     @FXML
     private JFXTextField txfTelefono;
     @FXML
-    private MFXButton btnLimpiarCampos;
+    private JFXDatePicker tpkFnacimiento;
     @FXML
-    private MFXButton btnBuscar;
+    private MFXButton btnLimpiarCampos;
     @FXML
     private MFXButton btnGuardar;
     @FXML
@@ -136,11 +133,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
     }
 
     @FXML
-    private void onActionBtnBuscar(ActionEvent event) {
-    }
-
-    @FXML
-    private void onActionBtnGuardar(ActionEvent event) {
+    private void onActionBtnGuardar(ActionEvent event) { // Poner los idiomas
         try {
             String invalidos = validarRequeridos();
             if (!invalidos.isEmpty()) {
@@ -164,9 +157,9 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
     }
 
     @FXML
-    private void onActionBtnFiltrar(ActionEvent event) {
+    private void onActionBtnFiltrar(ActionEvent event) { // Poner los idiomas
         CliPacienteService service = new CliPacienteService();
-        Respuesta respuesta = service.getPacientes(txfCedula.getText(), txfNombre.getText(), txfPapellido.getText());
+        Respuesta respuesta = service.getPacientes(txfBuscarCedula.getText(), txfBuscarNombre.getText(), txfBuscarPapellido.getText());
 
         if (respuesta.getEstado()) {
             tbvResultados.getItems().clear();
@@ -207,6 +200,16 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
 
         tbvResultados.getColumns().addAll(tbcId, tbcCedula, tbcNombre, tbcApellido, tbcEliminar);
         tbvResultados.refresh();
+
+        tbvResultados.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                unbindPaciente();
+                pacienteDto = newValue;
+                bindPaciente();
+            } else {
+                nuevoPaciente();
+            }
+        });
     }
 
     private void nuevoPaciente() {
@@ -217,7 +220,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
 
     private void indicarRequeridos() {
         requeridos.clear();
-        requeridos.addAll(Arrays.asList(txfCedula, txfNombre, txfPapellido, txfCorreo));
+        requeridos.addAll(Arrays.asList(txfCedula, txfNombre, txfPapellido, txfSapellido, txfCorreo));
     }
 
     private void bindPaciente() {
@@ -227,6 +230,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
         txfSapellido.textProperty().bindBidirectional(pacienteDto.pacSapellido);
         txfCorreo.textProperty().bindBidirectional(pacienteDto.pacCorreo);
         txfTelefono.textProperty().bindBidirectional(pacienteDto.pacTelefono);
+        tpkFnacimiento.valueProperty().bindBidirectional(pacienteDto.pacFnacimiento);
         BindingUtils.bindToggleGroupToProperty(tggGenero, pacienteDto.pacGenero);
     }
 
@@ -237,6 +241,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
         txfSapellido.textProperty().unbindBidirectional(pacienteDto.pacSapellido);
         txfCorreo.textProperty().unbindBidirectional(pacienteDto.pacCorreo);
         txfTelefono.textProperty().unbindBidirectional(pacienteDto.pacTelefono);
+        tpkFnacimiento.valueProperty().unbindBidirectional(pacienteDto.pacFnacimiento);
         BindingUtils.unbindToggleGroupToProperty(tggGenero, pacienteDto.pacGenero);
     }
 
@@ -299,13 +304,27 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
             cellButton.setText("X");
             cellButton.getStyleClass().add("mfx-button-menuSalir");
 
-            cellButton.setOnAction((ActionEvent t) -> {
-                CliPacienteDto car = (CliPacienteDto) ButtonCell.this.getTableView().getItems().get(ButtonCell.this.getIndex());
-                if (!car.getModificado()) {
-                    //  CliPacienteDto.getTarCaracteristicaEliminados().add(car);
+            cellButton.setOnAction((ActionEvent t) -> { // Poner los idiomas
+                CliPacienteDto pac = (CliPacienteDto) ButtonCell.this.getTableView().getItems().get(ButtonCell.this.getIndex());
+                try {
+                    if (pac.getPacId() == null) {
+                        new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.deleteUser", getStage(), "key.loadUserDelete");
+                    } else {
+                        CliPacienteService service = new CliPacienteService();
+                        Respuesta respuesta = service.eliminarPaciente(pac.getPacId());
+                        if (!respuesta.getEstado()) {
+                            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.deleteUser", getStage(), respuesta.getMensaje());
+                        } else {
+                            new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.deleteUser", getStage(), "key.deleteUserSuccess");
+                            nuevoPaciente();
+                            tbvResultados.getItems().remove(pac);
+                            tbvResultados.refresh();
+                        }
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(P09_MantenimientoPacientesViewController.class.getName()).log(Level.SEVERE, "Error eliminando el paciente.", ex);
+                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.deleteUser", getStage(), "key.deleteUserError");
                 }
-                tbvResultados.getItems().remove(car);
-                tbvResultados.refresh();
             });
         }
 

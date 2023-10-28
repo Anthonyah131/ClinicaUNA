@@ -82,7 +82,7 @@ public class P07_MantenimientoGeneralesViewController extends Controller impleme
         requeridos.clear();
         requeridos.addAll(Arrays.asList(txfNombre, txfCorreo, txfClave, txfPlantilla));
 
-//        cargarParametros();
+        cargarParametros();
         onActionsBotones();
     }
 
@@ -121,7 +121,7 @@ public class P07_MantenimientoGeneralesViewController extends Controller impleme
     }
 
     @FXML
-    private void onActionBtnGuardar(ActionEvent event) {
+    private void onActionBtnGuardar(ActionEvent event) { // Poner idiomas
         resourceBundle = FlowController.getInstance().getIdioma();
         try {
             String invalidos = ValidarRequeridos.validarRequeridos(requeridos);
@@ -136,7 +136,7 @@ public class P07_MantenimientoGeneralesViewController extends Controller impleme
                 } else {
                     unbindParametro();
                     this.parametrosDto = (CliParametrosDto) respuesta.getResultado("Parametro");
-                    bindParametro(false);
+                    bindParametro();
                     new Mensaje().showModal(Alert.AlertType.INFORMATION, "Guardar Parametros", getStage(), "Parametros actualizados correctamente.");
                     initialize(null, null);
                 }
@@ -158,7 +158,7 @@ public class P07_MantenimientoGeneralesViewController extends Controller impleme
                 unbindParametro();
                 this.parametrosDto = tarParametrosDtosList.get(0);
                 imvFotoEmpresa.setImage(byteToImage(this.parametrosDto.getParLogo()));
-                bindParametro(false);
+                bindParametro();
             } else {
                 new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Parametros", getStage(), respuesta.getMensaje());
             }
@@ -170,10 +170,10 @@ public class P07_MantenimientoGeneralesViewController extends Controller impleme
     private void nuevoParametro() {
         unbindParametro();
         this.parametrosDto = new CliParametrosDto();
-        bindParametro(true);
+        bindParametro();
     }
 
-    private void bindParametro(Boolean nuevo) {
+    private void bindParametro() {
         txfNombre.textProperty().bindBidirectional(parametrosDto.parNombre);
         txaInformacion.textProperty().bindBidirectional(parametrosDto.parDescripcion);
         txfCorreo.textProperty().bindBidirectional(parametrosDto.parEmail);
@@ -215,7 +215,7 @@ public class P07_MantenimientoGeneralesViewController extends Controller impleme
 
     //Metodo para cargar imagenes al icono de empresa
     public void loadImages(ImageView imgview, File file_) {
-        /*if (file_ != null) {
+        if (file_ != null) {
             try {
                 BufferedImage bufferedImage = ImageIO.read(file_);
                 Image image = SwingFXUtils.toFXImage(bufferedImage, null);
@@ -224,7 +224,7 @@ public class P07_MantenimientoGeneralesViewController extends Controller impleme
             } catch (IOException ex) {
                 new Mensaje().show(Alert.AlertType.ERROR, "Imagen", "Error cargando imagen");
             }
-        }*/
+        }
     }
 
     private byte[] fileToByte(File file) throws IOException {

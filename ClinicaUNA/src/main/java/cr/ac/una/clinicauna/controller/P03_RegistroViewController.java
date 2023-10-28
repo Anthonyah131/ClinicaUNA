@@ -145,22 +145,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
                     unbindUsuario();
                     this.usuarioDto = (CliUsuarioDto) respuesta.getResultado("Usuario");
                     bindUsuario();
-                    if ("M".equals(usuarioDto.getUsuTipousuario()) && usuarioDto.getCliMedicoList().isEmpty()) {
-                        CliMedicoService medicoService = new CliMedicoService();
-                        CliMedicoDto medicoDto = new CliMedicoDto();
-                        medicoDto.setMedCodigo("Ingrese" + usuarioDto.getUsuId());
-                        medicoDto.setMedFolio("Ingrese" + usuarioDto.getUsuId());
-                        medicoDto.setMedCarne("Ingrese" + usuarioDto.getUsuId());
-                        medicoDto.setMedEstado("I");
-                        Respuesta respuestaMedico = medicoService.guardarMedico(medicoDto);
-                        medicoDto = (CliMedicoDto) respuestaMedico.getResultado("Medico");
-                        medicoDto.setModificado(true);
-                        usuarioDto.getCliMedicoList().add(medicoDto);
-                        respuesta = usuarioService.guardarUsuario(usuarioDto);
-                        unbindUsuario();
-                        this.usuarioDto = (CliUsuarioDto) respuesta.getResultado("Usuario");
-                        bindUsuario();
-                    }
+                    crearBorrarMedico();
                     new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
                 }
             }
@@ -207,6 +192,41 @@ public class P03_RegistroViewController extends Controller implements Initializa
     @FXML
     private void onActionBtnSalir(ActionEvent event) {
         FlowController.getInstance().goView("P06_MenuPrincipalView");
+    }
+
+    private void crearBorrarMedico() {
+        if ("M".equals(usuarioDto.getUsuTipousuario()) && usuarioDto.getCliMedicoList().isEmpty()) {
+            CliUsuarioService usuarioService = new CliUsuarioService();
+            CliMedicoService medicoService = new CliMedicoService();
+            
+            CliMedicoDto medicoDto = new CliMedicoDto();
+            medicoDto.setMedCodigo("Ingrese" + usuarioDto.getUsuId());
+            medicoDto.setMedFolio("Ingrese" + usuarioDto.getUsuId());
+            medicoDto.setMedCarne("Ingrese" + usuarioDto.getUsuId());
+            medicoDto.setMedEstado("I");
+            
+            Respuesta respuestaMedico = medicoService.guardarMedico(medicoDto);
+            medicoDto = (CliMedicoDto) respuestaMedico.getResultado("Medico");
+            medicoDto.setModificado(true);
+            usuarioDto.getCliMedicoList().add(medicoDto);
+            Respuesta respuesta = usuarioService.guardarUsuario(usuarioDto);
+            
+            unbindUsuario();
+            this.usuarioDto = (CliUsuarioDto) respuesta.getResultado("Usuario");
+            bindUsuario();
+        } else if(!"M".equals(usuarioDto.getUsuTipousuario()) && !usuarioDto.getCliMedicoList().isEmpty()){
+            CliMedicoService medicoService = new CliMedicoService();
+            CliUsuarioService usuarioService = new CliUsuarioService();
+            
+            Long medicoId = this.usuarioDto.getCliMedicoList().get(0).getMedId();
+            usuarioDto.getCliMedicoListEliminados().add(this.usuarioDto.getCliMedicoList().get(0));
+            Respuesta respuesta = usuarioService.guardarUsuario(usuarioDto);
+            
+            unbindUsuario();
+            this.usuarioDto = (CliUsuarioDto) respuesta.getResultado("Usuario");
+            bindUsuario();
+            medicoService.eliminarMedico(medicoId);
+        }
     }
 
     private void cargarUsuario(Long id) {

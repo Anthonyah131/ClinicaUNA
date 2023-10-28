@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
@@ -15,7 +16,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" fx:id="root" prefHeight="720.0" prefWidth="1280.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/20.0.1" fx:controller="cr.ac.una.clinicauna.controller.P09_MantenimientoPacientesViewController">
+<AnchorPane id="AnchorPane" fx:id="root" prefHeight="720.0" prefWidth="1280.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.clinicauna.controller.P09_MantenimientoPacientesViewController">
     <stylesheets>
         <URL value="@styles.css" />
     </stylesheets>
@@ -72,6 +73,11 @@
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" prefWidth="200.0" spacing="20.0">
                            <children>
+                              <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                                 <children>
+                                    <JFXDatePicker fx:id="tpkFnacimiento" />
+                                 </children>
+                              </HBox>
                               <MFXButton fx:id="btnLimpiarCampos" layoutX="133.0" layoutY="10.0" onAction="#onActionBtnLimpiarCampos" styleClass="mfx-button-Image">
                                  <graphic>
                                     <ImageView fitHeight="40.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
@@ -82,18 +88,6 @@
                                  </graphic>
                                  <tooltip>
                                     <Tooltip text="%key.clear" />
-                                 </tooltip>
-                              </MFXButton>
-                              <MFXButton fx:id="btnBuscar" onAction="#onActionBtnBuscar" styleClass="mfx-button-Image">
-                                 <graphic>
-                                    <ImageView fitHeight="40.0" fitWidth="40.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../resources/media/icons/loopIcon.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                                 <tooltip>
-                                    <Tooltip text="%key.search" />
                                  </tooltip>
                               </MFXButton>
                               <MFXButton fx:id="btnGuardar" onAction="#onActionBtnGuardar" prefHeight="40.0" prefWidth="250.0" styleClass="mfx-button-Log" text="%key.addon" HBox.hgrow="ALWAYS" />
