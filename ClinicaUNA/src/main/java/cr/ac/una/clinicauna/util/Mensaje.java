@@ -76,7 +76,7 @@ public class Mensaje {
 
     public String comprobarMensaje(String mensaje) {
 
-        if (mensaje.equals("")) {
+        if (mensaje.equals("") || mensaje.length() < 3) {
             return mensaje;
         }
 

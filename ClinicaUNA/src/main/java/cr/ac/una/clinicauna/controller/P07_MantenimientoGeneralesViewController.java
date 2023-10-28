@@ -9,7 +9,9 @@ import cr.ac.una.clinicauna.model.CliParametrosDto;
 import cr.ac.una.clinicauna.service.CliParametrosService;
 import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Formato;
+import cr.ac.una.clinicauna.util.Mensaje;
 import cr.ac.una.clinicauna.util.Respuesta;
+import cr.ac.una.clinicauna.util.ValidarRequeridos;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.utils.SwingFXUtils;
 import java.awt.image.BufferedImage;
@@ -19,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -59,10 +62,11 @@ public class P07_MantenimientoGeneralesViewController extends Controller impleme
     private MFXButton btnAgregarPlantilla;
     @FXML
     private MFXButton btnGuardar;
-    
+
     CliParametrosDto parametrosDto;
     File file;
     List<Node> requeridos = new ArrayList<>();
+    ResourceBundle resourceBundle;
 
     /**
      * Initializes the controller class.
@@ -74,7 +78,11 @@ public class P07_MantenimientoGeneralesViewController extends Controller impleme
         txfCorreo.setTextFormatter(Formato.getInstance().maxLengthFormat(30));
         txfClave.setTextFormatter(Formato.getInstance().maxLengthFormat(30));
         this.parametrosDto = new CliParametrosDto();
-        cargarParametros();
+
+        requeridos.clear();
+        requeridos.addAll(Arrays.asList(txfNombre, txfCorreo, txfClave, txfPlantilla));
+
+//        cargarParametros();
         onActionsBotones();
     }
 
@@ -114,32 +122,33 @@ public class P07_MantenimientoGeneralesViewController extends Controller impleme
 
     @FXML
     private void onActionBtnGuardar(ActionEvent event) {
-        /*try {
-            String invalidos = validarRequeridos();
+        resourceBundle = FlowController.getInstance().getIdioma();
+        try {
+            String invalidos = ValidarRequeridos.validarRequeridos(requeridos);
             if (!invalidos.isEmpty()) {
-                new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar empleado", getStage(), invalidos);
+                String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), mensaje);
             } else {
+                CliParametrosService parametrosService = new CliParametrosService();
+                Respuesta respuesta = parametrosService.guardarParametro(parametrosDto);
+                if (!respuesta.getEstado()) {
+                    new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar Parametros", getStage(), respuesta.getMensaje());
+                } else {
+                    unbindParametro();
+                    this.parametrosDto = (CliParametrosDto) respuesta.getResultado("Parametro");
+                    bindParametro(false);
+                    new Mensaje().showModal(Alert.AlertType.INFORMATION, "Guardar Parametros", getStage(), "Parametros actualizados correctamente.");
+                    initialize(null, null);
+                }
             }
-            CliParametrosService parametrosService = new CliParametrosService();
-            Respuesta respuesta = parametrosService.guardarParametro(parametrosDto);
-            if (!respuesta.getEstado()) {
-                new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar Parametros", getStage(), respuesta.getMensaje());
-            } else {
-                unbindParametro();
-                this.parametrosDto = (CliParametrosDto) respuesta.getResultado("Parametro");
-                bindParametro(false);
-                new Mensaje().showModal(Alert.AlertType.INFORMATION, "Guardar Parametros", getStage(), "Parametros actualizados correctamente.");
-                initialize(null, null);
-            }
-
         } catch (Exception ex) {
             Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error guardando los Parametros.", ex);
             new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar Parametros", getStage(), "Ocurrio un error guardando los Parametros.");
-        }*/
+        }
     }
 
     private void cargarParametros() {
-        /*CliParametrosService service = new CliParametrosService();
+        CliParametrosService service = new CliParametrosService();
         Respuesta respuesta = service.getParametros();
 
         List<CliParametrosDto> tarParametrosDtosList = new ArrayList<>();
@@ -155,7 +164,7 @@ public class P07_MantenimientoGeneralesViewController extends Controller impleme
             }
         } else {
             nuevoParametro();
-        }*/
+        }
     }
 
     private void nuevoParametro() {
@@ -176,47 +185,6 @@ public class P07_MantenimientoGeneralesViewController extends Controller impleme
         txaInformacion.textProperty().unbindBidirectional(parametrosDto.parDescripcion);
         txfCorreo.textProperty().unbindBidirectional(parametrosDto.parEmail);
         txfClave.textProperty().unbindBidirectional(parametrosDto.parClave);
-    }
-
-    public String validarRequeridos() {
-        Boolean validos = true;
-        String invalidos = "";
-        for (Node node : requeridos) {
-            if (node instanceof JFXTextField && (((JFXTextField) node).getText() == null || ((JFXTextField) node).getText().isBlank())) {
-                if (validos) {
-                    invalidos += ((JFXTextField) node).getPromptText();
-                } else {
-                    invalidos += "," + ((JFXTextField) node).getPromptText();
-                }
-                validos = false;
-            } else if (node instanceof JFXPasswordField && (((JFXPasswordField) node).getText() == null || ((JFXPasswordField) node).getText().isBlank())) {
-                if (validos) {
-                    invalidos += ((JFXPasswordField) node).getPromptText();
-                } else {
-                    invalidos += "," + ((JFXPasswordField) node).getPromptText();
-                }
-                validos = false;
-            } else if (node instanceof JFXDatePicker && ((JFXDatePicker) node).getValue() == null) {
-                if (validos) {
-                    invalidos += ((JFXDatePicker) node).getAccessibleText();
-                } else {
-                    invalidos += "," + ((JFXDatePicker) node).getAccessibleText();
-                }
-                validos = false;
-            } else if (node instanceof JFXComboBox && ((JFXComboBox) node).getSelectionModel().getSelectedIndex() < 0) {
-                if (validos) {
-                    invalidos += ((JFXComboBox) node).getPromptText();
-                } else {
-                    invalidos += "," + ((JFXComboBox) node).getPromptText();
-                }
-                validos = false;
-            }
-        }
-        if (validos) {
-            return "";
-        } else {
-            return "Campos requeridos o con problemas de formato [" + invalidos + "].";
-        }
     }
 
     private void onActionsBotones() {

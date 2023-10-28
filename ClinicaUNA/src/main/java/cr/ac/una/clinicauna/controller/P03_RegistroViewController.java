@@ -87,8 +87,8 @@ public class P03_RegistroViewController extends Controller implements Initializa
         txfUsuario.setTextFormatter(Formato.getInstance().letrasFormat(20));
         txfContrasena.setTextFormatter(Formato.getInstance().maxLengthFormat(15));
         this.usuarioDto = new CliUsuarioDto();
-        iniciarScena();
         nuevoUsuario();
+        iniciarScena();
         indicarRequeridos();
         fillCbox();
 
@@ -102,9 +102,10 @@ public class P03_RegistroViewController extends Controller implements Initializa
     @FXML
     private void onActionBtnRegistrar(ActionEvent event) {
         try {
-            String invalidos = resourceBundle.getString("key.invalidFields") + ValidarRequeridos.validarRequeridos(requeridos);
+            String invalidos = ValidarRequeridos.validarRequeridos(requeridos);
             if (!invalidos.isEmpty()) {
-                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), invalidos);
+                String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), mensaje);
             } else {
                 CliUsuarioService usuarioService = new CliUsuarioService();
                 if (cboxTipoUsuario.getValue() != null) {
@@ -139,7 +140,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
                 Respuesta respuesta = usuarioService.guardarUsuario(usuarioDto);
 
                 if (!respuesta.getEstado()) {
-                   new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
+                    new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
                 } else {
                     unbindUsuario();
                     this.usuarioDto = (CliUsuarioDto) respuesta.getResultado("Usuario");
@@ -235,12 +236,21 @@ public class P03_RegistroViewController extends Controller implements Initializa
             btnEliminar.setDisable(true);
             btnBuscar.setDisable(true);
             chkActivo.setDisable(true);
-        } else {
+        } else if (padre.equals("P06_MenuPrincipalView")) {
             root.setPrefWidth(1280);
             root.getStyleClass().add("fondo-registro-completa");
             btnSalir.setVisible(true);
             btnEliminar.setDisable(false);
             btnBuscar.setDisable(false);
+
+            usuarioDto = (CliUsuarioDto) AppContext.getInstance().get("Usuario");
+            if (!usuarioDto.getUsuTipousuario().equals("A")) {
+                bindUsuario();
+                cboxTipoUsuario.setDisable(true);
+                btnEliminar.setDisable(true);
+                btnBuscar.setDisable(true);
+                chkActivo.setDisable(true);
+            }
         }
     }
 

@@ -142,7 +142,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
             } else {
                 if (medicoDto.getMedId() != null) {
                     CliMedicoService medicoService = new CliMedicoService();
-                    if (cboxCantidadCitas.getValue() != null) {;
+                    if (cboxCantidadCitas.getValue() != null) {
                         medicoDto.setMedEspaciosxhora((long) cboxCantidadCitas.getValue());
                     }
                     if (chkActivo.isSelected()) {
@@ -304,13 +304,16 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         TableColumn<CliMedicoDto, String> tbcApellido = new TableColumn<>(resourceBundle.getString("key.papellido"));
         tbcApellido.setPrefWidth(150);
         tbcApellido.setCellValueFactory(cd -> cd.getValue().getCliUsuarioDto().usuPapellido);
+        
+        TableColumn<CliMedicoDto, String> tbcCodigo = new TableColumn<>(resourceBundle.getString("key.papellido"));
+        tbcApellido.setPrefWidth(150);
+        tbcApellido.setCellValueFactory(cd -> cd.getValue().medCodigo);
+        
+        TableColumn<CliMedicoDto, String> tbcFolio = new TableColumn<>(resourceBundle.getString("key.papellido"));
+        tbcApellido.setPrefWidth(150);
+        tbcApellido.setCellValueFactory(cd -> cd.getValue().medFolio);
 
-        TableColumn<CliMedicoDto, Boolean> tbcEliminar = new TableColumn<>("Eliminar");
-        tbcEliminar.setPrefWidth(100);
-        tbcEliminar.setCellValueFactory((TableColumn.CellDataFeatures<CliMedicoDto, Boolean> p) -> new SimpleBooleanProperty(p.getValue() != null));
-        tbcEliminar.setCellFactory((TableColumn<CliMedicoDto, Boolean> p) -> new ButtonCell());
-
-        tbvResultados.getColumns().addAll(tbcId, tbcCedula, tbcNombre, tbcApellido, tbcEliminar);
+        tbvResultados.getColumns().addAll(tbcId, tbcCodigo, tbcFolio,tbcCedula, tbcNombre, tbcApellido);
 
         tbvResultados.refresh();
 
@@ -324,33 +327,4 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
             }
         });
     }
-
-    private class ButtonCell extends TableCell<CliMedicoDto, Boolean> {
-
-        final MFXButton cellButton = new MFXButton();
-
-        ButtonCell() {
-            cellButton.setPrefWidth(500);
-            cellButton.setText("X");
-            cellButton.getStyleClass().add("mfx-button-menuSalir");
-
-            cellButton.setOnAction((ActionEvent t) -> {
-                CliMedicoDto car = (CliMedicoDto) ButtonCell.this.getTableView().getItems().get(ButtonCell.this.getIndex());
-                if (!car.getModificado()) {
-                    //  CliPacienteDto.getTarCaracteristicaEliminados().add(car);
-                }
-                tbvResultados.getItems().remove(car);
-                tbvResultados.refresh();
-            });
-        }
-
-        @Override
-        protected void updateItem(Boolean t, boolean empty) {
-            super.updateItem(t, empty);
-            if (!empty) {
-                setGraphic(cellButton);
-            }
-        }
-    }
-
 }

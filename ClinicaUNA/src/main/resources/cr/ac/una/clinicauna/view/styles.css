@@ -252,6 +252,12 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;
 }
+.fondo-busqueda{
+    -fx-background-image: url("../resources/media/images/fondoBuscar.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
 /*-----------------------------------------------------------------------------------------------------------------*/
 .jfx-combo-box {
     -jfx-focus-color: #cc00cc;
@@ -313,4 +319,24 @@
 
 .jfx-pickers:focused{
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+/*-----------------------------------------------------------------------------------------------------------------*/
+.table-view {
+    -fx-background-color: #666666;
+    -fx-font: 15px "Arial Rounded MT Bold";
+}
+
+.table-cell {
+    -fx-alignment: center; /* Centra el texto horizontalmente en las celdas */
+}
+/*-----------------------------------------------------------------------------------------------------------------*/
+.images-effect-button {
+
+}
+.images-effect-button:hover {
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+.images-effect-button:pressed {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 255, 1), 10, 0.5, 0.0, 0.0);
 }

@@ -71,7 +71,6 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
 
     @FXML
     private void onActionBtnFiltrar(ActionEvent event) {
-
         CliUsuarioService service = new CliUsuarioService();
         Respuesta respuesta = service.getUsuarios(txfCedula.getText(), txfNombre.getText(), txfApellido.getText(), cboxTipoUsuario.getValue());
 
@@ -82,27 +81,34 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
             tbvResultados.setItems(usuarios);
             tbvResultados.refresh();
         } else {
-            new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Usuarios", getStage(), respuesta.getMensaje());
+            new Mensaje().showModal(Alert.AlertType.ERROR, "key.loadUsers", getStage(), respuesta.getMensaje());
         }
     }
 
     @FXML
     private void onMousePressenTbvResultados(MouseEvent event) {
+        if (event.getClickCount() == 2) {
+            cargarUsuario();
+        }
     }
 
     @FXML
     private void onActionBtnAceptar(ActionEvent event) {
+        cargarUsuario();
+    }
+
+    @FXML
+    private void onActionBtnLimpiarCampos(ActionEvent event) {
+        cleanNodes();
+    }
+
+    private void cargarUsuario() {
         resultado = tbvResultados.getSelectionModel().getSelectedItem();
         if (resultado != null) {
             P03_RegistroViewController registroController = (P03_RegistroViewController) FlowController.getInstance().getController("P03_RegistroView");
             registroController.bindBuscar();
         }
         getStage().close();
-    }
-
-    @FXML
-    private void onActionBtnLimpiarCampos(ActionEvent event) {
-        cleanNodes();
     }
 
     public void fillTableView() {
@@ -113,11 +119,11 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
         tbcId.setCellValueFactory(cd -> cd.getValue().usuId);
 
         TableColumn<CliUsuarioDto, String> tbcCedula = new TableColumn<>(resourceBundle.getString("key.identification"));
-        tbcCedula.setPrefWidth(100);
+        tbcCedula.setPrefWidth(150);
         tbcCedula.setCellValueFactory(cd -> cd.getValue().usuCedula);
 
         TableColumn<CliUsuarioDto, String> tbcNombre = new TableColumn<>(resourceBundle.getString("key.name"));
-        tbcNombre.setPrefWidth(100);
+        tbcNombre.setPrefWidth(150);
         tbcNombre.setCellValueFactory(cd -> cd.getValue().usuNombre);
 
         TableColumn<CliUsuarioDto, String> tbcApellido = new TableColumn<>(resourceBundle.getString("key.papellido"));
