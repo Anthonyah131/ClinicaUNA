@@ -1,6 +1,7 @@
 package cr.ac.una.clinicauna.controller;
 
 import cr.ac.una.clinicauna.service.CliUsuarioService;
+import cr.ac.una.clinicauna.util.Mensaje;
 import cr.ac.una.clinicauna.util.Respuesta;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
@@ -39,21 +40,21 @@ public class P04_RecuperarClaveViewController extends Controller implements Init
 
     @FXML
     private void onActionBtnAceptar(ActionEvent event) {
-        /*try {
+        try {
             if (txfCorreo.getText() == null || txfCorreo.getText().isEmpty()) {
-                new Mensaje().showModal(Alert.AlertType.ERROR, "Recuperación de clave", getStage(), "Es necesario digitar un correo para ingresar al sistema.");
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.passRecovery", getStage(), "key.needEnterMail");
             } else {
                 CliUsuarioService cliUsuarioService = new CliUsuarioService();
                 Respuesta respuesta = cliUsuarioService.recuperarClave(txfCorreo.getText());
                 if (respuesta.getEstado()) {
-                    new Mensaje().showModal(Alert.AlertType.INFORMATION, "Recuperación de clave", getStage(), "El correo fue enviado correctamente.");
+                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.passRecovery", getStage(), "key.mailSend");
                 } else {
-                    new Mensaje().showModal(Alert.AlertType.ERROR, "Recuperación de clave", getStage(), "Ocurrio un error enviando el correo de recuperacion.");
+                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.passRecovery", getStage(), "key.errorSendMail");
                 }
             }
         } catch (Exception ex) {
             Logger.getLogger(P04_RecuperarClaveViewController.class.getName()).log(Level.SEVERE, "Error enviando el correo.", ex);
-        }*/
+        }
     }
     
 }
