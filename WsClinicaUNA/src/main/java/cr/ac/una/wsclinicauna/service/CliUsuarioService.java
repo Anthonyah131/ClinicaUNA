@@ -148,9 +148,11 @@ public class CliUsuarioService {
 
                 if (!cliUsuarioDto.getCliMedicoList().isEmpty()) {
                     for (CliMedicoDto cliMedicoDto : cliUsuarioDto.getCliMedicoList()) {
-                        CliMedico cliMedico = em.find(CliMedico.class, cliMedicoDto.getMedId());
-                        cliMedico.setUsuId(cliUsuario);
-                        cliUsuario.getCliMedicoList().add(cliMedico);
+                        if (cliMedicoDto.getModificado()) {
+                            CliMedico cliMedico = em.find(CliMedico.class, cliMedicoDto.getMedId());
+                            cliMedico.setUsuId(cliUsuario);
+                            cliUsuario.getCliMedicoList().add(cliMedico);
+                        }
                     }
                 }
 
@@ -174,7 +176,14 @@ public class CliUsuarioService {
                 em.persist(cliUsuario);
             }
             em.flush();
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuario", new CliUsuarioDto(cliUsuario));
+            CliUsuarioDto cliUsuarioDtoR = new CliUsuarioDto(cliUsuario);
+            for (CliReporteusuarios cliReporteusuarios : cliUsuario.getCliReporteusuariosList()) {
+                cliUsuarioDtoR.getCliReporteusuariosList().add(new CliReporteusuariosDto(cliReporteusuarios));
+            }
+            for (CliMedico cliMedico : cliUsuario.getCliMedicoList()) {
+                cliUsuarioDtoR.getCliMedicoList().add(new CliMedicoDto(cliMedico));
+            }
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Usuario", cliUsuarioDtoR);
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el usuario.", ex);
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorSavingUser", "guardarUsuario " + ex.getMessage());
