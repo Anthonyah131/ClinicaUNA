@@ -54,7 +54,7 @@ public class CliParametrosService {
 
     public Respuesta guardarParametro(CliParametrosDto parametros) {
         try {
-            Request request = new Request("CliParametrosController/parametros");
+            Request request = new Request("CliParametrosController/parametro");
             request.post(parametros);
             if (request.isError()) {
                 return new Respuesta(false, request.getError(), "");

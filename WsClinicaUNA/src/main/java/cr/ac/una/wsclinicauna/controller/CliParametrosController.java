@@ -5,8 +5,10 @@
 package cr.ac.una.wsclinicauna.controller;
 
 import cr.ac.una.wsclinicauna.model.CliParametrosDto;
+import cr.ac.una.wsclinicauna.model.CliUsuarioDto;
 import cr.ac.una.wsclinicauna.service.CliParametrosService;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
+import cr.ac.una.wsclinicauna.util.Respuesta;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.Consumes;
@@ -16,8 +18,10 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.GenericEntity;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,8 +54,12 @@ public class CliParametrosController {
     @Path("/parametros")
     public Response getParametros() {
         try {
-
-            return Response.ok().build();
+            Respuesta res = cliParametrosService.getParametros();
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
+            }
+            return Response.ok(new GenericEntity<List<CliParametrosDto>>((List<CliParametrosDto>) res.getResultado("Parametros")) {
+            }).build();
         } catch (Exception ex) {
             Logger.getLogger(CliParametrosController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo los parametro").build();//TODO
@@ -63,8 +71,13 @@ public class CliParametrosController {
     @Path("/parametro")
     public Response guardarParametros(CliParametrosDto cliParametrosDto) {
         try {
+            Respuesta res = cliParametrosService.guardarParametro(cliParametrosDto);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
+            }
 
-            return Response.ok().build();//TODO
+            cliParametrosDto = (CliParametrosDto) res.getResultado("Parametro");
+            return Response.ok(cliParametrosDto).build();
         } catch (Exception ex) {
             Logger.getLogger(CliParametrosController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error guardando el parametro").build();//TODO
