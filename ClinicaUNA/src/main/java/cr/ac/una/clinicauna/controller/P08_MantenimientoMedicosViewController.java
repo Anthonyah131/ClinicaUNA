@@ -16,6 +16,7 @@ import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Formato;
 import cr.ac.una.clinicauna.util.Mensaje;
 import cr.ac.una.clinicauna.util.Respuesta;
+import cr.ac.una.clinicauna.util.ValidarRequeridos;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.util.ArrayList;
@@ -80,14 +81,13 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
     private AnchorPane root;
     @FXML
     private TableView<CliMedicoDto> tbvResultados;
+    @FXML
+    private MFXButton btnFiltrar;
 
     CliMedicoDto medicoDto;
     private ObservableList<CliMedicoDto> medicos = FXCollections.observableArrayList();
     List<Node> requeridos = new ArrayList<>();
     ResourceBundle resourceBundle;
-    Mensaje mensaje;
-    @FXML
-    private MFXButton btnFiltrar;
 
     /**
      * Initializes the controller class.
@@ -115,6 +115,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
 
     @FXML
     private void onActionBtnFiltrar(ActionEvent event) {
+        
     }
 
     @FXML
@@ -136,9 +137,10 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
     @FXML
     private void onActionBtnGuardar(ActionEvent event) {
         try {
-            String invalidos = validarRequeridos();
+            String invalidos = ValidarRequeridos.validarRequeridos(requeridos);
             if (!invalidos.isEmpty()) {
-                mensaje.showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), invalidos);
+                String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), mensaje);
             } else {
                 if (medicoDto.getMedId() != null) {
                     CliMedicoService medicoService = new CliMedicoService();
@@ -153,12 +155,12 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
 
                     Respuesta respuesta = medicoService.guardarMedico(medicoDto);
                     if (!respuesta.getEstado()) {
-                        mensaje.showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
+                        new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
                     } else {
                         unbindMedico();
                         this.medicoDto = (CliMedicoDto) respuesta.getResultado("Medico");
                         bindMedico();
-                        mensaje.showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
+                        new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
                     }
                 } else {
                     // Se pone un mensaje que se debe cargar un medico para actualizarlo
@@ -166,7 +168,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
             }
         } catch (Exception ex) {
             Logger.getLogger(P08_MantenimientoMedicosViewController.class.getName()).log(Level.SEVERE, "Error guardando el medico.", ex);
-            mensaje.showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
         }
     }
 
@@ -304,16 +306,16 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         TableColumn<CliMedicoDto, String> tbcApellido = new TableColumn<>(resourceBundle.getString("key.papellido"));
         tbcApellido.setPrefWidth(150);
         tbcApellido.setCellValueFactory(cd -> cd.getValue().getCliUsuarioDto().usuPapellido);
-        
-        TableColumn<CliMedicoDto, String> tbcCodigo = new TableColumn<>(resourceBundle.getString("key.papellido"));
-        tbcApellido.setPrefWidth(150);
-        tbcApellido.setCellValueFactory(cd -> cd.getValue().medCodigo);
-        
-        TableColumn<CliMedicoDto, String> tbcFolio = new TableColumn<>(resourceBundle.getString("key.papellido"));
-        tbcApellido.setPrefWidth(150);
-        tbcApellido.setCellValueFactory(cd -> cd.getValue().medFolio);
 
-        tbvResultados.getColumns().addAll(tbcId, tbcCodigo, tbcFolio,tbcCedula, tbcNombre, tbcApellido);
+        TableColumn<CliMedicoDto, String> tbcCodigo = new TableColumn<>(resourceBundle.getString("key.code"));
+        tbcCodigo.setPrefWidth(150);
+        tbcCodigo.setCellValueFactory(cd -> cd.getValue().medCodigo);
+
+        TableColumn<CliMedicoDto, String> tbcFolio = new TableColumn<>(resourceBundle.getString("key.folio"));
+        tbcFolio.setPrefWidth(150);
+        tbcFolio.setCellValueFactory(cd -> cd.getValue().medFolio);
+
+        tbvResultados.getColumns().addAll(tbcId, tbcCodigo, tbcFolio, tbcCedula, tbcNombre, tbcApellido);
 
         tbvResultados.refresh();
 

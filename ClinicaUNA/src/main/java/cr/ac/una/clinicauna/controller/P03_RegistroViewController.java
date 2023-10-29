@@ -28,6 +28,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -96,6 +98,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
 
     @Override
     public void initialize() {
+//        nuevoUsuario();
         iniciarScena();
     }
 
@@ -263,14 +266,14 @@ public class P03_RegistroViewController extends Controller implements Initializa
             btnEliminar.setDisable(false);
             btnBuscar.setDisable(false);
 
-            usuarioDto = (CliUsuarioDto) AppContext.getInstance().get("Usuario");
-            if (!usuarioDto.getUsuTipousuario().equals("A")) {
-                bindUsuario();
-                cboxTipoUsuario.setDisable(true);
-                btnEliminar.setDisable(true);
-                btnBuscar.setDisable(true);
-                chkActivo.setDisable(true);
-            }
+//            usuarioDto = (CliUsuarioDto) AppContext.getInstance().get("Usuario");
+//            if (!usuarioDto.getUsuTipousuario().equals("A")) {
+//                bindUsuario();
+//                cboxTipoUsuario.setDisable(true);
+//                btnEliminar.setDisable(true);
+//                btnBuscar.setDisable(true);
+//                chkActivo.setDisable(true);
+//            }
         }
     }
 
@@ -419,4 +422,5 @@ public class P03_RegistroViewController extends Controller implements Initializa
         usuarioDto = (CliUsuarioDto) buscadorRegistroController.getSeleccionado();
         bindUsuario();
     }
+
 }

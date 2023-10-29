@@ -12,6 +12,7 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -114,26 +115,40 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
     public void fillTableView() {
         tbvResultados.getItems().clear();
 
-        TableColumn<CliUsuarioDto, String> tbcId = new TableColumn<>("Id");
-        tbcId.setPrefWidth(50);
-        tbcId.setCellValueFactory(cd -> cd.getValue().usuId);
-
+//        TableColumn<CliUsuarioDto, String> tbcId = new TableColumn<>("Id");
+//        tbcId.setPrefWidth(30);
+//        tbcId.setCellValueFactory(cd -> cd.getValue().usuId);
         TableColumn<CliUsuarioDto, String> tbcCedula = new TableColumn<>(resourceBundle.getString("key.identification"));
-        tbcCedula.setPrefWidth(150);
+        tbcCedula.setPrefWidth(100);
         tbcCedula.setCellValueFactory(cd -> cd.getValue().usuCedula);
 
         TableColumn<CliUsuarioDto, String> tbcNombre = new TableColumn<>(resourceBundle.getString("key.name"));
-        tbcNombre.setPrefWidth(150);
+        tbcNombre.setPrefWidth(120);
         tbcNombre.setCellValueFactory(cd -> cd.getValue().usuNombre);
 
         TableColumn<CliUsuarioDto, String> tbcApellido = new TableColumn<>(resourceBundle.getString("key.papellido"));
-        tbcApellido.setPrefWidth(150);
+        tbcApellido.setPrefWidth(130);
         tbcApellido.setCellValueFactory(cd -> cd.getValue().usuPapellido);
 
-        tbvResultados.getColumns().add(tbcId);
-        tbvResultados.getColumns().add(tbcCedula);
-        tbvResultados.getColumns().add(tbcNombre);
-        tbvResultados.getColumns().add(tbcApellido);
+        TableColumn<CliUsuarioDto, String> tbcTipoUser = new TableColumn<>(resourceBundle.getString("key.usertype"));
+        tbcTipoUser.setPrefWidth(130);
+        tbcTipoUser.setCellValueFactory(cd -> {
+            String tipoUsuario = cd.getValue().usuTipousuario.get();
+            String tipoUsuarioTexto = "";
+
+            switch (tipoUsuario) {
+                case "M" ->
+                    tipoUsuarioTexto = "Médico";
+                case "A" ->
+                    tipoUsuarioTexto = "Administrador";
+                case "R" ->
+                    tipoUsuarioTexto = "Recepcionista";
+            }
+
+            return new SimpleStringProperty(tipoUsuarioTexto);
+        });
+
+        tbvResultados.getColumns().addAll(/*tbcId,*/tbcCedula, tbcNombre, tbcApellido, tbcTipoUser);
         tbvResultados.refresh();
     }
 
