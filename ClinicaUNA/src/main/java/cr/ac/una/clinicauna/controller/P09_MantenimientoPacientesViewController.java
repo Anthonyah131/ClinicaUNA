@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package cr.ac.una.clinicauna.controller;
 
 import com.jfoenix.controls.JFXComboBox;
@@ -17,6 +13,8 @@ import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Formato;
 import cr.ac.una.clinicauna.util.Mensaje;
 import cr.ac.una.clinicauna.util.Respuesta;
+import cr.ac.una.clinicauna.util.SoundUtil;
+import cr.ac.una.clinicauna.util.ValidarRequeridos;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.util.ArrayList;
@@ -90,7 +88,6 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
     List<Node> requeridos = new ArrayList<>();
 
     ResourceBundle resourceBundle;
-    Mensaje mensaje;
 
     /**
      * Initializes the controller class.
@@ -121,12 +118,14 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
 
     @FXML
     private void onActionBtnSalir(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         FlowController.getInstance().goView("P06_MenuPrincipalView");
     }
 
     @FXML
     private void onActionBtnLimpiarCampos(ActionEvent event) {
-        if (mensaje.showConfirmationi18n("key.clear", getStage(), "key.cleanRegistry")) {
+        SoundUtil.mouseEnterSound();
+        if (new Mensaje().showConfirmationi18n("key.clear", getStage(), "key.cleanRegistry")) {
             nuevoPaciente();
             cleanNodes();
         }
@@ -134,30 +133,33 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
 
     @FXML
     private void onActionBtnGuardar(ActionEvent event) { // Poner los idiomas
+        SoundUtil.mouseEnterSound();
         try {
-            String invalidos = validarRequeridos();
+            String invalidos = ValidarRequeridos.validarRequeridos(requeridos);
             if (!invalidos.isEmpty()) {
-                mensaje.showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), invalidos);
+                String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), mensaje);
             } else {
                 CliPacienteService pacienteService = new CliPacienteService();
                 Respuesta respuesta = pacienteService.guardarPaciente(pacienteDto);
                 if (!respuesta.getEstado()) {
-                    mensaje.showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
+                    new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
                 } else {
                     unbindPaciente();
                     this.pacienteDto = (CliPacienteDto) respuesta.getResultado("Paciente");
                     bindPaciente();
-                    mensaje.showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
+                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
                 }
             }
         } catch (Exception ex) {
             Logger.getLogger(P09_MantenimientoPacientesViewController.class.getName()).log(Level.SEVERE, "Error guardando el paciente.", ex);
-            mensaje.showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
         }
     }
 
     @FXML
     private void onActionBtnFiltrar(ActionEvent event) { // Poner los idiomas
+        SoundUtil.mouseEnterSound();
         CliPacienteService service = new CliPacienteService();
         Respuesta respuesta = service.getPacientes(txfBuscarCedula.getText(), txfBuscarNombre.getText(), txfBuscarPapellido.getText());
 
@@ -168,12 +170,12 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
             tbvResultados.setItems(pacientes);
             tbvResultados.refresh();
         } else {
-            //new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Pacientes", getStage(), respuesta.getMensaje());
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Pacientes", getStage(), respuesta.getMensaje());
         }
     }
 
     public void fillTableView() {
-        ResourceBundle resourceBundle = FlowController.getInstance().getIdioma();
+        resourceBundle = FlowController.getInstance().getIdioma();
 
         tbvResultados.getItems().clear();
 
@@ -243,48 +245,6 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
         txfTelefono.textProperty().unbindBidirectional(pacienteDto.pacTelefono);
         tpkFnacimiento.valueProperty().unbindBidirectional(pacienteDto.pacFnacimiento);
         BindingUtils.unbindToggleGroupToProperty(tggGenero, pacienteDto.pacGenero);
-    }
-
-    public String validarRequeridos() {
-        Boolean validos = true;
-        String invalidos = "";
-        for (Node node : requeridos) {
-            if (node instanceof JFXTextField && (((JFXTextField) node).getText() == null || ((JFXTextField) node).getText().isBlank())) {
-                if (validos) {
-                    invalidos += ((JFXTextField) node).getPromptText();
-                } else {
-                    invalidos += ", " + ((JFXTextField) node).getPromptText();
-                }
-                validos = false;
-            } else if (node instanceof JFXPasswordField && (((JFXPasswordField) node).getText() == null || ((JFXPasswordField) node).getText().isBlank())) {
-                if (validos) {
-                    invalidos += ((JFXPasswordField) node).getPromptText();
-                } else {
-                    invalidos += ", " + ((JFXPasswordField) node).getPromptText();
-                }
-                validos = false;
-            } else if (node instanceof JFXDatePicker && ((JFXDatePicker) node).getValue() == null) {
-                if (validos) {
-                    invalidos += ((JFXDatePicker) node).getAccessibleText();
-                } else {
-                    invalidos += ", " + ((JFXDatePicker) node).getAccessibleText();
-                }
-                validos = false;
-            } else if (node instanceof JFXComboBox && ((JFXComboBox) node).getSelectionModel().getSelectedIndex() < 0) {
-                if (validos) {
-                    invalidos += ((JFXComboBox) node).getPromptText();
-                } else {
-                    invalidos += ", " + ((JFXComboBox) node).getPromptText();
-                }
-                validos = false;
-            }
-        }
-        if (validos) {
-            return "";
-        } else {
-            String message = resourceBundle.getString("key.invalidFields") + invalidos + "].";
-            return message;
-        }
     }
 
     public void cleanNodes() {

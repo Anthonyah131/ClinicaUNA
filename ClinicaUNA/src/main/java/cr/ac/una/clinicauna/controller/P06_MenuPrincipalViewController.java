@@ -1,13 +1,17 @@
 package cr.ac.una.clinicauna.controller;
 
+import cr.ac.una.clinicauna.model.CliUsuarioDto;
 import cr.ac.una.clinicauna.util.AppContext;
 import cr.ac.una.clinicauna.util.FlowController;
+import cr.ac.una.clinicauna.util.Mensaje;
+import cr.ac.una.clinicauna.util.SoundUtil;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 
 /**
  * FXML Controller class
@@ -19,8 +23,6 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
     @FXML
     private MFXButton btnGenerales;
     @FXML
-    private MFXButton btnEvaluaciones;
-    @FXML
     private MFXButton btnCerrarSesion;
     @FXML
     private MFXButton btnSalir;
@@ -31,12 +33,17 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
     @FXML
     private MFXButton btnMantUsuarios;
 
+    CliUsuarioDto usuarioDto;
+    @FXML
+    private MFXButton btnAgenda;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        usuarioDto = (CliUsuarioDto) AppContext.getInstance().get("Usuario");
     }
 
     @Override
@@ -45,27 +52,40 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
 
     @FXML
     private void onActionBtnMantUsuarios(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         AppContext.getInstance().set("Padre", "P06_MenuPrincipalView");
         FlowController.getInstance().goView("P03_RegistroView");
     }
 
     @FXML
     private void onActionBtnGenerales(ActionEvent event) {
-          FlowController.getInstance().goView("P07_MantenimientoGeneralesView");
+        SoundUtil.mouseEnterSound();
+        if (usuarioDto.getUsuTipousuario().equals("A")) {
+            FlowController.getInstance().goView("P07_MantenimientoGeneralesView");
+        } else {
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "No tiene permisos para ingresar a esta pantalla");
+        }
     }
 
     @FXML
     private void onActionBtnMantenimientoMedicos(ActionEvent event) {
-        FlowController.getInstance().goView("P08_MantenimientoMedicosView");
+        SoundUtil.mouseEnterSound();
+        if (usuarioDto.getUsuTipousuario().equals("R")) {
+            FlowController.getInstance().goView("P08_MantenimientoMedicosView");
+        } else {
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "No tiene permisos para ingresar a esta pantalla");
+        }
     }
 
     @FXML
     private void onActionBtnRegistroPacientes(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         FlowController.getInstance().goView("P09_MantenimientoPacientesView");
     }
 
     @FXML
     private void onActionBtnCerrarSesion(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         FlowController.getInstance().clearHashMap();
         FlowController.getInstance().goViewInWindow("P01_LogInView", false);
         FlowController.getInstance().salir();
@@ -73,7 +93,14 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
 
     @FXML
     private void onActionBtnSalir(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         FlowController.getInstance().salir();
+    }
+
+    @FXML
+    private void onActionBtnAgenda(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
+        FlowController.getInstance().goView("P10_AgendaView");
     }
 
 }

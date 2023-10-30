@@ -8,6 +8,7 @@ import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Formato;
 import cr.ac.una.clinicauna.util.Mensaje;
 import cr.ac.una.clinicauna.util.Respuesta;
+import cr.ac.una.clinicauna.util.SoundUtil;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.util.List;
@@ -72,6 +73,7 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
 
     @FXML
     private void onActionBtnFiltrar(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         CliUsuarioService service = new CliUsuarioService();
         Respuesta respuesta = service.getUsuarios(txfCedula.getText(), txfNombre.getText(), txfApellido.getText(), cboxTipoUsuario.getValue());
 
@@ -89,17 +91,20 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
     @FXML
     private void onMousePressenTbvResultados(MouseEvent event) {
         if (event.getClickCount() == 2) {
+            SoundUtil.mouseEnterSound();
             cargarUsuario();
         }
     }
 
     @FXML
     private void onActionBtnAceptar(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         cargarUsuario();
     }
 
     @FXML
     private void onActionBtnLimpiarCampos(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         cleanNodes();
     }
 

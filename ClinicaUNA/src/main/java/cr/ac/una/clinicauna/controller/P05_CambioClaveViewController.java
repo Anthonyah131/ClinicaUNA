@@ -5,6 +5,7 @@ import cr.ac.una.clinicauna.service.CliUsuarioService;
 import cr.ac.una.clinicauna.util.AppContext;
 import cr.ac.una.clinicauna.util.Mensaje;
 import cr.ac.una.clinicauna.util.Respuesta;
+import cr.ac.una.clinicauna.util.SoundUtil;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import java.net.URL;
@@ -44,6 +45,7 @@ public class P05_CambioClaveViewController extends Controller implements Initial
 
     @FXML
     private void onActionBtnAceptar(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         try {
             if (txfClave.getText() == null || txfClave.getText().isEmpty()) {
                 new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.changePass", getStage(), "key.needEnterPass");

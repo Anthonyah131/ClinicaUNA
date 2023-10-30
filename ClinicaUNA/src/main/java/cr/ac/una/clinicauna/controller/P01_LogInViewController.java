@@ -101,11 +101,13 @@ public class P01_LogInViewController extends Controller implements Initializable
 
     @FXML
     private void onActionBtnSalir(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         getStage().close();
     }
 
     @FXML
     private void onActionBtnNuevaCuenta(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         FlowController.getInstance().delete("P03_RegistroView");
         AppContext.getInstance().set("Padre", "P01_LogInView");
         FlowController.getInstance().goViewInWindowModal("P03_RegistroView", stage, false);
@@ -113,12 +115,14 @@ public class P01_LogInViewController extends Controller implements Initializable
 
     @FXML
     private void onActionBtnRecuperarContra(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         FlowController.getInstance().delete("P04_RecuperarClaveView");
         FlowController.getInstance().goViewInWindowModal("P04_RecuperarClaveView", stage, false);
     }
 
     @FXML
     private void onActionBtnAcercaDe(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         if (getStage().getOwner() == null) {
             FlowController.getInstance().goMain();
         }
@@ -132,6 +136,7 @@ public class P01_LogInViewController extends Controller implements Initializable
 
     @FXML
     private void onActionMitSpanish(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         ResourceBundle idioma = ResourceBundle.getBundle("/cr/ac/una/clinicauna/resources/i18n/traduccion_es");
         FlowController.setIdioma(idioma);
 
@@ -143,6 +148,7 @@ public class P01_LogInViewController extends Controller implements Initializable
 
     @FXML
     private void onActionMitEnglish(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         ResourceBundle idioma = ResourceBundle.getBundle("/cr/ac/una/clinicauna/resources/i18n/traduccion_en");
         FlowController.setIdioma(idioma);
 

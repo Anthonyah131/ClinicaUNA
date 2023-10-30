@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXTimePicker;
 import java.util.List;
 import javafx.scene.Node;
 
@@ -38,7 +39,14 @@ public class ValidarRequeridos {
                     invalidos += ", " + ((JFXDatePicker) node).getAccessibleText();
                 }
                 validos = false;
-            } else if (node instanceof JFXComboBox && ((JFXComboBox) node).getSelectionModel().getSelectedIndex() < 0) {
+            } else if (node instanceof JFXTimePicker && ((JFXTimePicker) node).getValue() == null) {
+                if (validos) {
+                    invalidos += ((JFXTimePicker) node).getAccessibleText();
+                } else {
+                    invalidos += ", " + ((JFXTimePicker) node).getAccessibleText();
+                }
+                validos = false;
+            }else if (node instanceof JFXComboBox && ((JFXComboBox) node).getSelectionModel().getSelectedIndex() < 0) {
                 if (validos) {
                     invalidos += ((JFXComboBox) node).getPromptText();
                 } else {

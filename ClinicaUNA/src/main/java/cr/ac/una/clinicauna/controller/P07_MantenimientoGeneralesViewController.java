@@ -1,8 +1,5 @@
 package cr.ac.una.clinicauna.controller;
 
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXDatePicker;
-import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import cr.ac.una.clinicauna.model.CliParametrosDto;
@@ -11,6 +8,7 @@ import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Formato;
 import cr.ac.una.clinicauna.util.Mensaje;
 import cr.ac.una.clinicauna.util.Respuesta;
+import cr.ac.una.clinicauna.util.SoundUtil;
 import cr.ac.una.clinicauna.util.ValidarRequeridos;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.utils.SwingFXUtils;
@@ -92,11 +90,13 @@ public class P07_MantenimientoGeneralesViewController extends Controller impleme
 
     @FXML
     private void onActionBtnSalir(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         FlowController.getInstance().goView("P06_MenuPrincipalView");
     }
 
     @FXML
     private void onActionBtnAgregarPlantilla(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         //Inicializa el FileChooser y le da un titulo a la nueva ventana
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleccionar archivo");
@@ -122,6 +122,7 @@ public class P07_MantenimientoGeneralesViewController extends Controller impleme
 
     @FXML
     private void onActionBtnGuardar(ActionEvent event) { // Poner idiomas
+        SoundUtil.mouseEnterSound();
         resourceBundle = FlowController.getInstance().getIdioma();
         try {
             String invalidos = ValidarRequeridos.validarRequeridos(requeridos);
@@ -189,6 +190,7 @@ public class P07_MantenimientoGeneralesViewController extends Controller impleme
 
     private void onActionsBotones() {
         imvFotoEmpresa.setOnMouseClicked(event -> {
+            SoundUtil.mouseEnterSound();
 
             //Inicializa el FileChooser y le da un titulo a la nueva ventana
             FileChooser fileChooser = new FileChooser();

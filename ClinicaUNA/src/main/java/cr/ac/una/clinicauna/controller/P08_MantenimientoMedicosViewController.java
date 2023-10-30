@@ -16,10 +16,12 @@ import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Formato;
 import cr.ac.una.clinicauna.util.Mensaje;
 import cr.ac.una.clinicauna.util.Respuesta;
+import cr.ac.una.clinicauna.util.SoundUtil;
 import cr.ac.una.clinicauna.util.ValidarRequeridos;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -74,7 +76,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
     @FXML
     private JFXTimePicker tpkHoraInicio;
     @FXML
-    private JFXTimePicker tpkHoraLlegada;
+    private JFXTimePicker tpkHoraSalida;
     @FXML
     private JFXComboBox<Integer> cboxCantidadCitas;
     @FXML
@@ -97,9 +99,11 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
 
     /**
      * Initializes the controller class.
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        resourceBundle = FlowController.getInstance().getIdioma();
         txfBuscarCodigo.setTextFormatter(Formato.getInstance().letrasFormat(15));
         txfBuscarFolio.setTextFormatter(Formato.getInstance().letrasFormat(10));
         txfBuscarNombre.setTextFormatter(Formato.getInstance().letrasFormat(25));
@@ -109,6 +113,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         txfFolioMedico.setTextFormatter(Formato.getInstance().letrasFormat(10));
         txfLicencia.setTextFormatter(Formato.getInstance().letrasFormat(15));
         medicoDto = new CliMedicoDto();
+        indicarRequeridos();
         fillCbox();
         fillTableView();
         nuevoMedico();
@@ -121,27 +126,28 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
 
     @FXML
     private void onActionBtnFiltrar(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         cargarMedicos();
     }
 
     @FXML
     private void onActionBtnLimpiarBusquedaMedico(ActionEvent event) {
-        txfBuscarCodigo.clear();
-        txfBuscarFolio.clear();
-        txfBuscarNombre.clear();
-        txfBuscarPapellido.clear();
-        chkBuscarActivas.setSelected(false);
-        tbvResultados.getItems().clear();
-        medicos.clear();
+        SoundUtil.mouseEnterSound();
+        cleanNodesSearch();
     }
 
     @FXML
     private void onActionBtnLimpiarCampos(ActionEvent event) {
-        nuevoMedico();
+        SoundUtil.mouseEnterSound();
+        if (new Mensaje().showConfirmationi18n("key.clear", getStage(), "key.cleanRegistry")) {
+            nuevoMedico();
+            cleanNodes();
+        }
     }
 
     @FXML
     private void onActionBtnGuardar(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         try {
             String invalidos = ValidarRequeridos.validarRequeridos(requeridos);
             if (!invalidos.isEmpty()) {
@@ -161,8 +167,8 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
                     if (tpkHoraInicio.getValue() != null) {
                         medicoDto.setMedFiniTime(tpkHoraInicio.getValue());
                     }
-                    if (tpkHoraLlegada.getValue() != null) {
-                        medicoDto.setMedFfinTime(tpkHoraLlegada.getValue());
+                    if (tpkHoraSalida.getValue() != null) {
+                        medicoDto.setMedFfinTime(tpkHoraSalida.getValue());
                     }
 
                     Respuesta respuesta = medicoService.guardarMedico(medicoDto);
@@ -186,6 +192,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
 
     @FXML
     private void onActionBtnSalir(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         FlowController.getInstance().goView("P06_MenuPrincipalView");
     }
 
@@ -220,7 +227,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
             tpkHoraInicio.setValue(medicoDto.getMedFiniTime());
         }
         if (medicoDto.getMedFini() != null) {
-            tpkHoraLlegada.setValue(medicoDto.getMedFfinTime());
+            tpkHoraSalida.setValue(medicoDto.getMedFfinTime());
         }
 
 //        tpkHoraInicio.valueProperty().bindBidirectional(medicoDto.medFini.get().toLocalTime());
@@ -248,7 +255,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         txfFolioMedico.textProperty().unbindBidirectional(medicoDto.medFolio);
         txfLicencia.textProperty().unbindBidirectional(medicoDto.medCarne);
         tpkHoraInicio.setValue(null);
-        tpkHoraLlegada.setValue(null);
+        tpkHoraSalida.setValue(null);
 //        tpkHoraInicio.valueProperty().unbindBidirectional(medicoDto.medFini);
 //        tpkHoraLlegada.valueProperty().unbindBidirectional(medicoDto.medFfin);
 //        tpkHoraInicio.valueProperty().unbindBidirectional((Property<LocalTime>) Bindings.createObjectBinding(
@@ -270,58 +277,38 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
             tbvResultados.setItems(medicos);
             tbvResultados.refresh();
         } else {
-            //new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Medicos", getStage(), respuesta.getMensaje());
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Medicos", getStage(), respuesta.getMensaje());
         }
     }
 
-    public String validarRequeridos() {
-        Boolean validos = true;
-        String invalidos = "";
-        for (Node node : requeridos) {
-            if (node instanceof JFXTextField && (((JFXTextField) node).getText() == null || ((JFXTextField) node).getText().isBlank())) {
-                if (validos) {
-                    invalidos += ((JFXTextField) node).getPromptText();
-                } else {
-                    invalidos += ", " + ((JFXTextField) node).getPromptText();
-                }
-                validos = false;
-            } else if (node instanceof JFXPasswordField && (((JFXPasswordField) node).getText() == null || ((JFXPasswordField) node).getText().isBlank())) {
-                if (validos) {
-                    invalidos += ((JFXPasswordField) node).getPromptText();
-                } else {
-                    invalidos += ", " + ((JFXPasswordField) node).getPromptText();
-                }
-                validos = false;
-            } else if (node instanceof JFXDatePicker && ((JFXDatePicker) node).getValue() == null) {
-                if (validos) {
-                    invalidos += ((JFXDatePicker) node).getAccessibleText();
-                } else {
-                    invalidos += ", " + ((JFXDatePicker) node).getAccessibleText();
-                }
-                validos = false;
-            } else if (node instanceof JFXComboBox && ((JFXComboBox) node).getSelectionModel().getSelectedIndex() < 0) {
-                if (validos) {
-                    invalidos += ((JFXComboBox) node).getPromptText();
-                } else {
-                    invalidos += ", " + ((JFXComboBox) node).getPromptText();
-                }
-                validos = false;
-            }
-        }
-        if (validos) {
-            return "";
-        } else {
-            String message = resourceBundle.getString("key.invalidFields") + invalidos + "].";
-            return message;
-        }
+    public void cleanNodes() {
+        txfCodigoMedico.clear();
+        txfFolioMedico.clear();
+        txfLicencia.clear();
+        tpkHoraInicio.setValue(null);
+        tpkHoraSalida.setValue(null);
+        fillCbox();
+        chkActivo.setSelected(false);
+    }
+
+    public void cleanNodesSearch() {
+        tbvResultados.getItems().clear();
+        txfBuscarCodigo.clear();
+        txfBuscarFolio.clear();
+        txfBuscarNombre.clear();
+        txfBuscarPapellido.clear();
+        chkBuscarActivas.setSelected(false);
+        chkBuscarTodos.setSelected(false);
+        medicos.clear();
+    }
+
+    private void indicarRequeridos() {
+        requeridos.clear();
+        requeridos.addAll(Arrays.asList(txfCodigoMedico, txfFolioMedico, txfLicencia, cboxCantidadCitas, tpkHoraInicio, tpkHoraSalida));
     }
 
     public void fillCbox() {
         cboxCantidadCitas.getItems().clear();
-//
-//        String admin = resourceBundle.getString("key.admin");
-//        String doctor = resourceBundle.getString("key.doctor");
-//        String receptionist = resourceBundle.getString("key.receptionist");
 
         ObservableList<Integer> citasHora = FXCollections.observableArrayList();
         citasHora.addAll(1, 2, 3, 4);
@@ -329,7 +316,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
     }
 
     public void fillTableView() {
-        ResourceBundle resourceBundle = FlowController.getInstance().getIdioma();
+        resourceBundle = FlowController.getInstance().getIdioma();
 
         tbvResultados.getItems().clear();
 

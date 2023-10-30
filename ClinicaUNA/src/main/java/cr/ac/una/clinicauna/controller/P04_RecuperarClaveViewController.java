@@ -3,6 +3,7 @@ package cr.ac.una.clinicauna.controller;
 import cr.ac.una.clinicauna.service.CliUsuarioService;
 import cr.ac.una.clinicauna.util.Mensaje;
 import cr.ac.una.clinicauna.util.Respuesta;
+import cr.ac.una.clinicauna.util.SoundUtil;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import java.net.URL;
@@ -40,6 +41,7 @@ public class P04_RecuperarClaveViewController extends Controller implements Init
 
     @FXML
     private void onActionBtnAceptar(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         try {
             if (txfCorreo.getText() == null || txfCorreo.getText().isEmpty()) {
                 new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.passRecovery", getStage(), "key.needEnterMail");
