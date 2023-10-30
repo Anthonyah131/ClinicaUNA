@@ -100,4 +100,7 @@ public class CliCitaController {
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error eliminando el cita").build();//TODO
         }
     }
+    
+    
+    //TODO MANDAR CORREO DE AGENDACION DE CITA
 }

@@ -45,7 +45,7 @@ public class SecurityFilter implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext request) throws IOException {
         Method method = resourceInfo.getResourceMethod();
-        if (method.getName().equals(AUTHORIZATION_ACTIVATION_PATH)) {
+        if (method.getName().equals(AUTHORIZATION_SERVICE_PATH)) {
             return;
         }
         if (method.getName().equals(AUTHORIZATION_ACTIVATION_PATH)) {
