@@ -82,12 +82,15 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
     private MFXButton btnFiltrar;
     @FXML
     private TableView<CliPacienteDto> tbvResultados;
+    @FXML
+    private MFXButton btnAgregarCita;
 
     CliPacienteDto pacienteDto;
     private ObservableList<CliPacienteDto> pacientes = FXCollections.observableArrayList();
     List<Node> requeridos = new ArrayList<>();
 
     ResourceBundle resourceBundle;
+    
 
     /**
      * Initializes the controller class.

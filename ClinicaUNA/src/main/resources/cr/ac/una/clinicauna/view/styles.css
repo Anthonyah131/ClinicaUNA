@@ -87,6 +87,25 @@
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
 }
 
+.mfx-button-menu-minus{
+    -fx-cursor: hand;
+    /*-fx-pref-width: USE_COMPUTED_SIZE;*/
+    -fx-pref-height: 50px;   /* Alto mínimo */
+    -fx-background-color: #333333; /* Establece el fondo del botón como transparente */
+    -fx-font: 15px "Arial Rounded MT Bold"; /* Establece la fuente y el tamano */
+    -fx-text-fill: #FFFFFF; /* Color del texto */
+    -fx-background-radius: 0px;
+}
+.mfx-button-menu-minus:hover{
+    -fx-background-color: #FFFFFF; /* Establece el fondo del botón como transparente */
+    -fx-text-fill: #000000;
+    /*-fx-scale-x: 1.2; /* Escala horizontalmente el botón a 120% en hover */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 1), 10, 0.5, 0.0, 0.0);
+}
+.mfx-button-menu-minus:pressed{
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+
 /*-----------------------------------------------------------------------------------------------------------------*/
 .mfx-button-Image, .mfx-button-Image-salir{
     -fx-cursor: hand;
