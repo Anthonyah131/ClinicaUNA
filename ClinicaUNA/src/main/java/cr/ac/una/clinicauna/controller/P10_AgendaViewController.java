@@ -107,7 +107,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         Label lblTelefono = new Label("Telefono: ");
         Label lblTelefonoUsu = new Label();
         HBox hBox5 = new HBox(lblTelefono, lblTelefonoUsu);
-        Label lblCorreo = new Label("Telefono: ");
+        Label lblCorreo = new Label("Correo: ");
         Label lblCorreoUsu = new Label();
         HBox hBox6 = new HBox(lblCorreo, lblCorreoUsu);
         MFXButton btnGuardar = new MFXButton("Guardar");
