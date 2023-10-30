@@ -34,6 +34,7 @@ import java.security.Principal;
 public class SecurityFilter implements ContainerRequestFilter {
 
     private static final String AUTHORIZATION_SERVICE_PATH = "getUsuario";//TODO
+    private static final String AUTHORIZATION_ACTIVATION_PATH = "activacionUsuario";
     private static final String RENEWAL_SERVICE_PATH = "renovarToken";
     private final JwTokenHelper jwTokenHelper = JwTokenHelper.getInstance();
     private static final String AUTHENTICATION_SCHEME = "Bearer ";
@@ -44,7 +45,10 @@ public class SecurityFilter implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext request) throws IOException {
         Method method = resourceInfo.getResourceMethod();
-        if (method.getName().equals(AUTHORIZATION_SERVICE_PATH)) {
+        if (method.getName().equals(AUTHORIZATION_ACTIVATION_PATH)) {
+            return;
+        }
+        if (method.getName().equals(AUTHORIZATION_ACTIVATION_PATH)) {
             return;
         }
 
