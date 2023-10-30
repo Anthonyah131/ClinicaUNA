@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" fx:id="root" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="fondo-registro-completa" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.clinicauna.controller.P08_MantenimientoMedicosViewController">
+<AnchorPane id="AnchorPane" fx:id="root" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="fondo-registro-completa" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.clinicauna.controller.P08_MantenimientoMedicosViewController">
     <stylesheets>
         <URL value="@styles.css" />
     </stylesheets>
@@ -50,7 +50,12 @@
                      <children>
                         <JFXTextField fx:id="txfBuscarNombre" promptText="%key.searchName" styleClass="jfx-text-field-edit" HBox.hgrow="ALWAYS" />
                         <JFXTextField fx:id="txfBuscarPapellido" promptText="%key.searchFName" styleClass="jfx-text-field-edit" HBox.hgrow="ALWAYS" />
-                        <JFXCheckBox fx:id="chkBuscarActivas" styleClass="jfx-check-box" text="%key.selectActive" />
+                        <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <JFXCheckBox fx:id="chkBuscarActivas" styleClass="jfx-check-box" text="%key.selectActive" />
+                              <JFXCheckBox fx:id="chkBuscarTodos" onAction="#onActionBuscarTodos" styleClass="jfx-check-box" text="%key.selectActive" />
+                           </children>
+                        </VBox>
                         <MFXButton fx:id="btnLimpiarBusquedaMedico" onAction="#onActionBtnLimpiarBusquedaMedico" styleClass="mfx-button-Image">
                            <graphic>
                               <ImageView fitHeight="50.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">

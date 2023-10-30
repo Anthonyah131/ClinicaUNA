@@ -58,6 +58,8 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
     @FXML
     private JFXCheckBox chkBuscarActivas;
     @FXML
+    private JFXCheckBox chkBuscarTodos;
+    @FXML
     private MFXButton btnLimpiarBusquedaMedico;
     @FXML
     private JFXTextField txfCodigoMedico;
@@ -115,7 +117,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
 
     @FXML
     private void onActionBtnFiltrar(ActionEvent event) {
-        
+        cargarMedicos();
     }
 
     @FXML
@@ -176,6 +178,15 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
     private void onActionBtnSalir(ActionEvent event) {
         FlowController.getInstance().goView("P06_MenuPrincipalView");
     }
+    
+    @FXML
+    private void onActionBuscarTodos(ActionEvent event) {
+        if(chkBuscarTodos.isSelected()) {
+            chkBuscarActivas.setDisable(true);
+        } else {
+            chkBuscarActivas.setDisable(false);
+        }
+    }
 
     private void nuevoMedico() {
         unbindMedico();
@@ -219,7 +230,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
 
     public void cargarMedicos() {
         CliMedicoService service = new CliMedicoService();
-        Respuesta respuesta = service.getMedicos(txfBuscarCodigo.getText(), txfBuscarFolio.getText(), txfBuscarNombre.getText(), txfBuscarPapellido.getText());
+        Respuesta respuesta = service.getMedicos(txfBuscarCodigo.getText(), txfBuscarFolio.getText(), txfBuscarNombre.getText(), txfBuscarPapellido.getText(), chkBuscarActivas.isSelected(), chkBuscarTodos.isSelected());
 
         if (respuesta.getEstado()) {
             tbvResultados.getItems().clear();

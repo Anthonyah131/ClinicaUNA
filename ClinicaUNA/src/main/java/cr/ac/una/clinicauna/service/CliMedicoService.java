@@ -39,7 +39,7 @@ public class CliMedicoService {
         }
     }
 
-    public Respuesta getMedicos(String codigo, String folio, String nombre, String pApellido) {
+    public Respuesta getMedicos(String codigo, String folio, String nombre, String pApellido, boolean activo, boolean todos) {
         try {
             Request request = new Request("CliMedicoController/medicos");
             request.get();
@@ -70,6 +70,12 @@ public class CliMedicoService {
                 String apellidoBuscada = pApellido.toLowerCase();
                 medicos = medicos.stream()
                         .filter(p -> p.getCliUsuarioDto().getUsuPapellido().toLowerCase().contains(apellidoBuscada))
+                        .collect(Collectors.toCollection(FXCollections::observableArrayList));
+            }
+            if (!todos) {
+                String estado = activo ? "A" : "I";
+                medicos = medicos.stream()
+                        .filter(p -> p.getMedEstado().equals(estado))
                         .collect(Collectors.toCollection(FXCollections::observableArrayList));
             }
             return new Respuesta(true, "", "", "Medicos", medicos);
