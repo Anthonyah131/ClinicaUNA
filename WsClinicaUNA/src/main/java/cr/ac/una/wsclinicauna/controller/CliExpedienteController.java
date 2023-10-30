@@ -8,6 +8,7 @@ import cr.ac.una.wsclinicauna.model.CliExpedienteDto;
 import cr.ac.una.wsclinicauna.service.CliExpedienteService;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
+import cr.ac.una.wsclinicauna.util.Secure;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.Consumes;
@@ -32,6 +33,7 @@ import java.util.logging.Logger;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Tag(name = "Expediente", description = "Operaciones sobre expediente")
+@Secure
 public class CliExpedienteController {
 
     @EJB

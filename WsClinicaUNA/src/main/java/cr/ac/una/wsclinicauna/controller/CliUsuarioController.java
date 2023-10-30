@@ -7,6 +7,7 @@ import cr.ac.una.wsclinicauna.service.CliUsuarioService;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.JwTokenHelper;
 import cr.ac.una.wsclinicauna.util.Respuesta;
+import cr.ac.una.wsclinicauna.util.Secure;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.Consumes;
@@ -33,6 +34,7 @@ import java.util.logging.Logger;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Tag(name = "Usuarios", description = "Operaciones sobre usuarios")
+@Secure
 public class CliUsuarioController {
 
     @EJB
