@@ -25,7 +25,11 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -108,7 +112,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         fillCbox();
         fillTableView();
         nuevoMedico();
-        cargarMedicos();
+//        cargarMedicos();
     }
 
     @Override
@@ -154,6 +158,12 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
                     } else {
                         medicoDto.setMedEstado("I");
                     }
+                    if (tpkHoraInicio.getValue() != null) {
+                        medicoDto.setMedFiniTime(tpkHoraInicio.getValue());
+                    }
+                    if (tpkHoraLlegada.getValue() != null) {
+                        medicoDto.setMedFfinTime(tpkHoraLlegada.getValue());
+                    }
 
                     Respuesta respuesta = medicoService.guardarMedico(medicoDto);
                     if (!respuesta.getEstado()) {
@@ -178,10 +188,10 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
     private void onActionBtnSalir(ActionEvent event) {
         FlowController.getInstance().goView("P06_MenuPrincipalView");
     }
-    
+
     @FXML
     private void onActionBuscarTodos(ActionEvent event) {
-        if(chkBuscarTodos.isSelected()) {
+        if (chkBuscarTodos.isSelected()) {
             chkBuscarActivas.setDisable(true);
         } else {
             chkBuscarActivas.setDisable(false);
@@ -206,8 +216,21 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         txfCodigoMedico.textProperty().bindBidirectional(medicoDto.medCodigo);
         txfFolioMedico.textProperty().bindBidirectional(medicoDto.medFolio);
         txfLicencia.textProperty().bindBidirectional(medicoDto.medCarne);
-//        tpkHoraInicio.valueProperty().bindBidirectional(medicoDto.medFini);
+        if (medicoDto.getMedFini() != null) {
+            tpkHoraInicio.setValue(medicoDto.getMedFiniTime());
+        }
+        if (medicoDto.getMedFini() != null) {
+            tpkHoraLlegada.setValue(medicoDto.getMedFfinTime());
+        }
+
+//        tpkHoraInicio.valueProperty().bindBidirectional(medicoDto.medFini.get().toLocalTime());
 //        tpkHoraLlegada.valueProperty().bindBidirectional(medicoDto.medFfin);
+//        tpkHoraInicio.valueProperty().bindBidirectional((Property<LocalTime>) Bindings.createObjectBinding(
+//                () -> LocalTime.of(0, 0),
+//                medicoDto.medFini));
+//        tpkHoraLlegada.valueProperty().bindBidirectional((Property<LocalTime>) Bindings.createObjectBinding(
+//                () -> LocalTime.of(0, 0),
+//                medicoDto.medFfin));
         if ("A".equals(medicoDto.getMedEstado())) {
             chkActivo.setSelected(true);
         } else {
@@ -224,8 +247,16 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         txfCodigoMedico.textProperty().unbindBidirectional(medicoDto.medCodigo);
         txfFolioMedico.textProperty().unbindBidirectional(medicoDto.medFolio);
         txfLicencia.textProperty().unbindBidirectional(medicoDto.medCarne);
+        tpkHoraInicio.setValue(null);
+        tpkHoraLlegada.setValue(null);
 //        tpkHoraInicio.valueProperty().unbindBidirectional(medicoDto.medFini);
 //        tpkHoraLlegada.valueProperty().unbindBidirectional(medicoDto.medFfin);
+//        tpkHoraInicio.valueProperty().unbindBidirectional((Property<LocalTime>) Bindings.createObjectBinding(
+//                () -> LocalTime.of(0, 0),
+//                medicoDto.medFini));
+//        tpkHoraLlegada.valueProperty().unbindBidirectional((Property<LocalTime>) Bindings.createObjectBinding(
+//                () -> LocalTime.of(0, 0),
+//                medicoDto.medFfin));
     }
 
     public void cargarMedicos() {

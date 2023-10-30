@@ -24,6 +24,7 @@ import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -65,9 +66,9 @@ public class CliMedico implements Serializable {
     @Column(name = "MED_ESTADO")
     private String medEstado;
     @Column(name = "MED_FINI")
-    private LocalDate medFini;
+    private LocalDateTime medFini;
     @Column(name = "MED_FFIN")
-    private LocalDate medFfin;
+    private LocalDateTime medFfin;
     @Column(name = "MED_ESPACIOSXHORA")
     private Long medEspaciosxhora;
     @Version
@@ -145,19 +146,19 @@ public class CliMedico implements Serializable {
         this.medEstado = medEstado;
     }
 
-    public LocalDate getMedFini() {
+    public LocalDateTime getMedFini() {
         return medFini;
     }
 
-    public void setMedFini(LocalDate medFini) {
+    public void setMedFini(LocalDateTime medFini) {
         this.medFini = medFini;
     }
 
-    public LocalDate getMedFfin() {
+    public LocalDateTime getMedFfin() {
         return medFfin;
     }
 
-    public void setMedFfin(LocalDate medFfin) {
+    public void setMedFfin(LocalDateTime medFfin) {
         this.medFfin = medFfin;
     }
 

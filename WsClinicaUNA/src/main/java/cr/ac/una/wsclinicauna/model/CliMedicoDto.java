@@ -20,8 +20,8 @@ public class CliMedicoDto {
     private String medFolio;
     private String medCarne;
     private String medEstado;
-    private LocalDate medFini;
-    private LocalDate medFfin;
+    private LocalDateTime medFini;
+    private LocalDateTime medFfin;
     private Long medEspaciosxhora;
     private Long medVersion;
     private List<CliAgendaDto> cliAgendaList;
@@ -97,19 +97,19 @@ public class CliMedicoDto {
         this.medEstado = medEstado;
     }
 
-    public LocalDate getMedFini() {
+    public LocalDateTime getMedFini() {
         return medFini;
     }
 
-    public void setMedFini(LocalDate medFini) {
+    public void setMedFini(LocalDateTime medFini) {
         this.medFini = medFini;
     }
 
-    public LocalDate getMedFfin() {
+    public LocalDateTime getMedFfin() {
         return medFfin;
     }
 
-    public void setMedFfin(LocalDate medFfin) {
+    public void setMedFfin(LocalDateTime medFfin) {
         this.medFfin = medFfin;
     }
 

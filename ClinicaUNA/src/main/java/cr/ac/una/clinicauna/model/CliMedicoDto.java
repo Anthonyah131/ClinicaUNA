@@ -1,6 +1,8 @@
 package cr.ac.una.clinicauna.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.ObjectProperty;
@@ -21,8 +23,8 @@ public class CliMedicoDto {
     public SimpleStringProperty medFolio;
     public SimpleStringProperty medCarne;
     public SimpleBooleanProperty medEstado;
-    public ObjectProperty<LocalDate> medFini;
-    public ObjectProperty<LocalDate> medFfin;
+    public ObjectProperty<LocalDateTime> medFini;
+    public ObjectProperty<LocalDateTime> medFfin;
     public SimpleStringProperty medEspaciosxhora;
     public CliUsuarioDto cliUsuarioDto;
     public ObservableList<CliReporteagendaDto> cliReporteagendaList;
@@ -92,20 +94,40 @@ public class CliMedicoDto {
         this.medEstado.set(medEstado.equals("A"));
     }
 
-    public LocalDate getMedFini() {
+    public LocalDateTime getMedFini() {
         return medFini.get();
     }
 
-    public void setMedFini(LocalDate medFini) {
+    public void setMedFini(LocalDateTime medFini) {
         this.medFini.set(medFini);
     }
 
-    public LocalDate getMedFfin() {
+    public LocalTime getMedFiniTime() {
+        return medFini.get().toLocalTime();
+    }
+
+    public void setMedFiniTime(LocalTime time) {
+        LocalDateTime currentDateTime = medFini.get();
+        LocalDateTime newDateTime = LocalDateTime.of(currentDateTime.toLocalDate(), time);
+        medFini.set(newDateTime);
+    }
+
+    public LocalDateTime getMedFfin() {
         return medFfin.get();
     }
 
-    public void setMedFfin(LocalDate medFfin) {
+    public void setMedFfin(LocalDateTime medFfin) {
         this.medFfin.set(medFfin);
+    }
+    
+    public LocalTime getMedFfinTime() {
+        return medFfin.get().toLocalTime();
+    }
+
+    public void setMedFfinTime(LocalTime time) {
+        LocalDateTime currentDateTime = medFfin.get();
+        LocalDateTime newDateTime = LocalDateTime.of(currentDateTime.toLocalDate(), time);
+        medFfin.set(newDateTime);
     }
 
     public Long getMedEspaciosxhora() {
