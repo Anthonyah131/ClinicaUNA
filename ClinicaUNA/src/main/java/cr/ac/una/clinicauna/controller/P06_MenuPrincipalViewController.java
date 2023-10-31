@@ -70,7 +70,9 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
     @FXML
     private void onActionBtnMantenimientoMedicos(ActionEvent event) {
         SoundUtil.mouseEnterSound();
-        if (usuarioDto.getUsuTipousuario().equals("R")) {
+        if (!usuarioDto.getUsuTipousuario().equals("R")) {
+            AppContext.getInstance().set("PadreMedicos", "P06_MenuPrincipalView");
+            FlowController.getInstance().delete("P08_MantenimientoMedicosView");
             FlowController.getInstance().goView("P08_MantenimientoMedicosView");
         } else {
             new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "No tiene permisos para ingresar a esta pantalla");
@@ -80,12 +82,17 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
     @FXML
     private void onActionBtnRegistroPacientes(ActionEvent event) {
         SoundUtil.mouseEnterSound();
+        AppContext.getInstance().set("PadrePacientes", "P06_MenuPrincipalView");
+        FlowController.getInstance().delete("P09_MantenimientoPacientesView");
         FlowController.getInstance().goView("P09_MantenimientoPacientesView");
     }
 
     @FXML
     private void onActionBtnCerrarSesion(ActionEvent event) {
         SoundUtil.mouseEnterSound();
+        //limpiar el hashmap del AppContext
+        AppContext.getInstance().clearHashMap();
+        //limpiar el hashmap del FlowController
         FlowController.getInstance().clearHashMap();
         FlowController.getInstance().goViewInWindow("P01_LogInView", false);
         FlowController.getInstance().salir();

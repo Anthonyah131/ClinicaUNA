@@ -8,6 +8,7 @@ import com.jfoenix.controls.JFXTextField;
 import cr.ac.una.clinicauna.model.CliPacienteDto;
 import cr.ac.una.clinicauna.service.CliPacienteService;
 import cr.ac.una.clinicauna.service.CliUsuarioService;
+import cr.ac.una.clinicauna.util.AppContext;
 import cr.ac.una.clinicauna.util.BindingUtils;
 import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Formato;
@@ -110,6 +111,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
         txfBuscarNombre.setTextFormatter(Formato.getInstance().letrasFormat(25));
         txfBuscarPapellido.setTextFormatter(Formato.getInstance().letrasFormat(25));
         pacienteDto = new CliPacienteDto();
+        iniciarEscena();
         fillTableView();
         nuevoPaciente();
         indicarRequeridos();
@@ -256,6 +258,21 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
         txfBuscarCedula.clear();
         txfBuscarNombre.clear();
         txfBuscarPapellido.clear();
+    }
+    
+    private void iniciarEscena() {
+        String padre = (String) AppContext.getInstance().get("PadrePacientes");
+
+        if (padre.equals("P06_MenuPrincipalView")) {
+            btnAgregarCita.setVisible(false);
+        } else if (padre.equals("P10_AgendaView")) {
+            btnAgregarCita.setVisible(true);
+            btnSalir.setVisible(false);
+        }
+    }
+
+    @FXML
+    private void onActionBtnAgregarCita(ActionEvent event) {
     }
 
     private class ButtonCell extends TableCell<CliPacienteDto, Boolean> {

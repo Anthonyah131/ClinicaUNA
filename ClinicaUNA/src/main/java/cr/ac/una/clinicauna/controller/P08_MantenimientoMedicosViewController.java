@@ -12,6 +12,7 @@ import cr.ac.una.clinicauna.model.CliMedicoDto;
 import cr.ac.una.clinicauna.model.CliMedicoDto;
 import cr.ac.una.clinicauna.service.CliMedicoService;
 import cr.ac.una.clinicauna.service.CliMedicoService;
+import cr.ac.una.clinicauna.util.AppContext;
 import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Formato;
 import cr.ac.una.clinicauna.util.Mensaje;
@@ -96,9 +97,12 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
     private ObservableList<CliMedicoDto> medicos = FXCollections.observableArrayList();
     List<Node> requeridos = new ArrayList<>();
     ResourceBundle resourceBundle;
+    @FXML
+    private MFXButton btnAddToAgenda;
 
     /**
      * Initializes the controller class.
+     *
      * @param rb
      */
     @Override
@@ -113,6 +117,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         txfFolioMedico.setTextFormatter(Formato.getInstance().letrasFormat(10));
         txfLicencia.setTextFormatter(Formato.getInstance().letrasFormat(15));
         medicoDto = new CliMedicoDto();
+        iniciarEscena();
         indicarRequeridos();
         fillCbox();
         fillTableView();
@@ -357,5 +362,32 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
                 nuevoMedico();
             }
         });
+    }
+
+    @FXML
+    private void onActionBtnAddToAgenda(ActionEvent event) {
+    }
+
+    private void iniciarEscena() {
+        String padre = (String) AppContext.getInstance().get("PadreMedicos");
+
+        if (padre.equals("P06_MenuPrincipalView")) {
+            btnAddToAgenda.setVisible(false);
+        } else if (padre.equals("P10_AgendaView")) {
+            btnAddToAgenda.setVisible(true);
+            btnSalir.setVisible(false);
+
+            txfCodigoMedico.setEditable(false);
+            txfFolioMedico.setEditable(false);
+            txfLicencia.setEditable(false);
+            tpkHoraInicio.setEditable(false);
+            tpkHoraSalida.setEditable(false);
+            cboxCantidadCitas.setDisable(true);
+            chkActivo.setDisable(true);
+
+            btnLimpiarCampos.setVisible(false);
+            btnGuardar.setVisible(false);
+
+        }
     }
 }

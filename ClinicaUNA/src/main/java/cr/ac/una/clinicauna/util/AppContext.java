@@ -67,5 +67,9 @@ public class AppContext {
     public void delete(String parameter) {
         context.put(parameter, null);
     }
+    
+    public void clearHashMap() {
+       context.clear();
+    }
 
 }

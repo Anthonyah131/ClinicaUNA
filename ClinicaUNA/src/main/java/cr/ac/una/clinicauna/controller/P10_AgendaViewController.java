@@ -2,6 +2,9 @@ package cr.ac.una.clinicauna.controller;
 
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
+import cr.ac.una.clinicauna.util.AppContext;
+import cr.ac.una.clinicauna.util.FlowController;
+import cr.ac.una.clinicauna.util.SoundUtil;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -50,7 +53,13 @@ public class P10_AgendaViewController extends Controller implements Initializabl
 
     @FXML
     private void onActionBtnBuscarMedico(ActionEvent event) {
-
+//        AppContext.getInstance().set("PadreMedicos", "P10_AgendaView");
+//        FlowController.getInstance().delete("P08_MantenimientoMedicosView");
+//        FlowController.getInstance().goViewInWindowModal("P08_MantenimientoMedicosView", stage, false);
+//        
+        AppContext.getInstance().set("PadrePacientes", "P10_AgendaView");
+        FlowController.getInstance().delete("P09_MantenimientoPacientesView");
+        FlowController.getInstance().goViewInWindowModal("P09_MantenimientoPacientesView", stage, false);
     }
 
     private void llenarGridPane() {
@@ -96,70 +105,70 @@ public class P10_AgendaViewController extends Controller implements Initializabl
 
         Label lblEstado = new Label("Estado: ");
         lblEstado.getStyleClass().add("labels-text-minus");
-        
+
         Label lblEstado2 = new Label();
         lblEstado.getStyleClass().add("labels-text-minus");
-        
+
         HBox hBox1 = new HBox(lblEstado, lblEstado2);
         hBox1.setAlignment(Pos.CENTER_LEFT);
         hBox1.setSpacing(5);
-        
+
         Label lblPaciente = new Label("Paciente: ");
         lblPaciente.getStyleClass().add("labels-text-minus");
-        
+
         Label lblNombrePac = new Label();
         lblNombrePac.getStyleClass().add("labels-text-minus");
-        
+
         MFXButton btnAddPac = new MFXButton("Agregar");
         btnAddPac.getStyleClass().add("mfx-button-menu-minus");
-        
+
         HBox hBox2 = new HBox(lblPaciente, lblNombrePac, btnAddPac);
         hBox2.setAlignment(Pos.CENTER_LEFT);
         hBox2.setSpacing(5);
-        
+
         Label lblUsuario = new Label("Usuario que registra: ");
         lblUsuario.getStyleClass().add("labels-text-minus");
-        
+
         Label lblNombreUsu = new Label();
         lblNombreUsu.getStyleClass().add("labels-text-minus");
-        
+
         HBox hBox3 = new HBox(lblUsuario, lblNombreUsu);
         hBox3.setAlignment(Pos.CENTER_LEFT);
         hBox3.setSpacing(5);
-        
+
         Label lblMotivo = new Label("Motivo: ");
         lblMotivo.getStyleClass().add("labels-text-minus");
-        
+
         JFXTextField txfMotivo = new JFXTextField();
         txfMotivo.getStyleClass().add("jfx-text-field-edit");
-        
+
         HBox hBox4 = new HBox(lblMotivo, txfMotivo);
         hBox4.setAlignment(Pos.CENTER_LEFT);
         hBox4.setSpacing(5);
-        
+
         Label lblTelefono = new Label("Telefono: ");
         lblTelefono.getStyleClass().add("labels-text-minus");
-        
+
         Label lblTelefonoUsu = new Label();
         lblTelefonoUsu.getStyleClass().add("labels-text-minus");
-        
+
         HBox hBox5 = new HBox(lblTelefono, lblTelefonoUsu);
         hBox5.setAlignment(Pos.CENTER_LEFT);
         hBox5.setSpacing(5);
-        
+
         Label lblCorreo = new Label("Correo: ");
         lblCorreo.getStyleClass().add("labels-text-minus");
-        
+
         Label lblCorreoUsu = new Label();
         lblCorreoUsu.getStyleClass().add("labels-text-minus");
-        
+
         HBox hBox6 = new HBox(lblCorreo, lblCorreoUsu);
         hBox6.setAlignment(Pos.CENTER_LEFT);
         hBox6.setSpacing(5);
-        
+
         MFXButton btnGuardar = new MFXButton("Guardar");
         btnGuardar.getStyleClass().add("mfx-button-menu-minus");
-        
+
         vBox.setSpacing(5);
         vBox.setPadding(new Insets(5));
         vBox.setPrefWidth(300);
@@ -169,6 +178,8 @@ public class P10_AgendaViewController extends Controller implements Initializabl
 
     @FXML
     private void onActionBtnSalir(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
+        FlowController.getInstance().goView("P06_MenuPrincipalView");
     }
 
 }

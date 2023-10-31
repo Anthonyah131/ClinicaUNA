@@ -83,25 +83,35 @@
                      <children>
                         <JFXTimePicker fx:id="tpkHoraInicio" promptText="%key.startDay" styleClass="jfx-pickers" />
                         <JFXTimePicker fx:id="tpkHoraSalida" layoutX="167.0" layoutY="16.0" promptText="%key.endDay" styleClass="jfx-pickers" />
-                        <JFXComboBox fx:id="cboxCantidadCitas" maxWidth="1.7976931348623157E308" promptText="%key.shifts" styleClass="jfx-combo-box" />
+                        <JFXComboBox fx:id="cboxCantidadCitas" labelFloat="true" maxWidth="1.7976931348623157E308" promptText="%key.shifts" styleClass="jfx-combo-box" />
                         <JFXCheckBox fx:id="chkActivo" styleClass="jfx-check-box" text="%key.active" />
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER" prefWidth="200.0" spacing="10.0">
+                  <HBox alignment="CENTER" prefWidth="200.0" spacing="10.0" VBox.vgrow="NEVER">
                      <children>
-                        <MFXButton fx:id="btnLimpiarCampos" layoutX="290.0" layoutY="10.0" onAction="#onActionBtnLimpiarCampos" styleClass="mfx-button-Image">
-                           <graphic>
-                              <ImageView fitHeight="50.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../resources/media/icons/clearIcon.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <tooltip>
-                              <Tooltip text="Limpiar campos" />
-                           </tooltip>
-                        </MFXButton>
-                        <MFXButton fx:id="btnGuardar" onAction="#onActionBtnGuardar" prefHeight="45.0" prefWidth="250.0" styleClass="mfx-button-Log" text="%key.addon" />
+                        <HBox prefWidth="210.0" HBox.hgrow="ALWAYS" />
+                        <HBox alignment="CENTER" prefWidth="210.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <MFXButton fx:id="btnLimpiarCampos" onAction="#onActionBtnLimpiarCampos" styleClass="mfx-button-Image">
+                                 <graphic>
+                                    <ImageView fitHeight="50.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../resources/media/icons/clearIcon.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Limpiar campos" />
+                                 </tooltip>
+                              </MFXButton>
+                              <MFXButton fx:id="btnGuardar" onAction="#onActionBtnGuardar" prefHeight="45.0" prefWidth="250.0" styleClass="mfx-button-Log" text="%key.addon" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" prefWidth="210.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <MFXButton fx:id="btnAddToAgenda" onAction="#onActionBtnAddToAgenda" prefWidth="220.0" styleClass="mfx-button-menu-minus" text="%key.addToAgenda" />
+                           </children>
+                        </HBox>
                      </children>
                   </HBox>
                </children>
