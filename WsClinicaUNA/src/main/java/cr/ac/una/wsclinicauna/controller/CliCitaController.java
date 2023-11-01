@@ -5,7 +5,9 @@
 package cr.ac.una.wsclinicauna.controller;
 
 import cr.ac.una.wsclinicauna.model.CliCitaDto;
+import cr.ac.una.wsclinicauna.model.CliParametrosDto;
 import cr.ac.una.wsclinicauna.service.CliCitaService;
+import cr.ac.una.wsclinicauna.service.CliParametrosService;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import cr.ac.una.wsclinicauna.util.Secure;
@@ -21,28 +23,29 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.GenericEntity;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author ArauzKJ
- */
 @Path("/CliCitaController")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Tag(name = "Cita", description = "Operaciones sobre cita")
 @Secure
 public class CliCitaController {
+
     @EJB
     CliCitaService cliCitaService;
-    
+    @EJB
+    CliParametrosService cliParametrosService;
+
     @GET
     @Path("/cita/{id}")
     public Response getCita(@PathParam("id") Long id) {
         try {
-           Respuesta res = cliCitaService.getCita(id);
+            Respuesta res = cliCitaService.getCita(id);
             if (!res.getEstado()) {
                 return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
             }
@@ -79,6 +82,13 @@ public class CliCitaController {
             if (!res.getEstado()) {
                 return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
             }
+            
+            Respuesta re2 = cliParametrosService.getParametros();
+            List<CliParametrosDto> cliParametrosDtoList = (List<CliParametrosDto>) re2.getResultado("Parametros");
+            CliParametrosDto cliParametrosDto = cliParametrosDtoList.get(0);
+            
+            cliCitaService.memorandoEmailAgeCita(cliCitaDto.getCliPacienteDto(), cliParametrosDto, cliCitaDto);
+            
             return Response.ok((CliCitaDto) res.getResultado("Citas")).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(CliCitaController.class.getName()).log(Level.SEVERE, null, ex);
@@ -100,7 +110,5 @@ public class CliCitaController {
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error eliminando el cita").build();//TODO
         }
     }
-    
-    
-    //TODO MANDAR CORREO DE AGENDACION DE CITA
+
 }
