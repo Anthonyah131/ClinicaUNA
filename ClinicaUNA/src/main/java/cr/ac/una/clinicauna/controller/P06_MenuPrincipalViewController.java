@@ -53,8 +53,12 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
     @FXML
     private void onActionBtnMantUsuarios(ActionEvent event) {
         SoundUtil.mouseEnterSound();
-        AppContext.getInstance().set("Padre", "P06_MenuPrincipalView");
-        FlowController.getInstance().goView("P03_RegistroView");
+        if (usuarioDto.getUsuTipousuario().equals("A")) {
+            AppContext.getInstance().set("Padre", "P06_MenuPrincipalView");
+            FlowController.getInstance().goView("P03_RegistroView");
+        } else {
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "No tiene permisos para ingresar a esta pantalla");
+        }
     }
 
     @FXML
