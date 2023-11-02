@@ -112,7 +112,12 @@ public class CliMedicoDto {
 
     public void setMedFiniTime(LocalTime time) {
         LocalDateTime currentDateTime = medFini.get();
-        LocalDateTime newDateTime = LocalDateTime.of(currentDateTime.toLocalDate(), time);
+        LocalDateTime newDateTime;
+        if (currentDateTime != null) {
+            newDateTime = LocalDateTime.of(currentDateTime.toLocalDate(), time);
+        } else {
+            newDateTime = LocalDateTime.of(LocalDate.now(), time);
+        }
         medFini.set(newDateTime);
     }
 
@@ -134,7 +139,12 @@ public class CliMedicoDto {
 
     public void setMedFfinTime(LocalTime time) {
         LocalDateTime currentDateTime = medFfin.get();
-        LocalDateTime newDateTime = LocalDateTime.of(currentDateTime.toLocalDate(), time);
+        LocalDateTime newDateTime;
+        if (currentDateTime != null) {
+            newDateTime = LocalDateTime.of(currentDateTime.toLocalDate(), time);
+        } else {
+            newDateTime = LocalDateTime.of(LocalDate.now(), time);
+        }
         medFfin.set(newDateTime);
     }
 
