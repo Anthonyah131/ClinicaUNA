@@ -15,6 +15,8 @@ public class CliCitaDto {
     public SimpleStringProperty citUsuarioRegistra;
     public SimpleStringProperty citMotivo;
     public ObjectProperty<LocalDate> citFechaHora;
+    public SimpleStringProperty citEstado;
+    public SimpleStringProperty cliCantespacios;
     public CliAgendaDto cliAgendaDto;
     public CliPacienteDto cliPacienteDto;
     private Long citVersion;
@@ -25,6 +27,8 @@ public class CliCitaDto {
         this.citUsuarioRegistra = new SimpleStringProperty();
         this.citMotivo = new SimpleStringProperty();
         this.citFechaHora = new SimpleObjectProperty();
+        this.citEstado = new SimpleStringProperty();
+        this.cliCantespacios = new SimpleStringProperty();
         this.modificado = false;
     }
 
@@ -62,6 +66,26 @@ public class CliCitaDto {
 
     public void setCitFechaHora(LocalDate citFechaHora) {
         this.citFechaHora.set(citFechaHora);
+    }
+
+    public String getCitEstado() {
+        return citEstado.get();
+    }
+
+    public void setCitEstado(String citEstado) {
+        this.citEstado.set(citEstado);
+    }
+
+    public Long getCliCantespacios() {
+        if (this.cliCantespacios.get() != null && !this.cliCantespacios.get().isEmpty()) {
+            return Long.valueOf(this.cliCantespacios.get());
+        } else {
+            return null;
+        }
+    }
+
+    public void setCliCantespacios(Long cliCantespacios) {
+        this.cliCantespacios.set(cliCantespacios.toString());
     }
 
     public CliAgendaDto getCliAgendaDto() {

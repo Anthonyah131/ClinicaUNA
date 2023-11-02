@@ -54,6 +54,10 @@ public class CliCita implements Serializable {
     private String citMotivo;
     @Column(name = "CIT_FECHAHORA")
     private LocalDate citFechahora;
+    @Column(name = "CIT_ESTADO")
+    private String citEstado;
+    @Column(name = "CLI_CANTESPACIOS")
+    private Long cliCantespacios;
     @Version
     @Basic(optional = false)
     @Column(name = "CIT_VERSION")
@@ -81,6 +85,8 @@ public class CliCita implements Serializable {
         this.citUsuarioregistra = cliCitaDto.getCitUsuarioRegistra();
         this.citMotivo = cliCitaDto.getCitMotivo();
         this.citFechahora = cliCitaDto.getCitFechaHora();
+        this.citEstado = cliCitaDto.getCitEstado();
+        this.cliCantespacios = cliCitaDto.getCliCantespacios();
         this.citVersion = cliCitaDto.getCitVersion();
     }
 
@@ -116,6 +122,22 @@ public class CliCita implements Serializable {
         this.citFechahora = citFechahora;
     }
 
+    public String getCitEstado() {
+        return citEstado;
+    }
+
+    public void setCitEstado(String citEstado) {
+        this.citEstado = citEstado;
+    }
+
+    public Long getCliCantespacios() {
+        return cliCantespacios;
+    }
+
+    public void setCliCantespacios(Long cliCantespacios) {
+        this.cliCantespacios = cliCantespacios;
+    }
+    
     public Long getCitVersion() {
         return citVersion;
     }

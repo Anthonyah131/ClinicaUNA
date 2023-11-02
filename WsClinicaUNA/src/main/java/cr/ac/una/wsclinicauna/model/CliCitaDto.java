@@ -17,6 +17,8 @@ public class CliCitaDto {
     private String citUsuarioRegistra;
     private String citMotivo;
     private LocalDate citFechaHora;
+    private String citEstado;
+    private Long cliCantespacios;
     private Long citVersion;
     private CliAgendaDto cliAgendaDto;
     private CliPacienteDto cliPacienteDto;
@@ -34,6 +36,8 @@ public class CliCitaDto {
         this.citUsuarioRegistra = cliCita.getCitUsuarioregistra();
         this.citMotivo = cliCita.getCitMotivo();
         this.citFechaHora = cliCita.getCitFechahora();
+        this.citEstado = cliCita.getCitEstado();
+        this.cliCantespacios = cliCita.getCliCantespacios();
         this.citVersion = cliCita.getCitVersion();
         this.fecha = LocalDateTime.now();
     }
@@ -70,6 +74,22 @@ public class CliCitaDto {
 
     public void setCitFechaHora(LocalDate citFechaHora) {
         this.citFechaHora = citFechaHora;
+    }
+
+    public String getCitEstado() {
+        return citEstado;
+    }
+
+    public void setCitEstado(String citEstado) {
+        this.citEstado = citEstado;
+    }
+
+    public Long getCliCantespacios() {
+        return cliCantespacios;
+    }
+
+    public void setCliCantespacios(Long cliCantespacios) {
+        this.cliCantespacios = cliCantespacios;
     }
 
     public Long getCitVersion() {
