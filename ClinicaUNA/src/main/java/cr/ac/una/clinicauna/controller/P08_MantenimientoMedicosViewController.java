@@ -10,6 +10,7 @@ import cr.ac.una.clinicauna.model.CliMedicoDto;
 import cr.ac.una.clinicauna.model.CliMedicoDto;
 import cr.ac.una.clinicauna.model.CliMedicoDto;
 import cr.ac.una.clinicauna.model.CliMedicoDto;
+import cr.ac.una.clinicauna.model.CliUsuarioDto;
 import cr.ac.una.clinicauna.service.CliMedicoService;
 import cr.ac.una.clinicauna.service.CliMedicoService;
 import cr.ac.una.clinicauna.util.AppContext;
@@ -92,13 +93,15 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
     private TableView<CliMedicoDto> tbvResultados;
     @FXML
     private MFXButton btnFiltrar;
+    @FXML
+    private MFXButton btnAddToAgenda;
 
     CliMedicoDto medicoDto;
+    CliUsuarioDto usuario;
     private ObservableList<CliMedicoDto> medicos = FXCollections.observableArrayList();
     List<Node> requeridos = new ArrayList<>();
     ResourceBundle resourceBundle;
-    @FXML
-    private MFXButton btnAddToAgenda;
+    Object resultado;
 
     /**
      * Initializes the controller class.
@@ -108,19 +111,21 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         resourceBundle = FlowController.getInstance().getIdioma();
-        txfBuscarCodigo.setTextFormatter(Formato.getInstance().letrasFormat(15));
-        txfBuscarFolio.setTextFormatter(Formato.getInstance().letrasFormat(10));
+        txfBuscarCodigo.setTextFormatter(Formato.getInstance().maxLengthFormat(15));
+        txfBuscarFolio.setTextFormatter(Formato.getInstance().maxLengthFormat(10));
         txfBuscarNombre.setTextFormatter(Formato.getInstance().letrasFormat(25));
         txfBuscarPapellido.setTextFormatter(Formato.getInstance().letrasFormat(25));
 
-        txfCodigoMedico.setTextFormatter(Formato.getInstance().letrasFormat(15));
-        txfFolioMedico.setTextFormatter(Formato.getInstance().letrasFormat(10));
-        txfLicencia.setTextFormatter(Formato.getInstance().letrasFormat(15));
+        txfCodigoMedico.setTextFormatter(Formato.getInstance().maxLengthFormat(15));
+        txfFolioMedico.setTextFormatter(Formato.getInstance().maxLengthFormat(10));
+        txfLicencia.setTextFormatter(Formato.getInstance().maxLengthFormat(15));
+
         medicoDto = new CliMedicoDto();
+        fillTableView();
         iniciarEscena();
         indicarRequeridos();
         fillCbox();
-        fillTableView();
+
         nuevoMedico();
 //        cargarMedicos();
     }
@@ -186,6 +191,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
                         new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
                     }
                 } else {
+                    System.out.println("Error guardando");
                     // Se pone un mensaje que se debe cargar un medico para actualizarlo
                 }
             }
@@ -286,6 +292,25 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         }
     }
 
+    public void cargarMedico() {
+        CliMedicoService service = new CliMedicoService();
+
+        Respuesta respuesta = service.getMedicos(usuario.getUsuId());
+
+        if (respuesta.getEstado()) {
+            tbvResultados.getItems().clear();
+            medicos.clear();
+
+            medicos.addAll((List<CliMedicoDto>) respuesta.getResultado("Medicos"));
+
+            tbvResultados.setItems(medicos);
+            tbvResultados.refresh();
+
+        } else {
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Medicos", getStage(), respuesta.getMensaje());
+        }
+    }
+
     public void cleanNodes() {
         txfCodigoMedico.clear();
         txfFolioMedico.clear();
@@ -364,15 +389,43 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         });
     }
 
+    private void cargarUsuario() {
+        resultado = tbvResultados.getSelectionModel().getSelectedItem();
+        if (resultado != null) {
+            P10_AgendaViewController agendaController = (P10_AgendaViewController) FlowController.getInstance().getController("P10_AgendaView");
+            agendaController.bindBuscar();
+        }
+        getStage().close();
+    }
+
     @FXML
     private void onActionBtnAddToAgenda(ActionEvent event) {
+        cargarUsuario();
+    }
+    
+    public Object getSeleccionado() {
+        return resultado;
     }
 
     private void iniciarEscena() {
         String padre = (String) AppContext.getInstance().get("PadreMedicos");
+        usuario = (CliUsuarioDto) AppContext.getInstance().get("Usuario");
 
         if (padre.equals("P06_MenuPrincipalView")) {
             btnAddToAgenda.setVisible(false);
+            if (usuario.getUsuTipousuario().equals("M")) {
+                unbindMedico();
+                cargarMedico();
+                bindMedico();
+                txfBuscarCodigo.setDisable(true);
+                txfBuscarFolio.setDisable(true);
+                txfBuscarNombre.setDisable(true);
+                txfBuscarPapellido.setDisable(true);
+                chkBuscarActivas.setDisable(true);
+                chkBuscarTodos.setDisable(true);
+                btnFiltrar.setDisable(true);
+                btnLimpiarBusquedaMedico.setDisable(true);
+            }
         } else if (padre.equals("P10_AgendaView")) {
             btnAddToAgenda.setVisible(true);
             btnSalir.setVisible(false);
@@ -387,7 +440,6 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
 
             btnLimpiarCampos.setVisible(false);
             btnGuardar.setVisible(false);
-
         }
     }
 }

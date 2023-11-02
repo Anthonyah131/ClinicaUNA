@@ -39,6 +39,30 @@ public class CliMedicoService {
         }
     }
 
+    public Respuesta getMedicos(Long idUsuario) {
+        try {
+            Request request = new Request("CliMedicoController/medicos");
+            request.get();
+            if (request.isError()) {
+                return new Respuesta(false, request.getError(), "");
+            }
+            
+            List<CliMedicoDto> medicos = (List<CliMedicoDto>) request.readEntity(new GenericType<List<CliMedicoDto>>() {
+            });
+            if (idUsuario != null) {
+                medicos = medicos.stream()
+                        .filter(p -> p.getCliUsuarioDto().getUsuId().equals(idUsuario))
+                        .collect(Collectors.toCollection(FXCollections::observableArrayList));
+            }
+            
+            return new Respuesta(true, "", "", "Medicos", medicos);
+            
+        } catch (Exception ex) {
+            Logger.getLogger(CliMedicoService.class.getName()).log(Level.SEVERE, "Error obteniendo medicos.", ex);
+            return new Respuesta(false, "Error obteniendo medicos.", "getMedicos " + ex.getMessage());
+        }
+    }
+
     public Respuesta getMedicos(String codigo, String folio, String nombre, String pApellido, boolean activo, boolean todos) {
         try {
             Request request = new Request("CliMedicoController/medicos");
@@ -72,12 +96,12 @@ public class CliMedicoService {
                         .filter(p -> p.getCliUsuarioDto().getUsuPapellido().toLowerCase().contains(apellidoBuscada))
                         .collect(Collectors.toCollection(FXCollections::observableArrayList));
             }
-            if (!todos) {
-                String estado = activo ? "A" : "I";
-                medicos = medicos.stream()
-                        .filter(p -> p.getMedEstado().equals(estado))
-                        .collect(Collectors.toCollection(FXCollections::observableArrayList));
-            }
+//            if (!todos) {
+//                String estado = activo ? "A" : "I";
+//                medicos = medicos.stream()
+//                        .filter(p -> p.getMedEstado().equals(estado))
+//                        .collect(Collectors.toCollection(FXCollections::observableArrayList));
+//            }
             return new Respuesta(true, "", "", "Medicos", medicos);
         } catch (Exception ex) {
             Logger.getLogger(CliMedicoService.class.getName()).log(Level.SEVERE, "Error obteniendo medicos.", ex);

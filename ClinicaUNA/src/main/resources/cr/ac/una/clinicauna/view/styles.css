@@ -148,12 +148,24 @@
     -fx-background-position: center; /* Centra la imagen en el botón */
     -fx-padding: 0;  /*Elimina el relleno del botón */
 }
-.mfx-button-link:hover{
+.mfx-button-link-bigger{
+    -fx-cursor: hand;
+    -fx-background-color: transparent; /* Establece el fondo del botón como transparente */
+    -fx-font: 20px "Arial Rounded MT Bold"; /* Establece la fuente y el tamano */
+    -fx-text-fill: #000000; /* Color del texto */
+    -fx-underline: true;
+    -fx-content-display: text-only;
+    -fx-background-repeat: no-repeat; /* Evita que la imagen se repita */
+    -fx-background-size: contain; /* Ajusta el tamaño de la imagen al botón */
+    -fx-background-position: center; /* Centra la imagen en el botón */
+    -fx-padding: 0;  /*Elimina el relleno del botón */
+}
+.mfx-button-link:hover, .mfx-button-link-bigger:hover{
     /*-fx-scale-x: 1.2; /* Escala horizontalmente el botón a 120% en hover */
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
     -fx-text-fill: #0000ff; /* Color del texto */
 }
-.mfx-button-link:pressed{
+.mfx-button-link:pressed, mfx-button-link-bigger:pressed{
     -fx-effect: dropshadow(gaussian, rgba(0, 102, 204, 1), 10, 0.5, 0.0, 0.0);
 }
 /*-----------------------------------------------------------------------------------------------------------------*/
@@ -334,7 +346,7 @@
 }
 
 .menu-button-Image .context-menu{
-     -fx-background-color: transparent;
+    -fx-background-color: transparent;
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
     -fx-alignment: CENTER;
 }

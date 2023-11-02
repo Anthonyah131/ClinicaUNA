@@ -2,6 +2,9 @@ package cr.ac.una.clinicauna.controller;
 
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
+import cr.ac.una.clinicauna.model.CliCitaDto;
+import cr.ac.una.clinicauna.model.CliMedicoDto;
+import cr.ac.una.clinicauna.model.CliUsuarioDto;
 import cr.ac.una.clinicauna.util.AppContext;
 import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.SoundUtil;
@@ -30,13 +33,17 @@ public class P10_AgendaViewController extends Controller implements Initializabl
     @FXML
     private JFXDatePicker dtpFechasCitas;
     @FXML
-    private Label lblNombreMedico;
-    @FXML
     private MFXButton btnBuscarMedico;
     @FXML
     private GridPane grdCitas;
     @FXML
     private MFXButton btnSalir;
+    @FXML
+    private MFXButton btnCargarAgenda;
+    
+    CliUsuarioDto usuarioDto;
+    CliMedicoDto medicoDto;
+    CliCitaDto citaDto;
 
     /**
      * Initializes the controller class.
@@ -44,7 +51,8 @@ public class P10_AgendaViewController extends Controller implements Initializabl
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        llenarGridPane();
+        // llenarGridPane();
+        usuarioDto = (CliUsuarioDto) AppContext.getInstance().get("Usuario");
     }
 
     @Override
@@ -53,19 +61,39 @@ public class P10_AgendaViewController extends Controller implements Initializabl
 
     @FXML
     private void onActionBtnBuscarMedico(ActionEvent event) {
-//        AppContext.getInstance().set("PadreMedicos", "P10_AgendaView");
-//        FlowController.getInstance().delete("P08_MantenimientoMedicosView");
-//        FlowController.getInstance().goViewInWindowModal("P08_MantenimientoMedicosView", stage, false);
-//        
-        AppContext.getInstance().set("PadrePacientes", "P10_AgendaView");
-        FlowController.getInstance().delete("P09_MantenimientoPacientesView");
-        FlowController.getInstance().goViewInWindowModal("P09_MantenimientoPacientesView", stage, false);
+        AppContext.getInstance().set("PadreMedicos", "P10_AgendaView");
+        FlowController.getInstance().delete("P08_MantenimientoMedicosView");
+        FlowController.getInstance().goViewInWindowModal("P08_MantenimientoMedicosView", stage, false);
+        validarCargarAgenda();
+    }
+
+    @FXML
+    private void onActionBtnCargarAgenda(ActionEvent event) {
+        //validarCargarAgenda();
+        System.out.println(citaDto.toString());
+    }
+
+    @FXML
+    private void onActionBtnSalir(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
+        FlowController.getInstance().goView("P06_MenuPrincipalView");
+    }
+
+    private void validarCargarAgenda() {
+        if (dtpFechasCitas.getValue() != null && medicoDto != null) {
+            llenarGridPane();
+        }
     }
 
     private void llenarGridPane() {
-        int numRows = 7;
-        int numCols = 5;
-        int horaInicio = 8;
+        int iniJornada = medicoDto.getMedFiniTime().getHour();
+        int finJornada = medicoDto.getMedFfinTime().getHour();
+        int jornada = finJornada - iniJornada;
+        Long citasHoras = medicoDto.getMedEspaciosxhora();
+
+        int numRows = jornada;
+        int numCols = Math.toIntExact(citasHoras) + 1;
+        int horaInicio = iniJornada;
 
         grdCitas.getChildren().clear();
         // Crear filas
@@ -89,10 +117,20 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                     btnAddPac.setGraphic(imageView);
                     btnAddPac.getStyleClass().add("mfx-button-Image");
                     btnAddPac.setOnAction(event -> {
-                        crearCita(vBox);
+//                        int rowIndex = GridPane.getRowIndex(btnAddPac);
+//                        int colIndex = GridPane.getColumnIndex(btnAddPac);
+                        ///crearCita(vBox);
+                        FlowController.getInstance().goViewInWindowModal("P11_NuevaCitaView", stage, Boolean.FALSE);
                     });
                     vBox.getChildren().add(btnAddPac);
                     vBox.setAlignment(Pos.BOTTOM_RIGHT);
+//                    Label label = new Label();
+//                    label.setPrefSize(100, 50);
+//                    label.setOnMouseClicked(event -> {
+//                        int rowIndex = GridPane.getRowIndex(label);
+//                        int colIndex = GridPane.getColumnIndex(label);
+//                        System.out.println("Fila: " + rowIndex + " columna " + colIndex);
+//                    });
                     grdCitas.add(vBox, j, i);
                 }
             }
@@ -176,10 +214,18 @@ public class P10_AgendaViewController extends Controller implements Initializabl
 
     }
 
-    @FXML
-    private void onActionBtnSalir(ActionEvent event) {
-        SoundUtil.mouseEnterSound();
-        FlowController.getInstance().goView("P06_MenuPrincipalView");
+    public void bindBuscar() {
+        P08_MantenimientoMedicosViewController buscadorRegistroController = (P08_MantenimientoMedicosViewController) FlowController.getInstance().getController("P08_MantenimientoMedicosView");
+//        unbindUsuario();
+        medicoDto = (CliMedicoDto) buscadorRegistroController.getSeleccionado();
+        if (medicoDto != null) {
+            btnBuscarMedico.setText(medicoDto.getCliUsuarioDto().getUsuNombre() + " " + medicoDto.getCliUsuarioDto().getUsuPapellido() + " " + medicoDto.getCliUsuarioDto().getUsuSapellido());
+        }
+//        bindUsuario();
+    }
+    
+    public void cargarCita(CliCitaDto cita){
+        citaDto = cita;
     }
 
 }

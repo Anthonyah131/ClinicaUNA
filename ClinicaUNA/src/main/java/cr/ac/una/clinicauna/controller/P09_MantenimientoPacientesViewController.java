@@ -91,7 +91,6 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
     List<Node> requeridos = new ArrayList<>();
 
     ResourceBundle resourceBundle;
-    
 
     /**
      * Initializes the controller class.
@@ -179,6 +178,16 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
         }
     }
 
+    @FXML
+    private void onActionBtnAgregarCita(ActionEvent event) {
+        resultado = tbvResultados.getSelectionModel().getSelectedItem();
+        if (resultado != null) {
+            P11_NuevaCitaViewController citasController = (P11_NuevaCitaViewController) FlowController.getInstance().getController("P11_NuevaCitaView");
+            citasController.bindBuscar();
+        }
+        getStage().close();
+    }
+
     public void fillTableView() {
         resourceBundle = FlowController.getInstance().getIdioma();
 
@@ -259,7 +268,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
         txfBuscarNombre.clear();
         txfBuscarPapellido.clear();
     }
-    
+
     private void iniciarEscena() {
         String padre = (String) AppContext.getInstance().get("PadrePacientes");
 
@@ -271,8 +280,18 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
         }
     }
 
-    @FXML
-    private void onActionBtnAgregarCita(ActionEvent event) {
+    Object resultado;
+    private void cargarUsuario() {
+        resultado = tbvResultados.getSelectionModel().getSelectedItem();
+        if (resultado != null) {
+            P11_NuevaCitaViewController citaController = (P11_NuevaCitaViewController) FlowController.getInstance().getController("P03_RegistroView");
+            citaController.bindBuscar();
+        }
+        getStage().close();
+    }
+    
+    public Object getSeleccionado() {
+        return resultado;
     }
 
     private class ButtonCell extends TableCell<CliPacienteDto, Boolean> {
