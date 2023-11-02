@@ -103,7 +103,11 @@ public class CliMedicoDto {
     }
 
     public LocalTime getMedFiniTime() {
-        return medFini.get().toLocalTime();
+        if (medFini.get() != null) {
+            return medFini.get().toLocalTime();
+        } else {
+            return null;
+        }
     }
 
     public void setMedFiniTime(LocalTime time) {
@@ -119,9 +123,13 @@ public class CliMedicoDto {
     public void setMedFfin(LocalDateTime medFfin) {
         this.medFfin.set(medFfin);
     }
-    
+
     public LocalTime getMedFfinTime() {
-        return medFfin.get().toLocalTime();
+        if (medFfin.get() != null) {
+            return medFfin.get().toLocalTime();
+        } else {
+            return null;
+        }
     }
 
     public void setMedFfinTime(LocalTime time) {

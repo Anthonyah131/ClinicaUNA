@@ -6,6 +6,7 @@ package cr.ac.una.wsclinicauna.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class CliMedicoDto {
         this.fecha = LocalDateTime.now();
     }
 
-    public CliMedicoDto(CliMedico cliMedico ) {
+    public CliMedicoDto(CliMedico cliMedico) {
         this();
         this.medId = cliMedico.getMedId();
         this.medCodigo = cliMedico.getMedCodigo();
@@ -55,8 +56,6 @@ public class CliMedicoDto {
         this.fecha = LocalDateTime.now();
     }
 
-    
-    
     public Long getMedId() {
         return medId;
     }

@@ -74,7 +74,6 @@ public class CliMedicoController {
     @Path("/medico")
     public Response guardarMedico(CliMedicoDto cliMedicoDto) {
         try {
-            
             Respuesta res = cliMedicoService.guardarMedico(cliMedicoDto);
             if (!res.getEstado()) {
                 return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
