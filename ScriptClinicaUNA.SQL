@@ -239,9 +239,12 @@ CREATE TABLE CLI_CITA(
   cit_usuarioregistra Varchar2(20 ) NOT NULL,
   cit_motivo Varchar2(80 ),
   cit_fechahora Date,
+  cit_estado Varchar2(1),
+  cli_cantespacios Number,
   cit_version Number DEFAULT 1 NOT NULL,
   age_id Number,
-  pac_id Number
+  pac_id Number,
+  CONSTRAINT CLI_CITA_CK01 CHECK (cit_estado in ('P','A','C','U'))
 )
 ;
 
