@@ -271,6 +271,10 @@ COMMENT ON COLUMN CLI_CITA.cit_motivo IS 'motivo de la cita'
 ;
 COMMENT ON COLUMN CLI_CITA.cit_fechahora IS 'fecha y hora de la cita'
 ;
+COMMENT ON COLUMN CLI_CITA.cit_estado IS 'Estado de la cita (P:progrmada, A: atendida,C:cancelada,U:ausente)'
+;
+COMMENT ON COLUMN CLI_CITA.cli_cantespacios IS 'Cantidad de espacios ocupados por la cita'
+;
 COMMENT ON COLUMN CLI_CITA.cit_version IS 'version del registro de la cita'
 ;
 
