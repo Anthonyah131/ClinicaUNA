@@ -17,11 +17,19 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.NonUniqueResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import java.io.ByteArrayOutputStream;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.sf.jasperreports.engine.JREmptyDataSource;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
 
 /**
  *
@@ -30,6 +38,7 @@ import java.util.logging.Logger;
 @Stateless
 @LocalBean
 public class CliReporteagendaService {
+
     private static final Logger LOG = Logger.getLogger(CliReporteagendaService.class.getName());
     @PersistenceContext(unitName = "WsClinicaUNAPU")
     private EntityManager em;
@@ -82,13 +91,13 @@ public class CliReporteagendaService {
     public Respuesta guardarReporteagenda(CliReporteagendaDto cliReporteagendaDto) {
         try {
             CliReporteagenda cliReporteagenda;
-            if (cliReporteagendaDto.getRepageId()!= null && cliReporteagendaDto.getRepageId()> 0) {
+            if (cliReporteagendaDto.getRepageId() != null && cliReporteagendaDto.getRepageId() > 0) {
                 cliReporteagenda = em.find(CliReporteagenda.class, cliReporteagendaDto.getRepageId());
                 if (cliReporteagenda == null) {
                     return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el reporteagenda a modificar.", "guardarReporteagenda NoResultException");
                 }
                 cliReporteagenda.actualizar(cliReporteagendaDto);
-                CliMedico cliMedico= em.find(CliMedico.class, cliReporteagendaDto.getCliMedicoDto().getMedId());
+                CliMedico cliMedico = em.find(CliMedico.class, cliReporteagendaDto.getCliMedicoDto().getMedId());
                 cliReporteagenda.setMedId(cliMedico);
                 cliReporteagenda = em.merge(cliReporteagenda);
             } else {
@@ -125,4 +134,57 @@ public class CliReporteagendaService {
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el reporteagenda.", "eliminarReporteagenda " + ex.getMessage());
         }
     }
+
+    public Respuesta generarReporte(Long id) {
+        try {
+            Query qryUsuario = em.createNamedQuery("CliReporteagenda.findByRepageId", CliReporteagenda.class);
+            qryUsuario.setParameter("repageId", id);
+            CliReporteagenda cliReporteusuarios = (CliReporteagenda) qryUsuario.getSingleResult();
+            generateReport(id);
+            CliReporteagendaDto cliReporteusuariosDto = new CliReporteagendaDto(cliReporteusuarios);
+            cliReporteusuariosDto.setCliMedicoDto(new CliMedicoDto(cliReporteusuarios.getMedId()));
+
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Reporteagenda", cliReporteusuariosDto);
+
+        } catch (NoResultException ex) {
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un reporteagenda con el código ingresado.", "getReporteagenda NoResultException");
+        } catch (NonUniqueResultException ex) {
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el reporteagenda.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el reporteagenda.", "getReporteagenda NonUniqueResultException");
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el reporteagenda.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el reporteagenda.", "getReporteagenda " + ex.getMessage());
+        }
+    }
+
+    public JasperPrint generateReport(Long id) {
+        try {
+            // Compilar el archivo .jrxml
+            String jrxmlFile = "src/main/java/cr/ac/una/wsclinicauna/resources/report1.jrxml";
+            JasperCompileManager.compileReportToFile(jrxmlFile);
+            // Llenar el reporte con datos
+            Map<String, Object> params = new HashMap<>();
+            params.put("id", id);
+
+            String jasperReportFile = "src/main/java/cr/ac/una/wsclinicauna/resources/informe.jasper";
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReportFile, params, new JREmptyDataSource());
+            return jasperPrint;
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE, "Ocurrio un error al crear el reporte.", e);
+            return null;
+        }
+    }
+
+    private byte[] generateReport(JasperPrint jasperPrint) {
+        try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            JasperExportManager.exportReportToPdfStream(jasperPrint, byteArrayOutputStream);
+            return byteArrayOutputStream.toByteArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
 }

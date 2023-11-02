@@ -102,4 +102,21 @@ public class CliReporteagendaController {
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error eliminando el parametro").build();//TODO
         }
     }
+    
+    
+//    @GET
+//    @Path("/consultaReporte/{id}")
+//    public Response generarReporte(@PathParam("id") Long id) {
+//        try {
+//            Respuesta res = cliReporteagendaService.generarReporte(id);
+//            if (!res.getEstado()) {
+//                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
+//            }
+//            CliReporteagendaDto cliReporteexpedienteDto = (CliReporteagendaDto) res.getResultado("Reporteagenda");
+//            return Response.ok(cliReporteexpedienteDto).build();//TODO
+//        } catch (Exception ex) {
+//            Logger.getLogger(CliReporteagendaController.class.getName()).log(Level.SEVERE, null, ex);
+//            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el parametro").build();//TODO
+//        }
+//    }
 }
