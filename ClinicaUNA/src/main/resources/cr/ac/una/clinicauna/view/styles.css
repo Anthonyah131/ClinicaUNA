@@ -327,6 +327,27 @@
     -fx-alignment: CENTER;
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
 }
+.label-cita-programada{
+    -fx-font: 15px "Arial Rounded MT Bold";
+    -fx-text-fill: #000000; /* Color del texto */
+    -fx-background-color: rgba(0, 255, 0, 0.39);
+    -fx-alignment: CENTER;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+.label-cita-ausente{
+    -fx-font: 15px "Arial Rounded MT Bold";
+    -fx-text-fill: #000000; /* Color del texto */
+    -fx-background-color: rgba(255, 0, 0, 0.39);
+    -fx-alignment: CENTER;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+.label-cita-atendida{
+    -fx-font: 15px "Arial Rounded MT Bold";
+    -fx-text-fill: #000000; /* Color del texto */
+    -fx-background-color: rgba(0, 0, 255, 0.39);
+    -fx-alignment: CENTER;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
 /*-----------------------------------------------------------------------------------------------------------------*/
 .menu-button-Image{
 

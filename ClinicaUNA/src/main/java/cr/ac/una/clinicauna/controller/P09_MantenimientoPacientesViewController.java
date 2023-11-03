@@ -274,9 +274,9 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
 
         if (padre.equals("P06_MenuPrincipalView")) {
             btnAgregarCita.setVisible(false);
-        } else if (padre.equals("P10_AgendaView")) {
-            btnAgregarCita.setVisible(true);
+        } else if (padre.equals("P11_NuevaCitaView")) {
             btnSalir.setVisible(false);
+            btnAgregarCita.setVisible(true);
         }
     }
 

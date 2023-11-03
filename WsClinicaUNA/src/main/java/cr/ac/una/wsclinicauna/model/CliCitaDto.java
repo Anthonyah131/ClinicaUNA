@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.wsclinicauna.model;
 
 import java.time.LocalDate;
@@ -16,7 +12,7 @@ public class CliCitaDto {
     private Long citId;
     private String citUsuarioRegistra;
     private String citMotivo;
-    private LocalDate citFechaHora;
+    private LocalDateTime citFechaHora;
     private String citEstado;
     private Long cliCantespacios;
     private Long citVersion;
@@ -68,11 +64,11 @@ public class CliCitaDto {
         this.citMotivo = citMotivo;
     }
 
-    public LocalDate getCitFechaHora() {
+    public LocalDateTime getCitFechaHora() {
         return citFechaHora;
     }
 
-    public void setCitFechaHora(LocalDate citFechaHora) {
+    public void setCitFechaHora(LocalDateTime citFechaHora) {
         this.citFechaHora = citFechaHora;
     }
 

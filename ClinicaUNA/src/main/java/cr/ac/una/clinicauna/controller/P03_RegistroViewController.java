@@ -97,7 +97,6 @@ public class P03_RegistroViewController extends Controller implements Initializa
 
     @Override
     public void initialize() {
-//        nuevoUsuario();
         iniciarScena();
     }
 
@@ -205,52 +204,34 @@ public class P03_RegistroViewController extends Controller implements Initializa
         if ("M".equals(usuarioDto.getUsuTipousuario()) && usuarioDto.getCliMedicoList().isEmpty()) {
             CliUsuarioService usuarioService = new CliUsuarioService();
             CliMedicoService medicoService = new CliMedicoService();
-            
+
             CliMedicoDto medicoDto = new CliMedicoDto();
             medicoDto.setMedCodigo("Ingrese" + usuarioDto.getUsuId());
             medicoDto.setMedFolio("Ingrese" + usuarioDto.getUsuId());
             medicoDto.setMedCarne("Ingrese" + usuarioDto.getUsuId());
             medicoDto.setMedEstado("I");
-            
+
             Respuesta respuestaMedico = medicoService.guardarMedico(medicoDto);
             medicoDto = (CliMedicoDto) respuestaMedico.getResultado("Medico");
             medicoDto.setModificado(true);
             usuarioDto.getCliMedicoList().add(medicoDto);
             Respuesta respuesta = usuarioService.guardarUsuario(usuarioDto);
-            
+
             unbindUsuario();
             this.usuarioDto = (CliUsuarioDto) respuesta.getResultado("Usuario");
             bindUsuario();
-        } else if(!"M".equals(usuarioDto.getUsuTipousuario()) && !usuarioDto.getCliMedicoList().isEmpty()){
+        } else if (!"M".equals(usuarioDto.getUsuTipousuario()) && !usuarioDto.getCliMedicoList().isEmpty()) {
             CliMedicoService medicoService = new CliMedicoService();
             CliUsuarioService usuarioService = new CliUsuarioService();
-            
+
             Long medicoId = this.usuarioDto.getCliMedicoList().get(0).getMedId();
             usuarioDto.getCliMedicoListEliminados().add(this.usuarioDto.getCliMedicoList().get(0));
             Respuesta respuesta = usuarioService.guardarUsuario(usuarioDto);
-            
+
             unbindUsuario();
             this.usuarioDto = (CliUsuarioDto) respuesta.getResultado("Usuario");
             bindUsuario();
             medicoService.eliminarMedico(medicoId);
-        }
-    }
-
-    private void cargarUsuario(Long id) {
-        try {
-            CliUsuarioService service = new CliUsuarioService();
-            Respuesta respuesta = service.getUsuario(id);
-            if (respuesta.getEstado()) {
-                unbindUsuario();
-                this.usuarioDto = (CliUsuarioDto) respuesta.getResultado("Usuario");
-                bindUsuario();
-                ValidarRequeridos.validarRequeridos(requeridos);
-            } else {
-                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.loadUser", getStage(), respuesta.getMensaje());
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error consultando el usuario.", ex);
-            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.loadUser", getStage(), "key.errorQuerying");
         }
     }
 
@@ -269,15 +250,6 @@ public class P03_RegistroViewController extends Controller implements Initializa
             btnSalir.setVisible(true);
             btnEliminar.setDisable(false);
             btnBuscar.setDisable(false);
-
-//            usuarioDto = (CliUsuarioDto) AppContext.getInstance().get("Usuario");
-//            if (!usuarioDto.getUsuTipousuario().equals("A")) {
-//                bindUsuario();
-//                cboxTipoUsuario.setDisable(true);
-//                btnEliminar.setDisable(true);
-//                btnBuscar.setDisable(true);
-//                chkActivo.setDisable(true);
-//            }
         }
     }
 
@@ -321,6 +293,34 @@ public class P03_RegistroViewController extends Controller implements Initializa
         requeridos.addAll(Arrays.asList(txfCedula, txfNombre, txfPapellido, txfSapellido, txfCorreo, txfUsuario, cboxTipoUsuario, txfContrasena));
     }
 
+    private void bindUsuario() {
+        txfNombre.textProperty().bindBidirectional(usuarioDto.usuNombre);
+        txfCedula.textProperty().bindBidirectional(usuarioDto.usuCedula);
+        txfPapellido.textProperty().bindBidirectional(usuarioDto.usuPapellido);
+        txfSapellido.textProperty().bindBidirectional(usuarioDto.usuSapellido);
+        txfUsuario.textProperty().bindBidirectional(usuarioDto.usuUsuario);
+        txfContrasena.textProperty().bindBidirectional(usuarioDto.usuClave);
+        txfCorreo.textProperty().bindBidirectional(usuarioDto.usuCorreo);
+
+        if ("A".equals(usuarioDto.getUsuActivo())) {
+            chkActivo.setSelected(true);
+        } else {
+            chkActivo.setSelected(false);
+        }
+
+        if (usuarioDto.getUsuTipousuario() != null) {
+            seleccionarTipoPorNombre(usuarioDto.getUsuTipousuario());
+        } else {
+            cboxTipoUsuario.getSelectionModel().clearSelection();
+        }
+
+        if (usuarioDto.getUsuIdioma() != null) {
+            seleccionarIdiomaPorNombre(usuarioDto.getUsuIdioma());
+        } else {
+            cboxIdioma.getSelectionModel().clearSelection();
+        }
+    }
+
     private void seleccionarTipoPorNombre(String nombreTipo) {
         OUTER:
         for (String tipo : cboxTipoUsuario.getItems()) {
@@ -355,8 +355,6 @@ public class P03_RegistroViewController extends Controller implements Initializa
                     }
                     break;
                 }
-                default -> {
-                }
             }
         }
     }
@@ -379,34 +377,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
                     }
                     break;
                 }
-                default -> {
-                }
             }
-        }
-    }
-
-    private void bindUsuario() {
-        txfNombre.textProperty().bindBidirectional(usuarioDto.usuNombre);
-        txfCedula.textProperty().bindBidirectional(usuarioDto.usuCedula);
-        txfPapellido.textProperty().bindBidirectional(usuarioDto.usuPapellido);
-        txfSapellido.textProperty().bindBidirectional(usuarioDto.usuSapellido);
-        txfUsuario.textProperty().bindBidirectional(usuarioDto.usuUsuario);
-        txfContrasena.textProperty().bindBidirectional(usuarioDto.usuClave);
-        txfCorreo.textProperty().bindBidirectional(usuarioDto.usuCorreo);
-        if ("A".equals(usuarioDto.getUsuActivo())) {
-            chkActivo.setSelected(true);
-        } else {
-            chkActivo.setSelected(false);
-        }
-        if (usuarioDto.getUsuTipousuario() != null) {
-            seleccionarTipoPorNombre(usuarioDto.getUsuTipousuario());
-        } else {
-            cboxTipoUsuario.getSelectionModel().clearSelection();
-        }
-        if (usuarioDto.getUsuIdioma() != null) {
-            seleccionarIdiomaPorNombre(usuarioDto.getUsuIdioma());
-        } else {
-            cboxIdioma.getSelectionModel().clearSelection();
         }
     }
 
@@ -420,6 +391,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
         txfCorreo.textProperty().unbindBidirectional(usuarioDto.usuCorreo);
     }
 
+    //carga el ususario de la pesta;a de busqueda.
     public void bindBuscar() {
         P03_RegistroBuscadorViewController buscadorRegistroController = (P03_RegistroBuscadorViewController) FlowController.getInstance().getController("P03_RegistroBuscadorView");
         unbindUsuario();

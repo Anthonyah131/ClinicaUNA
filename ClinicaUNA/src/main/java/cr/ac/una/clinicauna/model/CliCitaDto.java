@@ -1,6 +1,7 @@
 package cr.ac.una.clinicauna.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -14,7 +15,7 @@ public class CliCitaDto {
     public SimpleStringProperty citId;
     public SimpleStringProperty citUsuarioRegistra;
     public SimpleStringProperty citMotivo;
-    public ObjectProperty<LocalDate> citFechaHora;
+    public ObjectProperty<LocalDateTime> citFechaHora;
     public SimpleStringProperty citEstado;
     public SimpleStringProperty cliCantespacios;
     public CliAgendaDto cliAgendaDto;
@@ -60,11 +61,11 @@ public class CliCitaDto {
         this.citMotivo.set(citMotivo);
     }
 
-    public LocalDate getCitFechaHora() {
+    public LocalDateTime getCitFechaHora() {
         return citFechaHora.get();
     }
 
-    public void setCitFechaHora(LocalDate citFechaHora) {
+    public void setCitFechaHora(LocalDateTime citFechaHora) {
         this.citFechaHora.set(citFechaHora);
     }
 
@@ -114,6 +115,10 @@ public class CliCitaDto {
 
     public Boolean getModificado() {
         return modificado;
+    }
+
+    public String getNombreString() {
+        return cliPacienteDto.getPacNombre() + " " + cliPacienteDto.getPacPapellido() + " " + cliPacienteDto.getPacSapellido();
     }
 
     public void setModificado(Boolean modificado) {

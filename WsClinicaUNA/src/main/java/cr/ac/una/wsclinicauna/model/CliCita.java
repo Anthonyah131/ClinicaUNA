@@ -22,6 +22,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 /**
@@ -53,7 +54,7 @@ public class CliCita implements Serializable {
     @Column(name = "CIT_MOTIVO")
     private String citMotivo;
     @Column(name = "CIT_FECHAHORA")
-    private LocalDate citFechahora;
+    private LocalDateTime citFechahora;
     @Column(name = "CIT_ESTADO")
     private String citEstado;
     @Column(name = "CLI_CANTESPACIOS")
@@ -114,11 +115,11 @@ public class CliCita implements Serializable {
         this.citMotivo = citMotivo;
     }
 
-    public LocalDate getCitFechahora() {
+    public LocalDateTime getCitFechahora() {
         return citFechahora;
     }
 
-    public void setCitFechahora(LocalDate citFechahora) {
+    public void setCitFechahora(LocalDateTime citFechahora) {
         this.citFechahora = citFechahora;
     }
 

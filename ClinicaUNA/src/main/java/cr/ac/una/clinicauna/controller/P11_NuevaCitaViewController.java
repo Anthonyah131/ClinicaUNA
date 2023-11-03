@@ -42,7 +42,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
     private Label lblCorreo;
     @FXML
     private MFXButton btnGuardar;
-    
+
     CliPacienteDto pacienteDto;
     CliCitaDto citaDto;
     CliUsuarioDto usuarioDto;
@@ -60,18 +60,34 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
 
     @Override
     public void initialize() {
-        
+
     }
 
     @FXML
     private void onActionBtnGuardar(ActionEvent event) {
         citaDto.setCitMotivo(txfMotivo.getText());
         citaDto.setCliPacienteDto(pacienteDto);
-        citaDto.setCitUsuarioRegistra(usuarioDto.getUsuNombre()+" "+usuarioDto.getUsuPapellido());
+        citaDto.setCitUsuarioRegistra(usuarioDto.getUsuNombre() + " " + usuarioDto.getUsuPapellido());
+        citaDto.setCliCantespacios(Long.valueOf(cboxEspacioHora.getValue()));
+        citaDto.setCitEstado(estadoCita());
+
         P10_AgendaViewController agendaController = (P10_AgendaViewController) FlowController.getInstance().getController("P10_AgendaView");
         agendaController.cargarCita(citaDto);
         stage.close();
 //      
+    }
+
+    public String estadoCita() {
+        return switch (cboxEstadoCita.getValue()) {
+            case "Ausente" ->
+                "U";
+            case "Atendida" ->
+                "A";
+            case "Cancelada" ->
+                "C";
+            default ->
+                "P";
+        };
     }
 
     @FXML
@@ -96,13 +112,13 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         numeros.addAll(1, 2, 3, 4);
         cboxEspacioHora.setItems(numeros);
     }
-    
+
     private void nuevaCita() {
-       // unbindUsuario();
+        // unbindUsuario();
         this.citaDto = new CliCitaDto();
         //bindUsuario();
     }
-    
+
     public void bindBuscar() {
         P09_MantenimientoPacientesViewController pacienteRegistroController = (P09_MantenimientoPacientesViewController) FlowController.getInstance().getController("P09_MantenimientoPacientesView");
 //        unbindUsuario();
@@ -110,13 +126,13 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
 //        bindUsuario();
         cargarLabels();
     }
-    
-    
 
     private void cargarLabels() {
-        lblNombrePac.setText(pacienteDto.getPacNombre() + " " + pacienteDto.getPacPapellido() + " " + pacienteDto.getPacSapellido());
+        lblNombrePac.setText(pacienteDto.getNombreString());
         lblNumero.setText(pacienteDto.getPacTelefono());
         lblNombreUsu.setText(usuarioDto.getUsuNombre() + " " + usuarioDto.getUsuPapellido());
         lblCorreo.setText(pacienteDto.getPacCorreo());
-   }
+    }
+    
+    
 }

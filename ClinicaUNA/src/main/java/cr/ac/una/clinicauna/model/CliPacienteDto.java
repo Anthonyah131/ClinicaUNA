@@ -187,6 +187,10 @@ public class CliPacienteDto {
     public Boolean getModificado() {
         return modificado;
     }
+    
+    public String getNombreString() {
+        return getPacNombre() + " " + getPacPapellido() + " " + getPacSapellido();
+    }
 
     public void setModificado(Boolean modificado) {
         this.modificado = modificado;
