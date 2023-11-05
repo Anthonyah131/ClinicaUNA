@@ -71,10 +71,16 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         citaDto.setCitMotivo(txfMotivo.getText());
         citaDto.setCliCantespacios(Long.valueOf(cboxEspacioHora.getValue()));
         citaDto.setCitEstado(estadoCita());
+        
+        guardarCita();
 
         P10_AgendaViewController agendaController = (P10_AgendaViewController) FlowController.getInstance().getController("P10_AgendaView");
         agendaController.cargarCita(citaDto);
         stage.close();
+    }
+    
+    private void guardarCita(){
+        
     }
 
     @FXML

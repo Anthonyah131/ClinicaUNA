@@ -11,6 +11,7 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -49,6 +50,8 @@ public class P10_AgendaViewController extends Controller implements Initializabl
     CliMedicoDto medicoDto;
     CliCitaDto citaDto;
     CliCitaDto citasMatriz[][];
+    
+    List<CliCitaDto> listaCitas;
 
     /**
      * Initializes the controller class.
@@ -302,6 +305,14 @@ public class P10_AgendaViewController extends Controller implements Initializabl
             case "U" ->
                 label.getStyleClass().add("label-cita-ausente");
         }
+    }
+    
+    private void guardarAgenda(){
+        
+    }
+    
+    private void cargarAgenda(){
+        
     }
 
 

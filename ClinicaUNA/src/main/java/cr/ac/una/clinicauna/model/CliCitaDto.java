@@ -135,7 +135,7 @@ public class CliCitaDto {
                 + "\nTelefono: " + cliPacienteDto.getPacTelefono()
                 + "\nCorreo: " + cliPacienteDto.getPacCorreo();
     }
-    
+
     public String estadoCita() {
         return switch (getCitEstado()) {
             case "U" ->
