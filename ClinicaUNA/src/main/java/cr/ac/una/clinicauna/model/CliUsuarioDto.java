@@ -236,9 +236,13 @@ public class CliUsuarioDto {
     public String toString() {
         return "CliUsuarioDto{" + "usuId=" + usuId + ", usuNombre=" + usuNombre + ", usuPapellido=" + usuPapellido + ", usuSapellido=" + usuSapellido + ", usuCedula=" + usuCedula + ", usuCorreo=" + usuCorreo + ", usuTipousuario=" + usuTipousuario + ", usuUsuario=" + usuUsuario + ", usuClave=" + usuClave + ", usuTempclave=" + usuTempclave + ", usuIdioma=" + usuIdioma + ", usuActivo=" + usuActivo + ", cliReporteusuariosList=" + cliReporteusuariosList + ", cliReporteusuariosListEliminados=" + cliReporteusuariosListEliminados + ", cliMedicoList=" + cliMedicoList + ", cliMedicoListEliminados=" + cliMedicoListEliminados + ", usuVersion=" + usuVersion + ", modificado=" + modificado + ", token=" + token + '}';
     }
-    
-    public String getNombreApellido(){
+
+    public String getNombreApellido() {
         return usuNombre.get() + " " + usuPapellido.get();
+    }
+
+    public String getNombreApellidos() {
+        return usuNombre.get() + " " + usuPapellido.get() + " " + usuSapellido.get();
     }
 
 }

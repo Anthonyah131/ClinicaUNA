@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXScrollPane?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/20.0.1" fx:controller="cr.ac.una.clinicauna.controller.P13_ExpedienteViewController">
+    <stylesheets>
+        <URL value="@styles.css" />
+    </stylesheets>
+   <children>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <padding>
+            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+         <children>
+            <VBox prefHeight="690.0" prefWidth="829.0" spacing="10.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <HBox alignment="CENTER_LEFT" spacing="15.0">
+                     <children>
+                        <MFXButton fx:id="btnSalir" onAction="#onActionBtnSalir" styleClass="mfx-button-Image-salir">
+                           <graphic>
+                              <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../resources/media/icons/Back_Icon.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </MFXButton>
+                        <Label styleClass="labels-text" text="Expediente clinico." />
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <Label layoutX="10.0" layoutY="14.0" styleClass="labels-text" text="Medico: " />
+                        <Label layoutX="10.0" layoutY="14.0" styleClass="labels-text" text="nombreMed" />
+                     </children>
+                  </HBox>
+                  <MFXScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                     <content>
+                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="1250.0" spacing="15.0" style="-fx-background-color: gray;">
+                           <children>
+                              <Label styleClass="labels-text-minus" text="Datos del paciente:" />
+                              <HBox layoutX="30.0" layoutY="62.0" spacing="10.0">
+                                 <children>
+                                    <Label maxWidth="1.7976931348623157E308" styleClass="labels-text-minus" text="Cedula:" />
+                                    <Label styleClass="labels-text-minus" text="ced" />
+                                    <Label layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" styleClass="labels-text-minus" text="Genero:" />
+                                    <Label layoutX="84.0" layoutY="10.0" styleClass="labels-text-minus" text="gen" />
+                                    <Label layoutX="135.0" layoutY="10.0" maxWidth="1.7976931348623157E308" styleClass="labels-text-minus" text="Fecha nacimiento:" />
+                                    <Label layoutX="209.0" layoutY="10.0" styleClass="labels-text-minus" text="fech" />
+                                 </children>
+                              </HBox>
+                              <HBox spacing="10.0">
+                                 <children>
+                                    <Label maxWidth="1.7976931348623157E308" styleClass="labels-text-minus" text="Nombre:" />
+                                    <Label styleClass="labels-text-minus" text="nomb" />
+                                    <Label layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" styleClass="labels-text-minus" text="Primer Apellido:" />
+                                    <Label layoutX="84.0" layoutY="10.0" styleClass="labels-text-minus" text="papell" />
+                                    <Label layoutX="135.0" layoutY="10.0" maxWidth="1.7976931348623157E308" styleClass="labels-text-minus" text="Segundo Apellido:" />
+                                    <Label layoutX="209.0" layoutY="10.0" styleClass="labels-text-minus" text="sapell" />
+                                 </children>
+                              </HBox>
+                              <HBox layoutX="30.0" layoutY="94.0" spacing="10.0">
+                                 <children>
+                                    <Label maxWidth="1.7976931348623157E308" styleClass="labels-text-minus" text="Telefono:" />
+                                    <Label styleClass="labels-text-minus" text="tel" />
+                                    <Label layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" styleClass="labels-text-minus" text="Correo:" />
+                                    <Label layoutX="84.0" layoutY="10.0" styleClass="labels-text-minus" text="mail" />
+                                 </children>
+                              </HBox>
+                              <Label layoutX="30.0" layoutY="30.0" styleClass="labels-text-minus" text="Antecedentes personales:" />
+                              <HBox layoutX="30.0" layoutY="126.0" spacing="10.0">
+                                 <children>
+                                    <HBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label prefWidth="200.0" styleClass="labels-text-minus" text="Antecedentes patologicos:" />
+                                          <JFXTextArea prefHeight="50.0" prefWidth="350.0" HBox.hgrow="ALWAYS" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label prefWidth="200.0" styleClass="labels-text-minus" text="Alergias:" />
+                                          <JFXTextArea prefHeight="50.0" prefWidth="350.0" HBox.hgrow="ALWAYS" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </HBox>
+                              <HBox layoutX="30.0" layoutY="190.0" spacing="10.0">
+                                 <children>
+                                    <HBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label prefWidth="200.0" styleClass="labels-text-minus" text="Hospitalizaciones:" />
+                                          <JFXTextArea prefHeight="50.0" prefWidth="350.0" HBox.hgrow="ALWAYS" />
+                                          <HBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Label prefWidth="200.0" styleClass="labels-text-minus" text="Operaciones:" />
+                                                <JFXTextArea prefHeight="50.0" prefWidth="350.0" HBox.hgrow="ALWAYS" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </HBox>
+                              <HBox layoutX="30.0" layoutY="255.0" spacing="10.0">
+                                 <children>
+                                    <HBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label prefWidth="200.0" styleClass="labels-text-minus" text="Tratamientos actuales:" />
+                                          <JFXTextArea prefHeight="50.0" prefWidth="350.0" HBox.hgrow="ALWAYS" />
+                                          <HBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Label minWidth="-Infinity" prefWidth="200.0" styleClass="labels-text-minus" text="Antecedentes Heredo Familiares:" textAlignment="CENTER" wrapText="true" />
+                                                <JFXTextArea prefHeight="50.0" prefWidth="350.0" HBox.hgrow="ALWAYS" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </HBox>
+                              <Label layoutX="30.0" layoutY="158.0" styleClass="labels-text-minus" text="Historial de citas:" />
+                              <HBox layoutX="30.0" layoutY="320.0" spacing="10.0">
+                                 <children>
+                                    <TableView maxWidth="1.7976931348623157E308" prefHeight="200.0" HBox.hgrow="ALWAYS" />
+                                 </children>
+                              </HBox>
+                              <HBox layoutX="30.0" layoutY="320.0" spacing="10.0">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" spacing="10.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label styleClass="labels-text-minus" text="Fecha y hora:" />
+                                          <Label styleClass="labels-text-minus" text="Fecha y hora:" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </HBox>
+                              <HBox layoutX="30.0" layoutY="320.0" spacing="10.0">
+                                 <children>
+                                    <JFXTextField promptText="Presion arterial:" styleClass="jfx-text-field-edit" HBox.hgrow="ALWAYS" />
+                                    <JFXTextField layoutX="10.0" layoutY="10.0" promptText="Frecuancia cardiaca:" styleClass="jfx-text-field-edit" HBox.hgrow="ALWAYS" />
+                                    <JFXTextField layoutX="201.0" layoutY="10.0" promptText="Peso:" styleClass="jfx-text-field-edit" HBox.hgrow="ALWAYS" />
+                                    <JFXTextField layoutX="392.0" layoutY="10.0" promptText="Talla:" styleClass="jfx-text-field-edit" HBox.hgrow="ALWAYS" />
+                                    <JFXTextField layoutX="583.0" layoutY="10.0" promptText="Temperatura:" styleClass="jfx-text-field-edit" HBox.hgrow="ALWAYS" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" spacing="10.0">
+                                 <children>
+                                    <Label maxWidth="1.7976931348623157E308" styleClass="labels-text-minus" text="Indice de masa corporal:" />
+                                    <Label layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" styleClass="labels-text-minus" text="indice" />
+                                 </children>
+                              </HBox>
+                              <HBox layoutX="30.0" layoutY="320.0" spacing="10.0">
+                                 <children>
+                                    <HBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label maxWidth="1.7976931348623157E308" prefWidth="200.0" styleClass="labels-text-minus" text="Anotaciones de enfermería:" textAlignment="CENTER" wrapText="true" />
+                                          <JFXTextArea prefHeight="50.0" prefWidth="350.0" HBox.hgrow="ALWAYS" />
+                                          <HBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Label prefHeight="34.0" prefWidth="200.0" styleClass="labels-text-minus" text="Rrazón de la consulta:" textAlignment="CENTER" wrapText="true" />
+                                                <JFXTextArea prefHeight="50.0" prefWidth="350.0" HBox.hgrow="ALWAYS" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </HBox>
+                              <HBox layoutX="30.0" layoutY="751.0" spacing="10.0">
+                                 <children>
+                                    <HBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label maxWidth="1.7976931348623157E308" prefWidth="200.0" styleClass="labels-text-minus" text="Plan de atención:" />
+                                          <JFXTextArea prefHeight="50.0" prefWidth="350.0" HBox.hgrow="ALWAYS" />
+                                          <HBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Label prefHeight="34.0" prefWidth="200.0" styleClass="labels-text-minus" text="Observaciones:" textAlignment="CENTER" wrapText="true" />
+                                                <JFXTextArea prefHeight="50.0" prefWidth="350.0" HBox.hgrow="ALWAYS" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </HBox>
+                              <HBox layoutX="30.0" layoutY="816.0" spacing="10.0">
+                                 <children>
+                                    <HBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label maxWidth="1.7976931348623157E308" prefWidth="200.0" styleClass="labels-text-minus" text="Examen físico:" />
+                                          <JFXTextArea prefHeight="50.0" prefWidth="350.0" HBox.hgrow="ALWAYS" />
+                                          <HBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Label prefHeight="34.0" prefWidth="200.0" styleClass="labels-text-minus" text="Tratamiento:" textAlignment="CENTER" wrapText="true" />
+                                                <JFXTextArea prefHeight="50.0" prefWidth="350.0" HBox.hgrow="ALWAYS" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </HBox>
+                              <Label layoutX="30.0" layoutY="385.0" styleClass="labels-text-minus" text="Evolución del paciente:" />
+                              <LineChart prefWidth="1196.0">
+                                <xAxis>
+                                  <CategoryAxis side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                  <NumberAxis side="LEFT" />
+                                </yAxis>
+                              </LineChart>
+                              <HBox layoutX="30.0" layoutY="881.0" spacing="10.0">
+                                 <children>
+                                    <HBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <Label maxWidth="1.7976931348623157E308" prefWidth="200.0" styleClass="labels-text-minus" text="Adjuntar examenes:" />
+                                          <MFXButton prefWidth="152.0" styleClass="mfx-button-menu-minus" text="Cargar archivos" />
+                                       </children>
+                                    </HBox>
+                                    <VBox prefHeight="50.0" prefWidth="525.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <HBox alignment="CENTER" spacing="10.0">
+                                             <children>
+                                                <JFXTextArea HBox.hgrow="ALWAYS" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <HBox layoutX="30.0" layoutY="1393.0" spacing="10.0">
+                                 <children>
+                                    <HBox alignment="CENTER_RIGHT" spacing="10.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                          <MFXButton prefWidth="152.0" styleClass="mfx-button-menu-minus" text="Guardar cambios" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </VBox>
+                     </content>
+                  </MFXScrollPane>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

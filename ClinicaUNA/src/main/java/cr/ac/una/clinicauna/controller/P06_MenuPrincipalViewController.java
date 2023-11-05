@@ -36,6 +36,8 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
     CliUsuarioDto usuarioDto;
     @FXML
     private MFXButton btnAgenda;
+    @FXML
+    private MFXButton btnAtencion;
 
     /**
      * Initializes the controller class.
@@ -112,6 +114,18 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
     private void onActionBtnAgenda(ActionEvent event) {
         SoundUtil.mouseEnterSound();
         FlowController.getInstance().goView("P10_AgendaView");
+    }
+
+    @FXML
+    private void onActionBtnAtencion(ActionEvent event) {
+         SoundUtil.mouseEnterSound();
+        if (!usuarioDto.getUsuTipousuario().equals("R")) {
+            //AppContext.getInstance().set("PadreMedicos", "P06_MenuPrincipalView");
+            //FlowController.getInstance().delete("P08_MantenimientoMedicosView");
+            FlowController.getInstance().goView("P12_AtencionCitasView");
+        } else {
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "No tiene permisos para ingresar a esta pantalla");
+        }
     }
 
 }

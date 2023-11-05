@@ -20,7 +20,8 @@
                   <MFXButton fx:id="btnGenerales" maxWidth="1.7976931348623157E308" onAction="#onActionBtnGenerales" styleClass="mfx-button-menu" text="%key.mantGenerales" />
                   <MFXButton fx:id="btnMantenimientoMedicos" maxWidth="1.7976931348623157E308" onAction="#onActionBtnMantenimientoMedicos" styleClass="mfx-button-menu" text="%key.mantMedicos" />
                   <MFXButton fx:id="btnRegistroPacientes" maxWidth="1.7976931348623157E308" onAction="#onActionBtnRegistroPacientes" styleClass="mfx-button-menu" text="%key.manPacientes" />
-                  <MFXButton fx:id="btnAgenda" layoutX="10.0" layoutY="595.0" maxWidth="1.7976931348623157E308" onAction="#onActionBtnAgenda" styleClass="mfx-button-menu" />
+                  <MFXButton fx:id="btnAgenda" layoutX="10.0" layoutY="595.0" maxWidth="1.7976931348623157E308" onAction="#onActionBtnAgenda" styleClass="mfx-button-menu" text="Agenda" />
+                  <MFXButton fx:id="btnAtencion" layoutX="10.0" layoutY="530.0" maxWidth="1.7976931348623157E308" onAction="#onActionBtnAtencion" styleClass="mfx-button-menu" text="Atencion de citas" />
                   <MFXButton fx:id="btnCerrarSesion" layoutX="10.0" layoutY="595.0" maxWidth="1.7976931348623157E308" onAction="#onActionBtnCerrarSesion" styleClass="mfx-button-menu" text="%key.cerrarSesion" />
                   <MFXButton fx:id="btnSalir" maxWidth="1.7976931348623157E308" onAction="#onActionBtnSalir" styleClass="mfx-button-salir" text="%key.salir" />
                </children>

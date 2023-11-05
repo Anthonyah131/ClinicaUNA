@@ -1,7 +1,10 @@
 package cr.ac.una.clinicauna.controller;
 
+import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 /**
@@ -9,7 +12,10 @@ import javafx.fxml.Initializable;
  *
  * @author Luvara
  */
-public class P12_ExpedienteViewController extends Controller implements Initializable {
+public class P13_ExpedienteViewController extends Controller implements Initializable {
+
+    @FXML
+    private MFXButton btnSalir;
 
     /**
      * Initializes the controller class.
@@ -21,6 +27,10 @@ public class P12_ExpedienteViewController extends Controller implements Initiali
 
     @Override
     public void initialize() {
+    }
+
+    @FXML
+    private void onActionBtnSalir(ActionEvent event) {
     }
     
 }
