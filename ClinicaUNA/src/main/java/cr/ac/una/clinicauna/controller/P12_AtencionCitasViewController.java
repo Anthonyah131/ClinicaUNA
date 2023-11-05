@@ -75,7 +75,7 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
 
         TableColumn<CliCitaDto, String> tbcNombre = new TableColumn<>(/*resourceBundle.getString("key.name")*/"Nombre paciente");
         tbcNombre.setPrefWidth(120);
-        tbcNombre.setCellValueFactory(cd -> cd.getValue().cliPacienteDto.pacNombreCompleto);
+        tbcNombre.setCellValueFactory(cd -> cd.getValue().cliPacienteDto.pacNombre);
 
         TableColumn<CliCitaDto, String> tbcMotivo = new TableColumn<>(/*resourceBundle.getString("key.papellido")*/"Motivo");
         tbcMotivo.setPrefWidth(130);

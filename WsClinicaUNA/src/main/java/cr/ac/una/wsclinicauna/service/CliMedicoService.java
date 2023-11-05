@@ -122,8 +122,8 @@ public class CliMedicoService {
                 for (CliAgendaDto cliAgendaDto : cliMedicoDto.getCliAgendaList()) {
                     if (cliAgendaDto.getModificado()) {
                         CliAgenda cliAgenda = em.find(CliAgenda.class, cliAgendaDto.getAgeId());
-                        cliMedico.getCliAgendaList().add(cliAgenda);
                         cliAgenda.setMedId(cliMedico);
+                        cliMedico.getCliAgendaList().add(cliAgenda);
                     }
                 }
 

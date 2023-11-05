@@ -117,9 +117,9 @@ public class CliCitaDto {
         return modificado;
     }
 
-    public String getNombreString() {
-        return cliPacienteDto.getPacNombre() + " " + cliPacienteDto.getPacPapellido() + " " + cliPacienteDto.getPacSapellido();
-    }
+//    public String getNombreString() {
+//        return cliPacienteDto.getPacNombre() + " " + cliPacienteDto.getPacPapellido() + " " + cliPacienteDto.getPacSapellido();
+//    }
 
     public void setModificado(Boolean modificado) {
         this.modificado = modificado;
@@ -129,7 +129,7 @@ public class CliCitaDto {
         String motivo = (getCitMotivo() != null) ? getCitMotivo() : "No indica";
 
         return "Estado: " + estadoCita()
-                + "\nPaciente: " + getNombreString()
+                + "\nPaciente: " + cliPacienteDto.getPacNombre()
                 + "\nUsuario que registra: " + getCitUsuarioRegistra()
                 + "\nMotivo: " + motivo
                 + "\nTelefono: " + cliPacienteDto.getPacTelefono()

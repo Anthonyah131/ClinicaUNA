@@ -11,6 +11,9 @@ import cr.ac.una.wsclinicauna.model.CliCitaDto;
 import cr.ac.una.wsclinicauna.model.CliMedico;
 import cr.ac.una.wsclinicauna.model.CliMedicoDto;
 import cr.ac.una.wsclinicauna.model.CliPacienteDto;
+import cr.ac.una.wsclinicauna.model.CliReporteusuarios;
+import cr.ac.una.wsclinicauna.model.CliReporteusuariosDto;
+import cr.ac.una.wsclinicauna.model.CliUsuarioDto;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import jakarta.ejb.LocalBean;
@@ -101,14 +104,17 @@ public class CliAgendaService {
                     return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el agenda a modificar.", "guardarAgenda NoResultException");
                 }
                 cliAgenda.actualizar(cliAgendaDto);
-                CliMedico cliMedico = em.find(CliMedico.class, cliAgendaDto.getCliMedicoDto().getMedId());
-                cliAgenda.setMedId(cliMedico);
-                
+
+                if (cliAgendaDto.getCliMedicoDto() != null && cliAgendaDto.getCliMedicoDto().getModificado()) {
+                    CliMedico cliMedico = em.find(CliMedico.class, cliAgendaDto.getCliMedicoDto().getMedId());
+                    cliAgenda.setMedId(cliMedico);
+                }
+
                 for (CliCitaDto cliCitaDto : cliAgendaDto.getCliCitaList()) {
                     if (cliCitaDto.getModificado()) {
                         CliCita cliCita = em.find(CliCita.class, cliCitaDto.getCitId());
-                        cliAgenda.getCliCitaList().add(cliCita);
                         cliCita.setAgeId(cliAgenda);
+                        cliAgenda.getCliCitaList().add(cliCita);
                     }
                 }
 
@@ -122,7 +128,14 @@ public class CliAgendaService {
                 em.persist(cliAgenda);
             }
             em.flush();
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Agenda", new CliAgendaDto(cliAgenda));
+            CliAgendaDto cliCitaDtoR = new CliAgendaDto(cliAgenda);
+            for (CliCita cliCita : cliAgenda.getCliCitaList()) {
+                cliCitaDtoR.getCliCitaList().add(new CliCitaDto(cliCita));
+            }
+            if (cliAgenda.getMedId() != null) {
+                cliCitaDtoR.setCliMedicoDto(new CliMedicoDto(cliAgenda.getMedId()));
+            }
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Agenda", cliCitaDtoR);
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el agenda.", ex);
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el agenda.", "guardarAgenda " + ex.getMessage());

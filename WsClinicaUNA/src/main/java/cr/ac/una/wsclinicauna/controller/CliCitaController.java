@@ -82,13 +82,14 @@ public class CliCitaController {
             if (!res.getEstado()) {
                 return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
             }
-            
+
             Respuesta re2 = cliParametrosService.getParametros();
             List<CliParametrosDto> cliParametrosDtoList = (List<CliParametrosDto>) re2.getResultado("Parametros");
             CliParametrosDto cliParametrosDto = cliParametrosDtoList.get(0);
-            
-            cliCitaService.memorandoEmailAgeCita(cliCitaDto.getCliPacienteDto(), cliParametrosDto, cliCitaDto);
-            
+
+            if (cliCitaDto.getCliPacienteDto() != null) {
+                cliCitaService.memorandoEmailAgeCita(cliCitaDto.getCliPacienteDto(), cliParametrosDto, cliCitaDto);
+            }
             return Response.ok((CliCitaDto) res.getResultado("Citas")).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(CliCitaController.class.getName()).log(Level.SEVERE, null, ex);

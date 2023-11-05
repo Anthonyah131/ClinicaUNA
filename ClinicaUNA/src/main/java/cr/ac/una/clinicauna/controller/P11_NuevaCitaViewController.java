@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import cr.ac.una.clinicauna.model.CliAgendaDto;
 import cr.ac.una.clinicauna.model.CliCitaDto;
+import cr.ac.una.clinicauna.model.CliMedicoDto;
 import cr.ac.una.clinicauna.model.CliPacienteDto;
 import cr.ac.una.clinicauna.model.CliUsuarioDto;
 import cr.ac.una.clinicauna.service.CliAgendaService;
@@ -63,6 +64,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
     CliUsuarioDto usuarioDto;
     CliPacienteDto pacienteDto;
     CliAgendaDto agendaDto;
+    CliMedicoDto medicoDto;
 
     /**
      * Initializes the controller class.
@@ -88,35 +90,58 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         guardarCita();
 
         P10_AgendaViewController agendaController = (P10_AgendaViewController) FlowController.getInstance().getController("P10_AgendaView");
-        agendaController.cargarCita(citaDto);
+        agendaController.cargarCita(citaDto, agendaDto, medicoDto);
         stage.close();
     }
 
     private void guardarCita() {
-//        try {
+        try {
 //            String invalidos = ValidarRequeridos.validarRequeridos(requeridos);
 //            if (!invalidos.isEmpty()) {
 //                String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
 //                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), mensaje);
 //            } else {
-//            CliCitaService citaService = new CliCitaService();
-//            Respuesta respuesta = citaService.guardarCita(citaDto);
-//
-//            if (!respuesta.getEstado()) {
-//                    new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
-//            } else {
-//                this.citaDto = (CliCitaDto) respuesta.getResultado("Cita");
-//
-//                CliPacienteService pacienteService = new CliPacienteService();
-//                CliAgendaService agendaService = new CliAgendaService();
-//
-//                new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
+
+            if (agendaDto.getAgeId() == null || agendaDto.getAgeId() <= 0) {
+                CliAgendaService agendaService = new CliAgendaService();
+                Respuesta respuesta = agendaService.guardarAgenda(agendaDto);
+                agendaDto = (CliAgendaDto) respuesta.getResultado("Agenda");
+            }
+            CliCitaService citaService = new CliCitaService();
+            Respuesta respuesta = citaService.guardarCita(citaDto);
+
+            if (!respuesta.getEstado()) {
+                new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
+            } else {
+                this.citaDto = (CliCitaDto) respuesta.getResultado("Cita");
+
+                CliPacienteService pacienteService = new CliPacienteService();
+                citaDto.setModificado(true);
+                pacienteDto.getCliCitaList().add(citaDto);
+                pacienteService.guardarPaciente(pacienteDto);
+
+                CliAgendaService agendaService = new CliAgendaService();
+                citaDto.setModificado(true);
+                agendaDto.getCliCitaList().add(citaDto);
+                respuesta = agendaService.guardarAgenda(agendaDto);
+                agendaDto = (CliAgendaDto) respuesta.getResultado("Agenda");
+
+                CliMedicoService medicoService = new CliMedicoService();
+                agendaDto.setModificado(true);
+                medicoDto.getCliAgendaList().add(agendaDto);
+                respuesta = medicoService.guardarMedico(medicoDto);
+                medicoDto = (CliMedicoDto) respuesta.getResultado("Medico");
+
+                respuesta = citaService.getCita(citaDto.getCitId());
+                this.citaDto = (CliCitaDto) respuesta.getResultado("Cita");
+
+                new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
+            }
 //            }
-//            }
-//        } catch (Exception ex) {
-//            Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error guardando el usuario.", ex);
-//            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
-//        }
+        } catch (Exception ex) {
+            Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error guardando el usuario.", ex);
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
+        }
     }
 
     @FXML
@@ -140,8 +165,8 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         lblNombreUsu.textProperty().bind(citaDto.citUsuarioRegistra);
         lblFechaHora.textProperty().bind(citaDto.citFechaHora.asString());
         if (citaDto.getCliPacienteDto() != null) {
-            citaDto.cliPacienteDto.getNombreCompleto();
-            lblNombrePac.textProperty().bind(citaDto.cliPacienteDto.pacNombreCompleto);
+            citaDto.cliPacienteDto.getPacNombre();
+            lblNombrePac.textProperty().bind(citaDto.cliPacienteDto.pacNombre);
             lblNumero.textProperty().bind(citaDto.cliPacienteDto.pacTelefono);
             lblCorreo.textProperty().bind(citaDto.cliPacienteDto.pacCorreo);
         }
@@ -165,10 +190,11 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         }
     }
 
-    public void cargarDefecto(CliCitaDto cita, CliUsuarioDto usuario, CliAgendaDto agenda, LocalDateTime fechaHora) {
+    public void cargarDefecto(CliCitaDto cita, CliUsuarioDto usuario, CliAgendaDto agenda, CliMedicoDto medico, LocalDateTime fechaHora) {
         usuarioDto = usuario;
         agendaDto = agenda;
         citaDto = cita;
+        medicoDto = medico;
         if (citaDto.getCitUsuarioRegistra() == null && citaDto.getCitFechaHora() == null) {
             citaDto.setCitUsuarioRegistra(usuarioDto.getUsuNombre());
             citaDto.setCitFechaHora(fechaHora);

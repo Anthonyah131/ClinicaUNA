@@ -137,6 +137,7 @@ public class CliPacienteService {
                 for (CliCitaDto cliCitaDto : cliPacienteDto.getCliCitaList()) {
                     if (cliCitaDto.getModificado()) {
                         CliCita cliCita = em.find(CliCita.class, cliCitaDto.getCitId());
+                        cliCita.setPacId(cliPaciente);
                         cliPaciente.getCliCitaList().add(cliCita);
                         cliCita.setPacId(cliPaciente);
                     }

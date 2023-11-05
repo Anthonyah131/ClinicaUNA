@@ -43,7 +43,7 @@ public class MemorandoCita {
     @EJB
     CliParametrosService cliParametrosService;
 
-    @Schedule(hour = "18", persistent = false)
+    @Schedule(hour = "10", minute = "38", persistent = false)
     private void memorandoCita() {
         try {
             Respuesta res = cliCitaService.getCitas();

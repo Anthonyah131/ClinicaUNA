@@ -22,7 +22,7 @@ public class CliPacienteDto {
     public SimpleStringProperty pacCedula;
     public SimpleStringProperty pacTelefono;
     public SimpleStringProperty pacCorreo;
-    public SimpleStringProperty pacNombreCompleto;
+//    public SimpleStringProperty pacNombreCompleto;
     public ObjectProperty<String> pacGenero;
     public ObjectProperty<LocalDate> pacFnacimiento;
     public ObservableList<CliExpedienteDto> cliExpedienteList;
@@ -42,7 +42,7 @@ public class CliPacienteDto {
         this.pacCedula = new SimpleStringProperty();
         this.pacTelefono = new SimpleStringProperty();
         this.pacCorreo = new SimpleStringProperty();
-        this.pacNombreCompleto = new SimpleStringProperty();
+//        this.pacNombreCompleto = new SimpleStringProperty();
         this.pacGenero = new SimpleObjectProperty("M");
         this.pacFnacimiento = new SimpleObjectProperty();
         this.cliExpedienteList = FXCollections.observableArrayList();
@@ -190,10 +190,11 @@ public class CliPacienteDto {
         return modificado;
     }
 
-    public String getNombreCompleto() {
-        this.pacNombreCompleto.set(getPacNombre() + " " + getPacPapellido() + " " + getPacSapellido());
-        return pacNombreCompleto.get();
-    }
+//    public SimpleStringProperty getNombreCompleto() {
+//        SimpleStringProperty nombreCompleto = new SimpleStringProperty();
+//        nombreCompleto.set(pacNombre.get() + " " + pacPapellido.get() + " " + pacSapellido.get());
+//        return nombreCompleto;
+//    }
 
     public void setModificado(Boolean modificado) {
         this.modificado = modificado;

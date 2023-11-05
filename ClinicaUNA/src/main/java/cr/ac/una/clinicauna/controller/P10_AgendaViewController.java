@@ -69,6 +69,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         // llenarGridPane();
         usuarioDto = (CliUsuarioDto) AppContext.getInstance().get("Usuario");
         citaDto = new CliCitaDto();
+        agendaDto = new CliAgendaDto();
 //        dragAndDrop();
     }
 
@@ -87,7 +88,6 @@ public class P10_AgendaViewController extends Controller implements Initializabl
     @FXML
     private void onActionBtnCargarAgenda(ActionEvent event) {
         //validarCargarAgenda();
-        cargarAgenda();
         System.out.println(citaDto.toString());
     }
 
@@ -99,6 +99,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
 
     private void validarCargarAgenda() {
         if (dtpFechasCitas.getValue() != null && medicoDto != null) {
+            cargarAgenda();
             llenarGridPane();
         }
     }
@@ -188,7 +189,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                         }
 
                         P11_NuevaCitaViewController citaController = (P11_NuevaCitaViewController) FlowController.getInstance().getController("P11_NuevaCitaView");
-                        citaController.cargarDefecto(citaDto, usuarioDto, agendaDto, calcularHora(rowIndex, colIndex));
+                        citaController.cargarDefecto(citaDto, usuarioDto, agendaDto, medicoDto, calcularHora(rowIndex, colIndex));
 
                         FlowController.getInstance().goViewInWindowModal("P11_NuevaCitaView", stage, Boolean.FALSE);
 
@@ -293,13 +294,15 @@ public class P10_AgendaViewController extends Controller implements Initializabl
 //        unbindUsuario();
         medicoDto = (CliMedicoDto) buscadorRegistroController.getSeleccionado();
         if (medicoDto != null) {
-            btnBuscarMedico.setText(medicoDto.getNombreString());
+            btnBuscarMedico.setText(medicoDto.getMedCodigo());
         }
 //        bindUsuario();
     }
 
-    public void cargarCita(CliCitaDto cita) {
+    public void cargarCita(CliCitaDto cita, CliAgendaDto agenda, CliMedicoDto medico) {
         citaDto = cita;
+        agendaDto = agenda;
+        medicoDto = medico;
     }
 
     private void estadoCita(Label label) {
@@ -325,8 +328,12 @@ public class P10_AgendaViewController extends Controller implements Initializabl
 
         if (respuesta.getEstado()) {
             agendaDto = (CliAgendaDto) respuesta.getResultado("Agenda"); // agendaDto tiene la agenda seleccionad, dentro tiene las citas y el paciente de cada cita
+            if(agendaDto == null) {
+                agendaDto = new CliAgendaDto();
+                agendaDto.setAgeFecha(dtpFechasCitas.getValue());
+            }
             for (CliCitaDto cita : agendaDto.getCliCitaList()) {
-                System.out.println(cita.getCitUsuarioRegistra() + " " + cita.getCliPacienteDto().getNombreCompleto());
+                System.out.println(cita.getCitUsuarioRegistra() + " " + cita.getCliPacienteDto().getPacNombre());
             }
         } else {
             new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Agenda", getStage(), respuesta.getMensaje());

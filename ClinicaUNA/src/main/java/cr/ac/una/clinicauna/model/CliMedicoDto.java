@@ -156,9 +156,9 @@ public class CliMedicoDto {
         }
     }
     
-    public String getNombreString() {
-        return cliUsuarioDto.getUsuNombre() + " " + cliUsuarioDto.getUsuPapellido() + " " + cliUsuarioDto.getUsuSapellido();
-    }
+//    public String getNombreString() {
+//        return cliUsuarioDto.getUsuNombre() + " " + cliUsuarioDto.getUsuPapellido() + " " + cliUsuarioDto.getUsuSapellido();
+//    }
 
     public void setMedEspaciosxhora(Long medEspaciosxhora) {
         this.medEspaciosxhora.set(medEspaciosxhora.toString());
