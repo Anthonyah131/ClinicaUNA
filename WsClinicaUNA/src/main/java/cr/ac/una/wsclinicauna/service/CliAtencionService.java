@@ -107,6 +107,7 @@ public class CliAtencionService {
                     if (cliExamenDto.getModificado()) {
                         CliExamen cliExamen = em.find(CliExamen.class, cliExamenDto.getExaId());
                         cliAtencion.getCliExamenList().add(cliExamen);
+                        cliExamen.setAteId(cliAtencion);
                     }
                 }
 

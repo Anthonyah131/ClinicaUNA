@@ -108,6 +108,7 @@ public class CliAgendaService {
                     if (cliCitaDto.getModificado()) {
                         CliCita cliCita = em.find(CliCita.class, cliCitaDto.getCitId());
                         cliAgenda.getCliCitaList().add(cliCita);
+                        cliCita.setAgeId(cliAgenda);
                     }
                 }
 

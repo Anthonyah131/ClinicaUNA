@@ -111,6 +111,7 @@ public class CliMedicoService {
                     if (cliReporteagendaDto.getModificado()) {
                         CliReporteagenda cliReporteagenda = em.find(CliReporteagenda.class, cliReporteagendaDto.getRepageId());
                         cliMedico.getCliReporteagendaList().add(cliReporteagenda);
+                        cliReporteagenda.setMedId(cliMedico);
                     }
                 }
 
@@ -122,6 +123,7 @@ public class CliMedicoService {
                     if (cliAgendaDto.getModificado()) {
                         CliAgenda cliAgenda = em.find(CliAgenda.class, cliAgendaDto.getAgeId());
                         cliMedico.getCliAgendaList().add(cliAgenda);
+                        cliAgenda.setMedId(cliMedico);
                     }
                 }
 

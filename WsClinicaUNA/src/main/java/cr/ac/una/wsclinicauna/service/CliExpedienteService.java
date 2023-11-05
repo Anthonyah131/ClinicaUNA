@@ -124,6 +124,7 @@ public class CliExpedienteService {
                     if (cliExamenDto.getModificado()) {
                         CliExamen cliExamen = em.find(CliExamen.class, cliExamenDto.getExaId());
                         cliExpediente.getCliExamenList().add(cliExamen);
+                        cliExamen.setExpId(cliExpediente);
                     }
                 }
 
@@ -135,6 +136,7 @@ public class CliExpedienteService {
                     if (cliAtencionDto.getModificado()) {
                         CliAtencion cliAtencion = em.find(CliAtencion.class, cliAtencionDto.getAteId());
                         cliExpediente.getCliAtencionList().add(cliAtencion);
+                        cliAtencion.setExpId(cliExpediente);
                     }
                 }
 
@@ -146,6 +148,7 @@ public class CliExpedienteService {
                     if (cliAntecedenteDto.getModificado()) {
                         CliAntecedente cliAntecedente = em.find(CliAntecedente.class, cliAntecedenteDto.getAntId());
                         cliExpediente.getCliAntecedenteList().add(cliAntecedente);
+                        cliAntecedente.setExpId(cliExpediente);
                     }
                 }
 
