@@ -5,20 +5,27 @@
 package cr.ac.una.clinicauna.service;
 
 import cr.ac.una.clinicauna.model.CliAgendaDto;
+import cr.ac.una.clinicauna.model.CliMedicoDto;
 import cr.ac.una.clinicauna.util.Request;
 import cr.ac.una.clinicauna.util.Respuesta;
 import jakarta.ws.rs.core.GenericType;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import javafx.collections.FXCollections;
 
 /**
  *
  * @author ANTHONY
  */
 public class CliAgendaService {
+
     public Respuesta getAgenda(Long id) {
         try {
             Map<String, Object> parametros = new HashMap<>();
@@ -36,7 +43,7 @@ public class CliAgendaService {
         }
     }
 
-    public Respuesta getAgendas() {
+    public Respuesta getAgenda(CliMedicoDto medicoDto, LocalDate fecha) {
         try {
             Request request = new Request("CliAgendaController/agendas");
             request.get();
@@ -45,7 +52,18 @@ public class CliAgendaService {
             }
             List<CliAgendaDto> agendas = (List<CliAgendaDto>) request.readEntity(new GenericType<List<CliAgendaDto>>() {
             });
-            return new Respuesta(true, "", "", "Agendas", agendas);
+            Optional<CliAgendaDto> agendaFiltrada = agendas.stream()
+                    .filter(agenda -> Objects.equals(agenda.getCliMedicoDto().getMedId(), medicoDto.getMedId())&& agenda.getAgeFecha().equals(fecha))
+                    .findFirst();
+
+            CliAgendaDto agendaEncontrada;
+            if (agendaFiltrada.isPresent()) {
+                agendaEncontrada = agendaFiltrada.get();
+            } else {
+                agendaEncontrada = null;
+            }
+
+            return new Respuesta(true, "", "", "Agenda", agendaEncontrada);
         } catch (Exception ex) {
             Logger.getLogger(CliAgendaService.class.getName()).log(Level.SEVERE, "Error obteniendo agendas.", ex);
             return new Respuesta(false, "Error obteniendo agendas.", "getAgendas " + ex.getMessage());

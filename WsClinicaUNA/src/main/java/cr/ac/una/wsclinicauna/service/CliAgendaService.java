@@ -10,6 +10,7 @@ import cr.ac.una.wsclinicauna.model.CliCita;
 import cr.ac.una.wsclinicauna.model.CliCitaDto;
 import cr.ac.una.wsclinicauna.model.CliMedico;
 import cr.ac.una.wsclinicauna.model.CliMedicoDto;
+import cr.ac.una.wsclinicauna.model.CliPacienteDto;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import jakarta.ejb.LocalBean;
@@ -74,7 +75,9 @@ public class CliAgendaService {
                 cliAgendaDto.setCliMedicoDto(new CliMedicoDto(cliAgenda.getMedId()));
 
                 for (CliCita cliCita : cliAgenda.getCliCitaList()) {
-                    cliAgendaDto.getCliCitaList().add(new CliCitaDto(cliCita));
+                    CliCitaDto cita = new CliCitaDto(cliCita);
+                    cita.setCliPacienteDto(new CliPacienteDto(cliCita.getPacId()));
+                    cliAgendaDto.getCliCitaList().add(cita);
                 }
                 cliAgendaDtos.add(cliAgendaDto);
             }

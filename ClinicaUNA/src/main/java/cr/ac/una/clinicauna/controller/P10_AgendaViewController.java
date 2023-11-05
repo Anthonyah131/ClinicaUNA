@@ -1,11 +1,16 @@
 package cr.ac.una.clinicauna.controller;
 
 import com.jfoenix.controls.JFXDatePicker;
+import cr.ac.una.clinicauna.model.CliAgendaDto;
 import cr.ac.una.clinicauna.model.CliCitaDto;
 import cr.ac.una.clinicauna.model.CliMedicoDto;
 import cr.ac.una.clinicauna.model.CliUsuarioDto;
+import cr.ac.una.clinicauna.service.CliAgendaService;
+import cr.ac.una.clinicauna.service.CliMedicoService;
 import cr.ac.una.clinicauna.util.AppContext;
 import cr.ac.una.clinicauna.util.FlowController;
+import cr.ac.una.clinicauna.util.Mensaje;
+import cr.ac.una.clinicauna.util.Respuesta;
 import cr.ac.una.clinicauna.util.SoundUtil;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
@@ -19,6 +24,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.input.DataFormat;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -48,9 +54,10 @@ public class P10_AgendaViewController extends Controller implements Initializabl
 
     CliUsuarioDto usuarioDto;
     CliMedicoDto medicoDto;
+    CliAgendaDto agendaDto;
     CliCitaDto citaDto;
     CliCitaDto citasMatriz[][];
-    
+
     List<CliCitaDto> listaCitas;
 
     /**
@@ -80,6 +87,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
     @FXML
     private void onActionBtnCargarAgenda(ActionEvent event) {
         //validarCargarAgenda();
+        cargarAgenda();
         System.out.println(citaDto.toString());
     }
 
@@ -150,7 +158,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
 
                     label.setText(hora12 + aux);
                     label.getStyleClass().add("labels-text-minus");
-                    label.setPrefWidth(90);                    
+                    label.setPrefWidth(90);
                     grdCitas.add(label, j, i);
                     horaInicio++;
                     continue;
@@ -180,13 +188,13 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                         }
 
                         P11_NuevaCitaViewController citaController = (P11_NuevaCitaViewController) FlowController.getInstance().getController("P11_NuevaCitaView");
-                        citaController.cargarDefecto(citaDto, usuarioDto, calcularHora(rowIndex, colIndex));
+                        citaController.cargarDefecto(citaDto, usuarioDto, agendaDto, calcularHora(rowIndex, colIndex));
 
                         FlowController.getInstance().goViewInWindowModal("P11_NuevaCitaView", stage, Boolean.FALSE);
 
 //                        if (citaDto.getCitId() != null) {
-                            citasMatriz[rowIndex][colIndex] = citaDto;
-                            crearCita(label);
+                        citasMatriz[rowIndex][colIndex] = citaDto;
+                        crearCita(label);
 //                        }
 
                         System.out.println("Fila: " + rowIndex + " columna " + colIndex);
@@ -306,15 +314,24 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                 label.getStyleClass().add("label-cita-ausente");
         }
     }
-    
-    private void guardarAgenda(){
-        
-    }
-    
-    private void cargarAgenda(){
-        
+
+    private void guardarAgenda() {
+
     }
 
+    private void cargarAgenda() {
+        CliAgendaService service = new CliAgendaService();
+        Respuesta respuesta = service.getAgenda(medicoDto, dtpFechasCitas.getValue());
+
+        if (respuesta.getEstado()) {
+            agendaDto = (CliAgendaDto) respuesta.getResultado("Agenda"); // agendaDto tiene la agenda seleccionad, dentro tiene las citas y el paciente de cada cita
+            for (CliCitaDto cita : agendaDto.getCliCitaList()) {
+                System.out.println(cita.getCitUsuarioRegistra() + " " + cita.getCliPacienteDto().getNombreCompleto());
+            }
+        } else {
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Agenda", getStage(), respuesta.getMensaje());
+        }
+    }
 
 //    public void dragAndDrop() {
 //

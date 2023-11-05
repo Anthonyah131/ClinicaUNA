@@ -2,21 +2,33 @@ package cr.ac.una.clinicauna.controller;
 
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
+import cr.ac.una.clinicauna.model.CliAgendaDto;
 import cr.ac.una.clinicauna.model.CliCitaDto;
 import cr.ac.una.clinicauna.model.CliPacienteDto;
 import cr.ac.una.clinicauna.model.CliUsuarioDto;
+import cr.ac.una.clinicauna.service.CliAgendaService;
+import cr.ac.una.clinicauna.service.CliCitaService;
+import cr.ac.una.clinicauna.service.CliMedicoService;
+import cr.ac.una.clinicauna.service.CliPacienteService;
+import cr.ac.una.clinicauna.service.CliUsuarioService;
 import cr.ac.una.clinicauna.util.AppContext;
 import cr.ac.una.clinicauna.util.FlowController;
+import cr.ac.una.clinicauna.util.Mensaje;
+import cr.ac.una.clinicauna.util.Respuesta;
+import cr.ac.una.clinicauna.util.ValidarRequeridos;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 
 /**
@@ -44,12 +56,13 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
     private Label lblCorreo;
     @FXML
     private MFXButton btnGuardar;
-
-    CliPacienteDto pacienteDto;
-    CliCitaDto citaDto;
-    CliUsuarioDto usuarioDto;
     @FXML
     private Label lblFechaHora;
+
+    CliCitaDto citaDto;
+    CliUsuarioDto usuarioDto;
+    CliPacienteDto pacienteDto;
+    CliAgendaDto agendaDto;
 
     /**
      * Initializes the controller class.
@@ -71,16 +84,39 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         citaDto.setCitMotivo(txfMotivo.getText());
         citaDto.setCliCantespacios(Long.valueOf(cboxEspacioHora.getValue()));
         citaDto.setCitEstado(estadoCita());
-        
+
         guardarCita();
 
         P10_AgendaViewController agendaController = (P10_AgendaViewController) FlowController.getInstance().getController("P10_AgendaView");
         agendaController.cargarCita(citaDto);
         stage.close();
     }
-    
-    private void guardarCita(){
-        
+
+    private void guardarCita() {
+//        try {
+//            String invalidos = ValidarRequeridos.validarRequeridos(requeridos);
+//            if (!invalidos.isEmpty()) {
+//                String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
+//                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), mensaje);
+//            } else {
+//            CliCitaService citaService = new CliCitaService();
+//            Respuesta respuesta = citaService.guardarCita(citaDto);
+//
+//            if (!respuesta.getEstado()) {
+//                    new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
+//            } else {
+//                this.citaDto = (CliCitaDto) respuesta.getResultado("Cita");
+//
+//                CliPacienteService pacienteService = new CliPacienteService();
+//                CliAgendaService agendaService = new CliAgendaService();
+//
+//                new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
+//            }
+//            }
+//        } catch (Exception ex) {
+//            Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error guardando el usuario.", ex);
+//            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
+//        }
     }
 
     @FXML
@@ -129,12 +165,12 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         }
     }
 
-    public void cargarDefecto(CliCitaDto cita, CliUsuarioDto usuario, LocalDateTime fechaHora) {
+    public void cargarDefecto(CliCitaDto cita, CliUsuarioDto usuario, CliAgendaDto agenda, LocalDateTime fechaHora) {
         usuarioDto = usuario;
-
+        agendaDto = agenda;
         citaDto = cita;
         if (citaDto.getCitUsuarioRegistra() == null && citaDto.getCitFechaHora() == null) {
-            citaDto.setCitUsuarioRegistra(usuarioDto.getNombreApellido());
+            citaDto.setCitUsuarioRegistra(usuarioDto.getUsuNombre());
             citaDto.setCitFechaHora(fechaHora);
         }
         bindCita();

@@ -123,7 +123,14 @@ public class CliCitaService {
                 em.persist(cliCita);
             }
             em.flush();
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Citas", new CliCitaDto(cliCita));
+            CliCitaDto citaDto = new CliCitaDto(cliCita);
+            if (cliCita.getAgeId() != null) {
+                citaDto.setCliAgendaDto(new CliAgendaDto(cliCita.getAgeId()));
+            }
+            if (cliCita.getPacId() != null) {
+                citaDto.setCliPacienteDto(new CliPacienteDto(cliCita.getPacId()));
+            }
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Citas", citaDto);
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el citas.", ex);
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el citas.", "guardarCita " + ex.getMessage());
@@ -196,7 +203,7 @@ public class CliCitaService {
     private String mensajeEmail(CliPacienteDto cliPacienteDto, byte[] html, byte[] logo, String nombre, LocalDate fechaCita) throws UnknownHostException, IOException {
         String base64Image = convertirABase64(logo);
         String mensaje = convertirBytesAHTML(html);
-        String activacionMensaje = "Hola por parte de" + nombre + "su cita fue agendada para el dia: " + fechaCita + "Gracias de antemano "+cliPacienteDto.getPacNombre();
+        String activacionMensaje = "Hola por parte de" + nombre + "su cita fue agendada para el dia: " + fechaCita + "Gracias de antemano " + cliPacienteDto.getPacNombre();
         mensaje = mensaje.replace("{Insertar nombre de la empresa}", nombre);
         mensaje = mensaje.replace("{Contenido que se le vaya a enviar}", activacionMensaje);
         mensaje = mensaje.replace("{imagen}", "data:image/png;base64," + base64Image);
