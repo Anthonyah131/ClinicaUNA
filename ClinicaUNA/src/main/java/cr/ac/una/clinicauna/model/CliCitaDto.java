@@ -124,4 +124,28 @@ public class CliCitaDto {
     public void setModificado(Boolean modificado) {
         this.modificado = modificado;
     }
+
+    public String citaLabel() {
+        String motivo = (getCitMotivo() != null) ? getCitMotivo() : "No indica";
+
+        return "Estado: " + estadoCita()
+                + "\nPaciente: " + getNombreString()
+                + "\nUsuario que registra: " + getCitUsuarioRegistra()
+                + "\nMotivo: " + motivo
+                + "\nTelefono: " + cliPacienteDto.getPacTelefono()
+                + "\nCorreo: " + cliPacienteDto.getPacCorreo();
+    }
+    
+    public String estadoCita() {
+        return switch (getCitEstado()) {
+            case "U" ->
+                "Ausente";
+            case "A" ->
+                "Atendida";
+            case "C" ->
+                "Cancelada";
+            default ->
+                "Programada";
+        };
+    }
 }

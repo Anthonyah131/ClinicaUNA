@@ -9,6 +9,8 @@ import cr.ac.una.clinicauna.util.AppContext;
 import cr.ac.una.clinicauna.util.FlowController;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -46,6 +48,8 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
     CliPacienteDto pacienteDto;
     CliCitaDto citaDto;
     CliUsuarioDto usuarioDto;
+    @FXML
+    private Label lblFechaHora;
 
     /**
      * Initializes the controller class.
@@ -54,8 +58,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         fillCbox();
-        nuevaCita();
-        usuarioDto = (CliUsuarioDto) AppContext.getInstance().get("Usuario");
+//        nuevaCita();
     }
 
     @Override
@@ -66,28 +69,12 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
     @FXML
     private void onActionBtnGuardar(ActionEvent event) {
         citaDto.setCitMotivo(txfMotivo.getText());
-        citaDto.setCliPacienteDto(pacienteDto);
-        citaDto.setCitUsuarioRegistra(usuarioDto.getUsuNombre() + " " + usuarioDto.getUsuPapellido());
         citaDto.setCliCantespacios(Long.valueOf(cboxEspacioHora.getValue()));
         citaDto.setCitEstado(estadoCita());
 
         P10_AgendaViewController agendaController = (P10_AgendaViewController) FlowController.getInstance().getController("P10_AgendaView");
         agendaController.cargarCita(citaDto);
         stage.close();
-//      
-    }
-
-    public String estadoCita() {
-        return switch (cboxEstadoCita.getValue()) {
-            case "Ausente" ->
-                "U";
-            case "Atendida" ->
-                "A";
-            case "Cancelada" ->
-                "C";
-            default ->
-                "P";
-        };
     }
 
     @FXML
@@ -95,6 +82,56 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         AppContext.getInstance().set("PadrePacientes", "P11_NuevaCitaView");
         FlowController.getInstance().delete("P09_MantenimientoPacientesView");
         FlowController.getInstance().goViewInWindowModal("P09_MantenimientoPacientesView", stage, false);
+    }
+
+    public void bindBuscarPaciente() {
+        P09_MantenimientoPacientesViewController pacienteRegistroController = (P09_MantenimientoPacientesViewController) FlowController.getInstance().getController("P09_MantenimientoPacientesView");
+        pacienteDto = (CliPacienteDto) pacienteRegistroController.getSeleccionado();
+        if (pacienteDto != null) {
+            citaDto.setCliPacienteDto(pacienteDto);
+            bindCita();
+        }
+    }
+
+    private void bindCita() {
+        txfMotivo.textProperty().bindBidirectional(citaDto.citMotivo);
+        lblNombreUsu.textProperty().bind(citaDto.citUsuarioRegistra);
+        lblFechaHora.textProperty().bind(citaDto.citFechaHora.asString());
+        if (citaDto.getCliPacienteDto() != null) {
+            citaDto.cliPacienteDto.getNombreCompleto();
+            lblNombrePac.textProperty().bind(citaDto.cliPacienteDto.pacNombreCompleto);
+            lblNumero.textProperty().bind(citaDto.cliPacienteDto.pacTelefono);
+            lblCorreo.textProperty().bind(citaDto.cliPacienteDto.pacCorreo);
+        }
+        if (citaDto.getCitEstado() != null) {
+            switch (citaDto.getCitEstado()) {
+                case "P" -> {
+                    cboxEstadoCita.getSelectionModel().select(0);
+                }
+                case "A" -> {
+                    cboxEstadoCita.getSelectionModel().select(1);
+                }
+                case "C" -> {
+                    cboxEstadoCita.getSelectionModel().select(2);
+                }
+                case "U" ->
+                    cboxEstadoCita.getSelectionModel().select(3);
+            }
+        }
+        if (citaDto.getCliCantespacios() != null) {
+            cboxEspacioHora.getSelectionModel().select(citaDto.getCliCantespacios().intValue() - 1);
+        }
+    }
+
+    public void cargarDefecto(CliCitaDto cita, CliUsuarioDto usuario, LocalDateTime fechaHora) {
+        usuarioDto = usuario;
+
+        citaDto = cita;
+        if (citaDto.getCitUsuarioRegistra() == null && citaDto.getCitFechaHora() == null) {
+            citaDto.setCitUsuarioRegistra(usuarioDto.getNombreApellido());
+            citaDto.setCitFechaHora(fechaHora);
+        }
+        bindCita();
     }
 
     public void fillCbox() {
@@ -113,26 +150,16 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         cboxEspacioHora.setItems(numeros);
     }
 
-    private void nuevaCita() {
-        // unbindUsuario();
-        this.citaDto = new CliCitaDto();
-        //bindUsuario();
+    public String estadoCita() {
+        return switch (cboxEstadoCita.getValue()) {
+            case "Ausente" ->
+                "U";
+            case "Atendida" ->
+                "A";
+            case "Cancelada" ->
+                "C";
+            default ->
+                "P";
+        };
     }
-
-    public void bindBuscar() {
-        P09_MantenimientoPacientesViewController pacienteRegistroController = (P09_MantenimientoPacientesViewController) FlowController.getInstance().getController("P09_MantenimientoPacientesView");
-//        unbindUsuario();
-        pacienteDto = (CliPacienteDto) pacienteRegistroController.getSeleccionado();
-//        bindUsuario();
-        cargarLabels();
-    }
-
-    private void cargarLabels() {
-        lblNombrePac.setText(pacienteDto.getNombreString());
-        lblNumero.setText(pacienteDto.getPacTelefono());
-        lblNombreUsu.setText(usuarioDto.getUsuNombre() + " " + usuarioDto.getUsuPapellido());
-        lblCorreo.setText(pacienteDto.getPacCorreo());
-    }
-    
-    
 }

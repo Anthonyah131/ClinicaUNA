@@ -183,7 +183,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
         resultado = tbvResultados.getSelectionModel().getSelectedItem();
         if (resultado != null) {
             P11_NuevaCitaViewController citasController = (P11_NuevaCitaViewController) FlowController.getInstance().getController("P11_NuevaCitaView");
-            citasController.bindBuscar();
+            citasController.bindBuscarPaciente();
         }
         getStage().close();
     }
@@ -281,14 +281,6 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
     }
 
     Object resultado;
-    private void cargarUsuario() {
-        resultado = tbvResultados.getSelectionModel().getSelectedItem();
-        if (resultado != null) {
-            P11_NuevaCitaViewController citaController = (P11_NuevaCitaViewController) FlowController.getInstance().getController("P03_RegistroView");
-            citaController.bindBuscar();
-        }
-        getStage().close();
-    }
     
     public Object getSeleccionado() {
         return resultado;

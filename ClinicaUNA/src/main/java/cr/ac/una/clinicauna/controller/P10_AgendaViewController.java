@@ -48,6 +48,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
     CliUsuarioDto usuarioDto;
     CliMedicoDto medicoDto;
     CliCitaDto citaDto;
+    CliCitaDto citasMatriz[][];
 
     /**
      * Initializes the controller class.
@@ -57,6 +58,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         // TODO
         // llenarGridPane();
         usuarioDto = (CliUsuarioDto) AppContext.getInstance().get("Usuario");
+        citaDto = new CliCitaDto();
 //        dragAndDrop();
     }
 
@@ -105,6 +107,8 @@ public class P10_AgendaViewController extends Controller implements Initializabl
 
         int citasHorasEncabezado = 60 / citasHoras;
 
+        citasMatriz = new CliCitaDto[numRows][numCols];
+
         grdCitas.getChildren().clear();
         // Crear filas
 
@@ -116,9 +120,9 @@ public class P10_AgendaViewController extends Controller implements Initializabl
 //            dragboard.setContent(content);
 //            event.consume();
 //        });
-
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
+                citasMatriz[i][j] = null;
                 if (i == 0 && j == 0) {
                     Label label = new Label("Horas");
                     label.getStyleClass().add("labels-text-minus");
@@ -143,7 +147,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
 
                     label.setText(hora12 + aux);
                     label.getStyleClass().add("labels-text-minus");
-                    label.setPrefWidth(90);
+                    label.setPrefWidth(90);                    
                     grdCitas.add(label, j, i);
                     horaInicio++;
                     continue;
@@ -156,15 +160,34 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                     imageView.setFitHeight(30);
                     imageView.setFitWidth(30);
                     label.setGraphic(imageView);
+                    label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
                     label.contentDisplayProperty().set(ContentDisplay.TOP);
                     label.setAlignment(Pos.CENTER);
+
                     label.setOnMouseClicked(event -> {
+                        FlowController.getInstance().delete("P11_NuevaCitaView");
                         int rowIndex = GridPane.getRowIndex(label);
                         int colIndex = GridPane.getColumnIndex(label);
+//                        calcularHora(rowIndex, colIndex);
+
+                        if (citasMatriz[rowIndex][colIndex] != null) {
+                            citaDto = citasMatriz[rowIndex][colIndex];
+                        } else {
+                            citaDto = new CliCitaDto();
+                        }
+
+                        P11_NuevaCitaViewController citaController = (P11_NuevaCitaViewController) FlowController.getInstance().getController("P11_NuevaCitaView");
+                        citaController.cargarDefecto(citaDto, usuarioDto, calcularHora(rowIndex, colIndex));
+
                         FlowController.getInstance().goViewInWindowModal("P11_NuevaCitaView", stage, Boolean.FALSE);
-                        calcularHora(rowIndex, colIndex);
-                        crearCita(label);
+
+//                        if (citaDto.getCitId() != null) {
+                            citasMatriz[rowIndex][colIndex] = citaDto;
+                            crearCita(label);
+//                        }
+
                         System.out.println("Fila: " + rowIndex + " columna " + colIndex);
+
                     });
                     // Configurar eventos de arrastrar y soltar para las etiquetas
 //                    label.setOnDragOver(event -> {
@@ -190,48 +213,48 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         grdCitas.setGridLinesVisible(true);
     }
 
-    private void calcularHora(int fila, int columna) {
-        if (citaDto != null) {
-            int iniJornada = medicoDto.getMedFiniTime().getHour();
-            int finJornada = medicoDto.getMedFfinTime().getHour();
-            int jornada = finJornada - iniJornada;
-            int citasHoras = Math.toIntExact(medicoDto.getMedEspaciosxhora());
+    private LocalDateTime calcularHora(int fila, int columna) {
+//        if (citaDto != null) {
+        int iniJornada = medicoDto.getMedFiniTime().getHour();
+        int finJornada = medicoDto.getMedFfinTime().getHour();
+        int jornada = finJornada - iniJornada;
+        int citasHoras = Math.toIntExact(medicoDto.getMedEspaciosxhora());
 
-            int hora = iniJornada + fila - 1;
+        int hora = iniJornada + fila - 1;
 
-            int minutos = 0;
+        int minutos = 0;
 
-            if (columna == 2) {
-                switch (citasHoras) {
-                    case 2 ->
-                        minutos = 30;
-                    case 3 ->
-                        minutos = 20;
-                    case 4 ->
-                        minutos = 15;
-                }
+        if (columna == 2) {
+            switch (citasHoras) {
+                case 2 ->
+                    minutos = 30;
+                case 3 ->
+                    minutos = 20;
+                case 4 ->
+                    minutos = 15;
             }
-            if (columna == 3) {
-                switch (citasHoras) {
-                    case 3 ->
-                        minutos = 40;
-                    case 4 ->
-                        minutos = 30;
-                }
-            }
-            if (columna == 4) {
-                minutos = 45;
-            }
-
-            LocalDate fecha = dtpFechasCitas.getValue();
-            int year = fecha.getYear();
-            int month = fecha.getMonthValue();
-            int day = fecha.getDayOfMonth();
-
-            LocalDateTime fechaHora = LocalDateTime.of(year, month, day, hora, minutos);
-            System.out.println(fechaHora);
-            citaDto.setCitFechaHora(fechaHora);
         }
+        if (columna == 3) {
+            switch (citasHoras) {
+                case 3 ->
+                    minutos = 40;
+                case 4 ->
+                    minutos = 30;
+            }
+        }
+        if (columna == 4) {
+            minutos = 45;
+        }
+
+        LocalDate fecha = dtpFechasCitas.getValue();
+        int year = fecha.getYear();
+        int month = fecha.getMonthValue();
+        int day = fecha.getDayOfMonth();
+
+        LocalDateTime fechaHora = LocalDateTime.of(year, month, day, hora, minutos);
+        System.out.println(fechaHora);
+
+        return fechaHora;
     }
 
     private void crearCita(Label label) {
@@ -239,17 +262,18 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         if (citaDto != null) {
             label.setText(""); // O label.setText(null)
             label.setGraphic(null); // Eliminar la imagen
-            String estadoCita = "Estado: " + estadoCita() + "\n";
-            String nombrePac = "Paciente: " + citaDto.getNombreString() + "\n";
-            String usuarioRegistra = "Usuario que registra: " + citaDto.getCitUsuarioRegistra() + "\n";
-            String motivo = (citaDto.getCitMotivo() != null) ? "Motivo: " + citaDto.getCitMotivo() + "\n" : "Motivo: No indica\n";
-            String telefono = "Telefono: " + citaDto.getCliPacienteDto().getPacTelefono() + "\n";
-            String correo = "Correo: " + citaDto.getCliPacienteDto().getPacCorreo() + "\n";
+//            String estadoCita = "Estado: " + estadoCita() + "\n";
+//            String nombrePac = "Paciente: " + citaDto.getNombreString() + "\n";
+//            String usuarioRegistra = "Usuario que registra: " + citaDto.getCitUsuarioRegistra() + "\n";
+//            String motivo = (citaDto.getCitMotivo() != null) ? "Motivo: " + citaDto.getCitMotivo() + "\n" : "Motivo: No indica\n";
+//            String telefono = "Telefono: " + citaDto.getCliPacienteDto().getPacTelefono() + "\n";
+//            String correo = "Correo: " + citaDto.getCliPacienteDto().getPacCorreo() + "\n";
 
             label.setPrefSize(300, 130);
             label.setPadding(new Insets(5));
             estadoCita(label);
-            label.setText(estadoCita + nombrePac + usuarioRegistra + motivo + telefono + correo);
+//            label.setText(estadoCita + nombrePac + usuarioRegistra + motivo + telefono + correo);
+            label.setText(citaDto.citaLabel());
         }
     }
 
@@ -280,18 +304,6 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         }
     }
 
-    public String estadoCita() {
-        return switch (citaDto.getCitEstado()) {
-            case "U" ->
-                "Ausente";
-            case "A" ->
-                "Atendida";
-            case "C" ->
-                "Cancelada";
-            default ->
-                "Programada";
-        };
-    }
 
 //    public void dragAndDrop() {
 //
