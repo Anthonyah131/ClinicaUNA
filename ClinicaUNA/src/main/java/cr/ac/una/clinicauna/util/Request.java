@@ -135,6 +135,7 @@ public class Request {
     public Boolean isError() {
         if (getStatus() == Response.Status.UNAUTHORIZED.getStatusCode()) {
             new Thread() {
+                @Override
                 public void run() {
                     try {
                         Thread.sleep(3000);

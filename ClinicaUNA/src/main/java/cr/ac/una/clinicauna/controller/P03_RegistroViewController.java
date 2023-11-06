@@ -206,9 +206,9 @@ public class P03_RegistroViewController extends Controller implements Initializa
             CliMedicoService medicoService = new CliMedicoService();
 
             CliMedicoDto medicoDto = new CliMedicoDto();
-            medicoDto.setMedCodigo("Ingrese" + usuarioDto.getUsuId());
-            medicoDto.setMedFolio("Ingrese" + usuarioDto.getUsuId());
-            medicoDto.setMedCarne("Ingrese" + usuarioDto.getUsuId());
+            medicoDto.setMedCodigo("-");
+            medicoDto.setMedFolio("-");
+            medicoDto.setMedCarne("-");
             medicoDto.setMedEstado("I");
 
             Respuesta respuestaMedico = medicoService.guardarMedico(medicoDto);

@@ -5,6 +5,8 @@ import cr.ac.una.clinicauna.model.CliAgendaDto;
 import cr.ac.una.clinicauna.model.CliCitaDto;
 import cr.ac.una.clinicauna.model.CliUsuarioDto;
 import cr.ac.una.clinicauna.util.AppContext;
+import cr.ac.una.clinicauna.util.FlowController;
+import cr.ac.una.clinicauna.util.SoundUtil;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -57,6 +59,8 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
 
     @FXML
     private void onActionBtnSalir(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
+        FlowController.getInstance().goView("P06_MenuPrincipalView");
     }
 
     @FXML

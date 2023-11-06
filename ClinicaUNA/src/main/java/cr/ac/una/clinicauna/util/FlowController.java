@@ -77,30 +77,16 @@ public class FlowController {
                 }
             }
         }
+        if (!name.equals("P01_LogInView")) {
+            this.controller = loader.getController();
+        }
         return loader;
     }
 
     public void goMain() {
         try {
-            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P02_PrincipalView.fxml"), FlowController.idioma)));
-//            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P02_LogInView.fxml"), FlowController.idioma)));
-//            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P03_RegistroView.fxml"), FlowController.idioma)));
-//            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P07_MantenimientoGeneralesView.fxml"), FlowController.idioma)));
-//            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P08_MantenimientoCompetencias.fxml"), FlowController.idioma)));
-//            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P09_MantenimientoPuestosView.fxml"), FlowController.idioma)));
-//            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P11_RegistroEvaluacionesView.fxml"), FlowController.idioma)));
-//             FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P12_AplicarEvaluacionView.fxml"), FlowController.idioma)));
-
-            FlowController.mainStage.show();
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(FlowController.class.getName()).log(Level.SEVERE, "Error inicializando la vista base.", ex);
-        }
-    }
-
-    public void goMainCliente() {
-        try {
-            FlowController.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("/cr/ac/una/evaconuna/view/.fxml"), FlowController.idioma)));
-            FlowController.mainStage.show();
+            this.mainStage.setScene(new Scene(FXMLLoader.load(App.class.getResource("view/P02_PrincipalView.fxml"), this.idioma)));
+            this.mainStage.show();
         } catch (IOException ex) {
             java.util.logging.Logger.getLogger(FlowController.class.getName()).log(Level.SEVERE, "Error inicializando la vista base.", ex);
         }
@@ -169,6 +155,11 @@ public class FlowController {
         stage.centerOnScreen();
         stage.show();
     }
+    
+    public void goLogInWindowModal(Boolean resizable) {
+        
+        goViewInWindowModal("P01_LogInView", this.controller.getStage(), resizable);
+    }
 
     public void goViewInWindowModal(String viewName, Stage parentStage, Boolean resizable) {
         FXMLLoader loader = getLoader(viewName);
@@ -192,10 +183,6 @@ public class FlowController {
         stage.showAndWait();
     }
     
-    public void goLogInWindowModal(Boolean resizable) {
-        goViewInWindowModal("P01_LogInView", this.controller.getStage(), resizable);
-    }
-
     public Controller getController(String viewName) {
         return getLoader(viewName).getController();
     }

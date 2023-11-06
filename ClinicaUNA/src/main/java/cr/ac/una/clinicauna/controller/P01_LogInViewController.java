@@ -159,7 +159,8 @@ public class P01_LogInViewController extends Controller implements Initializable
 
     public void iniciarScena() {
         String padre = (String) AppContext.getInstance().get("PadreLogin");
-
+        txfUsuario.clear();
+        txfContrasena.clear();
         if (padre != null) {
             btnSalir.setVisible(false);
             mbtnI18n.setVisible(false);

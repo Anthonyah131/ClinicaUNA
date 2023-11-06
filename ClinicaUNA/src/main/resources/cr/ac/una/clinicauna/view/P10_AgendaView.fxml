@@ -41,7 +41,6 @@
                         <JFXDatePicker fx:id="dtpFechasCitas" promptText="Fecha de las citas" styleClass="jfx-pickers" />
                         <Label styleClass="labels-text" text="Medico: " />
                         <MFXButton fx:id="btnBuscarMedico" onAction="#onActionBtnBuscarMedico" prefWidth="200.0" styleClass="mfx-button-link-bigger" text="Buscar Medicos" />
-                        <MFXButton fx:id="btnCargarAgenda" layoutX="658.0" layoutY="10.0" onAction="#onActionBtnCargarAgenda" prefWidth="200.0" styleClass="mfx-button-Log" text="Cargar agenda" />
                      </children>
                   </HBox>
                   <MFXScrollPane VBox.vgrow="ALWAYS">

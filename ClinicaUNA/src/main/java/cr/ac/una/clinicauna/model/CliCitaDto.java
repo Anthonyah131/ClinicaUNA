@@ -117,9 +117,9 @@ public class CliCitaDto {
         return modificado;
     }
 
-//    public String getNombreString() {
-//        return cliPacienteDto.getPacNombre() + " " + cliPacienteDto.getPacPapellido() + " " + cliPacienteDto.getPacSapellido();
-//    }
+    public String getNombreString() {
+        return cliPacienteDto.getPacNombre() + " " + cliPacienteDto.getPacPapellido() + " " + cliPacienteDto.getPacSapellido();
+    }
 
     public void setModificado(Boolean modificado) {
         this.modificado = modificado;

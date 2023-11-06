@@ -97,7 +97,7 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
     private void onActionBtnCerrarSesion(ActionEvent event) {
         SoundUtil.mouseEnterSound();
         //limpiar el hashmap del AppContext
-        AppContext.getInstance().clearHashMap();
+        //AppContext.getInstance().clearHashMap();
         //limpiar el hashmap del FlowController
         FlowController.getInstance().clearHashMap();
         FlowController.getInstance().goViewInWindow("P01_LogInView", false);

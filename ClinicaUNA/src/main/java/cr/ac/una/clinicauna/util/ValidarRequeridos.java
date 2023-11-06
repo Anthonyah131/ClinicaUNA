@@ -18,7 +18,7 @@ public class ValidarRequeridos {
         Boolean validos = true;
         String invalidos = "";
         for (Node node : requeridos) {
-            if (node instanceof JFXTextField && (((JFXTextField) node).getText() == null || ((JFXTextField) node).getText().isBlank())) {
+            if (node instanceof JFXTextField && (((JFXTextField) node).getText() == null || ((JFXTextField) node).getText().isBlank()|| ((JFXTextField) node).getText().equals("-"))) {
                 if (validos) {
                     invalidos += ((JFXTextField) node).getPromptText();
                 } else {
@@ -43,7 +43,7 @@ public class ValidarRequeridos {
                 if (validos) {
                     invalidos += ((JFXTimePicker) node).getAccessibleText();
                 } else {
-                    invalidos += ", " + ((JFXTimePicker) node).getAccessibleText();
+                    invalidos += ", " + ((JFXTimePicker) node).getPromptText();
                 }
                 validos = false;
             }else if (node instanceof JFXComboBox && ((JFXComboBox) node).getSelectionModel().getSelectedIndex() < 0) {

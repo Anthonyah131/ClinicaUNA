@@ -407,3 +407,22 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 255, 1), 10, 0.5, 0.0, 0.0);
 }
 /*-----------------------------------------------------------------------------------------------------------------*/
+.label-agenda-horas{
+    -fx-font: 15px "Arial Rounded MT Bold";
+    -fx-text-fill: #000000; /* Color del texto */
+    -fx-alignment: CENTER;
+    -fx-pref-width: 90px;
+    -fx-pref-height: 35px;
+    -fx-max-width: 1000; /* Un valor grande que actúa como reemplazo para Double.MAX_VALUE */
+    -fx-max-height: 1000;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}
+.label-agenda-colHoras{
+    -fx-font: 15px "Arial Rounded MT Bold";
+    -fx-text-fill: #000000; /* Color del texto */
+    -fx-alignment: CENTER;
+    -fx-pref-width: 90px;
+    -fx-max-width: 1000; /* Un valor grande que actúa como reemplazo para Double.MAX_VALUE */
+    -fx-max-height: 1000;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+}

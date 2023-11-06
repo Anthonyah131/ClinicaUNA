@@ -16,6 +16,7 @@ import cr.ac.una.clinicauna.util.SoundUtil;
 import cr.ac.una.clinicauna.util.ValidarRequeridos;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +34,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.StringConverter;
+import javafx.util.converter.TimeStringConverter;
 
 /**
  * FXML Controller class
@@ -115,6 +118,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         fillCbox();
 
         nuevoMedico();
+
 //        cargarMedicos();
     }
 
@@ -190,18 +194,23 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
     }
 
     @FXML
-    private void onActionBtnSalir(ActionEvent event) {
-        SoundUtil.mouseEnterSound();
-        FlowController.getInstance().goView("P06_MenuPrincipalView");
-    }
-
-    @FXML
     private void onActionBuscarTodos(ActionEvent event) {
         if (chkBuscarTodos.isSelected()) {
             chkBuscarActivas.setDisable(true);
         } else {
             chkBuscarActivas.setDisable(false);
         }
+    }
+
+    @FXML
+    private void onActionBtnAddToAgenda(ActionEvent event) {
+        cargarMedicoAgenda();
+    }
+
+    @FXML
+    private void onActionBtnSalir(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
+        FlowController.getInstance().goView("P06_MenuPrincipalView");
     }
 
     private void nuevoMedico() {
@@ -322,7 +331,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
 
     private void indicarRequeridos() {
         requeridos.clear();
-        requeridos.addAll(Arrays.asList(txfCodigoMedico, txfFolioMedico, txfLicencia, cboxCantidadCitas, tpkHoraInicio, tpkHoraSalida));
+        requeridos.addAll(Arrays.asList(txfCodigoMedico, txfFolioMedico, txfLicencia, tpkHoraInicio, tpkHoraSalida, cboxCantidadCitas));
     }
 
     public void fillCbox() {
@@ -377,20 +386,22 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         });
     }
 
-    private void cargarUsuario() {
+    private void cargarMedicoAgenda() {
         resultado = tbvResultados.getSelectionModel().getSelectedItem();
+
         if (resultado != null) {
-            P10_AgendaViewController agendaController = (P10_AgendaViewController) FlowController.getInstance().getController("P10_AgendaView");
-            agendaController.bindBuscar();
+            medicoDto = (CliMedicoDto) resultado;
+            if (medicoDto.getMedEstado().equals("A")) {
+                P10_AgendaViewController agendaController = (P10_AgendaViewController) FlowController.getInstance().getController("P10_AgendaView");
+                agendaController.bindBuscar();
+            } else {
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.deleteUser", getStage(), "Medico inactivo");
+                return;
+            }
         }
         getStage().close();
     }
 
-    @FXML
-    private void onActionBtnAddToAgenda(ActionEvent event) {
-        cargarUsuario();
-    }
-    
     public Object getSeleccionado() {
         return resultado;
     }
