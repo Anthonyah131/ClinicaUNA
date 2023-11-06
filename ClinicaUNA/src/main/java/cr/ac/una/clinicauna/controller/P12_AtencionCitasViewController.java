@@ -65,6 +65,7 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
 
     @FXML
     private void onActionBtnIrExpediente(ActionEvent event) {
+        FlowController.getInstance().goViewInWindow("P13_ExpedienteView", false);
     }
 
     public void fillTableView() {

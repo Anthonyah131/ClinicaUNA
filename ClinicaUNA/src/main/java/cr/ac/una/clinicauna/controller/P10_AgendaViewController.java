@@ -172,7 +172,40 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         }
         int fila = hora - iniJornada + 1;
 
-        citasMatriz[fila][col] = cita;
+        comprobarEspacios(fila, col, cita, citasHoras);
+
+//        citasMatriz[fila][col] = cita;
+//
+//        int citas = Math.toIntExact(cita.getCliCantespacios());
+//        int aux = col;
+//        if (citas != 1) {
+//            for (int i = 0; i < citas; i++) {
+//                if (aux == citasHoras + 1) {
+//                    fila++;
+//                    aux = 1;
+//                }
+//                citasMatriz[fila][aux] = cita;
+//                aux++;
+//            }
+//        }
+    }
+
+    private void comprobarEspacios(int fila, int col, CliCitaDto cita, int citasHoras) {
+
+        int citas = Math.toIntExact(cita.getCliCantespacios());
+        int aux = col;
+        if (citas != 1) {
+            for (int i = 0; i < citas; i++) {
+                if (aux == citasHoras + 1) {
+                    fila++;
+                    aux = 1;
+                }
+                citasMatriz[fila][aux] = cita;
+                aux++;
+            }
+        } else {
+            citasMatriz[fila][col] = cita;
+        }
     }
 
     private void llenarGridPane() {
@@ -191,55 +224,39 @@ public class P10_AgendaViewController extends Controller implements Initializabl
 
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
-                Label label = new Label();
                 if (i == 0 && j == 0) {
-                    label = new Label("Horas");
-                    label.getStyleClass().add("label-agenda-horas");
-//                    label.setPrefWidth(90);
+                    Label label = crearLabelBordes("Horas");
                     grdCitas.add(label, j, i);
                 }
                 if (i == 0 && j > 0) {
                     int minutos = citasHorasEncabezado * (j - 1);
                     String aux = (minutos == 0) ? "00:0" : "00:";
-                    label.setText(aux + minutos);
-                    label.getStyleClass().add("label-agenda-horas");
-//                    label.setPrefSize(150, 30);
-//                    label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+                    Label label = crearLabelBordes(aux + minutos);
                     grdCitas.add(label, j, i);
                     continue;
                 }
                 if (j == 0 && i > 0) {
                     String aux = (horaInicio < 12) ? ":00 am." : ":00 pm.";
                     int hora12 = (horaInicio <= 12) ? horaInicio : horaInicio - 12;
-
-                    label.setText(hora12 + aux);
-                    label.getStyleClass().add("label-agenda-horas");
-//                    label.setPrefWidth(90);
+                    Label label = crearLabelBordes(hora12 + aux);
                     grdCitas.add(label, j, i);
                     horaInicio++;
                     continue;
                 }
                 if (i > 0 && j > 0) {
-                   Label labelCit = new Label("Agregar cita");
+                    Label label;
                     if (citasMatriz[i][j] != null) {
                         citaDto = citasMatriz[i][j];
-                        crearCita(labelCit);
+                        label = new Label();
+                        crearCita(label);
                     } else {
-                        labelCit.setPrefSize(150, 70);
-                        Image image = new Image("cr/ac/una/ClinicaUNA/resources/media/icons/addIcon.png");
-                        ImageView imageView = new ImageView(image);
-                        imageView.setFitHeight(30);
-                        imageView.setFitWidth(30);
-                        labelCit.setGraphic(imageView);
-                        labelCit.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-                        labelCit.contentDisplayProperty().set(ContentDisplay.TOP);
-                        labelCit.setAlignment(Pos.CENTER);
+                        label = crearLabelAddCita();
                     }
 
-                    labelCit.setOnMouseClicked(event -> {
+                    label.setOnMouseClicked(event -> {
                         FlowController.getInstance().delete("P11_NuevaCitaView");
-                        int rowIndex = GridPane.getRowIndex(labelCit);
-                        int colIndex = GridPane.getColumnIndex(labelCit);
+                        int rowIndex = GridPane.getRowIndex(label);
+                        int colIndex = GridPane.getColumnIndex(label);
 
                         if (citasMatriz[rowIndex][colIndex] != null) {
                             citaDto = citasMatriz[rowIndex][colIndex];
@@ -254,23 +271,62 @@ public class P10_AgendaViewController extends Controller implements Initializabl
 
                         if (citaDto.getCitId() != null) {
                             citasMatriz[rowIndex][colIndex] = citaDto;
-                            crearCita(labelCit);
+                            crearCita(label);
                         }
 
                         System.out.println("Fila: " + rowIndex + " columna " + colIndex);
 
                     });
-                    grdCitas.add(labelCit, j, i);
+                    grdCitas.add(label, j, i);
                 }
             }
         }
         grdCitas.setGridLinesVisible(true);
     }
 
+    private Label crearLabelBordes(String texto) {
+        Label label = new Label();
+        label.setText(texto);
+        label.getStyleClass().add("label-agenda-horas");
+        return label;
+    }
+
+    private Label crearLabelAddCita() {
+        Label label = new Label();
+        label.setText("Agregar cita");
+        Image image = new Image("cr/ac/una/ClinicaUNA/resources/media/icons/addIcon.png");
+        ImageView imageView = new ImageView(image);
+        imageView.setFitHeight(30);
+        imageView.setFitWidth(30);
+        label.setGraphic(imageView);
+        label.getStyleClass().add("label-agregar-cita");
+
+        return label;
+    }
+
+    private void crearCita(Label label) {
+
+        if (citaDto != null) {
+            label.setText("");
+            label.setGraphic(null);
+//            String estadoCita = "Estado: " + estadoCita() + "\n";
+//            String nombrePac = "Paciente: " + citaDto.getNombreString() + "\n";
+//            String usuarioRegistra = "Usuario que registra: " + citaDto.getCitUsuarioRegistra() + "\n";
+//            String motivo = (citaDto.getCitMotivo() != null) ? "Motivo: " + citaDto.getCitMotivo() + "\n" : "Motivo: No indica\n";
+//            String telefono = "Telefono: " + citaDto.getCliPacienteDto().getPacTelefono() + "\n";
+//            String correo = "Correo: " + citaDto.getCliPacienteDto().getPacCorreo() + "\n";
+
+            label.setPrefSize(290, 130);
+            label.setPadding(new Insets(5));
+            estadoCita(label);
+//            label.setText(estadoCita + nombrePac + usuarioRegistra + motivo + telefono + correo);
+            label.setText(citaDto.citaLabel());
+        }
+    }
+
     private static final DataFormat DATA_FORMAT = new DataFormat("label");
 
     private LocalDateTime calcularHora(int fila, int columna) {
-//        if (citaDto != null) {
         int iniJornada = medicoDto.getMedFiniTime().getHour();
         int finJornada = medicoDto.getMedFfinTime().getHour();
         int jornada = finJornada - iniJornada;
@@ -313,34 +369,12 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         return fechaHora;
     }
 
-    private void crearCita(Label label) {
-
-        if (citaDto != null) {
-            label.setText(""); // O label.setText(null)
-            label.setGraphic(null); // Eliminar la imagen
-//            String estadoCita = "Estado: " + estadoCita() + "\n";
-//            String nombrePac = "Paciente: " + citaDto.getNombreString() + "\n";
-//            String usuarioRegistra = "Usuario que registra: " + citaDto.getCitUsuarioRegistra() + "\n";
-//            String motivo = (citaDto.getCitMotivo() != null) ? "Motivo: " + citaDto.getCitMotivo() + "\n" : "Motivo: No indica\n";
-//            String telefono = "Telefono: " + citaDto.getCliPacienteDto().getPacTelefono() + "\n";
-//            String correo = "Correo: " + citaDto.getCliPacienteDto().getPacCorreo() + "\n";
-
-            label.setPrefSize(300, 130);
-            label.setPadding(new Insets(5));
-            estadoCita(label);
-//            label.setText(estadoCita + nombrePac + usuarioRegistra + motivo + telefono + correo);
-            label.setText(citaDto.citaLabel());
-        }
-    }
-
     public void bindBuscar() {
         P08_MantenimientoMedicosViewController buscadorRegistroController = (P08_MantenimientoMedicosViewController) FlowController.getInstance().getController("P08_MantenimientoMedicosView");
-//        unbindUsuario();
         medicoDto = (CliMedicoDto) buscadorRegistroController.getSeleccionado();
         if (medicoDto != null) {
             btnBuscarMedico.setText(medicoDto.getCliUsuarioDto().getNombreApellidos());
         }
-//        bindUsuario();
     }
 
     public void cargarCita(CliCitaDto cita, CliAgendaDto agenda, CliMedicoDto medico) {
@@ -355,15 +389,9 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                 label.getStyleClass().add("label-cita-programada");
             case "A" ->
                 label.getStyleClass().add("label-cita-atendida");
-//            case "C" ->
-            //label.getStyleClass().add("label-cita-programada");
             case "U" ->
                 label.getStyleClass().add("label-cita-ausente");
         }
-    }
-
-    private void guardarAgenda() {
-
     }
 
 //    public void dragAndDrop() {
