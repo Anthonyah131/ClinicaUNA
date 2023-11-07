@@ -166,7 +166,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         lblFechaHora.textProperty().bind(citaDto.citFechaHora.asString());
         if (citaDto.getCliPacienteDto() != null) {
             citaDto.cliPacienteDto.getPacNombre();
-            lblNombrePac.setText(citaDto.getNombreString());
+            lblNombrePac.setText(citaDto.nombrePacienteCompleto());
             lblNumero.textProperty().bind(citaDto.cliPacienteDto.pacTelefono);
             lblCorreo.textProperty().bind(citaDto.cliPacienteDto.pacCorreo);
         }
@@ -196,7 +196,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         citaDto = cita;
         medicoDto = medico;
         if (citaDto.getCitUsuarioRegistra() == null && citaDto.getCitFechaHora() == null) {
-            citaDto.setCitUsuarioRegistra(usuarioDto.getNombreApellido());
+            citaDto.setCitUsuarioRegistra(usuarioDto.nombreUnApellido());
             citaDto.setCitFechaHora(fechaHora);
         }
         bindCita();

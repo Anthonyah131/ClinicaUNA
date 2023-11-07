@@ -52,7 +52,9 @@ public class P10_AgendaViewController extends Controller implements Initializabl
     CliAgendaDto agendaDto;
     CliCitaDto citaDto;
     CliCitaDto citasMatriz[][];
+    CliCitaDto citasVector[];
     List<CliCitaDto> listaCitas;
+    Label labelVector[];
 
     /**
      * Initializes the controller class.
@@ -82,11 +84,13 @@ public class P10_AgendaViewController extends Controller implements Initializabl
     }
 
     private void iniciarVariables() {
+        //Inicializar entidades
         usuarioDto = (CliUsuarioDto) AppContext.getInstance().get("Usuario");
         citaDto = new CliCitaDto();
         agendaDto = new CliAgendaDto();
         listaCitas = new ArrayList<>();
 
+        //Listener para el datepicker
         dtpFechasCitas.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 validarCargarAgenda();
@@ -96,19 +100,26 @@ public class P10_AgendaViewController extends Controller implements Initializabl
 
     private void validarCargarAgenda() {
         if (dtpFechasCitas.getValue() != null && medicoDto != null) {
+            //Recupera la agenda si la hay desde base y la lista de citas
             cargarAgenda();
-
+            //Variables varias para calculos de espacios en el grid
             int iniJornada = medicoDto.getMedFiniTime().getHour();
             int finJornada = medicoDto.getMedFfinTime().getHour();
             int jornada = finJornada - iniJornada;
             int citasHoras = Math.toIntExact(medicoDto.getMedEspaciosxhora());
-
+            //Establecer tamano vector y madris de citas
             citasMatriz = new CliCitaDto[jornada + 1][citasHoras + 1];
+            citasVector = new CliCitaDto[jornada * citasHoras];
+            labelVector = new Label[jornada * citasHoras];
+
+            System.out.println(citasVector.length + " " + citasMatriz.length);
+            //Recorre la lista de citas y las pasa a la matriz
             if (!listaCitas.isEmpty()) {
                 for (int i = 0; i < listaCitas.size(); i++) {
                     citaAMatriz(listaCitas.get(i), iniJornada, citasHoras);
                 }
             }
+            // llena el gridpane con labeles
             llenarGridPane();
         }
     }
@@ -136,75 +147,47 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         int hora = fechaHora.getHour();
         int minuto = fechaHora.getMinute();
 
-        int col = 1;
-
-        switch (citasHoras) {
-            case 2 -> {
-                col = switch (minuto) {
-                    case 0 ->
-                        1;
-                    default ->
-                        2;
-                };
-            }
-            case 3 -> {
-                col = switch (minuto) {
-                    case 0 ->
-                        1;
-                    case 20 ->
-                        2;
-                    default ->
-                        3;
-                };
-            }
-            case 4 -> {
-                col = switch (minuto) {
-                    case 0 ->
-                        1;
-                    case 15 ->
-                        2;
-                    case 30 ->
-                        3;
-                    default ->
-                        4;
-                };
+        int col = 0;
+        //comprobar minutos para 2 citas
+        if (citasHoras == 2 && minuto == 30) {
+            col = 1;
+        }
+        //comprobar minutos para 3 citas
+        if (citasHoras == 3) {
+            if (minuto == 20) {
+                col = 1;
+            } else if (minuto == 40) {
+                col = 2;
             }
         }
-        int fila = hora - iniJornada + 1;
+        //comprobar minutos para 4 citas
+        if (citasHoras == 4) {
+            switch (minuto) {
+                case 15 ->
+                    col = 1;
+                case 30 ->
+                    col = 2;
+                case 45 ->
+                    col = 3;
+            }
+        }
 
-        comprobarEspacios(fila, col, cita, citasHoras);
-
-//        citasMatriz[fila][col] = cita;
-//
-//        int citas = Math.toIntExact(cita.getCliCantespacios());
-//        int aux = col;
-//        if (citas != 1) {
-//            for (int i = 0; i < citas; i++) {
-//                if (aux == citasHoras + 1) {
-//                    fila++;
-//                    aux = 1;
-//                }
-//                citasMatriz[fila][aux] = cita;
-//                aux++;
-//            }
-//        }
+        int fila = hora - iniJornada;
+        int posVector = fila * citasHoras + col;
+        // Pasar de pos de matriz a pos de vector
+        comprobarEspaciosCitas(posVector, cita);
+        citasVector[posVector] = cita;
     }
 
-    private void comprobarEspacios(int fila, int col, CliCitaDto cita, int citasHoras) {
-
+    private void comprobarEspaciosCitas(int posVector, CliCitaDto cita) {
         int citas = Math.toIntExact(cita.getCliCantespacios());
-        int aux = col;
         if (citas != 1) {
             for (int i = 0; i < citas; i++) {
-                if (aux == citasHoras + 1) {
-                    fila++;
-                    aux = 1;
-                }
-                citasMatriz[fila][aux] = cita;
-                aux++;
+                citasVector[posVector] = cita;
+                posVector++;
             }
         } else {
-            citasMatriz[fila][col] = cita;
+            citasVector[posVector] = cita;
         }
     }
 
@@ -219,6 +202,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         int horaInicio = iniJornada;
 
         int citasHorasEncabezado = 60 / citasHoras;
+        int contadorLabel = 0;
 
         grdCitas.getChildren().clear();
 
@@ -258,29 +242,40 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                         int rowIndex = GridPane.getRowIndex(label);
                         int colIndex = GridPane.getColumnIndex(label);
 
-                        if (citasMatriz[rowIndex][colIndex] != null) {
-                            citaDto = citasMatriz[rowIndex][colIndex];
+//                        if (citasMatriz[rowIndex][colIndex] != null) {
+//                            citaDto = citasMatriz[rowIndex][colIndex];
+//                        } else {
+//                            citaDto = new CliCitaDto();
+//                        }
+                        int posVector = (rowIndex - 1) * citasHoras + colIndex - 1;
+                        if (citasVector[posVector] != null) {
+                            citaDto = citasVector[posVector];
                         } else {
                             citaDto = new CliCitaDto();
                         }
 
                         P11_NuevaCitaViewController citaController = (P11_NuevaCitaViewController) FlowController.getInstance().getController("P11_NuevaCitaView");
                         citaController.cargarDefecto(citaDto, usuarioDto, agendaDto, medicoDto, calcularHora(rowIndex, colIndex));
-
                         FlowController.getInstance().goViewInWindowModal("P11_NuevaCitaView", stage, Boolean.FALSE);
 
                         if (citaDto.getCitId() != null) {
-                            citasMatriz[rowIndex][colIndex] = citaDto;
+                            comprobarEspaciosCitas(posVector, citaDto);
+                            //citasVector[posVector] = citaDto;
+                            //citasMatriz[rowIndex][colIndex] = citaDto;
+                            crearCita();
                             crearCita(label);
                         }
 
                         System.out.println("Fila: " + rowIndex + " columna " + colIndex);
 
                     });
+                    labelVector[contadorLabel] = label;
+                    contadorLabel++;
                     grdCitas.add(label, j, i);
                 }
             }
         }
+        crearCita();
         grdCitas.setGridLinesVisible(true);
     }
 
@@ -304,6 +299,20 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         return label;
     }
 
+    private void crearCita() {
+        for (int i = 0; i < citasVector.length; i++) {
+            if (citasVector[i] != null) {
+                Label label = labelVector[i];
+                label.setText("");
+                label.setGraphic(null);
+                label.setPrefSize(290, 130);
+                label.setPadding(new Insets(5));
+                estadoCita(label, citasVector[i]);
+                label.setText(citasVector[i].citaLabel());
+            }
+        }
+    }
+
     private void crearCita(Label label) {
 
         if (citaDto != null) {
@@ -318,13 +327,11 @@ public class P10_AgendaViewController extends Controller implements Initializabl
 
             label.setPrefSize(290, 130);
             label.setPadding(new Insets(5));
-            estadoCita(label);
+//            estadoCita(label,);
 //            label.setText(estadoCita + nombrePac + usuarioRegistra + motivo + telefono + correo);
             label.setText(citaDto.citaLabel());
         }
     }
-
-    private static final DataFormat DATA_FORMAT = new DataFormat("label");
 
     private LocalDateTime calcularHora(int fila, int columna) {
         int iniJornada = medicoDto.getMedFiniTime().getHour();
@@ -373,7 +380,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         P08_MantenimientoMedicosViewController buscadorRegistroController = (P08_MantenimientoMedicosViewController) FlowController.getInstance().getController("P08_MantenimientoMedicosView");
         medicoDto = (CliMedicoDto) buscadorRegistroController.getSeleccionado();
         if (medicoDto != null) {
-            btnBuscarMedico.setText(medicoDto.getCliUsuarioDto().getNombreApellidos());
+            btnBuscarMedico.setText(medicoDto.getCliUsuarioDto().nombreDosApellidos());
         }
     }
 
@@ -383,8 +390,9 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         medicoDto = medico;
     }
 
-    private void estadoCita(Label label) {
-        switch (citaDto.getCitEstado()) {
+    private void estadoCita(Label label, CliCitaDto cita) {
+        label.getStyleClass().clear();
+        switch (cita.getCitEstado()) {
             case "P" ->
                 label.getStyleClass().add("label-cita-programada");
             case "A" ->

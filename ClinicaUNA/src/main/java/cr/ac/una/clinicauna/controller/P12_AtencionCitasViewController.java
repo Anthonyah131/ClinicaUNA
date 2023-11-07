@@ -48,7 +48,7 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         usuarioDto = (CliUsuarioDto) AppContext.getInstance().get("Usuario");
-        lblUserName.setText(usuarioDto.getNombreApellidos());
+        lblUserName.setText(usuarioDto.nombreDosApellidos());
         fillTableView();
         // TODO
     }
