@@ -65,6 +65,8 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
     CliPacienteDto pacienteDto;
     CliAgendaDto agendaDto;
     CliMedicoDto medicoDto;
+    CliCitaDto citasVector[];
+    int posVec;
 
     /**
      * Initializes the controller class.
@@ -87,11 +89,27 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         citaDto.setCliCantespacios(Long.valueOf(cboxEspacioHora.getValue()));
         citaDto.setCitEstado(estadoCita());
 
-        guardarCita();
+        if (comprobarEspacios()) {
+            guardarCita();
 
-        P10_AgendaViewController agendaController = (P10_AgendaViewController) FlowController.getInstance().getController("P10_AgendaView");
-        agendaController.cargarCita(citaDto, agendaDto, medicoDto);
-        stage.close();
+            P10_AgendaViewController agendaController = (P10_AgendaViewController) FlowController.getInstance().getController("P10_AgendaView");
+            agendaController.cargarCita(citaDto, agendaDto, medicoDto);
+            stage.close();
+        } else {
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "No hay suficientes campos libres");
+        }
+    }
+
+    private Boolean comprobarEspacios() {
+        int espacios = cboxEspacioHora.getValue();
+        int indiceVector = posVec;
+        for (int i = 0; i < espacios; i++) {
+            if (citasVector[indiceVector] != null) {
+                return false;
+            }
+            indiceVector++;
+        }
+        return true;
     }
 
     private void guardarCita() {
@@ -190,11 +208,14 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         }
     }
 
-    public void cargarDefecto(CliCitaDto cita, CliUsuarioDto usuario, CliAgendaDto agenda, CliMedicoDto medico, LocalDateTime fechaHora) {
+    public void cargarDefecto(CliCitaDto cita, CliUsuarioDto usuario, CliAgendaDto agenda, CliMedicoDto medico, LocalDateTime fechaHora,
+            CliCitaDto citasVec[], int pos) {
+        citaDto = cita;
         usuarioDto = usuario;
         agendaDto = agenda;
-        citaDto = cita;
         medicoDto = medico;
+        citasVector = citasVec;
+        posVec = pos;
         if (citaDto.getCitUsuarioRegistra() == null && citaDto.getCitFechaHora() == null) {
             citaDto.setCitUsuarioRegistra(usuarioDto.nombreUnApellido());
             citaDto.setCitFechaHora(fechaHora);

@@ -255,13 +255,12 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                         }
 
                         P11_NuevaCitaViewController citaController = (P11_NuevaCitaViewController) FlowController.getInstance().getController("P11_NuevaCitaView");
-                        citaController.cargarDefecto(citaDto, usuarioDto, agendaDto, medicoDto, calcularHora(rowIndex, colIndex));
+                        citaController.cargarDefecto(citaDto, usuarioDto, agendaDto, medicoDto,
+                                calcularHora(rowIndex, colIndex), citasVector, posVector);
                         FlowController.getInstance().goViewInWindowModal("P11_NuevaCitaView", stage, Boolean.FALSE);
 
                         if (citaDto.getCitId() != null) {
                             comprobarEspaciosCitas(posVector, citaDto);
-                            //citasVector[posVector] = citaDto;
-                            //citasMatriz[rowIndex][colIndex] = citaDto;
                             crearCita();
                             crearCita(label);
                         }
