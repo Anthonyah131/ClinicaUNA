@@ -27,9 +27,9 @@ public class CliMedicoDto {
     public ObjectProperty<LocalDateTime> medFfin;
     public SimpleStringProperty medEspaciosxhora;
     public CliUsuarioDto cliUsuarioDto;
-    public ObservableList<CliReporteagendaDto> cliReporteagendaList;
+    public ObservableList<CliReporteDto> cliReporteagendaList;
     public ObservableList<CliAgendaDto> cliAgendaList;
-    public List<CliReporteagendaDto> cliReporteagendaListEliminados;
+    public List<CliReporteDto> cliReporteagendaListEliminados;
     public List<CliAgendaDto> cliAgendaListEliminados;
     private Long medVersion;
     private Boolean modificado;
@@ -180,11 +180,11 @@ public class CliMedicoDto {
         this.cliAgendaList = FXCollections.observableArrayList(cliAgendaList);
     }
 
-    public ObservableList<CliReporteagendaDto> getCliReporteagendaList() {
+    public ObservableList<CliReporteDto> getCliReporteagendaList() {
         return cliReporteagendaList;
     }
 
-    public void setCliReporteagendaList(List<CliReporteagendaDto> cliReporteagendaList) {
+    public void setCliReporteagendaList(List<CliReporteDto> cliReporteagendaList) {
         this.cliReporteagendaList = FXCollections.observableArrayList(cliReporteagendaList);
     }
 
@@ -196,11 +196,11 @@ public class CliMedicoDto {
         this.cliAgendaListEliminados = cliAgendaListEliminados;
     }
 
-    public List<CliReporteagendaDto> getCliReporteagendaListEliminados() {
+    public List<CliReporteDto> getCliReporteagendaListEliminados() {
         return cliReporteagendaListEliminados;
     }
 
-    public void setCliReporteagendaListEliminados(List<CliReporteagendaDto> cliReporteagendaListEliminados) {
+    public void setCliReporteagendaListEliminados(List<CliReporteDto> cliReporteagendaListEliminados) {
         this.cliReporteagendaListEliminados = cliReporteagendaListEliminados;
     }
 

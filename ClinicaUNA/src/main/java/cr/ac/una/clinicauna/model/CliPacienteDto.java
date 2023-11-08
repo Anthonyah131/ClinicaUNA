@@ -26,10 +26,8 @@ public class CliPacienteDto {
     public ObjectProperty<String> pacGenero;
     public ObjectProperty<LocalDate> pacFnacimiento;
     public ObservableList<CliExpedienteDto> cliExpedienteList;
-    public ObservableList<CliReporteexpedienteDto> cliReporteexpedienteList;
     public ObservableList<CliCitaDto> cliCitaList;
     public List<CliExpedienteDto> cliExpedienteListEliminados;
-    public List<CliReporteexpedienteDto> cliReporteexpedienteListEliminados;
     public List<CliCitaDto> cliCitaListEliminados;
     private Long pacVersion;
     private Boolean modificado;
@@ -46,10 +44,8 @@ public class CliPacienteDto {
         this.pacGenero = new SimpleObjectProperty("M");
         this.pacFnacimiento = new SimpleObjectProperty();
         this.cliExpedienteList = FXCollections.observableArrayList();
-        this.cliReporteexpedienteList = FXCollections.observableArrayList();
         this.cliCitaList = FXCollections.observableArrayList();
         this.cliExpedienteListEliminados = new ArrayList<>();
-        this.cliReporteexpedienteListEliminados = new ArrayList<>();
         this.cliCitaListEliminados = new ArrayList<>();
         this.modificado = false;
     }
@@ -138,14 +134,6 @@ public class CliPacienteDto {
         this.cliExpedienteList = FXCollections.observableArrayList(cliExpedienteList);
     }
 
-    public ObservableList<CliReporteexpedienteDto> getCliReporteexpedienteList() {
-        return cliReporteexpedienteList;
-    }
-
-    public void setCliReporteexpedienteList(List<CliReporteexpedienteDto> cliReporteexpedienteList) {
-        this.cliReporteexpedienteList = FXCollections.observableArrayList(cliReporteexpedienteList);
-    }
-
     public ObservableList<CliCitaDto> getCliCitaList() {
         return cliCitaList;
     }
@@ -160,14 +148,6 @@ public class CliPacienteDto {
 
     public void setCliExpedienteListEliminados(List<CliExpedienteDto> cliExpedienteListEliminados) {
         this.cliExpedienteListEliminados = cliExpedienteListEliminados;
-    }
-
-    public List<CliReporteexpedienteDto> getCliReporteexpedienteListEliminados() {
-        return cliReporteexpedienteListEliminados;
-    }
-
-    public void setCliReporteexpedienteListEliminados(List<CliReporteexpedienteDto> cliReporteexpedienteListEliminados) {
-        this.cliReporteexpedienteListEliminados = cliReporteexpedienteListEliminados;
     }
 
     public List<CliCitaDto> getCliCitaListEliminados() {

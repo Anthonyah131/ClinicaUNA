@@ -51,7 +51,7 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
     @FXML
     private MFXButton btnAgregar;
     @FXML
-    private TableView<?> tbvParametros;
+    private TableView tbvParametros;
     @FXML
     private TableColumn<?, ?> tbcParametro;
     @FXML

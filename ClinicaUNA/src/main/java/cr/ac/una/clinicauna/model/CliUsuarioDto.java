@@ -26,8 +26,6 @@ public class CliUsuarioDto {
     public SimpleStringProperty usuTempclave;
     public SimpleStringProperty usuIdioma;
     public SimpleStringProperty usuActivo;
-    ObservableList<CliReporteusuariosDto> cliReporteusuariosList;
-    List<CliReporteusuariosDto> cliReporteusuariosListEliminados;
     ObservableList<CliMedicoDto> cliMedicoList;
     List<CliMedicoDto> cliMedicoListEliminados;
     private Long usuVersion;
@@ -47,8 +45,6 @@ public class CliUsuarioDto {
         this.usuTempclave = new SimpleStringProperty();
         this.usuIdioma = new SimpleStringProperty();
         this.usuActivo = new SimpleStringProperty();
-        this.cliReporteusuariosList = FXCollections.observableArrayList();
-        this.cliReporteusuariosListEliminados = new ArrayList<>();
         this.cliMedicoList = FXCollections.observableArrayList();
         this.cliMedicoListEliminados = new ArrayList<>();
         this.modificado = false;
@@ -154,22 +150,6 @@ public class CliUsuarioDto {
         this.usuActivo.set(usuActivo);
     }
 
-    public ObservableList<CliReporteusuariosDto> getCliReporteusuariosList() {
-        return this.cliReporteusuariosList;
-    }
-
-    public void setCliReporteusuariosList(List<CliReporteusuariosDto> cliReporteusuariosList) {
-        this.cliReporteusuariosList = FXCollections.observableArrayList(cliReporteusuariosList);
-    }
-
-    public List<CliReporteusuariosDto> getCliReporteusuariosListEliminados() {
-        return this.cliReporteusuariosListEliminados;
-    }
-
-    public void setCliReporteusuariosListEliminados(List<CliReporteusuariosDto> cliReporteusuariosListEliminados) {
-        this.cliReporteusuariosListEliminados = cliReporteusuariosListEliminados;
-    }
-
     public ObservableList<CliMedicoDto> getCliMedicoList() {
         return this.cliMedicoList;
     }
@@ -234,7 +214,7 @@ public class CliUsuarioDto {
 
     @Override
     public String toString() {
-        return "CliUsuarioDto{" + "usuId=" + usuId + ", usuNombre=" + usuNombre + ", usuPapellido=" + usuPapellido + ", usuSapellido=" + usuSapellido + ", usuCedula=" + usuCedula + ", usuCorreo=" + usuCorreo + ", usuTipousuario=" + usuTipousuario + ", usuUsuario=" + usuUsuario + ", usuClave=" + usuClave + ", usuTempclave=" + usuTempclave + ", usuIdioma=" + usuIdioma + ", usuActivo=" + usuActivo + ", cliReporteusuariosList=" + cliReporteusuariosList + ", cliReporteusuariosListEliminados=" + cliReporteusuariosListEliminados + ", cliMedicoList=" + cliMedicoList + ", cliMedicoListEliminados=" + cliMedicoListEliminados + ", usuVersion=" + usuVersion + ", modificado=" + modificado + ", token=" + token + '}';
+        return "CliUsuarioDto{" + "usuId=" + usuId + ", usuNombre=" + usuNombre + ", usuPapellido=" + usuPapellido + ", usuSapellido=" + usuSapellido + ", usuCedula=" + usuCedula + ", usuCorreo=" + usuCorreo + ", usuTipousuario=" + usuTipousuario + ", usuUsuario=" + usuUsuario + ", usuClave=" + usuClave + ", usuTempclave=" + usuTempclave + ", usuIdioma=" + usuIdioma + ", usuActivo=" + usuActivo + ", cliReporteusuariosList="  + ", cliMedicoList=" + cliMedicoList + ", cliMedicoListEliminados=" + cliMedicoListEliminados + ", usuVersion=" + usuVersion + ", modificado=" + modificado + ", token=" + token + '}';
     }
 
     public String nombreUnApellido() {
