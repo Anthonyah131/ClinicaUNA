@@ -5,14 +5,12 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/19" fx:controller="cr.ac.una.clinicauna.controller.P16_ReporteDinamicoViewController">
+<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.clinicauna.controller.P16_ReporteDinamicoViewController">
    <children>
       <HBox layoutX="529.0" layoutY="293.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -52,7 +50,7 @@
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
                            <children>
                               <Label text="Correos: " />
-                              <HBox fx:id="hbxCorreos" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                              <HBox fx:id="hbxCorreos" maxHeight="100.0" maxWidth="400.0" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                      </children>
@@ -71,6 +69,14 @@
                               <JFXDatePicker fx:id="dpDiaFinaliza" />
                            </children>
                         </HBox>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <MFXButton fx:id="btnLimpiar" onAction="#onActionBtnLimpiar" text="Limpiar" />
+                        <MFXButton fx:id="btnGuardar" onAction="#onActionBtnGuardar" text="Guardar" />
+                        <MFXButton fx:id="btnBuscar" onAction="#onActionBtnBuscar" text="Buscar" />
+                        <MFXButton fx:id="btnEliminar" onAction="#onActionBtnEliminar" text="Eliminar" />
                      </children>
                   </HBox>
                </children>
@@ -100,13 +106,7 @@
                   </VBox>
                   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <TableView fx:id="tbvParametros" maxWidth="320.0" prefHeight="400.0">
-                           <columns>
-                              <TableColumn fx:id="tbcParametro" prefWidth="150.0" text="Parametro" />
-                              <TableColumn fx:id="tbcValor" prefWidth="100.0" text="Valor" />
-                              <TableColumn fx:id="tbcEliminar" prefWidth="70.0" text="Eliminar" />
-                           </columns>
-                        </TableView>
+                        <TableView fx:id="tbvParametros" maxWidth="320.0" prefHeight="400.0" />
                      </children>
                   </VBox>
                </children>

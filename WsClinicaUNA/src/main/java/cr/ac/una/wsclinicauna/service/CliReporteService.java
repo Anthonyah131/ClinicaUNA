@@ -19,11 +19,21 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.NonUniqueResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import java.io.ByteArrayOutputStream;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 /**
  *
@@ -36,6 +46,52 @@ public class CliReporteService {
     private static final Logger LOG = Logger.getLogger(CliReporteService.class.getName());
     @PersistenceContext(unitName = "WsClinicaUNAPU")
     private EntityManager em;
+
+    /*public Respuesta generarInformeExcelDesdeConsultaSQL(String consulta) {
+        try {
+            Connection co = em.unwrap(Connection.class);
+
+            // Ejecutar la consulta SQL y obtener los resultados
+            Statement statement = co.createStatement();
+            ResultSet resultSet = statement.executeQuery(consulta);
+
+            // Crear un nuevo libro de Excel
+            Workbook workbook = new HSSFWorkbook(); // O utiliza XSSFWorkbook para formato .xlsx
+
+            // Crear una hoja en el libro
+            Sheet sheet = workbook.createSheet("Informe");
+
+            // Crear una fila para encabezados
+            Row headerRow = sheet.createRow(0);
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int numColumns = metaData.getColumnCount();
+            for (int i = 1; i <= numColumns; i++) {
+                String columnName = metaData.getColumnName(i);
+                Cell cell = headerRow.createCell(i - 1);
+                cell.setCellValue(columnName);
+            }
+
+            // Llenar el libro de Excel con los datos de la consulta
+            int rowNum = 1;
+            while (resultSet.next()) {
+                Row dataRow = sheet.createRow(rowNum);
+                for (int i = 1; i <= numColumns; i++) {
+                    Cell cell = dataRow.createCell(i - 1);
+                    cell.setCellValue(resultSet.getString(i));
+                }
+                rowNum++;
+            }
+
+            // Crear un flujo de salida para el libro de Excel
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            workbook.write(outputStream);
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "ReporteExcel", outputStream.toByteArray());
+        } catch (Exception e) {
+            Logger.getLogger(CliReporteService.class.getName()).log(Level.SEVERE, null, e);
+            // Tratar el error y devolver una respuesta adecuada al cliente
+            return null;
+        }
+    }*/
 
     public Respuesta getReporte(Long id) {
         try {

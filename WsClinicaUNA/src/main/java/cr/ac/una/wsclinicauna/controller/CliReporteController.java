@@ -21,6 +21,8 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.GenericEntity;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,6 +40,29 @@ public class CliReporteController {
 
     @EJB
     CliReporteService cliReporteService;
+
+    /*@GET
+    @Path("/generarReporte/{consulta}")
+    public Response generarInformeExcelDesdeConsultaSQL(@PathParam("consultaSQL") String consulta) {
+        try {
+            Respuesta res = cliReporteService.generarInformeExcelDesdeConsultaSQL(consulta);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
+            }
+            byte[] excelData = (byte[]) res.getResultado("ReporteExcel");
+            String outputPath = "/cr/ac/una/wsclinicauna/resources/informe.xlsx"; // Ruta donde deseas guardar el informe
+            try (FileOutputStream fos = new FileOutputStream(outputPath)) {
+                fos.write(excelData);
+            } catch (IOException e) {
+                e.printStackTrace();
+                // Trata cualquier error de escritura del archivo
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(CliReporteController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el Reporte").build();//TODO
+        }
+        return null;
+    }*/
 
     @GET
     @Path("/reporte/{id}")

@@ -12,9 +12,9 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class CliParametroconsultaDto {
 
-    private SimpleStringProperty parcId;
-    private SimpleStringProperty parcParametro;
-    private SimpleStringProperty parcValor;
+    public SimpleStringProperty parcId;
+    public SimpleStringProperty parcParametro;
+    public SimpleStringProperty parcValor;
     private CliReporteDto cliReporteDto;
     private Long parcVersion;
     private Boolean modificado;

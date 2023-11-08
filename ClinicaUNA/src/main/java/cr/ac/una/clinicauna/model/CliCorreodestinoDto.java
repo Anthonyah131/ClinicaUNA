@@ -12,8 +12,8 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class CliCorreodestinoDto {
 
-    private SimpleStringProperty cdId;
-    private SimpleStringProperty cdCorreo;
+    public SimpleStringProperty cdId;
+    public SimpleStringProperty cdCorreo;
     private CliReporteDto cliReporteDto;
     private Long cdVersion;
     private Boolean modificado;

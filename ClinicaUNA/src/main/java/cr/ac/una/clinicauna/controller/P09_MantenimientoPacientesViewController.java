@@ -136,7 +136,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
     }
 
     @FXML
-    private void onActionBtnGuardar(ActionEvent event) { // Poner los idiomas
+    private void onActionBtnGuardar(ActionEvent event) {
         SoundUtil.mouseEnterSound();
         try {
             String invalidos = ValidarRequeridos.validarRequeridos(requeridos);
