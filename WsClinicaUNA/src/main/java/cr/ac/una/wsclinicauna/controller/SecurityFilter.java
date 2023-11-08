@@ -1,6 +1,5 @@
 package cr.ac.una.wsclinicauna.controller;
 
-
 import cr.ac.una.wsclinicauna.util.JwTokenHelper;
 import cr.ac.una.wsclinicauna.util.Secure;
 import io.jsonwebtoken.Claims;
@@ -33,6 +32,7 @@ public class SecurityFilter implements ContainerRequestFilter {
     private static final String AUTHORIZATION_ACTIVATION_PATH = "activacionUsuario";
     private static final String AUTHORIZATION_RECUPERATION_PATH = "recuperarClave";
     private static final String RENEWAL_SERVICE_PATH = "renovarToken";
+    private static final String RENEWAL_PING_PATH = "ping";
     private final JwTokenHelper jwTokenHelper = JwTokenHelper.getInstance();
     private static final String AUTHENTICATION_SCHEME = "Bearer ";
 
@@ -49,6 +49,9 @@ public class SecurityFilter implements ContainerRequestFilter {
             return;
         }
         if (method.getName().equals(AUTHORIZATION_RECUPERATION_PATH)) {
+            return;
+        }
+        if (method.getName().equals(RENEWAL_PING_PATH)) {
             return;
         }
 

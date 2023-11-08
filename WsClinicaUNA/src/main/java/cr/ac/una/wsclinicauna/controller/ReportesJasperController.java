@@ -9,9 +9,11 @@ import cr.ac.una.wsclinicauna.util.Secure;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 /**
  *
@@ -25,4 +27,13 @@ import jakarta.ws.rs.core.MediaType;
 public class ReportesJasperController {
     @EJB
     ReportesJasperService reportesJasperService;
+    
+    @GET
+    @Path("/ping")
+    public Response ping() {
+        reportesJasperService.getAngendaReport(1L);
+        return Response
+                .ok("ping Jakarta EE")
+                .build();
+    }
 }
