@@ -51,10 +51,15 @@ public class P10_AgendaViewController extends Controller implements Initializabl
     CliMedicoDto medicoDto;
     CliAgendaDto agendaDto;
     CliCitaDto citaDto;
-    CliCitaDto citasMatriz[][];
+    //CliCitaDto citasMatriz[][];
     CliCitaDto citasVector[];
     List<CliCitaDto> listaCitas;
     Label labelVector[];
+
+    int iniJornada;
+    int finJornada;
+    int jornada;
+    int citasHoras;
 
     /**
      * Initializes the controller class.
@@ -103,22 +108,15 @@ public class P10_AgendaViewController extends Controller implements Initializabl
             //Recupera la agenda si la hay desde base y la lista de citas
             cargarAgenda();
             //Variables varias para calculos de espacios en el grid
-            int iniJornada = medicoDto.getMedFiniTime().getHour();
-            int finJornada = medicoDto.getMedFfinTime().getHour();
-            int jornada = finJornada - iniJornada;
-            int citasHoras = Math.toIntExact(medicoDto.getMedEspaciosxhora());
-            //Establecer tamano vector y madris de citas
-            citasMatriz = new CliCitaDto[jornada + 1][citasHoras + 1];
-            citasVector = new CliCitaDto[jornada * citasHoras];
+            iniJornada = medicoDto.getMedFiniTime().getHour();
+            finJornada = medicoDto.getMedFfinTime().getHour();
+            jornada = finJornada - iniJornada;
+            citasHoras = Math.toIntExact(medicoDto.getMedEspaciosxhora());
+            //Establecer tamano vector de citas
             labelVector = new Label[jornada * citasHoras];
 
-            System.out.println(citasVector.length + " " + citasMatriz.length);
             //Recorre la lista de citas y las pasa a la matriz
-            if (!listaCitas.isEmpty()) {
-                for (int i = 0; i < listaCitas.size(); i++) {
-                    citaAMatriz(listaCitas.get(i), iniJornada, citasHoras);
-                }
-            }
+            pasarListaCitasAVector();
             // llena el gridpane con labeles
             llenarGridPane();
         }
@@ -136,14 +134,26 @@ public class P10_AgendaViewController extends Controller implements Initializabl
             }
 
             listaCitas.clear();
-            listaCitas = agendaDto.getCliCitaList();
+            listaCitas.addAll(agendaDto.getCliCitaList());
         } else {
             new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Agenda", getStage(), respuesta.getMensaje());
         }
     }
 
-    private void citaAMatriz(CliCitaDto cita, int iniJornada, int citasHoras) {
-        LocalDateTime fechaHora = cita.getCitFechaHora();
+    private void pasarListaCitasAVector() {
+        listaCitas.clear();
+        listaCitas.addAll(agendaDto.getCliCitaList());
+        citasVector = new CliCitaDto[jornada * citasHoras];
+        if (!listaCitas.isEmpty()) {
+            for (int i = 0; i < listaCitas.size(); i++) {
+                LocalDateTime fechaHora = listaCitas.get(i).getCitFechaHora();
+                citasVector[citaAPosVector(fechaHora)] = listaCitas.get(i);
+            }
+        }
+    }
+
+    private int citaAPosVector(LocalDateTime fechaHora) {
+
         int hora = fechaHora.getHour();
         int minuto = fechaHora.getMinute();
 
@@ -175,28 +185,25 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         int fila = hora - iniJornada;
         int posVector = fila * citasHoras + col;
         // Pasar de pos de matriz a pos de vector
-        comprobarEspaciosCitas(posVector, cita);
-        citasVector[posVector] = cita;
+        return posVector;
     }
 
-    private void comprobarEspaciosCitas(int posVector, CliCitaDto cita) {
-        int citas = Math.toIntExact(cita.getCliCantespacios());
-        if (citas != 1) {
-            for (int i = 0; i < citas; i++) {
-                citasVector[posVector] = cita;
-                posVector++;
+    private void comprobarEspaciosCitas() { // arreglar
+        for (int i = 0; i < citasVector.length; i++) {
+            if (citasVector[i] != null) {
+                CliCitaDto cita = citasVector[i];
+                int espaciosCitas = Math.toIntExact(cita.getCliCantespacios());
+                if (espaciosCitas > 1) {
+                    for (int j = 0; j < espaciosCitas; j++) {
+                        citasVector[i] = cita;
+                        i++;
+                    }
+                }
             }
-        } else {
-            citasVector[posVector] = cita;
         }
     }
 
     private void llenarGridPane() {
-        int iniJornada = medicoDto.getMedFiniTime().getHour();
-        int finJornada = medicoDto.getMedFfinTime().getHour();
-        int jornada = finJornada - iniJornada;
-        int citasHoras = Math.toIntExact(medicoDto.getMedEspaciosxhora());
-
         int numRows = jornada + 1;
         int numCols = citasHoras + 1;
         int horaInicio = iniJornada;
@@ -228,41 +235,36 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                     continue;
                 }
                 if (i > 0 && j > 0) {
-                    Label label;
-                    if (citasMatriz[i][j] != null) {
-                        citaDto = citasMatriz[i][j];
-                        label = new Label();
-                        crearCita(label);
-                    } else {
-                        label = crearLabelAddCita();
-                    }
+                    Label label = new Label();
 
                     label.setOnMouseClicked(event -> {
                         FlowController.getInstance().delete("P11_NuevaCitaView");
                         int rowIndex = GridPane.getRowIndex(label);
                         int colIndex = GridPane.getColumnIndex(label);
 
-//                        if (citasMatriz[rowIndex][colIndex] != null) {
-//                            citaDto = citasMatriz[rowIndex][colIndex];
-//                        } else {
-//                            citaDto = new CliCitaDto();
-//                        }
                         int posVector = (rowIndex - 1) * citasHoras + colIndex - 1;
+                        LocalDateTime hora;
                         if (citasVector[posVector] != null) {
                             citaDto = citasVector[posVector];
+                            hora = citaDto.getCitFechaHora();
+                            posVector = citaAPosVector(hora);
                         } else {
                             citaDto = new CliCitaDto();
+                            hora = calcularHora(rowIndex, colIndex);
                         }
+                        System.out.println(hora);
+                        System.out.println(posVector);
 
                         P11_NuevaCitaViewController citaController = (P11_NuevaCitaViewController) FlowController.getInstance().getController("P11_NuevaCitaView");
                         citaController.cargarDefecto(citaDto, usuarioDto, agendaDto, medicoDto,
-                                calcularHora(rowIndex, colIndex), citasVector, posVector);
+                                hora, citasVector, posVector);
                         FlowController.getInstance().goViewInWindowModal("P11_NuevaCitaView", stage, Boolean.FALSE);
 
                         if (citaDto.getCitId() != null) {
-                            comprobarEspaciosCitas(posVector, citaDto);
+                            pasarListaCitasAVector();
+                            comprobarEspaciosCitas();
                             crearCita();
-                            crearCita(label);
+                            //crearCita(label);
                         }
 
                         System.out.println("Fila: " + rowIndex + " columna " + colIndex);
@@ -274,8 +276,19 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                 }
             }
         }
+        comprobarEspaciosCitas();
         crearCita();
         grdCitas.setGridLinesVisible(true);
+    }
+
+    private void crearCita() {
+        for (int i = 0; i < citasVector.length; i++) {
+            if (citasVector[i] != null) {
+                crearLabelCita(labelVector[i], citasVector[i].citaLabel(), citasVector[i].getCitEstado());
+            } else {
+                crearLabelAddCita(labelVector[i]);
+            }
+        }
     }
 
     private Label crearLabelBordes(String texto) {
@@ -285,8 +298,9 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         return label;
     }
 
-    private Label crearLabelAddCita() {
-        Label label = new Label();
+    private void crearLabelAddCita(Label label) {
+        label.getStyleClass().clear();
+        label.setText("");
         label.setText("Agregar cita");
         Image image = new Image("cr/ac/una/ClinicaUNA/resources/media/icons/addIcon.png");
         ImageView imageView = new ImageView(image);
@@ -295,40 +309,46 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         label.setGraphic(imageView);
         label.getStyleClass().add("label-agregar-cita");
 
-        return label;
     }
 
-    private void crearCita() {
-        for (int i = 0; i < citasVector.length; i++) {
-            if (citasVector[i] != null) {
-                Label label = labelVector[i];
-                label.setText("");
-                label.setGraphic(null);
-                label.setPrefSize(290, 130);
-                label.setPadding(new Insets(5));
-                estadoCita(label, citasVector[i]);
-                label.setText(citasVector[i].citaLabel());
-            }
-        }
+    private void crearLabelCita(Label label, String texto, String estadoCita) {
+        //Label label = new Label();
+        label.setText("");
+        label.setGraphic(null);
+        label.setText(texto);
+        label.setPrefSize(290, 130);
+        label.setPadding(new Insets(5));
+        estadoCita(label, estadoCita);
     }
 
-    private void crearCita(Label label) {
-
-        if (citaDto != null) {
-            label.setText("");
-            label.setGraphic(null);
-//            String estadoCita = "Estado: " + estadoCita() + "\n";
-//            String nombrePac = "Paciente: " + citaDto.getNombreString() + "\n";
-//            String usuarioRegistra = "Usuario que registra: " + citaDto.getCitUsuarioRegistra() + "\n";
-//            String motivo = (citaDto.getCitMotivo() != null) ? "Motivo: " + citaDto.getCitMotivo() + "\n" : "Motivo: No indica\n";
-//            String telefono = "Telefono: " + citaDto.getCliPacienteDto().getPacTelefono() + "\n";
-//            String correo = "Correo: " + citaDto.getCliPacienteDto().getPacCorreo() + "\n";
-
-            label.setPrefSize(290, 130);
-            label.setPadding(new Insets(5));
-//            estadoCita(label,);
-//            label.setText(estadoCita + nombrePac + usuarioRegistra + motivo + telefono + correo);
-            label.setText(citaDto.citaLabel());
+//    private void crearCita(Label label) {
+//
+//        if (citaDto != null) {
+//            label.setText("");
+//            label.setGraphic(null);
+////            String estadoCita = "Estado: " + estadoCita() + "\n";
+////            String nombrePac = "Paciente: " + citaDto.getNombreString() + "\n";
+////            String usuarioRegistra = "Usuario que registra: " + citaDto.getCitUsuarioRegistra() + "\n";
+////            String motivo = (citaDto.getCitMotivo() != null) ? "Motivo: " + citaDto.getCitMotivo() + "\n" : "Motivo: No indica\n";
+////            String telefono = "Telefono: " + citaDto.getCliPacienteDto().getPacTelefono() + "\n";
+////            String correo = "Correo: " + citaDto.getCliPacienteDto().getPacCorreo() + "\n";
+//
+//            label.setPrefSize(290, 130);
+//            label.setPadding(new Insets(5));
+////            estadoCita(label,);
+////            label.setText(estadoCita + nombrePac + usuarioRegistra + motivo + telefono + correo);
+//            label.setText(citaDto.citaLabel());
+//        }
+//    }
+    private void estadoCita(Label label, String estadoCita) {
+        label.getStyleClass().clear();
+        switch (estadoCita) {
+            case "P" ->
+                label.getStyleClass().add("label-cita-programada");
+            case "A" ->
+                label.getStyleClass().add("label-cita-atendida");
+            case "U" ->
+                label.getStyleClass().add("label-cita-ausente");
         }
     }
 
@@ -370,7 +390,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         int day = fecha.getDayOfMonth();
 
         LocalDateTime fechaHora = LocalDateTime.of(year, month, day, hora, minutos);
-        System.out.println(fechaHora);
+        //System.out.println(fechaHora);
 
         return fechaHora;
     }
@@ -383,22 +403,11 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         }
     }
 
+    //verificar si se ocupa
     public void cargarCita(CliCitaDto cita, CliAgendaDto agenda, CliMedicoDto medico) {
         citaDto = cita;
         agendaDto = agenda;
         medicoDto = medico;
-    }
-
-    private void estadoCita(Label label, CliCitaDto cita) {
-        label.getStyleClass().clear();
-        switch (cita.getCitEstado()) {
-            case "P" ->
-                label.getStyleClass().add("label-cita-programada");
-            case "A" ->
-                label.getStyleClass().add("label-cita-atendida");
-            case "U" ->
-                label.getStyleClass().add("label-cita-ausente");
-        }
     }
 
 //    public void dragAndDrop() {

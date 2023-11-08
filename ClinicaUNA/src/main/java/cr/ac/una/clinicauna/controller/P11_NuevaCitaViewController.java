@@ -85,25 +85,49 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
 
     @FXML
     private void onActionBtnGuardar(ActionEvent event) {
-        citaDto.setCitMotivo(txfMotivo.getText());
-        citaDto.setCliCantespacios(Long.valueOf(cboxEspacioHora.getValue()));
-        citaDto.setCitEstado(estadoCita());
 
-        if (comprobarEspacios()) {
-            guardarCita();
+        int cboxEspacios = cboxEspacioHora.getValue();
 
-            P10_AgendaViewController agendaController = (P10_AgendaViewController) FlowController.getInstance().getController("P10_AgendaView");
-            agendaController.cargarCita(citaDto, agendaDto, medicoDto);
-            stage.close();
+        //Si la cita no existe intenta crear una nueva si cumple los espacios
+        if (citasVector[posVec] == null) {
+            if (comprobarEspacios(posVec, 0)) {
+                asignarDatosCita();
+            } else {
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "No hay suficientes campos libres");
+            }
+        } // si los espacios del cbox son menores a los que ya tenia la cita se actualiza
+        //        else if (cboxEspacios < citaDto.getCliCantespacios()) {
+        //            asignarDatosCita();
+        //        } 
+        else if (cboxEspacioHora.getValue() > citaDto.getCliCantespacios()) {
+            int inicio = citaDto.getCliCantespacios().intValue();
+            int posAux = posVec + inicio;
+
+            if (comprobarEspacios(posAux, inicio)) {
+                asignarDatosCita();
+            } else {
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "No hay suficientes campos libres");
+            }
         } else {
-            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "No hay suficientes campos libres");
+            asignarDatosCita();
         }
     }
 
-    private Boolean comprobarEspacios() {
-        int espacios = cboxEspacioHora.getValue();
-        int indiceVector = posVec;
-        for (int i = 0; i < espacios; i++) {
+    private void asignarDatosCita() {
+        citaDto.setCitMotivo(txfMotivo.getText());
+        citaDto.setCliCantespacios(Long.valueOf(cboxEspacioHora.getValue()));
+        citaDto.setCitEstado(estadoCita());
+        guardarCita();
+
+        P10_AgendaViewController agendaController = (P10_AgendaViewController) FlowController.getInstance().getController("P10_AgendaView");
+        agendaController.cargarCita(citaDto, agendaDto, medicoDto);
+        stage.close();
+    }
+
+    private Boolean comprobarEspacios(int posV, int inicio) {
+        int tamano = cboxEspacioHora.getValue();
+        int indiceVector = posV;
+        for (int i = inicio; i < tamano; i++) {
             if (citasVector[indiceVector] != null) {
                 return false;
             }
@@ -214,14 +238,19 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         }
     }
 
-    public void cargarDefecto(CliCitaDto cita, CliUsuarioDto usuario, CliAgendaDto agenda, CliMedicoDto medico, LocalDateTime fechaHora,
-            CliCitaDto citasVec[], int pos) {
+    public void cargarDefecto(CliCitaDto cita, CliUsuarioDto usuario, CliAgendaDto agenda, CliMedicoDto medico, LocalDateTime fechaHora, CliCitaDto citasVec[], int pos) {
         citaDto = cita;
+<<<<<<< Updated upstream
         if (citaDto.getCitId() != null || citaDto.getCitId() > 0) {
             CliCitaService citaService = new CliCitaService();
             Respuesta respuesta = citaService.getCita(citaDto.getCitId());
             this.citaDto = (CliCitaDto) respuesta.getResultado("Cita");
         }
+=======
+        //CliCitaService citaService = new CliCitaService();
+        //Respuesta respuesta = citaService.getCita(citaDto.getCitId());
+        //this.citaDto = (CliCitaDto) respuesta.getResultado("Cita");
+>>>>>>> Stashed changes
         usuarioDto = usuario;
         agendaDto = agenda;
         medicoDto = medico;
