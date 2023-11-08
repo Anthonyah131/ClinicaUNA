@@ -10,8 +10,6 @@ import cr.ac.una.wsclinicauna.model.CliExpediente;
 import cr.ac.una.wsclinicauna.model.CliExpedienteDto;
 import cr.ac.una.wsclinicauna.model.CliPaciente;
 import cr.ac.una.wsclinicauna.model.CliPacienteDto;
-import cr.ac.una.wsclinicauna.model.CliReporteexpediente;
-import cr.ac.una.wsclinicauna.model.CliReporteexpedienteDto;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import jakarta.ejb.LocalBean;
@@ -52,9 +50,6 @@ public class CliPacienteService {
             for (CliCita cliCita : cliPaciente.getCliCitaList()) {
                 cliPacienteDto.getCliCitaList().add(new CliCitaDto(cliCita));
             }
-            for (CliReporteexpediente cliReporteexpediente : cliPaciente.getCliReporteexpedienteList()) {
-                cliPacienteDto.getCliReporteexpedienteList().add(new CliReporteexpedienteDto(cliReporteexpediente));
-            }
 
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Paciente", cliPacienteDto);
 
@@ -82,9 +77,6 @@ public class CliPacienteService {
                 }
                 for (CliCita cliCita : cliPaciente.getCliCitaList()) {
                     cliPacienteDto.getCliCitaList().add(new CliCitaDto(cliCita));
-                }
-                for (CliReporteexpediente cliReporteexpediente : cliPaciente.getCliReporteexpedienteList()) {
-                    cliPacienteDto.getCliReporteexpedienteList().add(new CliReporteexpedienteDto(cliReporteexpediente));
                 }
 
                 cliPacienteDtos.add(cliPacienteDto);
@@ -120,18 +112,6 @@ public class CliPacienteService {
 
                 for (CliExpedienteDto cliExpedienteDto : cliPacienteDto.getCliExpedienteListEliminados()) {
                     cliPaciente.getCliExpedienteList().remove(new CliExpediente(cliExpedienteDto.getExpId()));
-                }
-
-                for (CliReporteexpedienteDto cliReporteexpedienteDto : cliPacienteDto.getCliReporteexpedienteList()) {
-                    if (cliReporteexpedienteDto.getModificado()) {
-                        CliReporteexpediente cliReporteexpediente = em.find(CliReporteexpediente.class, cliReporteexpedienteDto.getRepexpId());
-                        cliPaciente.getCliReporteexpedienteList().add(cliReporteexpediente);
-                        cliReporteexpediente.setPacId(cliPaciente);
-                    }
-                }
-
-                for (CliReporteexpedienteDto cliReporteexpedienteDto : cliPacienteDto.getCliReporteexpedienteListEliminados()) {
-                    cliPaciente.getCliReporteexpedienteList().remove(new CliReporteexpediente(cliReporteexpedienteDto.getRepexpId()));
                 }
 
                 for (CliCitaDto cliCitaDto : cliPacienteDto.getCliCitaList()) {

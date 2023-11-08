@@ -10,7 +10,6 @@ import cr.ac.una.wsclinicauna.model.CliExamen;
 import cr.ac.una.wsclinicauna.model.CliExamenDto;
 import cr.ac.una.wsclinicauna.model.CliExpediente;
 import cr.ac.una.wsclinicauna.model.CliExpedienteDto;
-import cr.ac.una.wsclinicauna.model.CliReporteagenda;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import jakarta.ejb.LocalBean;

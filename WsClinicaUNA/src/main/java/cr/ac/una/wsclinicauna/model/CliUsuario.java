@@ -13,9 +13,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
@@ -94,11 +91,6 @@ public class CliUsuario implements Serializable {
     @Basic(optional = false)
     @Column(name = "USU_VERSION")
     private Long usuVersion;
-    @JoinTable(name = "CLI_USUARIOREPORTEUSUARIOS", joinColumns = {
-        @JoinColumn(name = "USU_ID", referencedColumnName = "USU_ID")}, inverseJoinColumns = {
-        @JoinColumn(name = "PARUSU_ID", referencedColumnName = "REPUSU_ID")})
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<CliReporteusuarios> cliReporteusuariosList;
     @OneToMany(mappedBy = "usuId", fetch = FetchType.LAZY)
     private List<CliMedico> cliMedicoList;
 
@@ -231,14 +223,6 @@ public class CliUsuario implements Serializable {
 
     public void setUsuVersion(Long usuVersion) {
         this.usuVersion = usuVersion;
-    }
-
-    public List<CliReporteusuarios> getCliReporteusuariosList() {
-        return cliReporteusuariosList;
-    }
-
-    public void setCliReporteusuariosList(List<CliReporteusuarios> cliReporteusuariosList) {
-        this.cliReporteusuariosList = cliReporteusuariosList;
     }
 
     public List<CliMedico> getCliMedicoList() {

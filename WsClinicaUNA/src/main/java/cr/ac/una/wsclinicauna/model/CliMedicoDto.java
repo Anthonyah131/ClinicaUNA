@@ -28,16 +28,12 @@ public class CliMedicoDto {
     private List<CliAgendaDto> cliAgendaList;
     private List<CliAgendaDto> cliAgendaListEliminados;
     private CliUsuarioDto cliUsuarioDto;
-    private List<CliReporteagendaDto> cliReporteagendaList;
-    private List<CliReporteagendaDto> cliReporteagendaListEliminados;
     private Boolean modificado;
     private LocalDateTime fecha;
 
     public CliMedicoDto() {
         this.cliAgendaList = new ArrayList<>();
         this.cliAgendaListEliminados = new ArrayList<>();
-        this.cliReporteagendaList = new ArrayList<>();
-        this.cliReporteagendaListEliminados = new ArrayList<>();
         this.modificado = false;
         this.fecha = LocalDateTime.now();
     }
@@ -152,21 +148,6 @@ public class CliMedicoDto {
         this.cliUsuarioDto = cliUsuarioDto;
     }
 
-    public List<CliReporteagendaDto> getCliReporteagendaList() {
-        return cliReporteagendaList;
-    }
-
-    public void setCliReporteagendaList(List<CliReporteagendaDto> cliReporteagendaList) {
-        this.cliReporteagendaList = cliReporteagendaList;
-    }
-
-    public List<CliReporteagendaDto> getCliReporteagendaListEliminados() {
-        return cliReporteagendaListEliminados;
-    }
-
-    public void setCliReporteagendaListEliminados(List<CliReporteagendaDto> cliReporteagendaListEliminados) {
-        this.cliReporteagendaListEliminados = cliReporteagendaListEliminados;
-    }
 
     public Boolean getModificado() {
         return modificado;

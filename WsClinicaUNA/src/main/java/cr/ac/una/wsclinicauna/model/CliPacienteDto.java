@@ -14,6 +14,7 @@ import java.util.List;
  * @author ArauzKJ
  */
 public class CliPacienteDto {
+
     private Long pacId;
     private String pacNombre;
     private String pacPapellido;
@@ -25,26 +26,22 @@ public class CliPacienteDto {
     private LocalDate pacFnacimiento;
     private Long pacVersion;
     private List<CliExpedienteDto> cliExpedienteList;
-    private List<CliReporteexpedienteDto> cliReporteexpedienteList;
     private List<CliCitaDto> cliCitaList;
     private List<CliExpedienteDto> cliExpedienteListEliminados;
-    private List<CliReporteexpedienteDto> cliReporteexpedienteListEliminados;
     private List<CliCitaDto> cliCitaListEliminados;
     private Boolean modificado;
     private LocalDateTime fecha;
 
-    public CliPacienteDto( ) {
+    public CliPacienteDto() {
         this.cliExpedienteList = new ArrayList<>();
-        this.cliReporteexpedienteList =  new ArrayList<>();
-        this.cliCitaList =  new ArrayList<>();
-        this.cliExpedienteListEliminados =  new ArrayList<>();
-        this.cliReporteexpedienteListEliminados =  new ArrayList<>();
-        this.cliCitaListEliminados =  new ArrayList<>();
+        this.cliCitaList = new ArrayList<>();
+        this.cliExpedienteListEliminados = new ArrayList<>();
+        this.cliCitaListEliminados = new ArrayList<>();
         this.modificado = false;
         this.fecha = LocalDateTime.now();
     }
 
-    public CliPacienteDto(CliPaciente cliPaciente ) {
+    public CliPacienteDto(CliPaciente cliPaciente) {
         this();
         this.pacId = cliPaciente.getPacId();
         this.pacNombre = cliPaciente.getPacNombre();
@@ -59,8 +56,6 @@ public class CliPacienteDto {
         this.fecha = LocalDateTime.now();
     }
 
-    
-    
     public Long getPacId() {
         return pacId;
     }
@@ -149,14 +144,6 @@ public class CliPacienteDto {
         this.cliExpedienteList = cliExpedienteList;
     }
 
-    public List<CliReporteexpedienteDto> getCliReporteexpedienteList() {
-        return cliReporteexpedienteList;
-    }
-
-    public void setCliReporteexpedienteList(List<CliReporteexpedienteDto> cliReporteexpedienteList) {
-        this.cliReporteexpedienteList = cliReporteexpedienteList;
-    }
-
     public List<CliCitaDto> getCliCitaList() {
         return cliCitaList;
     }
@@ -171,14 +158,6 @@ public class CliPacienteDto {
 
     public void setCliExpedienteListEliminados(List<CliExpedienteDto> cliExpedienteListEliminados) {
         this.cliExpedienteListEliminados = cliExpedienteListEliminados;
-    }
-
-    public List<CliReporteexpedienteDto> getCliReporteexpedienteListEliminados() {
-        return cliReporteexpedienteListEliminados;
-    }
-
-    public void setCliReporteexpedienteListEliminados(List<CliReporteexpedienteDto> cliReporteexpedienteListEliminados) {
-        this.cliReporteexpedienteListEliminados = cliReporteexpedienteListEliminados;
     }
 
     public List<CliCitaDto> getCliCitaListEliminados() {
@@ -204,7 +183,5 @@ public class CliPacienteDto {
     public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
-    
-    
-    
+
 }

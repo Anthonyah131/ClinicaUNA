@@ -80,8 +80,6 @@ public class CliPaciente implements Serializable {
     @OneToMany(mappedBy = "pacId", fetch = FetchType.LAZY)
     private List<CliExpediente> cliExpedienteList;
     @OneToMany(mappedBy = "pacId", fetch = FetchType.LAZY)
-    private List<CliReporteexpediente> cliReporteexpedienteList;
-    @OneToMany(mappedBy = "pacId", fetch = FetchType.LAZY)
     private List<CliCita> cliCitaList;
 
     public CliPaciente() {
@@ -196,13 +194,6 @@ public class CliPaciente implements Serializable {
         this.cliExpedienteList = cliExpedienteList;
     }
 
-    public List<CliReporteexpediente> getCliReporteexpedienteList() {
-        return cliReporteexpedienteList;
-    }
-
-    public void setCliReporteexpedienteList(List<CliReporteexpediente> cliReporteexpedienteList) {
-        this.cliReporteexpedienteList = cliReporteexpedienteList;
-    }
 
     public List<CliCita> getCliCitaList() {
         return cliCitaList;

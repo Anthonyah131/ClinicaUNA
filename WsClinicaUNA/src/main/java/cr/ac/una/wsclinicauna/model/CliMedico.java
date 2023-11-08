@@ -76,8 +76,6 @@ public class CliMedico implements Serializable {
     @JoinColumn(name = "USU_ID", referencedColumnName = "USU_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private CliUsuario usuId;
-    @OneToMany(mappedBy = "medId", fetch = FetchType.LAZY)
-    private List<CliReporteagenda> cliReporteagendaList;
 
     public CliMedico() {
     }
@@ -188,14 +186,6 @@ public class CliMedico implements Serializable {
 
     public void setUsuId(CliUsuario usuId) {
         this.usuId = usuId;
-    }
-
-    public List<CliReporteagenda> getCliReporteagendaList() {
-        return cliReporteagendaList;
-    }
-
-    public void setCliReporteagendaList(List<CliReporteagenda> cliReporteagendaList) {
-        this.cliReporteagendaList = cliReporteagendaList;
     }
 
     @Override

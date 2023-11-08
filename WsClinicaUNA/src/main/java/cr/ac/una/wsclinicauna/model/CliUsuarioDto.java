@@ -25,8 +25,6 @@ public class CliUsuarioDto {
     private String usuIdioma;
     private String usuActivo;
     private Long usuVersion;
-    List<CliReporteusuariosDto> cliReporteusuariosList;
-    List<CliReporteusuariosDto> cliReporteusuariosListEliminados;
     List<CliMedicoDto> cliMedicoList;
     List<CliMedicoDto> cliMedicoListEliminados;
     private Boolean modificado;
@@ -36,8 +34,6 @@ public class CliUsuarioDto {
         this.modificado = false;
         this.cliMedicoList = new ArrayList<>();
         this.cliMedicoListEliminados = new ArrayList<>();
-        this.cliReporteusuariosList = new ArrayList<>();
-        this.cliReporteusuariosListEliminados = new ArrayList<>();
     }
 
     public CliUsuarioDto(CliUsuario cliUsuario) {
@@ -175,22 +171,6 @@ public class CliUsuarioDto {
 
     public void setToken(String token) {
         this.token = token;
-    }
-
-    public List<CliReporteusuariosDto> getCliReporteusuariosList() {
-        return cliReporteusuariosList;
-    }
-
-    public void setCliReporteusuariosList(List<CliReporteusuariosDto> cliReporteusuariosList) {
-        this.cliReporteusuariosList = cliReporteusuariosList;
-    }
-
-    public List<CliReporteusuariosDto> getCliReporteusuariosListEliminados() {
-        return cliReporteusuariosListEliminados;
-    }
-
-    public void setCliReporteusuariosListEliminados(List<CliReporteusuariosDto> cliReporteusuariosListEliminados) {
-        this.cliReporteusuariosListEliminados = cliReporteusuariosListEliminados;
     }
 
     public List<CliMedicoDto> getCliMedicoList() {

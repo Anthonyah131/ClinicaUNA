@@ -4,8 +4,6 @@ import cr.ac.una.wsclinicauna.model.CliAgenda;
 import cr.ac.una.wsclinicauna.model.CliAgendaDto;
 import cr.ac.una.wsclinicauna.model.CliMedico;
 import cr.ac.una.wsclinicauna.model.CliMedicoDto;
-import cr.ac.una.wsclinicauna.model.CliReporteagenda;
-import cr.ac.una.wsclinicauna.model.CliReporteagendaDto;
 import cr.ac.una.wsclinicauna.model.CliUsuario;
 import cr.ac.una.wsclinicauna.model.CliUsuarioDto;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
@@ -48,10 +46,6 @@ public class CliMedicoService {
                 cliMedicoDto.getCliAgendaList().add(new CliAgendaDto(cliAgenda));
             }
 
-            for (CliReporteagenda cliReporteagenda : cliMedico.getCliReporteagendaList()) {
-                cliMedicoDto.getCliReporteagendaList().add(new CliReporteagendaDto(cliReporteagenda));
-            }
-
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Medico", cliMedicoDto);
 
         } catch (NoResultException ex) {
@@ -78,9 +72,6 @@ public class CliMedicoService {
                     cliMedicoDto.getCliAgendaList().add(new CliAgendaDto(cliAgenda));
                 }
 
-                for (CliReporteagenda cliReporteagenda : cliMedico.getCliReporteagendaList()) {
-                    cliMedicoDto.getCliReporteagendaList().add(new CliReporteagendaDto(cliReporteagenda));
-                }
                 cliMedicoDtos.add(cliMedicoDto);
             }
 
@@ -106,18 +97,6 @@ public class CliMedicoService {
 
                 CliUsuario cliUsuario = em.find(CliUsuario.class, cliMedicoDto.getCliUsuarioDto().getUsuId());
                 cliMedico.setUsuId(cliUsuario);
-
-                for (CliReporteagendaDto cliReporteagendaDto : cliMedicoDto.getCliReporteagendaList()) {
-                    if (cliReporteagendaDto.getModificado()) {
-                        CliReporteagenda cliReporteagenda = em.find(CliReporteagenda.class, cliReporteagendaDto.getRepageId());
-                        cliMedico.getCliReporteagendaList().add(cliReporteagenda);
-                        cliReporteagenda.setMedId(cliMedico);
-                    }
-                }
-
-                for (CliReporteagendaDto cliReporteagendaDto : cliMedicoDto.getCliReporteagendaListEliminados()) {
-                    cliMedico.getCliReporteagendaList().remove(new CliReporteagenda(cliReporteagendaDto.getRepageId()));
-                }
 
                 for (CliAgendaDto cliAgendaDto : cliMedicoDto.getCliAgendaList()) {
                     if (cliAgendaDto.getModificado()) {

@@ -3,8 +3,6 @@ package cr.ac.una.wsclinicauna.service;
 import cr.ac.una.wsclinicauna.model.CliMedico;
 import cr.ac.una.wsclinicauna.model.CliMedicoDto;
 import cr.ac.una.wsclinicauna.model.CliParametrosDto;
-import cr.ac.una.wsclinicauna.model.CliReporteusuarios;
-import cr.ac.una.wsclinicauna.model.CliReporteusuariosDto;
 import cr.ac.una.wsclinicauna.model.CliUsuario;
 import cr.ac.una.wsclinicauna.model.CliUsuarioDto;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
@@ -56,9 +54,7 @@ public class CliUsuarioService {
             qryActividad.setParameter("usuClave", clave);
             CliUsuario cliUsuario = (CliUsuario) qryActividad.getSingleResult();
             CliUsuarioDto cliUsuarioDto = new CliUsuarioDto(cliUsuario);
-            for (CliReporteusuarios cliReporteusuarios : cliUsuario.getCliReporteusuariosList()) {
-                cliUsuarioDto.getCliReporteusuariosList().add(new CliReporteusuariosDto(cliReporteusuarios));
-            }
+
             for (CliMedico cliMedico : cliUsuario.getCliMedicoList()) {
                 cliUsuarioDto.getCliMedicoList().add(new CliMedicoDto(cliMedico));
             }
@@ -83,9 +79,7 @@ public class CliUsuarioService {
             CliUsuario cliUsuario = (CliUsuario) qryUsuario.getSingleResult();
 
             CliUsuarioDto cliUsuarioDto = new CliUsuarioDto(cliUsuario);
-            for (CliReporteusuarios cliReporteusuarios : cliUsuario.getCliReporteusuariosList()) {
-                cliUsuarioDto.getCliReporteusuariosList().add(new CliReporteusuariosDto(cliReporteusuarios));
-            }
+
             for (CliMedico cliMedico : cliUsuario.getCliMedicoList()) {
                 cliUsuarioDto.getCliMedicoList().add(new CliMedicoDto(cliMedico));
             }
@@ -110,10 +104,6 @@ public class CliUsuarioService {
             List<CliUsuarioDto> cliUsuarioDtos = new ArrayList<>();
             for (CliUsuario cliUsuario : cliUsuarios) {
                 CliUsuarioDto cliUsuarioDto = new CliUsuarioDto(cliUsuario);
-
-                for (CliReporteusuarios cliReporteusuarios : cliUsuario.getCliReporteusuariosList()) {
-                    cliUsuarioDto.getCliReporteusuariosList().add(new CliReporteusuariosDto(cliReporteusuarios));
-                }
 
                 for (CliMedico cliMedico : cliUsuario.getCliMedicoList()) {
                     cliUsuarioDto.getCliMedicoList().add(new CliMedicoDto(cliMedico));
@@ -156,20 +146,6 @@ public class CliUsuarioService {
                     }
                 }
 
-                for (CliReporteusuariosDto cliReporteusuariosDto : cliUsuarioDto.getCliReporteusuariosListEliminados()) {
-                    cliUsuario.getCliReporteusuariosList().remove(new CliReporteusuarios(cliReporteusuariosDto.getRepusuId()));
-                }
-
-                if (!cliUsuarioDto.getCliReporteusuariosList().isEmpty()) {
-                    for (CliReporteusuariosDto cliReporteusuariosDto : cliUsuarioDto.getCliReporteusuariosList()) {
-                        if (cliReporteusuariosDto.getModificado()) {
-                            CliReporteusuarios cliReporteusuarios = em.find(CliReporteusuarios.class, cliReporteusuariosDto.getRepusuId());
-                            cliUsuario.getCliReporteusuariosList().add(cliReporteusuarios);
-                            cliReporteusuarios.getCliUsuarioList().add(cliUsuario);
-                        }
-
-                    }
-                }
                 cliUsuario = em.merge(cliUsuario);
             } else {
                 cliUsuario = new CliUsuario(cliUsuarioDto);
@@ -177,9 +153,7 @@ public class CliUsuarioService {
             }
             em.flush();
             CliUsuarioDto cliUsuarioDtoR = new CliUsuarioDto(cliUsuario);
-            for (CliReporteusuarios cliReporteusuarios : cliUsuario.getCliReporteusuariosList()) {
-                cliUsuarioDtoR.getCliReporteusuariosList().add(new CliReporteusuariosDto(cliReporteusuarios));
-            }
+
             for (CliMedico cliMedico : cliUsuario.getCliMedicoList()) {
                 cliUsuarioDtoR.getCliMedicoList().add(new CliMedicoDto(cliMedico));
             }

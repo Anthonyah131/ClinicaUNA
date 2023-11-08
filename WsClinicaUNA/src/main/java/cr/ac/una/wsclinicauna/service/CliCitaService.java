@@ -11,8 +11,6 @@ import cr.ac.una.wsclinicauna.model.CliCitaDto;
 import cr.ac.una.wsclinicauna.model.CliPaciente;
 import cr.ac.una.wsclinicauna.model.CliPacienteDto;
 import cr.ac.una.wsclinicauna.model.CliParametrosDto;
-import cr.ac.una.wsclinicauna.model.CliReporteagenda;
-import cr.ac.una.wsclinicauna.model.CliUsuarioDto;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import jakarta.ejb.LocalBean;
