@@ -575,10 +575,11 @@ COMMENT ON COLUMN CLI_AGENDA.age_version IS 'Version del registro de la agenda
 CREATE TABLE CLI_REPORTE(
   rep_id Number NOT NULL,
   rep_nombre Varchar2(30 ),
-  rep_descripcion Varchar2(30 ),
-  rep_consulta Varchar2(30 ),
-  rep_titulo Varchar2(30 ),
-  rep_periodicidad Varchar2(30 ),
+  rep_descripcion Varchar2(150 ),
+  rep_consulta Varchar2(500 ) NOT NULL,
+  rep_titulo Varchar2(50 ) NOT NULL,
+  rep_periodicidad Varchar2(30 ) NOT NULL,
+  rep_ffin Date,
   rep_version Number DEFAULT 1 NOT NULL
 )
 ;
@@ -602,6 +603,8 @@ COMMENT ON COLUMN CLI_REPORTE.rep_titulo IS 'Titulo del reporte'
 ;
 COMMENT ON COLUMN CLI_REPORTE.rep_periodicidad IS 'Dia de repeticion periodica'
 ;
+COMMENT ON COLUMN CLI_REPORTE.rep_ffin IS 'Día en el cual de dejan de enviar reportes'
+;
 COMMENT ON COLUMN CLI_REPORTE.rep_version IS 'Version del registro'
 ;
 
@@ -609,7 +612,7 @@ COMMENT ON COLUMN CLI_REPORTE.rep_version IS 'Version del registro'
 
 CREATE TABLE CLI_CORREODESTINO(
   cd_id Number NOT NULL,
-  cd_correo Varchar2(30 ),
+  cd_correo Varchar2(80 ) NOT NULL,
   cd_version Number DEFAULT 1 NOT NULL,
   rep_id Number
 )
@@ -638,8 +641,8 @@ COMMENT ON COLUMN CLI_CORREODESTINO.cd_version IS 'Version del registro'
 
 CREATE TABLE CLI_PARAMETROCONSULTA(
   parc_id Number NOT NULL,
-  parc_parametro Varchar2(30 ),
-  parc_valor Varchar2(30 ),
+  parc_parametro Varchar2(50 ) NOT NULL,
+  parc_valor Varchar2(30 ) NOT NULL,
   parc_version Number DEFAULT 1 NOT NULL,
   rep_id Number
 )
