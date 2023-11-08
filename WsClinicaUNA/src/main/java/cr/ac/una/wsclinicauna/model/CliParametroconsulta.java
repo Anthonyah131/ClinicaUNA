@@ -16,6 +16,7 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import java.io.Serializable;
 
 /**
@@ -43,6 +44,7 @@ public class CliParametroconsulta implements Serializable {
     private String parcParametro;
     @Column(name = "PARC_VALOR")
     private String parcValor;
+    @Version
     @Column(name = "PARC_VERSION")
     private Long parcVersion;
     @JoinColumn(name = "REP_ID", referencedColumnName = "REP_ID")

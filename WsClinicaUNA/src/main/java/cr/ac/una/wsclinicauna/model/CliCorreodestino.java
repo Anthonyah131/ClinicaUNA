@@ -16,6 +16,7 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import java.io.Serializable;
 
 
@@ -41,6 +42,7 @@ public class CliCorreodestino implements Serializable {
     private Long cdId;
     @Column(name = "CD_CORREO")
     private String cdCorreo;
+    @Version
     @Column(name = "CD_VERSION")
     private Long cdVersion;
     @JoinColumn(name = "REP_ID", referencedColumnName = "REP_ID")

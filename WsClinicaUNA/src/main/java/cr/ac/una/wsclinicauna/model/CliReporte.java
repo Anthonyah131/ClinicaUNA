@@ -16,6 +16,7 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
@@ -57,6 +58,7 @@ public class CliReporte implements Serializable {
     private String repPeriodicidad;
     @Column(name = "REP_FFIN")
     private LocalDate repFfin;
+    @Version
     @Basic(optional = false)
     @Column(name = "REP_VERSION")
     private Long repVersion;
