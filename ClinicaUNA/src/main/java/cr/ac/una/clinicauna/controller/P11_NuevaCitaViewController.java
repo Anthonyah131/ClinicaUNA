@@ -133,22 +133,28 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
             } else {
                 this.citaDto = (CliCitaDto) respuesta.getResultado("Cita");
 
-                CliPacienteService pacienteService = new CliPacienteService();
-                citaDto.setModificado(true);
-                pacienteDto.getCliCitaList().add(citaDto);
-                pacienteService.guardarPaciente(pacienteDto);
+                if (citaDto.getCliPacienteDto() == null) {
+                    CliPacienteService pacienteService = new CliPacienteService();
+                    citaDto.setModificado(true);
+                    pacienteDto.getCliCitaList().add(citaDto);
+                    pacienteService.guardarPaciente(pacienteDto);
+                }
 
-                CliAgendaService agendaService = new CliAgendaService();
-                citaDto.setModificado(true);
-                agendaDto.getCliCitaList().add(citaDto);
-                respuesta = agendaService.guardarAgenda(agendaDto);
-                agendaDto = (CliAgendaDto) respuesta.getResultado("Agenda");
+                if (citaDto.getCliPacienteDto() == null) {
+                    CliAgendaService agendaService = new CliAgendaService();
+                    citaDto.setModificado(true);
+                    agendaDto.getCliCitaList().add(citaDto);
+                    respuesta = agendaService.guardarAgenda(agendaDto);
+                    agendaDto = (CliAgendaDto) respuesta.getResultado("Agenda");
+                }
 
-                CliMedicoService medicoService = new CliMedicoService();
-                agendaDto.setModificado(true);
-                medicoDto.getCliAgendaList().add(agendaDto);
-                respuesta = medicoService.guardarMedico(medicoDto);
-                medicoDto = (CliMedicoDto) respuesta.getResultado("Medico");
+                if (agendaDto.getCliMedicoDto() == null) {
+                    CliMedicoService medicoService = new CliMedicoService();
+                    agendaDto.setModificado(true);
+                    medicoDto.getCliAgendaList().add(agendaDto);
+                    respuesta = medicoService.guardarMedico(medicoDto);
+                    medicoDto = (CliMedicoDto) respuesta.getResultado("Medico");
+                }
 
                 respuesta = citaService.getCita(citaDto.getCitId());
                 this.citaDto = (CliCitaDto) respuesta.getResultado("Cita");
