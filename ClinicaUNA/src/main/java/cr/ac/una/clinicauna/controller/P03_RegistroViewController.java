@@ -160,6 +160,8 @@ public class P03_RegistroViewController extends Controller implements Initializa
     @FXML
     private void onActionBtnBuscar(ActionEvent event) {
         SoundUtil.mouseEnterSound();
+        P03_RegistroBuscadorViewController registroController = (P03_RegistroBuscadorViewController) FlowController.getInstance().getController("P03_RegistroBuscadorView");
+        registroController.cargaDesdeVista("P03_RegistroView");
         FlowController.getInstance().goViewInWindowModal("P03_RegistroBuscadorView", stage, Boolean.FALSE);
     }
 

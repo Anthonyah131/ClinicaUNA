@@ -41,28 +41,29 @@ public class CliReporteController {
     @EJB
     CliReporteService cliReporteService;
 
-    /*@GET
+    @GET
     @Path("/generarReporte/{consulta}")
-    public Response generarInformeExcelDesdeConsultaSQL(@PathParam("consultaSQL") String consulta) {
+    public Response generarInformeExcelDesdeConsultaSQL(@PathParam("consulta") String consulta) {
         try {
             Respuesta res = cliReporteService.generarInformeExcelDesdeConsultaSQL(consulta);
             if (!res.getEstado()) {
                 return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
             }
             byte[] excelData = (byte[]) res.getResultado("ReporteExcel");
-            String outputPath = "/cr/ac/una/wsclinicauna/resources/informe.xlsx"; // Ruta donde deseas guardar el informe
+            String currentDirectory = System.getProperty("user.dir");
+            String outputPath = currentDirectory + "/informe.xlsx";
             try (FileOutputStream fos = new FileOutputStream(outputPath)) {
                 fos.write(excelData);
             } catch (IOException e) {
                 e.printStackTrace();
                 // Trata cualquier error de escritura del archivo
             }
+            return Response.ok().build();
         } catch (Exception ex) {
             Logger.getLogger(CliReporteController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el Reporte").build();//TODO
         }
-        return null;
-    }*/
+    }
 
     @GET
     @Path("/reporte/{id}")

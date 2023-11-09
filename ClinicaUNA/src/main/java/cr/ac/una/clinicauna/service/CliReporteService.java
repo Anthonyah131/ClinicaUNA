@@ -20,6 +20,22 @@ import java.util.logging.Logger;
  */
 public class CliReporteService {
 
+    public Respuesta generarInformeExcelDesdeConsultaSQL(String consulta) {
+        try {
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("consulta", consulta);
+            Request request = new Request("CliReporteController/generarReporte", "{consulta}", parametros);
+            request.get();
+            if (request.isError()) {
+                return new Respuesta(false, request.getError(), "");
+            }
+            return new Respuesta(true, "", "");
+        } catch (Exception ex) {
+            Logger.getLogger(CliReporteService.class.getName()).log(Level.SEVERE, "Error obteniendo el Reporte", ex);
+            return new Respuesta(false, "Error obteniendo el Reporte.", "getReporte " + ex.getMessage());
+        }
+    }
+    
     public Respuesta getReporte(Long id) {
         try {
             Map<String, Object> parametros = new HashMap<>();
@@ -37,7 +53,7 @@ public class CliReporteService {
         }
     }
 
-    public Respuesta getReportes() {
+    public Respuesta getReportes(String nombre) {
         try {
             Request request = new Request("CliReporteController/reportes");
             request.get();

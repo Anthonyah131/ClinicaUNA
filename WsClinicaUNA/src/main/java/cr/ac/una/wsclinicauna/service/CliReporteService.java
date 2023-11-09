@@ -26,10 +26,14 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -47,16 +51,34 @@ public class CliReporteService {
     @PersistenceContext(unitName = "WsClinicaUNAPU")
     private EntityManager em;
 
-    /*public Respuesta generarInformeExcelDesdeConsultaSQL(String consulta) {
+    public Respuesta generarInformeExcelDesdeConsultaSQL(CliReporteDto cliReporteDto, List<CliParametroconsultaDto> cliParametroconsultaDtos) {
         try {
-            Connection co = em.unwrap(Connection.class);
+            // Tu consulta SQL
+            String consulta = "SELECT u.usu_nombre, u.usu_papellido, u.usu_cedula FROM CLI_USUARIO u WHERE u.usu_nombre = 'nombre'";
+//            String consulta = cliReporteDto.getRepConsulta();
+
+            // Recorrer el mapa de parámetros y reemplazar en la consulta
+            for (CliParametroconsultaDto para : cliParametroconsultaDtos) {
+                String parametro = para.getParcParametro();
+                String valor = para.getParcValor();
+
+                // Utilizar una expresión regular para encontrar el parámetro dentro de comillas simples
+                String regex = "'" + parametro + "'";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(consulta);
+
+                // Reemplazar el parámetro solo si se encuentra entre comillas simples
+                consulta = matcher.replaceAll("'" + valor + "'");
+            }
+            
+            Connection co = em.unwrap(Connection.class); // Coneccion
 
             // Ejecutar la consulta SQL y obtener los resultados
             Statement statement = co.createStatement();
             ResultSet resultSet = statement.executeQuery(consulta);
 
             // Crear un nuevo libro de Excel
-            Workbook workbook = new HSSFWorkbook(); // O utiliza XSSFWorkbook para formato .xlsx
+            Workbook workbook = new XSSFWorkbook(); // Utiliza XSSFWorkbook para formato .xlsx
 
             // Crear una hoja en el libro
             Sheet sheet = workbook.createSheet("Informe");
@@ -91,7 +113,7 @@ public class CliReporteService {
             // Tratar el error y devolver una respuesta adecuada al cliente
             return null;
         }
-    }*/
+    }
 
     public Respuesta getReporte(Long id) {
         try {
@@ -129,11 +151,11 @@ public class CliReporteService {
             for (CliReporte cliReporte : cliReportes) {
                 CliReporteDto cliReporteDto = new CliReporteDto(cliReporte);
 
-                for (CliCorreodestino cliCorreodestino : cliReporte.getCliCorreodestinoList()) {
-                    cliReporteDto.getCliCorreodestinoList().add(new CliCorreodestinoDto(cliCorreodestino));
-                }
                 for (CliParametroconsulta cliParametroconsulta : cliReporte.getCliParametroconsultaList()) {
                     cliReporteDto.getCliParametroconsultaList().add(new CliParametroconsultaDto(cliParametroconsulta));
+                }
+                for (CliCorreodestino cliCorreodestino : cliReporte.getCliCorreodestinoList()) {
+                    cliReporteDto.getCliCorreodestinoList().add(new CliCorreodestinoDto(cliCorreodestino));
                 }
 
                 cliReporteDtos.add(cliReporteDto);
@@ -162,25 +184,29 @@ public class CliReporteService {
                 for (CliCorreodestinoDto cliCorreodestinoDto : cliReporteDto.getCliCorreodestinoList()) {
                     if (cliCorreodestinoDto.getModificado()) {
                         CliCorreodestino cliCorreodestino = em.find(CliCorreodestino.class, cliCorreodestinoDto.getCdId());
-                        cliReporte.getCliCorreodestinoList().add(cliCorreodestino);
                         cliCorreodestino.setRepId(cliReporte);
+                        cliReporte.getCliCorreodestinoList().add(cliCorreodestino);
                     }
                 }
 
                 for (CliCorreodestinoDto cliCorreodestinoDto : cliReporteDto.getCliCorreodestinoListEliminados()) {
+                    CliCorreodestino cliCorreodestino = em.find(CliCorreodestino.class, cliCorreodestinoDto.getCdId());
                     cliReporte.getCliCorreodestinoList().remove(new CliCorreodestino(cliCorreodestinoDto.getCdId()));
+                    em.remove(cliCorreodestino);
                 }
 
                 for (CliParametroconsultaDto cliParametroconsultaDto : cliReporteDto.getCliParametroconsultaList()) {
                     if (cliParametroconsultaDto.getModificado()) {
                         CliParametroconsulta cliParametroconsulta = em.find(CliParametroconsulta.class, cliParametroconsultaDto.getParcId());
-                        cliReporte.getCliParametroconsultaList().add(cliParametroconsulta);
                         cliParametroconsulta.setRepId(cliReporte);
+                        cliReporte.getCliParametroconsultaList().add(cliParametroconsulta);
                     }
                 }
 
                 for (CliParametroconsultaDto cliParametroconsultaDto : cliReporteDto.getCliParametroconsultaListEliminados()) {
+                    CliParametroconsulta cliParametroconsulta = em.find(CliParametroconsulta.class, cliParametroconsultaDto.getParcId());
                     cliReporte.getCliParametroconsultaList().remove(new CliParametroconsulta(cliParametroconsultaDto.getParcId()));
+                    em.remove(cliParametroconsulta);
                 }
 
                 cliReporte = em.merge(cliReporte);
@@ -189,7 +215,14 @@ public class CliReporteService {
                 em.persist(cliReporte);
             }
             em.flush();
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Reporte", new CliReporteDto(cliReporte));
+            CliReporteDto reporteDto = new CliReporteDto(cliReporte);
+            for (CliParametroconsulta cliParametroconsulta : cliReporte.getCliParametroconsultaList()) {
+                reporteDto.getCliParametroconsultaList().add(new CliParametroconsultaDto(cliParametroconsulta));
+            }
+            for (CliCorreodestino cliCorreodestino : cliReporte.getCliCorreodestinoList()) {
+                reporteDto.getCliCorreodestinoList().add(new CliCorreodestinoDto(cliCorreodestino));
+            }
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Reporte", reporteDto);
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el Reporte.", ex);
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el Reporte.", "guardarReporte " + ex.getMessage());
@@ -203,6 +236,12 @@ public class CliReporteService {
                 cliReporte = em.find(CliReporte.class, id);
                 if (cliReporte == null) {
                     return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el Reporte a eliminar.", "eliminarReporte NoResultException");
+                }
+                for (CliParametroconsulta cliParametroconsulta : cliReporte.getCliParametroconsultaList()) {
+                    em.remove(cliParametroconsulta);
+                }
+                for (CliCorreodestino cliCorreodestino : cliReporte.getCliCorreodestinoList()) {
+                    em.remove(cliCorreodestino);
                 }
                 em.remove(cliReporte);
             } else {

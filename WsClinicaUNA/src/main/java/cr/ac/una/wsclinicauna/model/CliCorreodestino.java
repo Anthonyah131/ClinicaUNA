@@ -36,7 +36,7 @@ public class CliCorreodestino implements Serializable {
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
-    @SequenceGenerator(name = "CLI_CORREODESTINO_CD_ID_GENERATOR", sequenceName = "CLI_CORREODESTINO_SEQ01", allocationSize = 1)
+    @SequenceGenerator(name = "CLI_CORREODESTINO_CD_ID_GENERATOR", sequenceName = "CLI_CORREOSDESTINO_SEQ01", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CLI_CORREODESTINO_CD_ID_GENERATOR")
     @Column(name = "CD_ID")
     private Long cdId;

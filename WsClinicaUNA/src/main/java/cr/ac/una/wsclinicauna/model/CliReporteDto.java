@@ -40,6 +40,7 @@ public class CliReporteDto {
     }
 
     public CliReporteDto(CliReporte cliReporte) {
+        this();
         this.repId = cliReporte.getRepId();
         this.repNombre = cliReporte.getRepNombre();
         this.repDescripcion = cliReporte.getRepDescripcion();

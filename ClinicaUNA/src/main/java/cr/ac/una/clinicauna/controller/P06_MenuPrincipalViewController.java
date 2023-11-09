@@ -32,12 +32,14 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
     private MFXButton btnRegistroPacientes;
     @FXML
     private MFXButton btnMantUsuarios;
-
-    CliUsuarioDto usuarioDto;
     @FXML
     private MFXButton btnAgenda;
     @FXML
     private MFXButton btnAtencion;
+    @FXML
+    private MFXButton btnReporteDinamico;
+
+    CliUsuarioDto usuarioDto;
 
     /**
      * Initializes the controller class.
@@ -126,6 +128,12 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
         } else {
             new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "No tiene permisos para ingresar a esta pantalla");
         }
+    }
+
+    @FXML
+    private void onActionBtnReporteDinamico(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
+        FlowController.getInstance().goView("P16_ReporteDinamicoView");
     }
 
 }

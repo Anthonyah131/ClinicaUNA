@@ -14,33 +14,33 @@
    <children>
       <HBox layoutX="529.0" layoutY="293.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+            <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
                <children>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER">
                      <children>
                         <Label text="Nombre:  " />
                         <JFXTextField fx:id="txfNombre" />
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER_LEFT">
                      <children>
-                        <Label text="Titulo: " />
-                        <JFXTextField fx:id="txfTitulo" />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                     <children>
+                        <HBox alignment="CENTER" prefWidth="200.0">
+                           <children>
+                              <Label text="Titulo: " />
+                              <JFXTextField fx:id="txfTitulo" />
+                           </children>
+                        </HBox>
                         <Label text="Descripcion" />
-                        <JFXTextArea fx:id="txaDescripcion" maxHeight="200.0" maxWidth="400.0" HBox.hgrow="ALWAYS" />
+                        <JFXTextArea fx:id="txaDescripcion" maxHeight="50.0" maxWidth="300.0" />
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER">
                      <children>
                         <Label text="Consulta Sql: " />
-                        <JFXTextArea fx:id="txaConsulta" maxHeight="200.0" maxWidth="400.0" HBox.hgrow="ALWAYS" />
+                        <JFXTextArea fx:id="txaConsulta" maxHeight="100.0" maxWidth="400.0" />
                      </children>
                   </HBox>
-                  <HBox fx:id="hbxCorreoView" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <HBox fx:id="hbxCorreoView" alignment="CENTER">
                      <children>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                            <children>
@@ -55,15 +55,15 @@
                         </HBox>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
                            <children>
                               <Label text="Día de la semana: " />
                               <JFXTextField fx:id="txfDia" />
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
                            <children>
                               <Label text="Día finaliza: " />
                               <JFXDatePicker fx:id="dpDiaFinaliza" />
@@ -71,19 +71,38 @@
                         </HBox>
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER">
                      <children>
                         <MFXButton fx:id="btnLimpiar" onAction="#onActionBtnLimpiar" text="Limpiar" />
                         <MFXButton fx:id="btnGuardar" onAction="#onActionBtnGuardar" text="Guardar" />
-                        <MFXButton fx:id="btnBuscar" onAction="#onActionBtnBuscar" text="Buscar" />
                         <MFXButton fx:id="btnEliminar" onAction="#onActionBtnEliminar" text="Eliminar" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="250.0" prefWidth="200.0">
+                     <children>
+                        <VBox alignment="CENTER" maxWidth="400.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <TableView fx:id="tbvReportes" maxWidth="350.0" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" maxWidth="300.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Label text="Nombre busqueda: " />
+                                    <JFXTextField fx:id="txfNombreBusqueda" />
+                                 </children>
+                              </HBox>
+                              <MFXButton fx:id="btnFiltrar" onAction="#onActionBtnFiltrar" text="Filtrar" />
+                           </children>
+                        </VBox>
                      </children>
                   </HBox>
                </children>
             </VBox>
-            <HBox fx:id="hbxParametroView" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+            <HBox fx:id="hbxParametroView" alignment="CENTER" HBox.hgrow="ALWAYS">
                <children>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                  <VBox alignment="CENTER" maxWidth="250.0" HBox.hgrow="ALWAYS">
                      <children>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                            <children>
@@ -104,7 +123,7 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                  <VBox alignment="CENTER" maxWidth="350.0" HBox.hgrow="ALWAYS">
                      <children>
                         <TableView fx:id="tbvParametros" maxWidth="320.0" prefHeight="400.0" />
                      </children>

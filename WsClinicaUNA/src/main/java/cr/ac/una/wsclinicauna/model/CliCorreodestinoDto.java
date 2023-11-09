@@ -21,6 +21,7 @@ public class CliCorreodestinoDto {
     }
 
     public CliCorreodestinoDto(CliCorreodestino cliCorreodestino) {
+        this();
         this.cdId = cliCorreodestino.getCdId();
         this.cdCorreo = cliCorreodestino.getCdCorreo();
         this.cdVersion = cliCorreodestino.getCdVersion();

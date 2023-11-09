@@ -50,7 +50,7 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
 
     Object resultado;
     private ObservableList<CliUsuarioDto> usuarios = FXCollections.observableArrayList();
-
+    String vista;
     ResourceBundle resourceBundle;
 
     /**
@@ -92,14 +92,22 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
     private void onMousePressenTbvResultados(MouseEvent event) {
         if (event.getClickCount() == 2) {
             SoundUtil.mouseEnterSound();
-            cargarUsuario();
+            if ("P03_RegistroView".equals(vista)) {
+                cargarUsuario();
+            } else if ("P16_ReporteDinamicoView".equals(vista)) {
+                cargarUsuarioCorreo();
+            }
         }
     }
 
     @FXML
     private void onActionBtnAceptar(ActionEvent event) {
         SoundUtil.mouseEnterSound();
-        cargarUsuario();
+        if ("P03_RegistroView".equals(vista)) {
+            cargarUsuario();
+        } else if ("P16_ReporteDinamicoView".equals(vista)) {
+            cargarUsuarioCorreo();
+        }
     }
 
     @FXML
@@ -108,11 +116,24 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
         cleanNodes();
     }
 
+    public void cargaDesdeVista(String vista) {
+        this.vista = vista;
+    }
+
     private void cargarUsuario() {
         resultado = tbvResultados.getSelectionModel().getSelectedItem();
         if (resultado != null) {
             P03_RegistroViewController registroController = (P03_RegistroViewController) FlowController.getInstance().getController("P03_RegistroView");
             registroController.bindBuscar();
+        }
+        getStage().close();
+    }
+
+    private void cargarUsuarioCorreo() {
+        resultado = tbvResultados.getSelectionModel().getSelectedItem();
+        if (resultado != null) {
+            P16_ReporteDinamicoViewController reporteController = (P16_ReporteDinamicoViewController) FlowController.getInstance().getController("P16_ReporteDinamicoView");
+            reporteController.bindBuscar();
         }
         getStage().close();
     }

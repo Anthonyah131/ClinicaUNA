@@ -21,6 +21,7 @@ public class CliParametroconsultaDto {
     }
 
     public CliParametroconsultaDto(CliParametroconsulta cliParametroconsulta) {
+        this();
         this.parcId = cliParametroconsulta.getParcId();
         this.parcParametro = cliParametroconsulta.getParcParametro();
         this.parcValor = cliParametroconsulta.getParcValor();
