@@ -51,14 +51,14 @@ public class CliReporteService {
     @PersistenceContext(unitName = "WsClinicaUNAPU")
     private EntityManager em;
 
-    public Respuesta generarInformeExcelDesdeConsultaSQL(CliReporteDto cliReporteDto, List<CliParametroconsultaDto> cliParametroconsultaDtos) {
+    public Respuesta generarInformeExcelDesdeConsultaSQL(CliReporteDto cliReporteDto) {
         try {
             // Tu consulta SQL
             String consulta = "SELECT u.usu_nombre, u.usu_papellido, u.usu_cedula FROM CLI_USUARIO u WHERE u.usu_nombre = 'nombre'";
 //            String consulta = cliReporteDto.getRepConsulta();
 
             // Recorrer el mapa de parámetros y reemplazar en la consulta
-            for (CliParametroconsultaDto para : cliParametroconsultaDtos) {
+            for (CliParametroconsultaDto para : cliReporteDto.getCliParametroconsultaList()) {
                 String parametro = para.getParcParametro();
                 String valor = para.getParcValor();
 

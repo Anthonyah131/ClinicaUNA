@@ -45,7 +45,7 @@ public class CliReporteController {
     @Path("/generarReporte/{consulta}")
     public Response generarInformeExcelDesdeConsultaSQL(@PathParam("consulta") String consulta) {
         try {
-            Respuesta res = cliReporteService.generarInformeExcelDesdeConsultaSQL(consulta);
+            Respuesta res = cliReporteService.generarInformeExcelDesdeConsultaSQL(null);
             if (!res.getEstado()) {
                 return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();//TODO
             }
