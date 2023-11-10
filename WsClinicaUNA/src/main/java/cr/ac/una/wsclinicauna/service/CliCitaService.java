@@ -86,7 +86,11 @@ public class CliCitaService {
                 CliCitaDto cliCitaDto = new CliCitaDto(cliCita);
 
                 cliCitaDto.setCliAgendaDto(new CliAgendaDto(cliCita.getAgeId()));
-                cliCitaDto.setCliPacienteDto(new CliPacienteDto(cliCita.getPacId()));
+                CliPacienteDto pacienteDto = new CliPacienteDto(cliCita.getPacId());
+                for (CliCita ci : cliCita.getPacId().getCliCitaList()) {
+                    pacienteDto.getCliCitaList().add(new CliCitaDto(ci));
+                }
+                cliCitaDto.setCliPacienteDto(pacienteDto);
 
                 cliCitaDtos.add(cliCitaDto);
             }
