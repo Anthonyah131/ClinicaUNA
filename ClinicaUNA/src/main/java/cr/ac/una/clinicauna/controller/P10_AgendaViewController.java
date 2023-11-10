@@ -51,7 +51,6 @@ public class P10_AgendaViewController extends Controller implements Initializabl
     CliMedicoDto medicoDto;
     CliAgendaDto agendaDto;
     CliCitaDto citaDto;
-    //CliCitaDto citasMatriz[][];
     CliCitaDto citasVector[];
     List<CliCitaDto> listaCitas;
     Label labelVector[];
@@ -114,11 +113,14 @@ public class P10_AgendaViewController extends Controller implements Initializabl
             citasHoras = Math.toIntExact(medicoDto.getMedEspaciosxhora());
             //Establecer tamano vector de citas
             labelVector = new Label[jornada * citasHoras];
+            citasVector = new CliCitaDto[jornada * citasHoras];
 
             //Recorre la lista de citas y las pasa a la matriz
             pasarListaCitasAVector();
             // llena el gridpane con labeles
             llenarGridPane();
+            comprobarEspaciosCitas();
+            crearCita();
         }
     }
 
@@ -143,7 +145,10 @@ public class P10_AgendaViewController extends Controller implements Initializabl
     private void pasarListaCitasAVector() {
         listaCitas.clear();
         listaCitas.addAll(agendaDto.getCliCitaList());
-        citasVector = new CliCitaDto[jornada * citasHoras];
+        //limpiar el vector de citas
+        for (int i = 0; i < citasVector.length; i++) {
+            citasVector[i] = null; // O cualquier otro valor adecuado para limpiar los datos existentes
+        }
         if (!listaCitas.isEmpty()) {
             for (int i = 0; i < listaCitas.size(); i++) {
                 LocalDateTime fechaHora = listaCitas.get(i).getCitFechaHora();
@@ -261,6 +266,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                         FlowController.getInstance().goViewInWindowModal("P11_NuevaCitaView", stage, Boolean.FALSE);
 
                         if (citaDto.getCitId() != null) {
+                            cargarAgenda();
                             pasarListaCitasAVector();
                             comprobarEspaciosCitas();
                             crearCita();
@@ -276,8 +282,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                 }
             }
         }
-        comprobarEspaciosCitas();
-        crearCita();
+
         grdCitas.setGridLinesVisible(true);
     }
 

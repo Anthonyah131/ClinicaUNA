@@ -129,7 +129,7 @@ public class CliCitaDto {
         String motivo = (getCitMotivo() != null) ? getCitMotivo() : "No indica";
 
         return "Estado: " + estadoCita()
-                + "\nPaciente: " + cliPacienteDto.getPacNombre()
+                + "\nPaciente: " + nombrePacienteCompleto()
                 + "\nUsuario que registra: " + getCitUsuarioRegistra()
                 + "\nMotivo: " + motivo
                 + "\nTelefono: " + cliPacienteDto.getPacTelefono()

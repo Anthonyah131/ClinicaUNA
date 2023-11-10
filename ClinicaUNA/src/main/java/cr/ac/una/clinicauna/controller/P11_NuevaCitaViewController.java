@@ -241,15 +241,12 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
     public void cargarDefecto(CliCitaDto cita, CliUsuarioDto usuario, CliAgendaDto agenda, CliMedicoDto medico, LocalDateTime fechaHora, CliCitaDto citasVec[], int pos) {
         citaDto = cita;
         //---------------
-        if (citaDto.getCitId() != null || citaDto.getCitId() > 0) {
-            CliCitaService citaService = new CliCitaService();
-            Respuesta respuesta = citaService.getCita(citaDto.getCitId());
-            this.citaDto = (CliCitaDto) respuesta.getResultado("Cita");
-        }
+//        if (citaDto.getCitId() != null || citaDto.getCitId() > 0) {
+//            CliCitaService citaService = new CliCitaService();
+//            Respuesta respuesta = citaService.getCita(citaDto.getCitId());
+//            this.citaDto = (CliCitaDto) respuesta.getResultado("Cita");
+//        }
         //----------------------
-        //CliCitaService citaService = new CliCitaService();
-        //Respuesta respuesta = citaService.getCita(citaDto.getCitId());
-        //this.citaDto = (CliCitaDto) respuesta.getResultado("Cita");
         usuarioDto = usuario;
         agendaDto = agenda;
         medicoDto = medico;

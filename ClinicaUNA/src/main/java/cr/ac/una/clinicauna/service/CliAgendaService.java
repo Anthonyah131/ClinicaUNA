@@ -5,6 +5,7 @@
 package cr.ac.una.clinicauna.service;
 
 import cr.ac.una.clinicauna.model.CliAgendaDto;
+import cr.ac.una.clinicauna.model.CliCitaDto;
 import cr.ac.una.clinicauna.model.CliMedicoDto;
 import cr.ac.una.clinicauna.util.Request;
 import cr.ac.una.clinicauna.util.Respuesta;
@@ -53,7 +54,7 @@ public class CliAgendaService {
             List<CliAgendaDto> agendas = (List<CliAgendaDto>) request.readEntity(new GenericType<List<CliAgendaDto>>() {
             });
             Optional<CliAgendaDto> agendaFiltrada = agendas.stream()
-                    .filter(agenda -> Objects.equals(agenda.getCliMedicoDto().getMedId(), medicoDto.getMedId())&& agenda.getAgeFecha().equals(fecha))
+                    .filter(agenda -> Objects.equals(agenda.getCliMedicoDto().getMedId(), medicoDto.getMedId()) && agenda.getAgeFecha().equals(fecha))
                     .findFirst();
 
             CliAgendaDto agendaEncontrada;
@@ -64,6 +65,29 @@ public class CliAgendaService {
             }
 
             return new Respuesta(true, "", "", "Agenda", agendaEncontrada);
+        } catch (Exception ex) {
+            Logger.getLogger(CliAgendaService.class.getName()).log(Level.SEVERE, "Error obteniendo agendas.", ex);
+            return new Respuesta(false, "Error obteniendo agendas.", "getAgendas " + ex.getMessage());
+        }
+    }
+
+    public Respuesta getAgendas(LocalDate fecha) {
+        try {
+            Request request = new Request("CliAgendaController/agendas");
+            request.get();
+            if (request.isError()) {
+                return new Respuesta(false, request.getError(), "");
+            }
+            List<CliAgendaDto> agendas = (List<CliAgendaDto>) request.readEntity(new GenericType<List<CliAgendaDto>>() {
+            });
+
+            List<CliCitaDto> agendaFiltrada = agendas.stream()
+                    .filter(agenda -> agenda.getAgeFecha().equals(fecha))
+                    .flatMap(objeto -> objeto.getCliCitaList().stream())
+                    .sorted((cita1, cita2) -> cita1.getCitFechaHora().compareTo(cita2.getCitFechaHora())) // Ordena por fecha y hora ascendente
+                    .collect(Collectors.toList());
+
+            return new Respuesta(true, "", "", "Agenda", agendaFiltrada);
         } catch (Exception ex) {
             Logger.getLogger(CliAgendaService.class.getName()).log(Level.SEVERE, "Error obteniendo agendas.", ex);
             return new Respuesta(false, "Error obteniendo agendas.", "getAgendas " + ex.getMessage());

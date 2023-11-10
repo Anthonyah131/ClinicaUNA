@@ -22,7 +22,6 @@ public class CliPacienteDto {
     public SimpleStringProperty pacCedula;
     public SimpleStringProperty pacTelefono;
     public SimpleStringProperty pacCorreo;
-//    public SimpleStringProperty pacNombreCompleto;
     public ObjectProperty<String> pacGenero;
     public ObjectProperty<LocalDate> pacFnacimiento;
     public ObservableList<CliExpedienteDto> cliExpedienteList;
@@ -170,13 +169,11 @@ public class CliPacienteDto {
         return modificado;
     }
 
-//    public SimpleStringProperty getNombreCompleto() {
-//        SimpleStringProperty nombreCompleto = new SimpleStringProperty();
-//        nombreCompleto.set(pacNombre.get() + " " + pacPapellido.get() + " " + pacSapellido.get());
-//        return nombreCompleto;
-//    }
-
     public void setModificado(Boolean modificado) {
         this.modificado = modificado;
+    }
+
+    public String nombrePacienteCompleto() {
+        return pacNombre.get() + " " + pacPapellido.get() + " " + pacSapellido.get();
     }
 }

@@ -38,9 +38,9 @@
                               </ImageView>
                            </graphic>
                         </MFXButton>
-                        <JFXDatePicker fx:id="dtpFechasCitas" promptText="Fecha de las citas" styleClass="jfx-pickers" />
-                        <Label styleClass="labels-text" text="Medico: " />
-                        <MFXButton fx:id="btnBuscarMedico" onAction="#onActionBtnBuscarMedico" prefWidth="200.0" styleClass="mfx-button-link-bigger" text="Buscar Medicos" />
+                        <JFXDatePicker fx:id="dtpFechasCitas" promptText="%key.dateAppo" styleClass="jfx-pickers" />
+                        <Label styleClass="labels-text" text="%key.medico" />
+                        <MFXButton fx:id="btnBuscarMedico" onAction="#onActionBtnBuscarMedico" prefWidth="200.0" styleClass="mfx-button-link-bigger" text="%key.searchDoctors" />
                      </children>
                   </HBox>
                   <MFXScrollPane VBox.vgrow="ALWAYS">

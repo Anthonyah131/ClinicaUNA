@@ -36,16 +36,16 @@
                               </ImageView>
                            </graphic>
                         </MFXButton>
-                        <Label styleClass="labels-text" text="Fecha:" />
+                        <Label styleClass="labels-text" text="%key.date" />
                         <JFXDatePicker fx:id="dtpFecha" styleClass="jfx-pickers" />
-                        <Label layoutX="454.0" layoutY="16.0" styleClass="labels-text" text="Usuario:" />
+                        <Label layoutX="454.0" layoutY="16.0" styleClass="labels-text" text="%key.user" />
                         <Label fx:id="lblUserName" layoutX="710.0" layoutY="14.0" styleClass="labels-text" text="nombremed" />
                      </children>
                   </HBox>
                   <TableView fx:id="tbvCitas" prefHeight="518.0" prefWidth="1235.0" VBox.vgrow="ALWAYS" />
                   <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="10.0" spacing="15.0">
                      <children>
-                        <MFXButton fx:id="btnIrExpediente" onAction="#onActionBtnIrExpediente" styleClass="mfx-button-menu" text="Ir a expediente" />
+                        <MFXButton fx:id="btnIrExpediente" onAction="#onActionBtnIrExpediente" styleClass="mfx-button-menu" text="%key.goFile" />
                      </children>
                   </HBox>
                </children>

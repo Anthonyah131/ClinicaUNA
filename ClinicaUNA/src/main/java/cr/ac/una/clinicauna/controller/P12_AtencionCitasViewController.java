@@ -3,20 +3,31 @@ package cr.ac.una.clinicauna.controller;
 import com.jfoenix.controls.JFXDatePicker;
 import cr.ac.una.clinicauna.model.CliAgendaDto;
 import cr.ac.una.clinicauna.model.CliCitaDto;
+import cr.ac.una.clinicauna.model.CliMedicoDto;
+import cr.ac.una.clinicauna.model.CliPacienteDto;
 import cr.ac.una.clinicauna.model.CliUsuarioDto;
+import cr.ac.una.clinicauna.service.CliAgendaService;
 import cr.ac.una.clinicauna.util.AppContext;
 import cr.ac.una.clinicauna.util.FlowController;
+import cr.ac.una.clinicauna.util.Mensaje;
+import cr.ac.una.clinicauna.util.Respuesta;
 import cr.ac.una.clinicauna.util.SoundUtil;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -30,7 +41,6 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
 
     @FXML
     private MFXButton btnSalir;
-
     @FXML
     private JFXDatePicker dtpFecha;
     @FXML
@@ -41,6 +51,13 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
     private Label lblUserName;
 
     CliUsuarioDto usuarioDto;
+    CliMedicoDto medicoDto;
+    CliAgendaDto agendaDto;
+    CliPacienteDto pacienteDto;
+    CliCitaDto citaDto;
+    Object resultado;
+//    List<CliCitaDto> listaCitas;
+    private ObservableList<CliCitaDto> listaCitas = FXCollections.observableArrayList();
 
     /**
      * Initializes the controller class.
@@ -50,6 +67,11 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
         usuarioDto = (CliUsuarioDto) AppContext.getInstance().get("Usuario");
         lblUserName.setText(usuarioDto.nombreDosApellidos());
         fillTableView();
+        dtpFecha.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                cargarCitasAdmin();
+            }
+        });
         // TODO
     }
 
@@ -65,29 +87,43 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
 
     @FXML
     private void onActionBtnIrExpediente(ActionEvent event) {
-        FlowController.getInstance().goViewInWindow("P13_ExpedienteView", false);
+         resultado = tbvCitas.getSelectionModel().getSelectedItem();
+        if (resultado != null) {
+            CliCitaDto citaDto = (CliCitaDto) resultado;
+            pacienteDto = citaDto.getCliPacienteDto();
+            
+            P13_ExpedienteViewController expedienteController = (P13_ExpedienteViewController) FlowController.getInstance().getController("P13_ExpedienteView");
+            expedienteController.cargarPaciente(pacienteDto, usuarioDto);
+             FlowController.getInstance().goViewInWindow("P13_ExpedienteView", false);
+        }
+//        getStage().close();
+       
     }
 
     public void fillTableView() {
         tbvCitas.getItems().clear();
-
-//        TableColumn<CliUsuarioDto, String> tbcId = new TableColumn<>("Id");
-//        tbcId.setPrefWidth(30);
-//        tbcId.setCellValueFactory(cd -> cd.getValue().usuId);
+        
         TableColumn<CliCitaDto, String> tbcFecha = new TableColumn<>(/*resourceBundle.getString("key.identification")*/"Fecha");
-        tbcFecha.setPrefWidth(100);
-        tbcFecha.setCellValueFactory(cd -> cd.getValue().citFechaHora.asString());
+        tbcFecha.setPrefWidth(150);
+        tbcFecha.setCellValueFactory(cd -> {
+            LocalDateTime fecha = cd.getValue().getCitFechaHora();
+            String fechaString = fecha.getDayOfMonth() + "/" + fecha.getMonthValue() + "/" + fecha.getYear();
+            return new SimpleStringProperty(fechaString);
+        });
 
         TableColumn<CliCitaDto, String> tbcNombre = new TableColumn<>(/*resourceBundle.getString("key.name")*/"Nombre paciente");
-        tbcNombre.setPrefWidth(120);
-        tbcNombre.setCellValueFactory(cd -> cd.getValue().cliPacienteDto.pacNombre);
+        tbcNombre.setPrefWidth(200);
+        tbcNombre.setCellValueFactory(cd -> {
+            String nombrePac = cd.getValue().nombrePacienteCompleto();
+            return new SimpleStringProperty(nombrePac);
+        });
 
         TableColumn<CliCitaDto, String> tbcMotivo = new TableColumn<>(/*resourceBundle.getString("key.papellido")*/"Motivo");
-        tbcMotivo.setPrefWidth(130);
+        tbcMotivo.setPrefWidth(150);
         tbcMotivo.setCellValueFactory(cd -> cd.getValue().citMotivo);
 
         TableColumn<CliCitaDto, String> tbcHora = new TableColumn<>(/*resourceBundle.getString("key.usertype")*/"Hora");
-        tbcHora.setPrefWidth(130);
+        tbcHora.setPrefWidth(150);
         tbcHora.setCellValueFactory(cd -> {
             LocalDateTime fecha = cd.getValue().getCitFechaHora();
             int hora = fecha.getHour();
@@ -102,28 +138,57 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
             horaFormateada = (hora12 < 10) ? "0" : "";
             horaFormateada += hora12 + minutes + minuto + aux;
 
-//            try {
-//                SimpleDateFormat formatoEntrada = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-//                Date fechaHora = formatoEntrada.parse(fecha);
-//
-//                // Formatear la hora en el formato deseado (08:30 am/pm)
-//                SimpleDateFormat formatoHora = new SimpleDateFormat("hh:mm a");
-//                horaFormateada = formatoHora.format(fechaHora);
-//
-//                // Formatear la fecha en el formato deseado (día mes año)
-//                SimpleDateFormat formatoFecha = new SimpleDateFormat("dd MMMM yyyy");
-//                String fechaFormateada = formatoFecha.format(fechaHora);
-//
-//                System.out.println("Hora: " + horaFormateada);
-//                System.out.println("Fecha: " + fechaFormateada);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
             return new SimpleStringProperty(horaFormateada);
         });
+        
+        TableColumn<CliCitaDto, String> tbcDuracion = new TableColumn<>(/*resourceBundle.getString("key.usertype")*/"Duracion");
+        tbcDuracion.setPrefWidth(150);
+        tbcDuracion.setCellValueFactory(cd -> {
+            int duracion = cd.getValue().getCliCantespacios().intValue();
+            
+            //duracion *= medicoDto.getMedEspaciosxhora().intValue();
+            duracion *= 15;
 
-        tbvCitas.getColumns().addAll(/*tbcHora,*/tbcFecha, tbcNombre, tbcMotivo/*, tbcTipoUser*/);
+            String duraString = duracion + " minutos";
+
+            return new SimpleStringProperty(duraString);
+        });
+
+        tbvCitas.getColumns().addAll(/*tbcHora,*/tbcFecha, tbcHora, tbcNombre, tbcMotivo, tbcDuracion/*, tbcTipoUser*/);
         tbvCitas.refresh();
+    }
+
+    private void cargarCitasMedico() {
+        CliAgendaService service = new CliAgendaService();
+        Respuesta respuesta = service.getAgendas(dtpFecha.getValue());
+
+        if (respuesta.getEstado()) {
+            agendaDto = (CliAgendaDto) respuesta.getResultado("Agenda"); // agendaDto tiene la agenda seleccionad, dentro tiene las citas y el paciente de cada cita
+            tbvCitas.getItems().clear();
+            listaCitas.clear();
+            listaCitas.addAll(agendaDto.getCliCitaList());
+            tbvCitas.setItems(listaCitas);
+            tbvCitas.refresh();
+        } else {
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Agenda", getStage(), respuesta.getMensaje());
+        }
+        System.out.println(listaCitas.size());
+    }
+
+    private void cargarCitasAdmin() {
+        CliAgendaService service = new CliAgendaService();
+        Respuesta respuesta = service.getAgendas(dtpFecha.getValue());
+
+        if (respuesta.getEstado()) {
+            tbvCitas.getItems().clear();
+            listaCitas.clear();
+            listaCitas.addAll((List<CliCitaDto>) respuesta.getResultado("Agenda"));
+            tbvCitas.setItems(listaCitas);
+            tbvCitas.refresh();
+        } else {
+            new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Agenda", getStage(), respuesta.getMensaje());
+        }
+        System.out.println(listaCitas.size());
     }
 
 }
