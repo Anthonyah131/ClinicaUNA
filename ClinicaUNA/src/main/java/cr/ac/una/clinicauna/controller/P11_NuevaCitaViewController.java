@@ -128,6 +128,9 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         int tamano = cboxEspacioHora.getValue();
         int indiceVector = posV;
         for (int i = inicio; i < tamano; i++) {
+            if (indiceVector == citasVector.length) {
+                return false;
+            }
             if (citasVector[indiceVector] != null) {
                 return false;
             }

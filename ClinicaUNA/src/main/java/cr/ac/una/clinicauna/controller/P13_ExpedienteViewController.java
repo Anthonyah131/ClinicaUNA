@@ -22,6 +22,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,6 +35,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.util.Callback;
@@ -82,8 +84,6 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
     @FXML
     private MFXButton btnAgregarAntecedente;
     @FXML
-    private JFXListView<CliAntecedenteDto> ltvAntecedentes;
-    @FXML
     private JFXTextArea txaAntPatologicos;
     @FXML
     private JFXTextArea txaTratamientosActuales;
@@ -128,16 +128,18 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
     @FXML
     private JFXTextArea txaComentarioArchivo;
     @FXML
-    private JFXListView<?> ltvArchivos;
-    @FXML
     private MFXButton btnGuardarExpediente;
+    @FXML
+    private TableView<CliAntecedenteDto> tbvAntecedentes;
+    @FXML
+    private TableView<?> tbvArchivos;
 
     CliPacienteDto pacienteDto;
     CliUsuarioDto usuarioDto;
     CliAntecedenteDto antecedenteDto;
-    List<CliAntecedenteDto> listaAntecedenteDto = new ArrayList<>();
     List<Node> requeridosAntecedentes = new ArrayList<>();
 
+    ObservableList<CliAntecedenteDto> listaAntecedenteDto = FXCollections.observableArrayList();
     ObservableList<CliCitaDto> listaCitas = FXCollections.observableArrayList();
     ResourceBundle resourceBundle;
 
@@ -153,14 +155,9 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
 
         requeridosAntecedentes.addAll(Arrays.asList(txfAntTipo, txfAntParentesco, txfAntDescripcion));
         resourceBundle = FlowController.getInstance().getIdioma();
+        cargarTablaAntecedentes();
         nuevoAntecedente();
-
-        ltvAntecedentes.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            // Acciones que deseas realizar cuando se selecciona un ítem
-            System.out.println("Elemento seleccionado: " + newValue);
-            antecedenteDto = newValue;
-            bindAntecedente();
-        });
+        listenerNodos();
     }
 
     @Override
@@ -175,14 +172,16 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
                 String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
                 new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), mensaje);
             } else {
-                actualizarListasAntecedentes();
 
+                listaAntecedenteDto.add(antecedenteDto);
+                tbvAntecedentes.setItems(listaAntecedenteDto);
+                tbvAntecedentes.refresh();
+                nuevoAntecedente();
             }
         } catch (Exception ex) {
             Logger.getLogger(P13_ExpedienteViewController.class.getName()).log(Level.SEVERE, "Error guardando el antecedente.", ex);
             new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
         }
-        nuevoAntecedente();
     }
 
     @FXML
@@ -292,28 +291,94 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
         txfAntDescripcion.textProperty().unbindBidirectional(antecedenteDto.antDescripcion);
     }
 
-    private void actualizarListasAntecedentes() {
-        listaAntecedenteDto.add(antecedenteDto);
+    private void cargarTablaAntecedentes() {
+        tbvAntecedentes.getItems().clear();
 
-        ltvAntecedentes.getItems().clear();
+        TableColumn<CliAntecedenteDto, String> tbcTipo = new TableColumn<>(/*resourceBundle.getString("key.papellido")*/"Tipo");
+        tbcTipo.setPrefWidth(130);
+        tbcTipo.setCellValueFactory(cd -> cd.getValue().antTipo);
 
-//        List<String> antecedenteStrings = listaAntecedenteDto.stream()
-//                .map(CliAntecedenteDto::getAntTipo)
-//                .collect(Collectors.toList());
-        ltvAntecedentes.getItems().addAll(listaAntecedenteDto);
+        TableColumn<CliAntecedenteDto, String> tbcParent = new TableColumn<>(/*resourceBundle.getString("key.papellido")*/"Parentesco");
+        tbcParent.setPrefWidth(150);
+        tbcParent.setCellValueFactory(cd -> cd.getValue().antTipo);
+        
+        TableColumn<CliAntecedenteDto, Boolean> tbcEliminar = new TableColumn<>("Eliminar");
+        tbcEliminar.setPrefWidth(100);
+        tbcEliminar.setCellValueFactory((TableColumn.CellDataFeatures<CliAntecedenteDto, Boolean> p) -> new SimpleBooleanProperty(p.getValue() != null));
+        tbcEliminar.setCellFactory((TableColumn<CliAntecedenteDto, Boolean> p) -> new P13_ExpedienteViewController.ButtonCellAntecedentes());
 
-        ltvAntecedentes.setCellFactory((ListView<CliAntecedenteDto> listView) -> new ListCell<CliAntecedenteDto>() {
-            @Override
-            protected void updateItem(CliAntecedenteDto item, boolean empty) {
-                super.updateItem(item, empty);
+        tbvAntecedentes.getColumns().addAll(tbcTipo, tbcParent,tbcEliminar);
+        tbvAntecedentes.refresh();
 
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(item.getAntTipo());
-                }
+    }
+
+    private void listenerNodos() {
+        tbvAntecedentes.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                unbindAntecedente();
+                antecedenteDto = newValue;
+                bindAntecedente();
+            } else {
+                nuevoAntecedente();
             }
         });
+    }
+
+    private void cargarTablaArchivos() {
+        tbvAntecedentes.getItems().clear();
+
+        TableColumn<CliAntecedenteDto, String> tbcTipo = new TableColumn<>(/*resourceBundle.getString("key.papellido")*/"Tipo");
+        tbcTipo.setPrefWidth(150);
+        tbcTipo.setCellValueFactory(cd -> cd.getValue().antTipo);
+
+        TableColumn<CliAntecedenteDto, String> tbcParent = new TableColumn<>(/*resourceBundle.getString("key.papellido")*/"Tipo");
+        tbcParent.setPrefWidth(150);
+        tbcParent.setCellValueFactory(cd -> cd.getValue().antTipo);
+
+        tbvAntecedentes.getColumns().addAll(tbcTipo, tbcParent);
+        tbvAntecedentes.refresh();
+    }
+    
+    private class ButtonCellAntecedentes extends TableCell<CliAntecedenteDto, Boolean> {
+
+        final MFXButton cellButton = new MFXButton();
+
+        ButtonCellAntecedentes() {
+            cellButton.setPrefWidth(500);
+            cellButton.setText("X");
+            cellButton.getStyleClass().add("mfx-button-menuSalir");
+
+            cellButton.setOnAction((ActionEvent t) -> {
+//                CliPacienteDto pac = (CliPacienteDto) ButtonCell.this.getTableView().getItems().get(ButtonCell.this.getIndex());
+//                try {
+//                    if (pac.getPacId() == null) {
+//                        new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.deleteUser", getStage(), "key.loadUserDelete");
+//                    } else {
+//                        CliPacienteService service = new CliPacienteService();
+//                        Respuesta respuesta = service.eliminarPaciente(pac.getPacId());
+//                        if (!respuesta.getEstado()) {
+//                            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.deleteUser", getStage(), respuesta.getMensaje());
+//                        } else {
+//                            new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.deleteUser", getStage(), "key.deleteUserSuccess");
+//                            nuevoPaciente();
+//                            tbvResultados.getItems().remove(pac);
+//                            tbvResultados.refresh();
+//                        }
+//                    }
+//                } catch (Exception ex) {
+//                    Logger.getLogger(P09_MantenimientoPacientesViewController.class.getName()).log(Level.SEVERE, "Error eliminando el paciente.", ex);
+//                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.deleteUser", getStage(), "key.deleteUserError");
+//                }
+            });
+        }
+
+        @Override
+        protected void updateItem(Boolean t, boolean empty) {
+            super.updateItem(t, empty);
+            if (!empty) {
+                setGraphic(cellButton);
+            }
+        }
     }
 
 }

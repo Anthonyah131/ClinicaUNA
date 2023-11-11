@@ -237,15 +237,6 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         if (medicoDto.getMedFini() != null) {
             tpkHoraSalida.setValue(medicoDto.getMedFfinTime());
         }
-
-//        tpkHoraInicio.valueProperty().bindBidirectional(medicoDto.medFini.get().toLocalTime());
-//        tpkHoraLlegada.valueProperty().bindBidirectional(medicoDto.medFfin);
-//        tpkHoraInicio.valueProperty().bindBidirectional((Property<LocalTime>) Bindings.createObjectBinding(
-//                () -> LocalTime.of(0, 0),
-//                medicoDto.medFini));
-//        tpkHoraLlegada.valueProperty().bindBidirectional((Property<LocalTime>) Bindings.createObjectBinding(
-//                () -> LocalTime.of(0, 0),
-//                medicoDto.medFfin));
         if ("A".equals(medicoDto.getMedEstado())) {
             chkActivo.setSelected(true);
         } else {
@@ -264,14 +255,6 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         txfLicencia.textProperty().unbindBidirectional(medicoDto.medCarne);
         tpkHoraInicio.setValue(null);
         tpkHoraSalida.setValue(null);
-//        tpkHoraInicio.valueProperty().unbindBidirectional(medicoDto.medFini);
-//        tpkHoraLlegada.valueProperty().unbindBidirectional(medicoDto.medFfin);
-//        tpkHoraInicio.valueProperty().unbindBidirectional((Property<LocalTime>) Bindings.createObjectBinding(
-//                () -> LocalTime.of(0, 0),
-//                medicoDto.medFini));
-//        tpkHoraLlegada.valueProperty().unbindBidirectional((Property<LocalTime>) Bindings.createObjectBinding(
-//                () -> LocalTime.of(0, 0),
-//                medicoDto.medFfin));
     }
 
     public void cargarMedicos() {

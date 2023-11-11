@@ -14,11 +14,7 @@ import cr.ac.una.clinicauna.util.Respuesta;
 import cr.ac.una.clinicauna.util.SoundUtil;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
@@ -104,6 +100,7 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
         tbvCitas.getItems().clear();
         
         TableColumn<CliCitaDto, String> tbcFecha = new TableColumn<>(/*resourceBundle.getString("key.identification")*/"Fecha");
+        tbcFecha.setSortable(false);
         tbcFecha.setPrefWidth(150);
         tbcFecha.setCellValueFactory(cd -> {
             LocalDateTime fecha = cd.getValue().getCitFechaHora();
@@ -112,6 +109,7 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
         });
 
         TableColumn<CliCitaDto, String> tbcNombre = new TableColumn<>(/*resourceBundle.getString("key.name")*/"Nombre paciente");
+        tbcNombre.setSortable(false);
         tbcNombre.setPrefWidth(200);
         tbcNombre.setCellValueFactory(cd -> {
             String nombrePac = cd.getValue().nombrePacienteCompleto();
@@ -119,10 +117,12 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
         });
 
         TableColumn<CliCitaDto, String> tbcMotivo = new TableColumn<>(/*resourceBundle.getString("key.papellido")*/"Motivo");
+        tbcMotivo.setSortable(false);
         tbcMotivo.setPrefWidth(150);
         tbcMotivo.setCellValueFactory(cd -> cd.getValue().citMotivo);
 
         TableColumn<CliCitaDto, String> tbcHora = new TableColumn<>(/*resourceBundle.getString("key.usertype")*/"Hora");
+        tbcHora.setSortable(false);
         tbcHora.setPrefWidth(150);
         tbcHora.setCellValueFactory(cd -> {
             LocalDateTime fecha = cd.getValue().getCitFechaHora();
@@ -142,6 +142,7 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
         });
         
         TableColumn<CliCitaDto, String> tbcDuracion = new TableColumn<>(/*resourceBundle.getString("key.usertype")*/"Duracion");
+        tbcDuracion.setSortable(false);
         tbcDuracion.setPrefWidth(150);
         tbcDuracion.setCellValueFactory(cd -> {
             int duracion = cd.getValue().getCliCantespacios().intValue();

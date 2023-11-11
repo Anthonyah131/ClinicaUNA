@@ -1,13 +1,11 @@
 package cr.ac.una.clinicauna.controller;
 
-import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
-import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import cr.ac.una.clinicauna.model.CliPacienteDto;
+import cr.ac.una.clinicauna.model.CliUsuarioDto;
 import cr.ac.una.clinicauna.service.CliPacienteService;
-import cr.ac.una.clinicauna.service.CliUsuarioService;
 import cr.ac.una.clinicauna.util.AppContext;
 import cr.ac.una.clinicauna.util.BindingUtils;
 import cr.ac.una.clinicauna.util.FlowController;
@@ -85,12 +83,15 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
     private TableView<CliPacienteDto> tbvResultados;
     @FXML
     private MFXButton btnAgregarCita;
+    @FXML
+    private MFXButton btnIrExpediente;
 
     CliPacienteDto pacienteDto;
     private ObservableList<CliPacienteDto> pacientes = FXCollections.observableArrayList();
     List<Node> requeridos = new ArrayList<>();
 
     ResourceBundle resourceBundle;
+    CliUsuarioDto usuarioDto;
 
     /**
      * Initializes the controller class.
@@ -214,7 +215,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
         tbcEliminar.setCellValueFactory((TableColumn.CellDataFeatures<CliPacienteDto, Boolean> p) -> new SimpleBooleanProperty(p.getValue() != null));
         tbcEliminar.setCellFactory((TableColumn<CliPacienteDto, Boolean> p) -> new ButtonCell());
 
-        tbvResultados.getColumns().addAll(tbcId, tbcCedula, tbcNombre, tbcApellido, tbcEliminar);
+        tbvResultados.getColumns().addAll(tbcId, tbcCedula, tbcNombre, tbcApellido/*, tbcEliminar*/);
         tbvResultados.refresh();
 
         tbvResultados.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -271,19 +272,27 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
 
     private void iniciarEscena() {
         String padre = (String) AppContext.getInstance().get("PadrePacientes");
-
+        usuarioDto = (CliUsuarioDto) AppContext.getInstance().get("Usuario");
+        
         if (padre.equals("P06_MenuPrincipalView")) {
             btnAgregarCita.setVisible(false);
         } else if (padre.equals("P11_NuevaCitaView")) {
             btnSalir.setVisible(false);
             btnAgregarCita.setVisible(true);
         }
+        if (usuarioDto.getUsuTipousuario().equals("R")){
+            btnIrExpediente.setVisible(false);
+        }
     }
 
     Object resultado;
-    
+
     public Object getSeleccionado() {
         return resultado;
+    }
+
+    @FXML
+    private void onActionBtnIrExpediente(ActionEvent event) {
     }
 
     private class ButtonCell extends TableCell<CliPacienteDto, Boolean> {
