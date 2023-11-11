@@ -76,7 +76,11 @@ public class CliAgendaService {
 
                 for (CliCita cliCita : cliAgenda.getCliCitaList()) {
                     CliCitaDto cita = new CliCitaDto(cliCita);
-                    cita.setCliPacienteDto(new CliPacienteDto(cliCita.getPacId()));
+                    CliPacienteDto pacienteDto = new CliPacienteDto(cliCita.getPacId());
+                    for (CliCita ci : cliCita.getPacId().getCliCitaList()) {
+                        pacienteDto.getCliCitaList().add(new CliCitaDto(ci));
+                    }
+                    cita.setCliPacienteDto(pacienteDto);
                     cliAgendaDto.getCliCitaList().add(cita);
                 }
                 cliAgendaDtos.add(cliAgendaDto);

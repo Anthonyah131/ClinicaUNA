@@ -261,7 +261,7 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
         TableColumn<CliCitaDto, String> tbcNombre = new TableColumn<>(/*resourceBundle.getString("key.name")*/"Nombre paciente");
         tbcNombre.setPrefWidth(200);
         tbcNombre.setCellValueFactory(cd -> {
-            String nombrePac = cd.getValue().nombrePacienteCompleto();
+            String nombrePac = pacienteDto.getPacNombre();
             return new SimpleStringProperty(nombrePac);
         });
 
