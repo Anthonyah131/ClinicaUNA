@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Report1" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f3e1445f-2207-4d37-80e6-167af5cc1015">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ClinicaUNA"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="agenda" uuid="d05c2f9f-3389-40a9-a23e-15e4b8035de6">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ClinicaUNA"/>
+		<parameter name="usuid" class="java.lang.Long"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT c.cit_id,
+       c.cit_usuarioregistra,
+       c.cit_motivo,
+       c.cit_fechahora,
+       c.cit_estado,
+       c.cli_cantespacios,
+       p.pac_nombre,
+       p.pac_papellido,
+       p.pac_cedula
+FROM CLI_CITA c
+JOIN CLI_AGENDA a ON c.age_id = a.age_id
+JOIN CLI_MEDICO m ON a.med_id = m.med_id
+JOIN CLI_PACIENTE p ON c.pac_id = p.pac_id
+WHERE m.med_id = $P{usuid}]]>
+		</queryString>
+		<field name="CIT_ID" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.name" value="CIT_ID"/>
+			<property name="com.jaspersoft.studio.field.label" value="CIT_ID"/>
+		</field>
+		<field name="CIT_USUARIOREGISTRA" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="CIT_USUARIOREGISTRA"/>
+			<property name="com.jaspersoft.studio.field.label" value="CIT_USUARIOREGISTRA"/>
+		</field>
+		<field name="CIT_MOTIVO" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="CIT_MOTIVO"/>
+			<property name="com.jaspersoft.studio.field.label" value="CIT_MOTIVO"/>
+		</field>
+		<field name="CIT_FECHAHORA" class="java.sql.Timestamp">
+			<property name="com.jaspersoft.studio.field.name" value="CIT_FECHAHORA"/>
+			<property name="com.jaspersoft.studio.field.label" value="CIT_FECHAHORA"/>
+		</field>
+		<field name="CIT_ESTADO" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="CIT_ESTADO"/>
+			<property name="com.jaspersoft.studio.field.label" value="CIT_ESTADO"/>
+		</field>
+		<field name="CLI_CANTESPACIOS" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.name" value="CLI_CANTESPACIOS"/>
+			<property name="com.jaspersoft.studio.field.label" value="CLI_CANTESPACIOS"/>
+		</field>
+		<field name="PAC_NOMBRE" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="PAC_NOMBRE"/>
+			<property name="com.jaspersoft.studio.field.label" value="PAC_NOMBRE"/>
+		</field>
+		<field name="PAC_PAPELLIDO" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="PAC_PAPELLIDO"/>
+			<property name="com.jaspersoft.studio.field.label" value="PAC_PAPELLIDO"/>
+		</field>
+		<field name="PAC_CEDULA" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="PAC_CEDULA"/>
+			<property name="com.jaspersoft.studio.field.label" value="PAC_CEDULA"/>
+		</field>
+	</subDataset>
+	<parameter name="usuid" class="java.lang.Long"/>
+	<queryString language="SQL">
+		<![CDATA[select t.* from CLI_MEDICO t 
+WHERE t.med_id = $P{usuid}]]>
+	</queryString>
+	<field name="MED_ID" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="MED_ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="MED_ID"/>
+	</field>
+	<field name="MED_CODIGO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MED_CODIGO"/>
+		<property name="com.jaspersoft.studio.field.label" value="MED_CODIGO"/>
+	</field>
+	<field name="MED_FOLIO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MED_FOLIO"/>
+		<property name="com.jaspersoft.studio.field.label" value="MED_FOLIO"/>
+	</field>
+	<field name="MED_CARNE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MED_CARNE"/>
+		<property name="com.jaspersoft.studio.field.label" value="MED_CARNE"/>
+	</field>
+	<field name="MED_ESTADO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MED_ESTADO"/>
+		<property name="com.jaspersoft.studio.field.label" value="MED_ESTADO"/>
+	</field>
+	<field name="MED_FINI" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="MED_FINI"/>
+		<property name="com.jaspersoft.studio.field.label" value="MED_FINI"/>
+	</field>
+	<field name="MED_FFIN" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="MED_FFIN"/>
+		<property name="com.jaspersoft.studio.field.label" value="MED_FFIN"/>
+	</field>
+	<field name="MED_ESPACIOSXHORA" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="MED_ESPACIOSXHORA"/>
+		<property name="com.jaspersoft.studio.field.label" value="MED_ESPACIOSXHORA"/>
+	</field>
+	<field name="MED_VERSION" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="MED_VERSION"/>
+		<property name="com.jaspersoft.studio.field.label" value="MED_VERSION"/>
+	</field>
+	<field name="USU_ID" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="USU_ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="USU_ID"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="227" y="24" width="100" height="30" uuid="1c5f685f-1079-4694-9bce-393f05ff7958"/>
+				<textElement textAlignment="Center">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[Clinica UNA]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="0" y="0" width="100" height="30" uuid="78ffdaca-85db-4b02-94ad-77edd87e95d2"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="360" y="0" width="195" height="54" uuid="f6d7311d-c26d-41a6-bbcc-e11e989d5925"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA["Folio del medico: "+ new String($F{MED_FOLIO}) + "\nCarnet del medico: "+new  String($F{MED_CARNE})]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="46" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="227" height="46" uuid="2ab02770-a49d-45ee-a78d-3c859acc496a"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ID del medico: "+new String($F{MED_ID}.toString())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="310" y="0" width="245" height="46" uuid="9d8bdb8b-2397-4b3b-9697-e723f35886aa"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Codigo del medico: "+new String($F{MED_CODIGO})]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="378" splitType="Stretch">
+			<componentElement>
+				<reportElement x="0" y="0" width="555" height="378" uuid="a36eaad4-1ae6-4e8f-bc25-516d0b37ea71">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+					<property name="com.jaspersoft.studio.components.autoresize.proportional" value="true"/>
+					<property name="com.jaspersoft.studio.components.autoresize.next" value="true"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="agenda" uuid="ecd31c55-e22e-4845-ab46-8f35ac47179e">
+						<datasetParameter name="usuid">
+							<datasetParameterExpression><![CDATA[$P{usuid}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="80" uuid="bf8b7975-b628-4be6-ba8c-c217d645b556">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="80" height="30" uuid="5316853b-a9e4-4dff-b958-17392f946d4b"/>
+								<text><![CDATA[CIT_USUARIOREGISTRA]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="80" height="30" uuid="0e070ed8-5269-4f59-8300-fc4be43283f6"/>
+								<textFieldExpression><![CDATA[$F{CIT_USUARIOREGISTRA}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="80" uuid="94160f07-8953-47e3-ae84-5a466b224526">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="80" height="30" uuid="4c09986c-17f9-4718-8c92-d02ae2f4c2c2"/>
+								<text><![CDATA[CIT_MOTIVO]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="80" height="30" uuid="85b0c233-2873-4021-b750-0787a4eb48e5"/>
+								<textFieldExpression><![CDATA[$F{CIT_MOTIVO}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="79" uuid="9374f2ee-8eed-4a3d-856c-9a0ef546f0cf">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="79" height="30" uuid="ec62d4b8-c945-4e09-b6bd-7bff0546acdd"/>
+								<text><![CDATA[CIT_FECHAHORA]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="79" height="30" uuid="841ec971-32cf-408e-ab90-cf34ab05fec6"/>
+								<textFieldExpression><![CDATA[$F{CIT_FECHAHORA}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="79" uuid="fde04fc6-0464-42a2-ad49-52121eaeeb88">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="79" height="30" uuid="8a7cc0e0-137a-40d7-9bca-fa7b5046815c"/>
+								<text><![CDATA[CIT_ESTADO]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="79" height="30" uuid="bbdd4cc8-bf41-46d1-96d6-b72c6c8f3022"/>
+								<textFieldExpression><![CDATA[$F{CIT_ESTADO}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="79" uuid="5ed7ef05-9566-4b22-a7bc-4689734e7e35">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="79" height="30" uuid="926afa42-9e9f-4051-ba74-d36eb950635e"/>
+								<text><![CDATA[PAC_NOMBRE]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="79" height="30" uuid="2a19d7f2-995f-422c-9c99-06a3aabcb163"/>
+								<textFieldExpression><![CDATA[$F{PAC_NOMBRE}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="79" uuid="70a25381-7058-47cb-a075-295181af5898">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="79" height="30" uuid="d12ec49a-a97f-4237-992f-411bb96163df"/>
+								<text><![CDATA[PAC_PAPELLIDO]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="79" height="30" uuid="aaa189e3-fd3b-47ec-bb23-dc6eccd14dfb"/>
+								<textFieldExpression><![CDATA[$F{PAC_PAPELLIDO}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="79" uuid="9f0229fd-5e53-46af-82f1-4628f4d8372d">
+						<jr:columnHeader style="Table_CH" height="30">
+							<staticText>
+								<reportElement x="0" y="0" width="79" height="30" uuid="1b222b49-e49e-40ea-adce-bbbb4ba3562f"/>
+								<text><![CDATA[PAC_CEDULA]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="79" height="30" uuid="ab40d1a1-c3c9-4951-b305-4bedeae6e2fa"/>
+								<textFieldExpression><![CDATA[$F{PAC_CEDULA}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="64" splitType="Stretch">
+			<textField>
+				<reportElement x="455" y="34" width="100" height="30" uuid="9b920def-9d5d-48bd-a435-7b96f6038143"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="34" width="100" height="30" uuid="19475c84-deda-4209-adc0-85001d9d41d1"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[
+® UNA, EvaComUNA 2023]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
