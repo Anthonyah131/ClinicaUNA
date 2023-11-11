@@ -3,15 +3,14 @@
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/19" fx:controller="cr.ac.una.clinicauna.controller.P15_ReportesViewController">
+<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.clinicauna.controller.P15_ReportesViewController">
    <children>
       <HBox alignment="CENTER" layoutX="127.0" layoutY="240.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -69,10 +68,10 @@
                </children>
             </VBox>
             <Separator orientation="VERTICAL" prefHeight="200.0" />
-            <VBox alignment="CENTER" prefHeight="720.0" prefWidth="409.0" HBox.hgrow="ALWAYS">
+            <VBox alignment="CENTER" prefHeight="720.0" HBox.hgrow="ALWAYS">
                <children>
-                  <MFXButton fx:id="btnAgregarUsuario" onAction="#onActionBtnAgregarUsuario" text="AgregarUsuario" />
-                  <TableView fx:id="tbvUsuarios" />
+                  <Label text="Tipo de Usuario" />
+                  <ComboBox fx:id="cbxTipoUsuario" prefWidth="150.0" />
                   <HBox alignment="BOTTOM_RIGHT" prefHeight="64.0" spacing="20.0">
                      <children>
                         <MFXButton fx:id="btnLimpiarU" onAction="#OnActionbtnLimpiaU" text="Limpiar" />

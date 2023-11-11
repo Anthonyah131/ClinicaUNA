@@ -11,8 +11,8 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
 
 /**
  * FXML Controller class
@@ -42,13 +42,11 @@ public class P15_ReportesViewController extends Controller implements Initializa
     @FXML
     private MFXButton btnAceptarP;
     @FXML
-    private MFXButton btnAgregarUsuario;
-    @FXML
-    private TableView<?> tbvUsuarios;
-    @FXML
     private MFXButton btnLimpiarU;
     @FXML
     private MFXButton btnAceptarU;
+    @FXML
+    private ComboBox<?> cbxTipoUsuario;
 
     /**
      * Initializes the controller class.
@@ -86,9 +84,6 @@ public class P15_ReportesViewController extends Controller implements Initializa
     private void OnActionbtnAceptarP(ActionEvent event) {
     }
 
-    @FXML
-    private void onActionBtnAgregarUsuario(ActionEvent event) {
-    }
 
     @FXML
     private void OnActionbtnLimpiaU(ActionEvent event) {

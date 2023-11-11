@@ -38,6 +38,7 @@
                      <children>
                         <Label text="Consulta Sql: " />
                         <JFXTextArea fx:id="txaConsulta" maxHeight="100.0" maxWidth="400.0" />
+                        <Label prefWidth="130.0" text="Nota: Esta consulta permite únicamente operaciones de lectura (SELECT). No se permiten operaciones de modificación (UPDATE, INSERT, DELETE).Los parámetros deben ir encerrados por {} (por ejemplo, {nombre}" textAlignment="CENTER" wrapText="true" />
                      </children>
                   </HBox>
                   <HBox fx:id="hbxCorreoView" alignment="CENTER">
@@ -85,7 +86,7 @@
                               <TableView fx:id="tbvReportes" maxWidth="350.0" />
                            </children>
                         </VBox>
-                        <VBox alignment="CENTER" maxWidth="300.0" HBox.hgrow="ALWAYS">
+                        <VBox alignment="CENTER" maxWidth="275.0" HBox.hgrow="ALWAYS">
                            <children>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                  <children>
@@ -102,14 +103,16 @@
             </VBox>
             <HBox fx:id="hbxParametroView" alignment="CENTER" HBox.hgrow="ALWAYS">
                <children>
-                  <VBox alignment="CENTER" maxWidth="250.0" HBox.hgrow="ALWAYS">
+                  <VBox alignment="CENTER" maxWidth="225.0" HBox.hgrow="ALWAYS">
                      <children>
+                        <Label prefWidth="125.0" text="Nota: El nombre del parámetro debe ser exactamente igual al texto dentro de las llaves en la consulta, sin las {}." wrapText="true" />
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                            <children>
                               <Label text="Parametro: " />
                               <JFXTextField fx:id="txfParametro" />
                            </children>
                         </HBox>
+                        <Label prefWidth="125.0" text="Nota: El valor del parámetro debe ser el valor que se quiere poner en la consulta (por ejemplo, 'Anthony' o '%a%' o 5). igual al texto dentro de las llaves en la consulta, sin las {}." wrapText="true" />
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                            <children>
                               <Label text="Valor: " />
