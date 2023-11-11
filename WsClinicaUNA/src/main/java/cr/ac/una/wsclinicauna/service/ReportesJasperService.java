@@ -44,7 +44,7 @@ public class ReportesJasperService {
             CliMedico cliMedico = em.find(CliMedico.class, id);
 
             Map<String, Object> variables = new HashMap<>();
-            variables.put("id", id);
+            variables.put("usuid", id);
 
             JasperReport jr = (JasperReport) JRLoader.loadObject(ReportesJasperController.class.getResource("/cr/ac/una/wsclinicauna/reportes/Report1.jasper"));
 
