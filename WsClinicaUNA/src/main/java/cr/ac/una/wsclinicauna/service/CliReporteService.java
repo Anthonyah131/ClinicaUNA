@@ -35,9 +35,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 
 /**
  *
@@ -54,23 +57,22 @@ public class CliReporteService {
     public Respuesta generarInformeExcelDesdeConsultaSQL(CliReporteDto cliReporteDto) {
         try {
             // Tu consulta SQL
-            String consulta = "SELECT u.usu_nombre, u.usu_papellido, u.usu_cedula FROM CLI_USUARIO u WHERE u.usu_nombre = 'nombre'";
-//            String consulta = cliReporteDto.getRepConsulta();
+//            String consulta = "SELECT u.usu_nombre, u.usu_papellido, u.usu_cedula FROM CLI_USUARIO u WHERE u.usu_nombre LIKE {nombre}";
+            String consulta = cliReporteDto.getRepConsulta();
 
             // Recorrer el mapa de parámetros y reemplazar en la consulta
             for (CliParametroconsultaDto para : cliReporteDto.getCliParametroconsultaList()) {
                 String parametro = para.getParcParametro();
                 String valor = para.getParcValor();
 
-                // Utilizar una expresión regular para encontrar el parámetro dentro de comillas simples
-                String regex = "'" + parametro + "'";
-                Pattern pattern = Pattern.compile(regex);
+                // Utilizar una expresión regular para encontrar todos los textos dentro de {}
+                Pattern pattern = Pattern.compile("\\{" + parametro +"\\}");
                 Matcher matcher = pattern.matcher(consulta);
 
-                // Reemplazar el parámetro solo si se encuentra entre comillas simples
-                consulta = matcher.replaceAll("'" + valor + "'");
+                // Reemplazar todos los textos encontrados con el valor de reemplazo
+                consulta = matcher.replaceAll(Matcher.quoteReplacement(valor));
             }
-            
+
             Connection co = em.unwrap(Connection.class); // Coneccion
 
             // Ejecutar la consulta SQL y obtener los resultados
@@ -83,23 +85,41 @@ public class CliReporteService {
             // Crear una hoja en el libro
             Sheet sheet = workbook.createSheet("Informe");
 
-            // Crear una fila para encabezados
-            Row headerRow = sheet.createRow(0);
             ResultSetMetaData metaData = resultSet.getMetaData();
             int numColumns = metaData.getColumnCount();
+
+            // Establecer el título
+            String titulo = cliReporteDto.getRepTitulo();
+            Font titleFont = workbook.createFont();
+            titleFont.setFontHeightInPoints((short) 14);
+            titleFont.setBold(true);
+            CellStyle titleCellStyle = workbook.createCellStyle();
+            titleCellStyle.setFont(titleFont);
+            Row titleRow = sheet.createRow(0);
+            Cell titleCell = titleRow.createCell(0);
+            titleCell.setCellValue(titulo);
+            titleCell.setCellStyle(titleCellStyle);
+
+            // Fusionar celdas para el título
+            sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, numColumns - 1));
+
+            // Crear una fila para encabezados y ajustar el ancho de las celdas
+            Row headerRow = sheet.createRow(1); // Ahora los encabezados empiezan en la fila 1
             for (int i = 1; i <= numColumns; i++) {
                 String columnName = metaData.getColumnName(i);
                 Cell cell = headerRow.createCell(i - 1);
                 cell.setCellValue(columnName);
+                sheet.autoSizeColumn(i - 1); // Ajustar el ancho de la columna automáticamente
             }
 
-            // Llenar el libro de Excel con los datos de la consulta
-            int rowNum = 1;
+            // Llenar el libro de Excel con los datos de la consulta y ajustar el ancho de las celdas
+            int rowNum = 2; // Empieza desde la fila 2 para los datos
             while (resultSet.next()) {
                 Row dataRow = sheet.createRow(rowNum);
                 for (int i = 1; i <= numColumns; i++) {
                     Cell cell = dataRow.createCell(i - 1);
                     cell.setCellValue(resultSet.getString(i));
+                    sheet.autoSizeColumn(i - 1); // Ajustar el ancho de la columna automáticamente
                 }
                 rowNum++;
             }

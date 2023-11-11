@@ -58,7 +58,7 @@ public class EnvioCorreo {
     @EJB
     CliReporteService cliReporteService;
 
-    @Schedule(hour = "0", minute = "54", persistent = false)
+    @Schedule(hour = "14", minute = "16", persistent = false)
     private void envioReporte() {
         try {
             Respuesta res = cliReporteService.getReportes();
@@ -88,7 +88,7 @@ public class EnvioCorreo {
             Logger.getLogger(EnvioCorreo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public static String getSpanishDayOfWeek(LocalDate fecha) {
         DayOfWeek diaActual = fecha.getDayOfWeek();
         Locale spanishLocale = new Locale("es", "ES"); // Establecer el idioma español
@@ -111,13 +111,13 @@ public class EnvioCorreo {
         //proporciona el correo y contrasena del correo con el que va a ser enviado
         String correoRemitente = cliParametrosDto.getParEmail();//"CineUna123@outlook.com";
         String passwordRemitente = cliParametrosDto.getParClave();//"cine1234";
-        String asunto = "ClinicaUNA";
+        String asunto = "ClinicaUNA Reporte";
 
         Respuesta re = cliReporteService.generarInformeExcelDesdeConsultaSQL(cliReporteDto);
         byte[] excelData = (byte[]) re.getResultado("ReporteExcel");
 
         //Mensaje que va a ser enviado
-        Multipart multipart = mensajeEmailReporte(cliReporteDto, cliParametrosDto.getParHtml(), cliParametrosDto.getParLogo(), cliParametrosDto.getParNombre(), excelData);
+        Multipart multipart = mensajeEmailReporte(excelData);
 
         MimeMessage message = new MimeMessage(session);
         message.setFrom(new InternetAddress(correoRemitente));
@@ -137,24 +137,17 @@ public class EnvioCorreo {
 
     }
 
-    private Multipart mensajeEmailReporte(CliReporteDto cliReporteDto, byte[] html, byte[] logo, String nombre, byte[] excelData) throws UnknownHostException, IOException {
+    private Multipart mensajeEmailReporte(byte[] excelData) throws UnknownHostException, IOException {
         try {
-            String base64Image = convertirABase64(logo);
-            String mensaje = convertirBytesAHTML(html);
-            String activacionMensaje = "Hola por parte de" + nombre + " le adjuntamos el informe generado por excel";
-            mensaje = mensaje.replace("{Insertar nombre de la empresa}", nombre);
-            mensaje = mensaje.replace("{Contenido que se le vaya a enviar}", activacionMensaje);
-            mensaje = mensaje.replace("{imagen}", "data:image/png;base64," + base64Image);
-
-            // Crear la parte del mensaje que contendrá el archivo adjunto
-            BodyPart messageBodyPart = new MimeBodyPart();
+            // Crear una parte del mensaje con texto
+            MimeBodyPart messageBodyPart = new MimeBodyPart();
+            String mensaje = "Adjunto se encuentra el informe.";
             messageBodyPart.setText(mensaje);
 
-            // Crear un multipart para el mensaje
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(messageBodyPart);
 
-            // Adjuntar el archivo generado
+            // Agregar el archivo como una parte del mensaje
             messageBodyPart = new MimeBodyPart();
             ByteArrayDataSource fuenteDatos = new ByteArrayDataSource(excelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             messageBodyPart.setDataHandler(new DataHandler(fuenteDatos));
