@@ -1,44 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.clinicauna.controller.P15_ReportesViewController">
+<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" styleClass="fondo-reportes" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.clinicauna.controller.P15_ReportesViewController">
    <children>
       <HBox alignment="CENTER" layoutX="127.0" layoutY="240.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <VBox alignment="CENTER" prefHeight="720.0" prefWidth="94.0" HBox.hgrow="ALWAYS">
                <children>
+                  <MFXButton fx:id="btnBuscarMedico" onAction="#onActionBtnBuscarMedico" styleClass="mfx-button-Log" text="%key.btnSearchMedic" />
                   <HBox alignment="CENTER" prefHeight="58.0">
                      <children>
-                        <Label text="Medico " />
+                        <Label styleClass="labels-text-minus" text="%key.lbMedic" />
                         <Label fx:id="lbMedico" text="........" />
-                        <MFXButton fx:id="btnBuscarMedico" onAction="#onActionBtnBuscarMedico" text="BuscarPaciente" />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="42.0" spacing="10.0">
-                     <children>
-                        <Label prefHeight="35.0" prefWidth="170.0" text="Fdesde" />
-                        <Label prefHeight="35.0" prefWidth="170.0" text="Fhasta" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="57.0">
                      <children>
-                        <JFXDatePicker fx:id="fdesde" defaultColor="#0084ff" />
-                        <JFXDatePicker fx:id="fhasta" defaultColor="#1f8fff" layoutX="10.0" layoutY="10.0" />
+                        <JFXDatePicker fx:id="fdesde" defaultColor="#0084ff" promptText="%key.fromDay" styleClass="jfx-pickers" />
+                        <JFXDatePicker fx:id="fhasta" defaultColor="#1f8fff" layoutX="10.0" layoutY="10.0" promptText="%key.toDay" styleClass="jfx-pickers" />
                      </children>
                   </HBox>
-                  <HBox alignment="BOTTOM_RIGHT" prefHeight="64.0" spacing="20.0">
+                  <HBox alignment="CENTER" prefHeight="64.0" spacing="20.0">
                      <children>
-                        <MFXButton fx:id="btnLimpiarM" onAction="#OnActionbtnLimpiarM" text="Limpiar" />
-                        <MFXButton fx:id="btnAceptarM" onAction="#OnActionbtnAceptarM" text="Aceptar" />
+                        <MFXButton fx:id="btnLimpiarM" onAction="#OnActionbtnLimpiarM" styleClass="mfx-button-Log" text="%key.btnClean" />
+                        <MFXButton fx:id="btnAceptarM" onAction="#OnActionbtnAceptarM" styleClass="mfx-button-Log" text="%key.btnAcept" />
                      </children>
                      <padding>
                         <Insets right="5.0" />
@@ -49,17 +43,17 @@
             <Separator orientation="VERTICAL" prefHeight="200.0" />
             <VBox alignment="CENTER" prefHeight="720.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
                <children>
+                  <MFXButton fx:id="btnBuscarPaciente" onAction="#onActionBtnBuscarPaciente" styleClass="mfx-button-Log" text="%key.btnSearchUser" />
                   <HBox alignment="CENTER" prefHeight="58.0">
                      <children>
-                        <Label text="Paciente" />
+                        <Label styleClass="labels-text-minus" text="%key.lbPatient" />
                         <Label fx:id="lbPaciente" text="........" />
-                        <MFXButton fx:id="btnBuscarPaciente" onAction="#onActionBtnBuscarPaciente" text="BucarPaciente" />
                      </children>
                   </HBox>
-                  <HBox alignment="BOTTOM_RIGHT" prefHeight="64.0" spacing="20.0">
+                  <HBox alignment="CENTER" prefHeight="64.0" spacing="20.0">
                      <children>
-                        <MFXButton fx:id="btnLimpiarP" onAction="#OnActionbtnLimpiaP" text="Limpiar" />
-                        <MFXButton fx:id="btnAceptarP" onAction="#OnActionbtnAceptarP" text="Aceptar" />
+                        <MFXButton fx:id="btnLimpiarP" onAction="#OnActionbtnLimpiaP" styleClass="mfx-button-Log" text="%key.btnClean" />
+                        <MFXButton fx:id="btnAceptarP" onAction="#OnActionbtnAceptarP" styleClass="mfx-button-Log" text="%key.btnAcept" />
                      </children>
                      <padding>
                         <Insets right="5.0" />
@@ -70,12 +64,11 @@
             <Separator orientation="VERTICAL" prefHeight="200.0" />
             <VBox alignment="CENTER" prefHeight="720.0" HBox.hgrow="ALWAYS">
                <children>
-                  <Label text="Tipo de Usuario" />
-                  <ComboBox fx:id="cbxTipoUsuario" prefWidth="150.0" />
-                  <HBox alignment="BOTTOM_RIGHT" prefHeight="64.0" spacing="20.0">
+                  <JFXComboBox fx:id="cbxTipoUsuario" promptText="%key.cbxTypeUser" styleClass="jfx-combo-box" />
+                  <HBox alignment="CENTER" prefHeight="64.0" spacing="20.0">
                      <children>
-                        <MFXButton fx:id="btnLimpiarU" onAction="#OnActionbtnLimpiaU" text="Limpiar" />
-                        <MFXButton fx:id="btnAceptarU" onAction="#OnActionbtnAceptarU" text="Aceptar" />
+                        <MFXButton fx:id="btnLimpiarU" onAction="#OnActionbtnLimpiaU" styleClass="mfx-button-Log" text="%key.btnClean" />
+                        <MFXButton fx:id="btnAceptarU" onAction="#OnActionbtnAceptarU" styleClass="mfx-button-Log" text="%key.btnAcept" />
                      </children>
                      <padding>
                         <Insets right="5.0" />

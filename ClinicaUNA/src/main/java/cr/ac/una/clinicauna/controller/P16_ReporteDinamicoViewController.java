@@ -18,6 +18,7 @@ import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Formato;
 import cr.ac.una.clinicauna.util.Mensaje;
 import cr.ac.una.clinicauna.util.Respuesta;
+import cr.ac.una.clinicauna.util.ValidarRequeridos;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.util.ArrayList;
@@ -97,6 +98,8 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
     List<Node> requeridos = new ArrayList<>();
     List<Node> requeridosParametro = new ArrayList<>();
 
+    ResourceBundle resourceBundle;
+
     /**
      * Initializes the controller class.
      */
@@ -138,29 +141,29 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
         ObservableList<CliParametroconsultaDto> parametros = tbvParametros.getItems();
         if (tbvParametros.getItems() == null || !parametros.stream().anyMatch(e -> e.getParcParametro().equals(this.parametroDto.getParcParametro()))) {
             try {
-//                String invalidos = ValidarRequeridos.validarRequeridos(requeridosParametro);
-//                if (!invalidos.isEmpty()) {
-//                    String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
-//                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), mensaje);
-//                } else {
-                CliParametroconsultaService parametroService = new CliParametroconsultaService();
-                Respuesta respuesta = parametroService.guardarParametroconsulta(this.parametroDto);
-                if (!respuesta.getEstado()) {
-                    new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
+                String invalidos = ValidarRequeridos.validarRequeridos(requeridosParametro);
+                if (!invalidos.isEmpty()) {
+                    String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
+                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), mensaje);
                 } else {
-                    unbindParametro();
-                    this.parametroDto = (CliParametroconsultaDto) respuesta.getResultado("Parametroconsulta");
-                    this.parametroDto.setModificado(true);
-                    reporteDto.getCliParametroconsultaList().add(this.parametroDto);
-                    onActionBtnGuardar(event);
-                    this.parametroDto = new CliParametroconsultaDto();
-                    bindParametro();
-                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
+                    CliParametroconsultaService parametroService = new CliParametroconsultaService();
+                    Respuesta respuesta = parametroService.guardarParametroconsulta(this.parametroDto);
+                    if (!respuesta.getEstado()) {
+                        new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), respuesta.getMensaje());
+                    } else {
+                        unbindParametro();
+                        this.parametroDto = (CliParametroconsultaDto) respuesta.getResultado("Parametroconsulta");
+                        this.parametroDto.setModificado(true);
+                        reporteDto.getCliParametroconsultaList().add(this.parametroDto);
+                        onActionBtnGuardar(event);
+                        this.parametroDto = new CliParametroconsultaDto();
+                        bindParametro();
+                        new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveParameterR", getStage(), "key.updatedParameterR");
+                    }
                 }
-//                }
             } catch (Exception ex) {
                 Logger.getLogger(P16_ReporteDinamicoViewController.class.getName()).log(Level.SEVERE, "Error guardando el parametro.", ex);
-                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), "key.errorSavingParameterR");
             }
         }
     }
@@ -191,27 +194,27 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
             new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
         }*/
         try {
-//            String invalidos = ValidarRequeridos.validarRequeridos(requeridos);
-//            if (!invalidos.isEmpty()) {
-//                String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
-//                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), mensaje);
-//            } else {
-            CliReporteService reporteService = new CliReporteService();
-            Respuesta respuesta = reporteService.guardarReporte(reporteDto);
-            if (!respuesta.getEstado()) {
-                new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
+            String invalidos = ValidarRequeridos.validarRequeridos(requeridos);
+            if (!invalidos.isEmpty()) {
+                String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveReportD", getStage(), mensaje);
             } else {
-                unbindReporte();
-                this.reporteDto = (CliReporteDto) respuesta.getResultado("Reporte");
-                cargarParametros();
-                cargarCorreos();
-                bindReporte();
-                new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
+                CliReporteService reporteService = new CliReporteService();
+                Respuesta respuesta = reporteService.guardarReporte(reporteDto);
+                if (!respuesta.getEstado()) {
+                    new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveReportD", getStage(), respuesta.getMensaje());
+                } else {
+                    unbindReporte();
+                    this.reporteDto = (CliReporteDto) respuesta.getResultado("Reporte");
+                    cargarParametros();
+                    cargarCorreos();
+                    bindReporte();
+                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveReportD", getStage(), "key.updatedReportD");
+                }
             }
-//            }
         } catch (Exception ex) {
             Logger.getLogger(P16_ReporteDinamicoViewController.class.getName()).log(Level.SEVERE, "Error guardando el reporte.", ex);
-            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveReportD", getStage(), "key.errorSavingReportD");
         }
         onActionBtnFiltrar(event);
     }
@@ -220,20 +223,20 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
     private void onActionBtnEliminar(ActionEvent event) {
         try {
             if (this.reporteDto.getRepId() == null) {
-                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.deleteUser", getStage(), "key.loadUserDelete");
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.deleteReportD", getStage(), "key.loadReportDDelete");
             } else {
                 CliReporteService service = new CliReporteService();
                 Respuesta respuesta = service.eliminarReporte(this.reporteDto.getRepId());
                 if (!respuesta.getEstado()) {
-                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.deleteUser", getStage(), respuesta.getMensaje());
+                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.deleteReportD", getStage(), respuesta.getMensaje());
                 } else {
-                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.deleteUser", getStage(), "key.deleteUserSuccess");
+                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.deleteReportD", getStage(), "key.deleteReportDSuccess");
                     nuevoReporte();
                 }
             }
         } catch (Exception ex) {
-            Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error eliminando el usuario.", ex);
-            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.deleteUser", getStage(), "key.deleteUserError");
+            Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error eliminando el Reporte.", ex);
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.deleteReportD", getStage(), "key.deleteReportDError");
         }
         onActionBtnFiltrar(event);
     }
@@ -250,7 +253,7 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
             tbvReportes.setItems(reportes);
             tbvReportes.refresh();
         } else {
-            new Mensaje().showModal(Alert.AlertType.ERROR, "key.loadUsers", getStage(), respuesta.getMensaje());
+            new Mensaje().showModal(Alert.AlertType.ERROR, "key.loadReportsD", getStage(), respuesta.getMensaje());
         }
     }
 
@@ -407,15 +410,15 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
         if (reporteDto.getCliCorreodestinoList() == null || !reporteDto.getCliCorreodestinoList().stream().anyMatch(e -> e.getCdCorreo().equals(usuarioDto.getUsuCorreo()))) {
             correoDto.setCdCorreo(usuarioDto.getUsuCorreo());
             try {
-//                String invalidos = ValidarRequeridos.validarRequeridos(requeridosParametro);
-//                if (!invalidos.isEmpty()) {
-//                    String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
-//                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), mensaje);
-//                } else {
+                String invalidos = ValidarRequeridos.validarRequeridos(requeridosParametro);
+                if (!invalidos.isEmpty()) {
+                    String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
+                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveEmailR", getStage(), mensaje);
+                } else {
                 CliCorreodestinoService correoService = new CliCorreodestinoService();
                 Respuesta respuesta = correoService.guardarCorreodestino(this.correoDto);
                 if (!respuesta.getEstado()) {
-                    new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
+                    new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveEmailR", getStage(), respuesta.getMensaje());
                 } else {
                     this.correoDto = (CliCorreodestinoDto) respuesta.getResultado("Correodestino");
                     this.correoDto.setModificado(true);
@@ -423,12 +426,12 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
                     ActionEvent event = new ActionEvent();
                     onActionBtnGuardar(event);
                     this.correoDto = new CliCorreodestinoDto();
-                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
+                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveEmailR", getStage(), "key.updatedEmailR");
                 }
-//                }
+                }
             } catch (Exception ex) {
                 Logger.getLogger(P16_ReporteDinamicoViewController.class.getName()).log(Level.SEVERE, "Error guardando el parametro.", ex);
-                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveEmailR", getStage(), "key.errorSavingEmailR");
             }
         }
 
