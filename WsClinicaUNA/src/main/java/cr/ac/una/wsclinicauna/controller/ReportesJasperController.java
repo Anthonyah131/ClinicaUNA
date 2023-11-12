@@ -5,6 +5,8 @@
 package cr.ac.una.wsclinicauna.controller;
 
 import cr.ac.una.wsclinicauna.service.ReportesJasperService;
+import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
+import cr.ac.una.wsclinicauna.util.Respuesta;
 import cr.ac.una.wsclinicauna.util.Secure;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.ejb.EJB;
@@ -14,6 +16,9 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -25,15 +30,33 @@ import jakarta.ws.rs.core.Response;
 @Tag(name = "ReportesJasper", description = "Operaciones sobre ReportesJasper")
 @Secure
 public class ReportesJasperController {
+
     @EJB
     ReportesJasperService reportesJasperService;
-    
+
     @GET
     @Path("/ping")
     public Response ping() {
-        reportesJasperService.getAngendaReport(1L);
         return Response
                 .ok("ping Jakarta EE")
                 .build();
     }
+
+    @GET
+    @Path("/agendaMedico/{id}/{fechainicial}/{fechafin}")
+    public Response agendaMedico(Long id, LocalDate fechainicial,LocalDate fechafin) {
+        try {
+            Respuesta res = reportesJasperService.getAngendaReport(id, fechainicial, fechafin);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
+            }
+            //Aun no se que devolver
+            
+            return Response.ok().build();//TODO
+        } catch (Exception ex) {
+            Logger.getLogger(ReportesJasperController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el reporte").build();
+        }
+    }
+
 }

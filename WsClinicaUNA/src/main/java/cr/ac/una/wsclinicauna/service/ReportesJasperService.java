@@ -17,6 +17,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.sql.Connection;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -38,13 +39,15 @@ public class ReportesJasperService {
     @PersistenceContext(unitName = "WsClinicaUNAPU")
     private EntityManager em;
 
-    public Respuesta getAngendaReport(Long id) {
+    public Respuesta getAngendaReport(Long id, LocalDate fechainicial,LocalDate fechafin) {
         try {
             Connection co = em.unwrap(Connection.class);
             CliMedico cliMedico = em.find(CliMedico.class, id);
 
             Map<String, Object> variables = new HashMap<>();
             variables.put("usuid", id);
+            variables.put("fechainicial", fechainicial);
+            variables.put("fechainicial", fechafin);
 
             JasperReport jr = (JasperReport) JRLoader.loadObject(ReportesJasperController.class.getResource("/cr/ac/una/wsclinicauna/reportes/Report1.jasper"));
 

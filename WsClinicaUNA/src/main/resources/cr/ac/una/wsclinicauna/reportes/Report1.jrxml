@@ -34,6 +34,8 @@
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ClinicaUNA"/>
 		<parameter name="usuid" class="java.lang.Long"/>
+		<parameter name="fechainicial" class="java.sql.Date"/>
+		<parameter name="fechafin" class="java.sql.Date"/>
 		<queryString language="SQL">
 			<![CDATA[SELECT c.cit_id,
        c.cit_usuarioregistra,
@@ -48,7 +50,8 @@ FROM CLI_CITA c
 JOIN CLI_AGENDA a ON c.age_id = a.age_id
 JOIN CLI_MEDICO m ON a.med_id = m.med_id
 JOIN CLI_PACIENTE p ON c.pac_id = p.pac_id
-WHERE m.med_id = $P{usuid}]]>
+WHERE m.med_id = $P{usuid} 
+  AND a.age_fecha BETWEEN $P{fechainicial} AND $P{fechafin}]]>
 		</queryString>
 		<field name="CIT_ID" class="java.math.BigDecimal">
 			<property name="com.jaspersoft.studio.field.name" value="CIT_ID"/>
@@ -88,6 +91,8 @@ WHERE m.med_id = $P{usuid}]]>
 		</field>
 	</subDataset>
 	<parameter name="usuid" class="java.lang.Long"/>
+	<parameter name="fechainicial" class="java.sql.Date"/>
+	<parameter name="fechafin" class="java.sql.Date"/>
 	<queryString language="SQL">
 		<![CDATA[select t.* from CLI_MEDICO t 
 WHERE t.med_id = $P{usuid}]]>
@@ -136,7 +141,10 @@ WHERE t.med_id = $P{usuid}]]>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch">
+		<band height="90" splitType="Stretch">
+			<rectangle>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="87" forecolor="#911210" backcolor="#BF979A" uuid="a2032deb-d27e-4f7d-bb35-71df5f3b7319"/>
+			</rectangle>
 			<staticText>
 				<reportElement x="227" y="24" width="100" height="30" uuid="1c5f685f-1079-4694-9bce-393f05ff7958"/>
 				<textElement textAlignment="Center">
@@ -145,13 +153,20 @@ WHERE t.med_id = $P{usuid}]]>
 				<text><![CDATA[Clinica UNA]]></text>
 			</staticText>
 			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="0" y="0" width="100" height="30" uuid="78ffdaca-85db-4b02-94ad-77edd87e95d2"/>
+				<reportElement x="20" y="0" width="100" height="30" uuid="78ffdaca-85db-4b02-94ad-77edd87e95d2"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="360" y="0" width="195" height="54" uuid="f6d7311d-c26d-41a6-bbcc-e11e989d5925"/>
 				<textElement textAlignment="Left"/>
 				<textFieldExpression><![CDATA["Folio del medico: "+ new String($F{MED_FOLIO}) + "\nCarnet del medico: "+new  String($F{MED_CARNE})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="57" width="555" height="30" uuid="26fb6c7d-1a12-446b-ad97-d5397591cdf5"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Reporte del: "+ new String($P{fechainicial}.toString())+", hasta el  "+new  String($P{fechafin}.toString())]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
@@ -192,13 +207,19 @@ WHERE t.med_id = $P{usuid}]]>
 						<datasetParameter name="usuid">
 							<datasetParameterExpression><![CDATA[$P{usuid}]]></datasetParameterExpression>
 						</datasetParameter>
+						<datasetParameter name="fechainicial">
+							<datasetParameterExpression><![CDATA[$P{fechainicial}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="fechafin">
+							<datasetParameterExpression><![CDATA[$P{fechafin}]]></datasetParameterExpression>
+						</datasetParameter>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
 					<jr:column width="80" uuid="bf8b7975-b628-4be6-ba8c-c217d645b556">
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="80" height="30" uuid="5316853b-a9e4-4dff-b958-17392f946d4b"/>
-								<text><![CDATA[CIT_USUARIOREGISTRA]]></text>
+								<text><![CDATA[USUARIOREGISTRA]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
@@ -212,7 +233,7 @@ WHERE t.med_id = $P{usuid}]]>
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="80" height="30" uuid="4c09986c-17f9-4718-8c92-d02ae2f4c2c2"/>
-								<text><![CDATA[CIT_MOTIVO]]></text>
+								<text><![CDATA[MOTIVO]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
@@ -226,7 +247,7 @@ WHERE t.med_id = $P{usuid}]]>
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="79" height="30" uuid="ec62d4b8-c945-4e09-b6bd-7bff0546acdd"/>
-								<text><![CDATA[CIT_FECHAHORA]]></text>
+								<text><![CDATA[FECHAHORA]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
@@ -240,7 +261,7 @@ WHERE t.med_id = $P{usuid}]]>
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="79" height="30" uuid="8a7cc0e0-137a-40d7-9bca-fa7b5046815c"/>
-								<text><![CDATA[CIT_ESTADO]]></text>
+								<text><![CDATA[ESTADO]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
@@ -254,7 +275,7 @@ WHERE t.med_id = $P{usuid}]]>
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="79" height="30" uuid="926afa42-9e9f-4051-ba74-d36eb950635e"/>
-								<text><![CDATA[PAC_NOMBRE]]></text>
+								<text><![CDATA[NOMBRE]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
@@ -268,7 +289,7 @@ WHERE t.med_id = $P{usuid}]]>
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="79" height="30" uuid="d12ec49a-a97f-4237-992f-411bb96163df"/>
-								<text><![CDATA[PAC_PAPELLIDO]]></text>
+								<text><![CDATA[PAPELLIDO]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
@@ -282,7 +303,7 @@ WHERE t.med_id = $P{usuid}]]>
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="79" height="30" uuid="1b222b49-e49e-40ea-adce-bbbb4ba3562f"/>
-								<text><![CDATA[PAC_CEDULA]]></text>
+								<text><![CDATA[CEDULA]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
