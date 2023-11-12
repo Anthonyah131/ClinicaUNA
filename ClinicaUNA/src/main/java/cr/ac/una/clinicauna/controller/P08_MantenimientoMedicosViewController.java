@@ -13,10 +13,10 @@ import cr.ac.una.clinicauna.util.Formato;
 import cr.ac.una.clinicauna.util.Mensaje;
 import cr.ac.una.clinicauna.util.Respuesta;
 import cr.ac.una.clinicauna.util.SoundUtil;
+import cr.ac.una.clinicauna.util.Utilidades;
 import cr.ac.una.clinicauna.util.ValidarRequeridos;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,11 +31,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
-import javafx.util.StringConverter;
-import javafx.util.converter.TimeStringConverter;
 
 /**
  * FXML Controller class
@@ -86,6 +85,10 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
     private MFXButton btnFiltrar;
     @FXML
     private MFXButton btnAddToAgenda;
+    @FXML
+    private Label lblJornadaT;
+    @FXML
+    private Label lblCantidadCitas;
 
     CliMedicoDto medicoDto;
     CliUsuarioDto usuario;
@@ -118,12 +121,12 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         fillCbox();
 
         nuevoMedico();
-
-//        cargarMedicos();
+        cargarListeners();
     }
 
     @Override
     public void initialize() {
+
     }
 
     @FXML
@@ -217,6 +220,21 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         unbindMedico();
         this.medicoDto = new CliMedicoDto();
         bindMedico();
+    }
+    int[] horas;
+
+    private void calcJornada() {
+        if (tpkHoraInicio.getValue() != null && tpkHoraSalida.getValue() != null) {
+            horas = Utilidades.calcularJornada(tpkHoraInicio.getValue(), tpkHoraSalida.getValue());
+            lblJornadaT.setText(horas[0] + "h " + horas[1] + "m");
+        }
+    }
+
+    private void calcCitasDia() {
+        if (tpkHoraInicio.getValue() != null && tpkHoraSalida.getValue() != null && cboxCantidadCitas.getValue() != null) {
+            int cantCitas = Utilidades.calcularCitasJornada(horas[0], horas[1], cboxCantidadCitas.getValue());
+            lblCantidadCitas.setText(cantCitas + ".");
+        }
     }
 
     private void seleccionarTipoPorCantidad(Integer cantXjora) {
@@ -357,7 +375,31 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         tbvResultados.getColumns().addAll(tbcId, tbcCodigo, tbcFolio, tbcCedula, tbcNombre, tbcApellido);
 
         tbvResultados.refresh();
+    }
 
+    private void cargarListeners() {
+
+        //Listener para el datepicker
+        tpkHoraInicio.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                calcJornada();
+                calcCitasDia();
+            }
+        });
+        //Listener para el datepicker
+        tpkHoraSalida.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                calcJornada();
+                calcCitasDia();
+            }
+        });
+        cboxCantidadCitas.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                calcJornada();
+                calcCitasDia();
+            }
+        });
+        //Listener para la tabla
         tbvResultados.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 unbindMedico();

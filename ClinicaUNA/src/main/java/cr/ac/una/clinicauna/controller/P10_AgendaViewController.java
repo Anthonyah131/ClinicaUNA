@@ -11,6 +11,7 @@ import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Mensaje;
 import cr.ac.una.clinicauna.util.Respuesta;
 import cr.ac.una.clinicauna.util.SoundUtil;
+import cr.ac.una.clinicauna.util.Utilidades;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.time.LocalDate;
@@ -22,10 +23,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.input.DataFormat;
-import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -59,6 +57,10 @@ public class P10_AgendaViewController extends Controller implements Initializabl
     int finJornada;
     int jornada;
     int citasHoras;
+    int minutosIniJornada;
+    int cantCitasTotales;
+    int[] jornadaDoctor;
+    int casillasVacias;
 
     /**
      * Initializes the controller class.
@@ -109,14 +111,23 @@ public class P10_AgendaViewController extends Controller implements Initializabl
             //Variables varias para calculos de espacios en el grid
             iniJornada = medicoDto.getMedFiniTime().getHour();
             finJornada = medicoDto.getMedFfinTime().getHour();
-            jornada = finJornada - iniJornada;
-            citasHoras = Math.toIntExact(medicoDto.getMedEspaciosxhora());
+
+            minutosIniJornada = medicoDto.getMedFiniTime().getMinute();
+            //Obtener la cantidad de horas y minutos que va a trabajar el doctor y asi obtener la jornada
+            jornadaDoctor = Utilidades.calcularJornada(medicoDto.getMedFiniTime(), medicoDto.getMedFfinTime());
+            jornada = jornadaDoctor[0];
+            citasHoras = medicoDto.getMedEspaciosxhora().intValue();
+
+            //obtener el total de citas que puede atender el doctor para inicializar vectores
+            cantCitasTotales = Utilidades.calcularCitasJornada(jornadaDoctor[0], jornadaDoctor[1], citasHoras);
+
             //Establecer tamano vector de citas
-            labelVector = new Label[jornada * citasHoras];
-            citasVector = new CliCitaDto[jornada * citasHoras];
+            labelVector = new Label[cantCitasTotales];
+            citasVector = new CliCitaDto[cantCitasTotales];
 
             //Recorre la lista de citas y las pasa a la matriz
             pasarListaCitasAVector();
+
             // llena el gridpane con labeles
             llenarGridPane();
             comprobarEspaciosCitas();
@@ -212,9 +223,14 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         int numRows = jornada + 1;
         int numCols = citasHoras + 1;
         int horaInicio = iniJornada;
-
+        
+        if(jornadaDoctor[0]>0){
+            numRows++;
+        }
+        
         int citasHorasEncabezado = 60 / citasHoras;
         int contadorLabel = 0;
+        casillasVacias = 0;
 
         grdCitas.getChildren().clear();
 
@@ -239,7 +255,12 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                     horaInicio++;
                     continue;
                 }
-                if (i > 0 && j > 0) {
+                if (i == 1 && citasHorasEncabezado * (j - 1) < minutosIniJornada) {
+                    casillasVacias++;
+                    continue;
+                }
+
+                if (i > 0 && j > 0 && contadorLabel<cantCitasTotales) {
                     Label label = new Label();
 
                     label.setOnMouseClicked(event -> {
@@ -247,7 +268,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                         int rowIndex = GridPane.getRowIndex(label);
                         int colIndex = GridPane.getColumnIndex(label);
 
-                        int posVector = (rowIndex - 1) * citasHoras + colIndex - 1;
+                        int posVector = (rowIndex - 1) * citasHoras + colIndex - 1-casillasVacias;
                         LocalDateTime hora;
                         if (citasVector[posVector] != null) {
                             citaDto = citasVector[posVector];
@@ -317,7 +338,6 @@ public class P10_AgendaViewController extends Controller implements Initializabl
     }
 
     private void crearLabelCita(Label label, String texto, String estadoCita) {
-        //Label label = new Label();
         label.setText("");
         label.setGraphic(null);
         label.setText(texto);
@@ -326,25 +346,6 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         estadoCita(label, estadoCita);
     }
 
-//    private void crearCita(Label label) {
-//
-//        if (citaDto != null) {
-//            label.setText("");
-//            label.setGraphic(null);
-////            String estadoCita = "Estado: " + estadoCita() + "\n";
-////            String nombrePac = "Paciente: " + citaDto.getNombreString() + "\n";
-////            String usuarioRegistra = "Usuario que registra: " + citaDto.getCitUsuarioRegistra() + "\n";
-////            String motivo = (citaDto.getCitMotivo() != null) ? "Motivo: " + citaDto.getCitMotivo() + "\n" : "Motivo: No indica\n";
-////            String telefono = "Telefono: " + citaDto.getCliPacienteDto().getPacTelefono() + "\n";
-////            String correo = "Correo: " + citaDto.getCliPacienteDto().getPacCorreo() + "\n";
-//
-//            label.setPrefSize(290, 130);
-//            label.setPadding(new Insets(5));
-////            estadoCita(label,);
-////            label.setText(estadoCita + nombrePac + usuarioRegistra + motivo + telefono + correo);
-//            label.setText(citaDto.citaLabel());
-//        }
-//    }
     private void estadoCita(Label label, String estadoCita) {
         label.getStyleClass().clear();
         switch (estadoCita) {
@@ -395,7 +396,6 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         int day = fecha.getDayOfMonth();
 
         LocalDateTime fechaHora = LocalDateTime.of(year, month, day, hora, minutos);
-        //System.out.println(fechaHora);
 
         return fechaHora;
     }
@@ -415,6 +415,9 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         medicoDto = medico;
     }
 
+    private void calcularEntradaSalida() {
+
+    }
 //    public void dragAndDrop() {
 //
 //        grdCitas.setOnDragOver(event -> {

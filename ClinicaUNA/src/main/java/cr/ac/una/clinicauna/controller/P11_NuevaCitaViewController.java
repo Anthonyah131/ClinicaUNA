@@ -21,6 +21,9 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,6 +32,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 
@@ -67,6 +71,9 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
     CliMedicoDto medicoDto;
     CliCitaDto citasVector[];
     int posVec;
+    List<Node> requeridos = new ArrayList<>();
+
+    ResourceBundle resourceBundle;
 
     /**
      * Initializes the controller class.
@@ -74,7 +81,9 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        resourceBundle = FlowController.getInstance().getIdioma();
         fillCbox();
+        requeridos.addAll(Arrays.asList( cboxEstadoCita, cboxEspacioHora));
 //        nuevaCita();
     }
 
@@ -86,30 +95,33 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
     @FXML
     private void onActionBtnGuardar(ActionEvent event) {
 
-        int cboxEspacios = cboxEspacioHora.getValue();
-
-        //Si la cita no existe intenta crear una nueva si cumple los espacios
-        if (citasVector[posVec] == null) {
-            if (comprobarEspacios(posVec, 0)) {
-                asignarDatosCita();
-            } else {
-                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "No hay suficientes campos libres");
-            }
-        } // si los espacios del cbox son menores a los que ya tenia la cita se actualiza
-        //        else if (cboxEspacios < citaDto.getCliCantespacios()) {
-        //            asignarDatosCita();
-        //        } 
-        else if (cboxEspacioHora.getValue() > citaDto.getCliCantespacios()) {
-            int inicio = citaDto.getCliCantespacios().intValue();
-            int posAux = posVec + inicio;
-
-            if (comprobarEspacios(posAux, inicio)) {
-                asignarDatosCita();
-            } else {
-                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "No hay suficientes campos libres");
-            }
+        String invalidos = ValidarRequeridos.validarRequeridos(requeridos);
+        if (!invalidos.isEmpty()) {
+            String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), mensaje);
         } else {
-            asignarDatosCita();
+            int cboxEspacios = cboxEspacioHora.getValue();
+
+            //Si la cita no existe intenta crear una nueva si cumple los espacios
+            if (citasVector[posVec] == null) {
+                if (comprobarEspacios(posVec, 0)) {
+                    asignarDatosCita();
+                } else {
+                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "No hay suficientes campos libres");
+                }
+            } // si los espacios del cbox son menores a los que ya tenia la cita se actualiza
+            else if (cboxEspacioHora.getValue() > citaDto.getCliCantespacios()) {
+                int inicio = citaDto.getCliCantespacios().intValue();
+                int posAux = posVec + inicio;
+
+                if (comprobarEspacios(posAux, inicio)) {
+                    asignarDatosCita();
+                } else {
+                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "No hay suficientes campos libres");
+                }
+            } else {
+                asignarDatosCita();
+            }
         }
     }
 
@@ -141,12 +153,6 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
 
     private void guardarCita() {
         try {
-//            String invalidos = ValidarRequeridos.validarRequeridos(requeridos);
-//            if (!invalidos.isEmpty()) {
-//                String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
-//                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), mensaje);
-//            } else {
-
             if (agendaDto.getAgeId() == null || agendaDto.getAgeId() <= 0) {
                 CliAgendaService agendaService = new CliAgendaService();
                 Respuesta respuesta = agendaService.guardarAgenda(agendaDto);
@@ -188,7 +194,6 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
 
                 new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
             }
-//            }
         } catch (Exception ex) {
             Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error guardando el usuario.", ex);
             new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
