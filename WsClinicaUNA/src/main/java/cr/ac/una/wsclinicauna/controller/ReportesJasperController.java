@@ -13,10 +13,13 @@ import jakarta.ejb.EJB;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,14 +47,17 @@ public class ReportesJasperController {
 
     @GET
     @Path("/agendaMedico/{id}/{fechainicial}/{fechafin}")
-    public Response agendaMedico(Long id, LocalDate fechainicial,LocalDate fechafin) {
+    public Response agendaMedico(@PathParam("id") Long id, @PathParam("fechainicial") String fechainicial, @PathParam("fechafin") String fechafin) {
         try {
-            Respuesta res = reportesJasperService.getAngendaReport(id, fechainicial, fechafin);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate fechainicial2 = LocalDate.parse(fechainicial, formatter);
+            LocalDate fechafin2 = LocalDate.parse(fechafin, formatter);
+            Respuesta res = reportesJasperService.getAngendaReport(id, fechainicial2, fechafin2);
             if (!res.getEstado()) {
                 return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
             }
             //Aun no se que devolver
-            
+
             return Response.ok().build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(ReportesJasperController.class.getName()).log(Level.SEVERE, null, ex);
