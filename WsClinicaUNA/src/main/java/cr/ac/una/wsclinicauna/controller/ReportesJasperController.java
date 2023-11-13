@@ -64,5 +64,23 @@ public class ReportesJasperController {
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el reporte").build();
         }
     }
+    
+    
+    @GET
+    @Path("/expedientePaciente/{id}")
+    public Response expedientePaciente(@PathParam("id") Long id) {
+        try {
+            Respuesta res = reportesJasperService.getExpedienteReport(id);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
+            }
+            //Aun no se que devolver
+
+            return Response.ok().build();//TODO
+        } catch (Exception ex) {
+            Logger.getLogger(ReportesJasperController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el reporte").build();
+        }
+    }
 
 }

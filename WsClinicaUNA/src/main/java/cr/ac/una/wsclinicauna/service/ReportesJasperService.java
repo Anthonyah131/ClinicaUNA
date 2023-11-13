@@ -6,6 +6,7 @@ package cr.ac.una.wsclinicauna.service;
 
 import cr.ac.una.wsclinicauna.controller.ReportesJasperController;
 import cr.ac.una.wsclinicauna.model.CliMedico;
+import cr.ac.una.wsclinicauna.model.CliPaciente;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import jakarta.ejb.LocalBean;
@@ -57,6 +58,25 @@ public class ReportesJasperService {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el usuario.", ex);
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorSavingUser", "getAngendaReport " + ex.getMessage());
+        }
+    }
+    
+    public Respuesta getExpedienteReport(Long pacId) {
+        try {
+            Connection co = em.unwrap(Connection.class);
+            CliPaciente cliPaciente = em.find(CliPaciente.class, pacId);
+
+            Map<String, Object> variables = new HashMap<>();
+            variables.put("pacId", pacId);
+
+            JasperReport jr = (JasperReport) JRLoader.loadObject(ReportesJasperController.class.getResource("/cr/ac/una/wsclinicauna/reportes/Report2.jasper"));
+
+            JasperPrint jp = JasperFillManager.fillReport(jr, variables, co);
+            byte[] byteReport = toByteArray(jp);
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Reporte", byteReport);
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el usuario.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorSavingUser", "getExpedienteReport " + ex.getMessage());
         }
     }
 
