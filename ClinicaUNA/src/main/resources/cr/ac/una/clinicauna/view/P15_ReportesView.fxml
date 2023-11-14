@@ -6,77 +6,99 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" styleClass="fondo-reportes" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.clinicauna.controller.P15_ReportesViewController">
    <children>
-      <HBox alignment="CENTER" layoutX="127.0" layoutY="240.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox alignment="CENTER" prefHeight="720.0" prefWidth="94.0" HBox.hgrow="ALWAYS">
+            <HBox VBox.vgrow="ALWAYS">
                <children>
-                  <MFXButton fx:id="btnBuscarMedico" onAction="#onActionBtnBuscarMedico" styleClass="mfx-button-Log" text="%key.btnSearchMedic" />
-                  <HBox alignment="CENTER" prefHeight="58.0">
+                  <MFXButton fx:id="btnSalir" onAction="#onActionBtnSalir" styleClass="mfx-button-Image-salir">
+                     <graphic>
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resources/media/icons/Back_Icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <HBox.margin>
+                        <Insets left="5.0" top="5.0" />
+                     </HBox.margin>
+                  </MFXButton>
+                  <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
                      <children>
-                        <Label styleClass="labels-text-minus" text="%key.lbMedic" />
-                        <Label fx:id="lbMedico" text="........" />
+                        <VBox alignment="CENTER" prefHeight="720.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <MFXButton fx:id="btnBuscarMedico" onAction="#onActionBtnBuscarMedico" styleClass="mfx-button-Log" text="%key.btnSearchMedic" />
+                              <HBox alignment="CENTER" prefHeight="58.0">
+                                 <children>
+                                    <Label styleClass="labels-text-minus" text="%key.lbMedic" />
+                                    <Label fx:id="lbMedico" text="........" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="57.0">
+                                 <children>
+                                    <JFXDatePicker fx:id="fdesde" defaultColor="#0084ff" promptText="%key.fromDay" styleClass="jfx-pickers" />
+                                    <JFXDatePicker fx:id="fhasta" defaultColor="#1f8fff" layoutX="10.0" layoutY="10.0" promptText="%key.toDay" styleClass="jfx-pickers" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="64.0" spacing="20.0">
+                                 <children>
+                                    <MFXButton fx:id="btnLimpiarM" onAction="#OnActionbtnLimpiarM" styleClass="mfx-button-Log" text="%key.btnClean" />
+                                    <MFXButton fx:id="btnAceptarM" onAction="#OnActionbtnAceptarM" styleClass="mfx-button-Log" text="%key.btnAcept" />
+                                 </children>
+                                 <padding>
+                                    <Insets right="5.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <Separator orientation="VERTICAL" prefHeight="200.0" />
+                        <VBox alignment="CENTER" prefHeight="720.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <MFXButton fx:id="btnBuscarPaciente" onAction="#onActionBtnBuscarPaciente" styleClass="mfx-button-Log" text="%key.btnSearchUser" />
+                              <HBox alignment="CENTER" prefHeight="58.0">
+                                 <children>
+                                    <Label styleClass="labels-text-minus" text="%key.lbPatient" />
+                                    <Label fx:id="lbPaciente" text="........" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="64.0" spacing="20.0">
+                                 <children>
+                                    <MFXButton fx:id="btnLimpiarP" onAction="#OnActionbtnLimpiaP" styleClass="mfx-button-Log" text="%key.btnClean" />
+                                    <MFXButton fx:id="btnAceptarP" onAction="#OnActionbtnAceptarP" styleClass="mfx-button-Log" text="%key.btnAcept" />
+                                 </children>
+                                 <padding>
+                                    <Insets right="5.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <Separator orientation="VERTICAL" prefHeight="200.0" />
+                        <VBox alignment="CENTER" prefHeight="720.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <JFXComboBox fx:id="cbxTipoUsuario" promptText="%key.cbxTypeUser" styleClass="jfx-combo-box" />
+                              <HBox alignment="CENTER" prefHeight="64.0" spacing="20.0">
+                                 <children>
+                                    <MFXButton fx:id="btnLimpiarU" onAction="#OnActionbtnLimpiaU" styleClass="mfx-button-Log" text="%key.btnClean" />
+                                    <MFXButton fx:id="btnAceptarU" onAction="#OnActionbtnAceptarU" styleClass="mfx-button-Log" text="%key.btnAcept" />
+                                 </children>
+                                 <padding>
+                                    <Insets right="5.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                        </VBox>
                      </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="57.0">
-                     <children>
-                        <JFXDatePicker fx:id="fdesde" defaultColor="#0084ff" promptText="%key.fromDay" styleClass="jfx-pickers" />
-                        <JFXDatePicker fx:id="fhasta" defaultColor="#1f8fff" layoutX="10.0" layoutY="10.0" promptText="%key.toDay" styleClass="jfx-pickers" />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="64.0" spacing="20.0">
-                     <children>
-                        <MFXButton fx:id="btnLimpiarM" onAction="#OnActionbtnLimpiarM" styleClass="mfx-button-Log" text="%key.btnClean" />
-                        <MFXButton fx:id="btnAceptarM" onAction="#OnActionbtnAceptarM" styleClass="mfx-button-Log" text="%key.btnAcept" />
-                     </children>
-                     <padding>
-                        <Insets right="5.0" />
-                     </padding>
                   </HBox>
                </children>
-            </VBox>
-            <Separator orientation="VERTICAL" prefHeight="200.0" />
-            <VBox alignment="CENTER" prefHeight="720.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
-               <children>
-                  <MFXButton fx:id="btnBuscarPaciente" onAction="#onActionBtnBuscarPaciente" styleClass="mfx-button-Log" text="%key.btnSearchUser" />
-                  <HBox alignment="CENTER" prefHeight="58.0">
-                     <children>
-                        <Label styleClass="labels-text-minus" text="%key.lbPatient" />
-                        <Label fx:id="lbPaciente" text="........" />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="64.0" spacing="20.0">
-                     <children>
-                        <MFXButton fx:id="btnLimpiarP" onAction="#OnActionbtnLimpiaP" styleClass="mfx-button-Log" text="%key.btnClean" />
-                        <MFXButton fx:id="btnAceptarP" onAction="#OnActionbtnAceptarP" styleClass="mfx-button-Log" text="%key.btnAcept" />
-                     </children>
-                     <padding>
-                        <Insets right="5.0" />
-                     </padding>
-                  </HBox>
-               </children>
-            </VBox>
-            <Separator orientation="VERTICAL" prefHeight="200.0" />
-            <VBox alignment="CENTER" prefHeight="720.0" HBox.hgrow="ALWAYS">
-               <children>
-                  <JFXComboBox fx:id="cbxTipoUsuario" promptText="%key.cbxTypeUser" styleClass="jfx-combo-box" />
-                  <HBox alignment="CENTER" prefHeight="64.0" spacing="20.0">
-                     <children>
-                        <MFXButton fx:id="btnLimpiarU" onAction="#OnActionbtnLimpiaU" styleClass="mfx-button-Log" text="%key.btnClean" />
-                        <MFXButton fx:id="btnAceptarU" onAction="#OnActionbtnAceptarU" styleClass="mfx-button-Log" text="%key.btnAcept" />
-                     </children>
-                     <padding>
-                        <Insets right="5.0" />
-                     </padding>
-                  </HBox>
-               </children>
-            </VBox>
+            </HBox>
          </children>
-      </HBox>
+      </VBox>
    </children>
 </AnchorPane>

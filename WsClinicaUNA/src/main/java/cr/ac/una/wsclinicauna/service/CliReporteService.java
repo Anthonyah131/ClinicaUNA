@@ -26,9 +26,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -56,40 +54,32 @@ public class CliReporteService {
 
     public Respuesta generarInformeExcelDesdeConsultaSQL(CliReporteDto cliReporteDto) {
         try {
-            // Tu consulta SQL
 //            String consulta = "SELECT u.usu_nombre, u.usu_papellido, u.usu_cedula FROM CLI_USUARIO u WHERE u.usu_nombre LIKE {nombre}";
-            String consulta = cliReporteDto.getRepConsulta();
+            String consulta = cliReporteDto.getRepConsulta(); // Conulta SQL
 
-            // Recorrer el mapa de parámetros y reemplazar en la consulta
-            for (CliParametroconsultaDto para : cliReporteDto.getCliParametroconsultaList()) {
+            for (CliParametroconsultaDto para : cliReporteDto.getCliParametroconsultaList()) { // Remplazo parametros
                 String parametro = para.getParcParametro();
                 String valor = para.getParcValor();
 
-                // Utilizar una expresión regular para encontrar todos los textos dentro de {}
-                Pattern pattern = Pattern.compile("\\{" + parametro +"\\}");
+                Pattern pattern = Pattern.compile("\\{" + parametro + "\\}");
                 Matcher matcher = pattern.matcher(consulta);
 
-                // Reemplazar todos los textos encontrados con el valor de reemplazo
                 consulta = matcher.replaceAll(Matcher.quoteReplacement(valor));
             }
 
             Connection co = em.unwrap(Connection.class); // Coneccion
 
-            // Ejecutar la consulta SQL y obtener los resultados
             Statement statement = co.createStatement();
-            ResultSet resultSet = statement.executeQuery(consulta);
+            ResultSet resultSet = statement.executeQuery(consulta); // Ejecuta la consulta
 
-            // Crear un nuevo libro de Excel
-            Workbook workbook = new XSSFWorkbook(); // Utiliza XSSFWorkbook para formato .xlsx
+            Workbook workbook = new XSSFWorkbook();
 
-            // Crear una hoja en el libro
             Sheet sheet = workbook.createSheet("Informe");
 
             ResultSetMetaData metaData = resultSet.getMetaData();
             int numColumns = metaData.getColumnCount();
 
-            // Establecer el título
-            String titulo = cliReporteDto.getRepTitulo();
+            String titulo = cliReporteDto.getRepTitulo(); // Titulo informe
             Font titleFont = workbook.createFont();
             titleFont.setFontHeightInPoints((short) 14);
             titleFont.setBold(true);
@@ -100,37 +90,54 @@ public class CliReporteService {
             titleCell.setCellValue(titulo);
             titleCell.setCellStyle(titleCellStyle);
 
-            // Fusionar celdas para el título
             sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, numColumns - 1));
 
-            // Crear una fila para encabezados y ajustar el ancho de las celdas
-            Row headerRow = sheet.createRow(1); // Ahora los encabezados empiezan en la fila 1
+            int numParametros = cliReporteDto.getCliParametroconsultaList().size();
+
+            Row parameterRow = sheet.createRow(2);
+
+            Cell parameterHeaderCell = parameterRow.createCell(0);
+            parameterHeaderCell.setCellValue("Parámetros"); // Titulo parametros
+
+            sheet.addMergedRegion(new CellRangeAddress(1, 1, 0, 1));
+
+            for (int i = 0; i < numParametros; i++) { // Parametros
+                CliParametroconsultaDto parametro = cliReporteDto.getCliParametroconsultaList().get(i);
+                Row currentRow = sheet.createRow(i + 3);
+                Cell paramNameCell = currentRow.createCell(0);
+                paramNameCell.setCellValue(parametro.getParcParametro());
+
+                Cell paramValueCell = currentRow.createCell(1);
+                paramValueCell.setCellValue(parametro.getParcValor());
+
+                sheet.autoSizeColumn(0);
+                sheet.autoSizeColumn(1);
+            }
+
+            Row headerRow = sheet.createRow(4 + numParametros); // Titulos Valores
             for (int i = 1; i <= numColumns; i++) {
                 String columnName = metaData.getColumnName(i);
                 Cell cell = headerRow.createCell(i - 1);
                 cell.setCellValue(columnName);
-                sheet.autoSizeColumn(i - 1); // Ajustar el ancho de la columna automáticamente
+                sheet.autoSizeColumn(i - 1);
             }
 
-            // Llenar el libro de Excel con los datos de la consulta y ajustar el ancho de las celdas
-            int rowNum = 2; // Empieza desde la fila 2 para los datos
-            while (resultSet.next()) {
+            int rowNum = 5 + numParametros;
+            while (resultSet.next()) { // Valores
                 Row dataRow = sheet.createRow(rowNum);
                 for (int i = 1; i <= numColumns; i++) {
                     Cell cell = dataRow.createCell(i - 1);
                     cell.setCellValue(resultSet.getString(i));
-                    sheet.autoSizeColumn(i - 1); // Ajustar el ancho de la columna automáticamente
+                    sheet.autoSizeColumn(i - 1);
                 }
                 rowNum++;
             }
 
-            // Crear un flujo de salida para el libro de Excel
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             workbook.write(outputStream);
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "ReporteExcel", outputStream.toByteArray());
         } catch (Exception e) {
             Logger.getLogger(CliReporteService.class.getName()).log(Level.SEVERE, null, e);
-            // Tratar el error y devolver una respuesta adecuada al cliente
             return null;
         }
     }

@@ -68,16 +68,30 @@ public class EnvioCorreo {
             CliParametrosDto cliParametrosDto = cliParametrosDtoList.get(0);
 
             for (CliReporteDto reporteDto : cliReporteDtos) {
-                // Obtener el día actual
+                /*LocalDate fechaActual = LocalDate.now();
+                LocalDate fechaInicioReporte = reporteDto.getRepFinicio();
+                LocalDate fechaSiguienteReporte = reporteDto.getRepFsiguiente();
+
+                if (fechaInicioReporte.isEqual(fechaActual)) {
+                    reporteEmail(reporteDto, cliParametrosDto);
+                
+                    long diasDiferencia = ChronoUnit.DAYS.between(fechaInicioReporte, fechaSiguienteReporte);
+
+                    // Actualizar la fecha de inicio con la fecha siguiente
+                    reporteDto.setRepFinicio(fechaSiguienteReporte);
+
+                    // Sumar la diferencia de días a la fecha siguiente
+                    reporteDto.setRepFsiguiente(fechaSiguienteReporte.plusDays(diasDiferencia));
+                
+                    cliReporteService.guardarReporte(reporteDto);
+                }*/
+
                 LocalDate fechaActual = LocalDate.now();
 
-                // Convertir el día devuelto a mayúsculas para asegurar la comparación
-                String diaReporte = reporteDto.getRepPeriodicidad().toLowerCase(); // Suponiendo que reporteDto.getRepPeriodicidad() devuelve el día en mayúsculas
+                String diaReporte = reporteDto.getRepPeriodicidad().toLowerCase();
 
-                // Mapear el nombre del día a un valor de DayOfWeek
                 String diaActual = getSpanishDayOfWeek(fechaActual);
 
-                // Comparar si el día actual es igual al día devuelto
                 if (diaActual.toLowerCase().equalsIgnoreCase(diaReporte)) {
                     reporteEmail(reporteDto, cliParametrosDto);
                 }

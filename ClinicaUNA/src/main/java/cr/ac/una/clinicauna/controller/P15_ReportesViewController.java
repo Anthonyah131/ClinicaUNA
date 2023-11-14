@@ -5,6 +5,7 @@
 package cr.ac.una.clinicauna.controller;
 
 import com.jfoenix.controls.JFXDatePicker;
+import cr.ac.una.clinicauna.util.FlowController;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -47,6 +48,8 @@ public class P15_ReportesViewController extends Controller implements Initializa
     private MFXButton btnAceptarU;
     @FXML
     private ComboBox<?> cbxTipoUsuario;
+    @FXML
+    private MFXButton btnSalir;
 
     /**
      * Initializes the controller class.
@@ -84,13 +87,17 @@ public class P15_ReportesViewController extends Controller implements Initializa
     private void OnActionbtnAceptarP(ActionEvent event) {
     }
 
-
     @FXML
     private void OnActionbtnLimpiaU(ActionEvent event) {
     }
 
     @FXML
     private void OnActionbtnAceptarU(ActionEvent event) {
+    }
+
+    @FXML
+    private void onActionBtnSalir(ActionEvent event) {
+        FlowController.getInstance().goView("P06_MenuPrincipalView");
     }
     
 }

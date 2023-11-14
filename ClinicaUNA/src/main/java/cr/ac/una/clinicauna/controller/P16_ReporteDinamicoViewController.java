@@ -4,6 +4,8 @@
  */
 package cr.ac.una.clinicauna.controller;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
@@ -21,6 +23,7 @@ import cr.ac.una.clinicauna.util.Respuesta;
 import cr.ac.una.clinicauna.util.ValidarRequeridos;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -65,9 +68,9 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
     @FXML
     private HBox hbxCorreos;
     @FXML
-    private JFXTextField txfDia;
+    private JFXDatePicker dpDiaInicia;
     @FXML
-    private JFXDatePicker dpDiaFinaliza;
+    private JFXDatePicker dpDiaSiguiente;
     @FXML
     private MFXButton btnLimpiar;
     @FXML
@@ -99,6 +102,14 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
     List<Node> requeridosParametro = new ArrayList<>();
 
     ResourceBundle resourceBundle;
+    @FXML
+    private JFXButton btnSql;
+    @FXML
+    private JFXButton btnParameter;
+    @FXML
+    private JFXButton btnSqlValue;
+    @FXML
+    private MFXButton btnSalir;
 
     /**
      * Initializes the controller class.
@@ -109,7 +120,6 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
         txfTitulo.setTextFormatter(Formato.getInstance().maxLengthFormat(50));
         txaDescripcion.setTextFormatter(Formato.getInstance().maxLengthFormat(150));
         txaConsulta.setTextFormatter(Formato.getInstance().maxLengthFormat(500));
-        txfDia.setTextFormatter(Formato.getInstance().letrasFormat(30));
 
         txfParametro.setTextFormatter(Formato.getInstance().maxLengthFormat(50));
         txfValor.setTextFormatter(Formato.getInstance().maxLengthFormat(30));
@@ -136,7 +146,7 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
         FlowController.getInstance().goViewInWindowModal("P03_RegistroBuscadorView", stage, Boolean.FALSE);
     }
 
-    @FXML // Poner idioma
+    @FXML
     private void onActionBtnAgregar(ActionEvent event) {
         ObservableList<CliParametroconsultaDto> parametros = tbvParametros.getItems();
         if (tbvParametros.getItems() == null || !parametros.stream().anyMatch(e -> e.getParcParametro().equals(this.parametroDto.getParcParametro()))) {
@@ -146,19 +156,28 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
                     String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
                     new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), mensaje);
                 } else {
-                    CliParametroconsultaService parametroService = new CliParametroconsultaService();
-                    Respuesta respuesta = parametroService.guardarParametroconsulta(this.parametroDto);
-                    if (!respuesta.getEstado()) {
-                        new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), respuesta.getMensaje());
+                    LocalDate fechaActual = LocalDate.now();
+                    if (dpDiaInicia.getValue() == null || dpDiaInicia.getValue().isBefore(fechaActual)) {
+                        new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), "key.errorDateStart");
                     } else {
-                        unbindParametro();
-                        this.parametroDto = (CliParametroconsultaDto) respuesta.getResultado("Parametroconsulta");
-                        this.parametroDto.setModificado(true);
-                        reporteDto.getCliParametroconsultaList().add(this.parametroDto);
-                        onActionBtnGuardar(event);
-                        this.parametroDto = new CliParametroconsultaDto();
-                        bindParametro();
-                        new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveParameterR", getStage(), "key.updatedParameterR");
+                        if (dpDiaSiguiente.getValue() == null || dpDiaSiguiente.getValue().isBefore(dpDiaInicia.getValue())) {
+                            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), "key.errorDateNext");
+                        } else {
+                            CliParametroconsultaService parametroService = new CliParametroconsultaService();
+                            Respuesta respuesta = parametroService.guardarParametroconsulta(this.parametroDto);
+                            if (!respuesta.getEstado()) {
+                                new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), respuesta.getMensaje());
+                            } else {
+                                unbindParametro();
+                                this.parametroDto = (CliParametroconsultaDto) respuesta.getResultado("Parametroconsulta");
+                                this.parametroDto.setModificado(true);
+                                reporteDto.getCliParametroconsultaList().add(this.parametroDto);
+                                onActionBtnGuardar(event);
+                                this.parametroDto = new CliParametroconsultaDto();
+                                bindParametro();
+                                new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveParameterR", getStage(), "key.updatedParameterR");
+                            }
+                        }
                     }
                 }
             } catch (Exception ex) {
@@ -316,7 +335,7 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
 
     private void indicarRequeridos() {
         requeridos.clear();
-        requeridos.addAll(Arrays.asList(txaConsulta, txfTitulo, txfDia));
+        requeridos.addAll(Arrays.asList(txaConsulta, txfTitulo));
     }
 
     private void bindReporte() {
@@ -324,8 +343,8 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
         txfTitulo.textProperty().bindBidirectional(this.reporteDto.repTitulo);
         txaDescripcion.textProperty().bindBidirectional(this.reporteDto.repDescripcion);
         txaConsulta.textProperty().bindBidirectional(this.reporteDto.repConsulta);
-        txfDia.textProperty().bindBidirectional(this.reporteDto.repPeriodicidad);
-        dpDiaFinaliza.valueProperty().bindBidirectional(this.reporteDto.repFfin);
+        dpDiaInicia.valueProperty().bindBidirectional(this.reporteDto.repFfin);
+//        dpDiaSiguiente.valueProperty().bindBidirectional(this.reporteDto.repFsiguiente);
         if (this.reporteDto.getRepId() == null || this.reporteDto.getRepId() <= 0) {
             hbxCorreoView.setDisable(true);
             hbxParametroView.setDisable(true);
@@ -340,8 +359,8 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
         txfTitulo.textProperty().unbindBidirectional(this.reporteDto.repTitulo);
         txaDescripcion.textProperty().unbindBidirectional(this.reporteDto.repDescripcion);
         txaConsulta.textProperty().unbindBidirectional(this.reporteDto.repConsulta);
-        txfDia.textProperty().unbindBidirectional(this.reporteDto.repPeriodicidad);
-        dpDiaFinaliza.valueProperty().unbindBidirectional(this.reporteDto.repFfin);
+        dpDiaInicia.valueProperty().unbindBidirectional(this.reporteDto.repFfin);
+//        dpDiaSiguiente.valueProperty().unbindBidirectional(this.reporteDto.repFsiguiente);
     }
 
     private void nuevoParametro() {
@@ -415,19 +434,19 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
                     String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
                     new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveEmailR", getStage(), mensaje);
                 } else {
-                CliCorreodestinoService correoService = new CliCorreodestinoService();
-                Respuesta respuesta = correoService.guardarCorreodestino(this.correoDto);
-                if (!respuesta.getEstado()) {
-                    new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveEmailR", getStage(), respuesta.getMensaje());
-                } else {
-                    this.correoDto = (CliCorreodestinoDto) respuesta.getResultado("Correodestino");
-                    this.correoDto.setModificado(true);
-                    reporteDto.getCliCorreodestinoList().add(this.correoDto);
-                    ActionEvent event = new ActionEvent();
-                    onActionBtnGuardar(event);
-                    this.correoDto = new CliCorreodestinoDto();
-                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveEmailR", getStage(), "key.updatedEmailR");
-                }
+                    CliCorreodestinoService correoService = new CliCorreodestinoService();
+                    Respuesta respuesta = correoService.guardarCorreodestino(this.correoDto);
+                    if (!respuesta.getEstado()) {
+                        new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveEmailR", getStage(), respuesta.getMensaje());
+                    } else {
+                        this.correoDto = (CliCorreodestinoDto) respuesta.getResultado("Correodestino");
+                        this.correoDto.setModificado(true);
+                        reporteDto.getCliCorreodestinoList().add(this.correoDto);
+                        ActionEvent event = new ActionEvent();
+                        onActionBtnGuardar(event);
+                        this.correoDto = new CliCorreodestinoDto();
+                        new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveEmailR", getStage(), "key.updatedEmailR");
+                    }
                 }
             } catch (Exception ex) {
                 Logger.getLogger(P16_ReporteDinamicoViewController.class.getName()).log(Level.SEVERE, "Error guardando el parametro.", ex);
@@ -435,6 +454,26 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
             }
         }
 
+    }
+    
+    @FXML
+    private void onActionBtnSql(ActionEvent event) {
+        new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.consultSql", getStage(), "key.lbQueryR");
+    }
+
+    @FXML
+    private void onActionBtnParameter(ActionEvent event) {
+        new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.parameterR", getStage(), "key.lbParameterR");
+    }
+
+    @FXML
+    private void onActionBtnValue(ActionEvent event) {
+        new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.valorR", getStage(), "key.lbValoryR");
+    }
+
+    @FXML
+    private void onActionBtnSalir(ActionEvent event) {
+        FlowController.getInstance().goView("P06_MenuPrincipalView");
     }
 
     private class ButtonCell extends TableCell<CliParametroconsultaDto, Boolean> {

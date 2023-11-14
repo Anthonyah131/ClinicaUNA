@@ -58,7 +58,6 @@ public class CliReporteController {
                 fos.write(excelData);
             } catch (IOException e) {
                 e.printStackTrace();
-                // Trata cualquier error de escritura del archivo
             }
             return Response.ok().build();
         } catch (Exception ex) {
