@@ -6,6 +6,7 @@ import cr.ac.una.clinicauna.model.CliCitaDto;
 import cr.ac.una.clinicauna.model.CliMedicoDto;
 import cr.ac.una.clinicauna.model.CliUsuarioDto;
 import cr.ac.una.clinicauna.service.CliAgendaService;
+import cr.ac.una.clinicauna.service.CliCitaService;
 import cr.ac.una.clinicauna.util.AppContext;
 import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Mensaje;
@@ -21,6 +22,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -29,6 +32,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
@@ -86,6 +92,12 @@ public class P10_AgendaViewController extends Controller implements Initializabl
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         iniciarVariables();
+        grdCitas.setOnDragOver(event -> {
+            if (event.getGestureSource() != grdCitas && event.getDragboard().hasString()) {
+                event.acceptTransferModes(TransferMode.MOVE);
+            }
+            event.consume();
+        });
     }
 
     @Override
@@ -343,6 +355,76 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                         System.out.println("Fila: " + rowIndex + " columna " + colIndex);
 
                     });
+                    label.setOnDragDetected(event -> {
+                        /* Inicia la operación de drag */
+                        Dragboard db = label.startDragAndDrop(TransferMode.MOVE);
+                        ClipboardContent content = new ClipboardContent();
+                        content.putString(label.getText());  // Puedes ajustar la información que deseas transferir
+                        db.setContent(content);
+                        int colIndex = GridPane.getColumnIndex(label);
+                        int rowIndex = GridPane.getRowIndex(label);
+                        posDragDrop = (rowIndex - 1) * citasHoras + colIndex - 1 - casillasVacias;
+                        LocalDateTime hora;
+                        if (citasVector[posDragDrop] != null) {
+                            citaDto = citasVector[posDragDrop];
+                            hora = citaDto.getCitFechaHora();
+                            posDragDrop = citaAPosVector(hora);
+                            citaDto = citasVector[posDragDrop];
+                        }
+
+                        System.out.println("Inicio" + rowIndex + " - " + colIndex);
+                        event.consume();
+                    });
+                    label.setOnDragOver(event -> {
+                        if (event.getGestureSource() != label && event.getDragboard().hasString()) {
+                            /* Acepta el contenido solo si el destino es otra celda del GridPane */
+                            event.acceptTransferModes(TransferMode.MOVE);
+                        }
+                        event.consume();
+                    });
+                    label.setOnDragDropped(event -> {
+                        Dragboard db = event.getDragboard();
+                        boolean success = false;
+
+                        if (db.hasString()) {
+                            /* Obtiene la posición de la celda en la que se soltó el Label */
+                            int colIndex = GridPane.getColumnIndex(label);
+                            int rowIndex = GridPane.getRowIndex(label);
+
+                            int posAux = posDragDrop;
+
+                            posDragDrop = (rowIndex - 1) * citasHoras + colIndex - 1 - casillasVacias;
+
+                            if (citaDto.getCliCantespacios() > 1) {
+                                if (comprobarEspacios(posDragDrop, citaDto.getCliCantespacios().intValue())) {
+                                    citasVector[posAux] = null;
+                                    citaDto.setCitFechaHora(calcularHora(rowIndex, colIndex));
+                                    citasVector[posDragDrop] = citaDto;
+                                    actualizarCita(citaDto);
+                                } else {
+                                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "No hay suficientes campos libres");
+                                }
+                            } else {
+                                citasVector[posAux] = null;
+                                citaDto.setCitFechaHora(calcularHora(rowIndex, colIndex));
+                                citasVector[posDragDrop] = citaDto;
+                                actualizarCita(citaDto);
+                            }
+
+                            pasarListaCitasAVector();
+                            comprobarEspaciosCitas();
+                            crearCita();
+
+                            System.out.println("Fin" + rowIndex + " - " + colIndex);
+
+                            /* Puedes realizar acciones adicionales aquí, como intercambiar información entre celdas */
+                            success = true;
+                        }
+
+                        event.setDropCompleted(success);
+                        event.consume();
+                    });
+
                     labelVector[contadorLabel] = label;
                     contadorLabel++;
                     grdCitas.add(label, j, i);
@@ -351,6 +433,35 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         }
         grdCitas.setGridLinesVisible(true);
     }
+
+    private void actualizarCita(CliCitaDto cita) {
+        try {
+            CliCitaService citaService = new CliCitaService();
+            Respuesta respuesta = citaService.guardarCita(cita);
+
+            if (!respuesta.getEstado()) {
+                new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error guardando el usuario.", ex);
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
+        }
+    }
+
+    private Boolean comprobarEspacios(int posV, int tamano) {
+        int indiceVector = posV;
+        for (int i = 0; i < tamano; i++) {
+            if (indiceVector == citasVector.length) {
+                return false;
+            }
+            if (citasVector[indiceVector] != null) {
+                return false;
+            }
+            indiceVector++;
+        }
+        return true;
+    }
+    int posDragDrop;
 
     private void crearCita() {
         try {

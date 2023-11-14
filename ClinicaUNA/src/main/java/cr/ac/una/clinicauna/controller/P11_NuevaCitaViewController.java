@@ -172,7 +172,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
                     pacienteService.guardarPaciente(pacienteDto);
                 }
 
-                if (citaDto.getCliPacienteDto() == null) {
+                if (citaDto.getCliPacienteDto() == null) {///preguntar
                     CliAgendaService agendaService = new CliAgendaService();
                     citaDto.setModificado(true);
                     agendaDto.getCliCitaList().add(citaDto);
