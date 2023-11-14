@@ -356,19 +356,18 @@ public class P10_AgendaViewController extends Controller implements Initializabl
 
                     });
                     label.setOnDragDetected(event -> {
-                        /* Inicia la operación de drag */
                         Dragboard db = label.startDragAndDrop(TransferMode.MOVE);
                         ClipboardContent content = new ClipboardContent();
-                        content.putString(label.getText());  // Puedes ajustar la información que deseas transferir
+                        content.putString(label.getText());
                         db.setContent(content);
+
                         int colIndex = GridPane.getColumnIndex(label);
                         int rowIndex = GridPane.getRowIndex(label);
                         posDragDrop = (rowIndex - 1) * citasHoras + colIndex - 1 - casillasVacias;
-                        LocalDateTime hora;
+
                         if (citasVector[posDragDrop] != null) {
                             citaDto = citasVector[posDragDrop];
-                            hora = citaDto.getCitFechaHora();
-                            posDragDrop = citaAPosVector(hora);
+                            posDragDrop = citaAPosVector(citaDto.getCitFechaHora());
                             citaDto = citasVector[posDragDrop];
                         }
 
@@ -377,7 +376,6 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                     });
                     label.setOnDragOver(event -> {
                         if (event.getGestureSource() != label && event.getDragboard().hasString()) {
-                            /* Acepta el contenido solo si el destino es otra celda del GridPane */
                             event.acceptTransferModes(TransferMode.MOVE);
                         }
                         event.consume();
@@ -387,7 +385,6 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                         boolean success = false;
 
                         if (db.hasString()) {
-                            /* Obtiene la posición de la celda en la que se soltó el Label */
                             int colIndex = GridPane.getColumnIndex(label);
                             int rowIndex = GridPane.getRowIndex(label);
 
@@ -417,7 +414,6 @@ public class P10_AgendaViewController extends Controller implements Initializabl
 
                             System.out.println("Fin" + rowIndex + " - " + colIndex);
 
-                            /* Puedes realizar acciones adicionales aquí, como intercambiar información entre celdas */
                             success = true;
                         }
 
