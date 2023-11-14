@@ -141,7 +141,7 @@ WHERE t.med_id = $P{usuid}]]>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="90" splitType="Stretch">
+		<band height="531" splitType="Stretch">
 			<rectangle>
 				<reportElement mode="Opaque" x="0" y="0" width="555" height="87" forecolor="#911210" backcolor="#BF979A" uuid="a2032deb-d27e-4f7d-bb35-71df5f3b7319"/>
 			</rectangle>
@@ -168,33 +168,22 @@ WHERE t.med_id = $P{usuid}]]>
 				</textElement>
 				<textFieldExpression><![CDATA["Reporte del: "+ new String($P{fechainicial}.toString())+", hasta el  "+new  String($P{fechafin}.toString())]]></textFieldExpression>
 			</textField>
-		</band>
-	</title>
-	<pageHeader>
-		<band height="46" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="227" height="46" uuid="2ab02770-a49d-45ee-a78d-3c859acc496a"/>
-				<textElement>
-					<font size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["ID del medico: "+new String($F{MED_ID}.toString())]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="310" y="0" width="245" height="46" uuid="9d8bdb8b-2397-4b3b-9697-e723f35886aa"/>
+				<reportElement x="310" y="87" width="245" height="46" uuid="9d8bdb8b-2397-4b3b-9697-e723f35886aa"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Codigo del medico: "+new String($F{MED_CODIGO})]]></textFieldExpression>
 			</textField>
-		</band>
-	</pageHeader>
-	<columnHeader>
-		<band height="61" splitType="Stretch"/>
-	</columnHeader>
-	<detail>
-		<band height="378" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="87" width="227" height="46" uuid="2ab02770-a49d-45ee-a78d-3c859acc496a"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ID del medico: "+new String($F{MED_ID}.toString())]]></textFieldExpression>
+			</textField>
 			<componentElement>
-				<reportElement x="0" y="0" width="555" height="378" uuid="a36eaad4-1ae6-4e8f-bc25-516d0b37ea71">
+				<reportElement x="0" y="153" width="555" height="378" uuid="a36eaad4-1ae6-4e8f-bc25-516d0b37ea71">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
@@ -219,12 +208,18 @@ WHERE t.med_id = $P{usuid}]]>
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="80" height="30" uuid="5316853b-a9e4-4dff-b958-17392f946d4b"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
 								<text><![CDATA[USUARIOREGISTRA]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="80" height="30" uuid="0e070ed8-5269-4f59-8300-fc4be43283f6"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
 								<textFieldExpression><![CDATA[$F{CIT_USUARIOREGISTRA}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
@@ -233,12 +228,18 @@ WHERE t.med_id = $P{usuid}]]>
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="80" height="30" uuid="4c09986c-17f9-4718-8c92-d02ae2f4c2c2"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
 								<text><![CDATA[MOTIVO]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="80" height="30" uuid="85b0c233-2873-4021-b750-0787a4eb48e5"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
 								<textFieldExpression><![CDATA[$F{CIT_MOTIVO}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
@@ -247,12 +248,18 @@ WHERE t.med_id = $P{usuid}]]>
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="79" height="30" uuid="ec62d4b8-c945-4e09-b6bd-7bff0546acdd"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
 								<text><![CDATA[FECHAHORA]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="79" height="30" uuid="841ec971-32cf-408e-ab90-cf34ab05fec6"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
 								<textFieldExpression><![CDATA[$F{CIT_FECHAHORA}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
@@ -261,12 +268,18 @@ WHERE t.med_id = $P{usuid}]]>
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="79" height="30" uuid="8a7cc0e0-137a-40d7-9bca-fa7b5046815c"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
 								<text><![CDATA[ESTADO]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="79" height="30" uuid="bbdd4cc8-bf41-46d1-96d6-b72c6c8f3022"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
 								<textFieldExpression><![CDATA[$F{CIT_ESTADO}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
@@ -275,12 +288,18 @@ WHERE t.med_id = $P{usuid}]]>
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="79" height="30" uuid="926afa42-9e9f-4051-ba74-d36eb950635e"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
 								<text><![CDATA[NOMBRE]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="79" height="30" uuid="2a19d7f2-995f-422c-9c99-06a3aabcb163"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
 								<textFieldExpression><![CDATA[$F{PAC_NOMBRE}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
@@ -289,12 +308,18 @@ WHERE t.med_id = $P{usuid}]]>
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="79" height="30" uuid="d12ec49a-a97f-4237-992f-411bb96163df"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
 								<text><![CDATA[PAPELLIDO]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="79" height="30" uuid="aaa189e3-fd3b-47ec-bb23-dc6eccd14dfb"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
 								<textFieldExpression><![CDATA[$F{PAC_PAPELLIDO}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
@@ -303,12 +328,18 @@ WHERE t.med_id = $P{usuid}]]>
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
 								<reportElement x="0" y="0" width="79" height="30" uuid="1b222b49-e49e-40ea-adce-bbbb4ba3562f"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
 								<text><![CDATA[CEDULA]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
 								<reportElement x="0" y="0" width="79" height="30" uuid="ab40d1a1-c3c9-4951-b305-4bedeae6e2fa"/>
+								<textElement textAlignment="Center">
+									<font isBold="true"/>
+								</textElement>
 								<textFieldExpression><![CDATA[$F{PAC_CEDULA}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
@@ -316,10 +347,10 @@ WHERE t.med_id = $P{usuid}]]>
 				</jr:table>
 			</componentElement>
 		</band>
+	</title>
+	<detail>
+		<band height="71" splitType="Stretch"/>
 	</detail>
-	<columnFooter>
-		<band height="45" splitType="Stretch"/>
-	</columnFooter>
 	<pageFooter>
 		<band height="64" splitType="Stretch">
 			<textField>
@@ -336,7 +367,4 @@ WHERE t.med_id = $P{usuid}]]>
 			</staticText>
 		</band>
 	</pageFooter>
-	<summary>
-		<band height="42" splitType="Stretch"/>
-	</summary>
 </jasperReport>
