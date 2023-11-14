@@ -16,6 +16,8 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -27,6 +29,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
 /**
@@ -44,6 +47,18 @@ public class P10_AgendaViewController extends Controller implements Initializabl
     private GridPane grdCitas;
     @FXML
     private MFXButton btnSalir;
+    @FXML
+    private Label lblTotalCitas;
+    @FXML
+    private Label lblJornada;
+    @FXML
+    private Label lblCitasLibres;
+    @FXML
+    private Label lblCitasProgramadas;
+    @FXML
+    private Label lblHoraEntrada;
+    @FXML
+    private Label lblHoraSalida;
 
     CliUsuarioDto usuarioDto;
     CliMedicoDto medicoDto;
@@ -61,6 +76,8 @@ public class P10_AgendaViewController extends Controller implements Initializabl
     int cantCitasTotales;
     int[] jornadaDoctor;
     int casillasVacias;
+    @FXML
+    private AnchorPane root;
 
     /**
      * Initializes the controller class.
@@ -109,27 +126,47 @@ public class P10_AgendaViewController extends Controller implements Initializabl
             //Recupera la agenda si la hay desde base y la lista de citas
             cargarAgenda();
             //Variables varias para calculos de espacios en el grid
-            iniJornada = medicoDto.getMedFiniTime().getHour();
-            finJornada = medicoDto.getMedFfinTime().getHour();
+            LocalTime horaEntradaTime = medicoDto.getMedFiniTime();
+            LocalTime horaSalidaTime = medicoDto.getMedFfinTime();
 
-            minutosIniJornada = medicoDto.getMedFiniTime().getMinute();
+            if (agendaDto.getAgeFecha().isBefore(LocalDate.now())) {
+//                horaEntradaTime = agendaDto.getAgeIniTime();
+//                horaSalidaTime = agendaDto.getAgeFinTime();
+            } else {
+                horaEntradaTime = medicoDto.getMedFiniTime();
+                horaSalidaTime = medicoDto.getMedFfinTime();
+            }
+
+            iniJornada = horaEntradaTime.getHour();
+            finJornada = horaSalidaTime.getHour();
+            minutosIniJornada = horaEntradaTime.getMinute();
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
+
+            String horaEntrada = horaEntradaTime.format(formatter);
+            String horaSalida = horaSalidaTime.format(formatter);
+
+            lblHoraEntrada.setText(horaEntrada);
+            lblHoraSalida.setText(horaSalida);
+
             //Obtener la cantidad de horas y minutos que va a trabajar el doctor y asi obtener la jornada
             jornadaDoctor = Utilidades.calcularJornada(medicoDto.getMedFiniTime(), medicoDto.getMedFfinTime());
             jornada = jornadaDoctor[0];
             citasHoras = medicoDto.getMedEspaciosxhora().intValue();
+            lblJornada.setText(jornadaDoctor[0] + "h " + jornadaDoctor[1] + "m");
 
             //obtener el total de citas que puede atender el doctor para inicializar vectores
             cantCitasTotales = Utilidades.calcularCitasJornada(jornadaDoctor[0], jornadaDoctor[1], citasHoras);
+            lblTotalCitas.setText(cantCitasTotales + ".");
 
             //Establecer tamano vector de citas
             labelVector = new Label[cantCitasTotales];
             citasVector = new CliCitaDto[cantCitasTotales];
 
-            //Recorre la lista de citas y las pasa a la matriz
-            pasarListaCitasAVector();
-
             // llena el gridpane con labeles
             llenarGridPane();
+            //Recorre la lista de citas y las pasa a la matriz
+            pasarListaCitasAVector();
             comprobarEspaciosCitas();
             crearCita();
         }
@@ -154,6 +191,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
     }
 
     private void pasarListaCitasAVector() {
+
         listaCitas.clear();
         listaCitas.addAll(agendaDto.getCliCitaList());
         //limpiar el vector de citas
@@ -199,12 +237,14 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         }
 
         int fila = hora - iniJornada;
-        int posVector = fila * citasHoras + col;
+        int posVector = fila * citasHoras + col - casillasVacias;
         // Pasar de pos de matriz a pos de vector
         return posVector;
     }
 
     private void comprobarEspaciosCitas() { // arreglar
+        int citasDisponibles = 0;
+        int citasProgramadas = 0;
         for (int i = 0; i < citasVector.length; i++) {
             if (citasVector[i] != null) {
                 CliCitaDto cita = citasVector[i];
@@ -213,21 +253,28 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                     for (int j = 0; j < espaciosCitas; j++) {
                         citasVector[i] = cita;
                         i++;
+//                        citasProgramadas++;
                     }
+//                } else {
+//                    citasProgramadas++;
                 }
+                citasProgramadas++;
             }
+            citasDisponibles++;
         }
+        lblCitasProgramadas.setText(citasProgramadas + ".");
+        lblCitasLibres.setText(citasDisponibles + ".");
     }
 
     private void llenarGridPane() {
         int numRows = jornada + 1;
         int numCols = citasHoras + 1;
         int horaInicio = iniJornada;
-        
-        if(jornadaDoctor[0]>0){
+
+        if (jornadaDoctor[0] > 0) {
             numRows++;
         }
-        
+
         int citasHorasEncabezado = 60 / citasHoras;
         int contadorLabel = 0;
         casillasVacias = 0;
@@ -260,7 +307,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                     continue;
                 }
 
-                if (i > 0 && j > 0 && contadorLabel<cantCitasTotales) {
+                if (i > 0 && j > 0 && contadorLabel < cantCitasTotales) {
                     Label label = new Label();
 
                     label.setOnMouseClicked(event -> {
@@ -268,7 +315,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                         int rowIndex = GridPane.getRowIndex(label);
                         int colIndex = GridPane.getColumnIndex(label);
 
-                        int posVector = (rowIndex - 1) * citasHoras + colIndex - 1-casillasVacias;
+                        int posVector = (rowIndex - 1) * citasHoras + colIndex - 1 - casillasVacias;
                         LocalDateTime hora;
                         if (citasVector[posVector] != null) {
                             citaDto = citasVector[posVector];
@@ -291,7 +338,6 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                             pasarListaCitasAVector();
                             comprobarEspaciosCitas();
                             crearCita();
-                            //crearCita(label);
                         }
 
                         System.out.println("Fila: " + rowIndex + " columna " + colIndex);
@@ -303,17 +349,22 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                 }
             }
         }
-
         grdCitas.setGridLinesVisible(true);
     }
 
     private void crearCita() {
-        for (int i = 0; i < citasVector.length; i++) {
-            if (citasVector[i] != null) {
-                crearLabelCita(labelVector[i], citasVector[i].citaLabel(), citasVector[i].getCitEstado());
-            } else {
-                crearLabelAddCita(labelVector[i]);
+        try {
+            for (int i = 0; i < citasVector.length; i++) {
+                if (citasVector[i] != null) {
+                    crearLabelCita(labelVector[i], citasVector[i].citaLabel(), citasVector[i].getCitEstado());
+                } else {
+                    crearLabelAddCita(labelVector[i]);
+                }
             }
+        } catch (NullPointerException e) {
+            System.err.println("Error: El objeto Label es nulo. No se puede invocar getStyleClass().");
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "Conflicto en la hora de entrada o salida y la duracion de las citas");
+            grdCitas.getChildren().clear();
         }
     }
 

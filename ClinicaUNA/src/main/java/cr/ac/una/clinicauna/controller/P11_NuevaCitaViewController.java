@@ -83,8 +83,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         // TODO
         resourceBundle = FlowController.getInstance().getIdioma();
         fillCbox();
-        requeridos.addAll(Arrays.asList( cboxEstadoCita, cboxEspacioHora));
-//        nuevaCita();
+        requeridos.addAll(Arrays.asList(cboxEstadoCita, cboxEspacioHora));
     }
 
     @Override
@@ -109,7 +108,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
                 } else {
                     new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "No hay suficientes campos libres");
                 }
-            } // si los espacios del cbox son menores a los que ya tenia la cita se actualiza
+            } // si los espacios del cbox son mayores a los que ya tenia la cita se comprueba el espacio
             else if (cboxEspacioHora.getValue() > citaDto.getCliCantespacios()) {
                 int inicio = citaDto.getCliCantespacios().intValue();
                 int posAux = posVec + inicio;
@@ -249,11 +248,11 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
     public void cargarDefecto(CliCitaDto cita, CliUsuarioDto usuario, CliAgendaDto agenda, CliMedicoDto medico, LocalDateTime fechaHora, CliCitaDto citasVec[], int pos) {
         citaDto = cita;
         //---------------
-//        if (citaDto.getCitId() != null || citaDto.getCitId() > 0) {
-//            CliCitaService citaService = new CliCitaService();
-//            Respuesta respuesta = citaService.getCita(citaDto.getCitId());
-//            this.citaDto = (CliCitaDto) respuesta.getResultado("Cita");
-//        }
+        if (citaDto.getCitId() != null /*|| citaDto.getCitId() > 0*/) {
+            CliCitaService citaService = new CliCitaService();
+            Respuesta respuesta = citaService.getCita(citaDto.getCitId());
+            this.citaDto = (CliCitaDto) respuesta.getResultado("Cita");
+        }
         //----------------------
         usuarioDto = usuario;
         agendaDto = agenda;

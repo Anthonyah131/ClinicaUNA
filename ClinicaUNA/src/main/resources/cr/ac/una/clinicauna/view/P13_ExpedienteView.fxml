@@ -48,7 +48,7 @@
                         <Label fx:id="lblNombreUsuario" layoutX="10.0" layoutY="14.0" styleClass="labels-text" text="nombreMed" />
                      </children>
                   </HBox>
-                  <MFXScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                  <MFXScrollPane fitToWidth="true" hbarPolicy="NEVER" vvalue="1.0" VBox.vgrow="ALWAYS">
                      <content>
                         <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="1250.0" spacing="15.0">
                            <children>
