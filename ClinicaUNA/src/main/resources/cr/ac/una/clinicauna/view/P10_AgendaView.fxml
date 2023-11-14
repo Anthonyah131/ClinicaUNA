@@ -46,14 +46,14 @@
                            <children>
                               <HBox spacing="5.0">
                                  <children>
-                                    <Label styleClass="labels-text-minus" text="Hora entrada:" />
-                                    <Label fx:id="lblHoraEntrada" layoutX="10.0" layoutY="10.0" styleClass="labels-text-minus" />
+                                    <Label styleClass="labels-text-minus" text="%key.checkIn" />
+                                    <Label fx:id="lblHoraEntrada" layoutX="10.0" layoutY="10.0" styleClass="labels-text-minus" text="0." />
                                  </children>
                               </HBox>
                               <HBox layoutX="10.0" layoutY="10.0" spacing="5.0">
                                  <children>
-                                    <Label styleClass="labels-text-minus" text="Hora salida:" />
-                                    <Label fx:id="lblHoraSalida" layoutX="10.0" layoutY="10.0" styleClass="labels-text-minus" />
+                                    <Label styleClass="labels-text-minus" text="%key.checkOut" />
+                                    <Label fx:id="lblHoraSalida" layoutX="10.0" layoutY="10.0" styleClass="labels-text-minus" text="0." />
                                  </children>
                               </HBox>
                            </children>
@@ -62,14 +62,14 @@
                            <children>
                               <HBox spacing="5.0">
                                  <children>
-                                    <Label styleClass="labels-text-minus" text="Total de citas:" />
-                                    <Label fx:id="lblTotalCitas" layoutX="10.0" layoutY="10.0" styleClass="labels-text-minus" />
+                                    <Label styleClass="labels-text-minus" text="%key.totalFields" />
+                                    <Label fx:id="lblTotalCitas" layoutX="10.0" layoutY="10.0" styleClass="labels-text-minus" text="0." />
                                  </children>
                               </HBox>
                               <HBox layoutX="10.0" layoutY="10.0" spacing="5.0">
                                  <children>
-                                    <Label styleClass="labels-text-minus" text="Jornada:" />
-                                    <Label fx:id="lblJornada" layoutX="10.0" layoutY="10.0" styleClass="labels-text-minus" />
+                                    <Label styleClass="labels-text-minus" text="%key.schedule" />
+                                    <Label fx:id="lblJornada" layoutX="10.0" layoutY="10.0" styleClass="labels-text-minus" text="0." />
                                  </children>
                               </HBox>
                            </children>
@@ -78,14 +78,14 @@
                            <children>
                               <HBox layoutX="10.0" layoutY="10.0" spacing="5.0">
                                  <children>
-                                    <Label styleClass="labels-text-minus" text="Citas libres:" />
-                                    <Label fx:id="lblCitasLibres" layoutX="10.0" layoutY="10.0" styleClass="labels-text-minus" />
+                                    <Label styleClass="labels-text-minus" text="%key.freeFields" />
+                                    <Label fx:id="lblCitasLibres" layoutX="10.0" layoutY="10.0" styleClass="labels-text-minus" text="0." />
                                  </children>
                               </HBox>
                               <HBox layoutX="10.0" layoutY="40.0" spacing="5.0">
                                  <children>
-                                    <Label styleClass="labels-text-minus" text="Citas programadas:" />
-                                    <Label fx:id="lblCitasProgramadas" layoutX="10.0" layoutY="10.0" styleClass="labels-text-minus" />
+                                    <Label styleClass="labels-text-minus" text="%key.scheduledAppo" />
+                                    <Label fx:id="lblCitasProgramadas" layoutX="10.0" layoutY="10.0" styleClass="labels-text-minus" text="0." />
                                  </children>
                               </HBox>
                            </children>
