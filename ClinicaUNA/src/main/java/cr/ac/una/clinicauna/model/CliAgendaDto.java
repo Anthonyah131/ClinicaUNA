@@ -1,6 +1,8 @@
 package cr.ac.una.clinicauna.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.ObjectProperty;
@@ -18,6 +20,8 @@ public class CliAgendaDto {
     public SimpleStringProperty ageId;
     public ObjectProperty<LocalDate> ageFecha;
     public SimpleStringProperty ageTiempo;
+    public ObjectProperty<LocalDateTime> ageEntrada;
+    public ObjectProperty<LocalDateTime> ageSalida;
     public SimpleStringProperty ageEspacios;
     public CliMedicoDto cliMedicoDto;
     public ObservableList<CliCitaDto> cliCitaList;
@@ -29,6 +33,8 @@ public class CliAgendaDto {
         this.ageId = new SimpleStringProperty();
         this.ageFecha = new SimpleObjectProperty();
         this.ageTiempo = new SimpleStringProperty();
+        this.ageEntrada = new SimpleObjectProperty();
+        this.ageSalida = new SimpleObjectProperty();
         this.ageEspacios = new SimpleStringProperty();
         this.cliCitaList = FXCollections.observableArrayList();
         this.cliCitaListEliminados = new ArrayList<>();
@@ -62,6 +68,60 @@ public class CliAgendaDto {
     public void setAgeTiempo(String ageTiempo) {
         this.ageTiempo.set(ageTiempo);
     }
+    
+    public LocalDateTime getAgeEntrada() {
+        return ageEntrada.get();
+    }
+
+    public void setAgeEntrada(LocalDateTime ageEntrada) {
+        this.ageEntrada.set(ageEntrada);
+    }
+
+    public LocalTime getAgeEntradaTime() {
+        if (ageEntrada.get() != null) {
+            return ageEntrada.get().toLocalTime();
+        } else {
+            return null;
+        }
+    }
+
+    public void setAgeEntradaTime(LocalTime time) {
+        LocalDateTime currentDateTime = ageEntrada.get();
+        LocalDateTime newDateTime;
+        if (currentDateTime != null) {
+            newDateTime = LocalDateTime.of(currentDateTime.toLocalDate(), time);
+        } else {
+            newDateTime = LocalDateTime.of(LocalDate.now(), time);
+        }
+        ageEntrada.set(newDateTime);
+    }
+
+    public LocalDateTime getAgeFfin() {
+        return ageSalida.get();
+    }
+
+    public void setAgeFfin(LocalDateTime ageSalida) {
+        this.ageSalida.set(ageSalida);
+    }
+
+    public LocalTime getAgeFfinTime() {
+        if (ageSalida.get() != null) {
+            return ageSalida.get().toLocalTime();
+        } else {
+            return null;
+        }
+    }
+
+    public void setAgeFfinTime(LocalTime time) {
+        LocalDateTime currentDateTime = ageSalida.get();
+        LocalDateTime newDateTime;
+        if (currentDateTime != null) {
+            newDateTime = LocalDateTime.of(currentDateTime.toLocalDate(), time);
+        } else {
+            newDateTime = LocalDateTime.of(LocalDate.now(), time);
+        }
+        ageSalida.set(newDateTime);
+    }
 
     public Long getAgeEspacios() {
         if (this.ageEspacios.get() != null && !this.ageEspacios.get().isEmpty()) {
@@ -75,8 +135,8 @@ public class CliAgendaDto {
         this.ageEspacios.set(ageEspacios.toString());
     }
 
-    public CliMedicoDto getCliMedicoDto() {
-        return cliMedicoDto;
+    public CliMedicoDto getCliAgeicoDto() {
+        return this.cliMedicoDto;
     }
 
     public void setCliMedicoDto(CliMedicoDto cliMedicoDto) {

@@ -21,7 +21,8 @@ public class CliReporteDto {
     private String repConsulta;
     private String repTitulo;
     private String repPeriodicidad;
-    private LocalDate repFfin;
+    private LocalDate repFini;
+    private LocalDate repFsig;
     private Long repVersion;
     private List<CliParametroconsultaDto> cliParametroconsultaList;
     private List<CliParametroconsultaDto> cliParametroconsultaListEliminados;
@@ -47,7 +48,8 @@ public class CliReporteDto {
         this.repConsulta = cliReporte.getRepConsulta();
         this.repTitulo = cliReporte.getRepTitulo();
         this.repPeriodicidad = cliReporte.getRepPeriodicidad();
-        this.repFfin = cliReporte.getRepFfin();
+        this.repFini = cliReporte.getRepFini();
+        this.repFsig = cliReporte.getRepFsig();
         this.repVersion = cliReporte.getRepVersion();
     }
 
@@ -99,12 +101,20 @@ public class CliReporteDto {
         this.repPeriodicidad = repPeriodicidad;
     }
 
-    public LocalDate getRepFfin() {
-        return repFfin;
+    public LocalDate getRepFini() {
+        return repFini;
     }
 
-    public void setRepFfin(LocalDate repFfin) {
-        this.repFfin = repFfin;
+    public void setRepFini(LocalDate repFini) {
+        this.repFini = repFini;
+    }
+    
+    public LocalDate getRepFsig() {
+        return repFsig;
+    }
+
+    public void setRepFsig(LocalDate repFsig) {
+        this.repFsig = repFsig;
     }
 
     public Long getRepVersion() {

@@ -35,7 +35,8 @@ import java.util.List;
     @NamedQuery(name = "CliReporte.findByRepConsulta", query = "SELECT c FROM CliReporte c WHERE c.repConsulta = :repConsulta"),
     @NamedQuery(name = "CliReporte.findByRepTitulo", query = "SELECT c FROM CliReporte c WHERE c.repTitulo = :repTitulo"),
     @NamedQuery(name = "CliReporte.findByRepPeriodicidad", query = "SELECT c FROM CliReporte c WHERE c.repPeriodicidad = :repPeriodicidad"),
-    @NamedQuery(name = "CliReporte.findByRepFfin", query = "SELECT c FROM CliReporte c WHERE c.repFfin = :repFfin"),
+    @NamedQuery(name = "CliReporte.findByRepFini", query = "SELECT c FROM CliReporte c WHERE c.repFini = :repFini"),
+    @NamedQuery(name = "CliReporte.findByRepFsig", query = "SELECT c FROM CliReporte c WHERE c.repFsig = :repFsig"),
     @NamedQuery(name = "CliReporte.findByRepVersion", query = "SELECT c FROM CliReporte c WHERE c.repVersion = :repVersion")})
 public class CliReporte implements Serializable {
 
@@ -56,8 +57,10 @@ public class CliReporte implements Serializable {
     private String repTitulo;
     @Column(name = "REP_PERIODICIDAD")
     private String repPeriodicidad;
-    @Column(name = "REP_FFIN")
-    private LocalDate repFfin;
+    @Column(name = "REP_FINI")
+    private LocalDate repFini;
+    @Column(name = "REP_FSIG")
+    private LocalDate repFsig;
     @Version
     @Basic(optional = false)
     @Column(name = "REP_VERSION")
@@ -85,7 +88,8 @@ public class CliReporte implements Serializable {
         this.repConsulta = cliReporteDto.getRepConsulta();
         this.repTitulo = cliReporteDto.getRepTitulo();
         this.repPeriodicidad = cliReporteDto.getRepPeriodicidad();
-        this.repFfin = cliReporteDto.getRepFfin();
+        this.repFini = cliReporteDto.getRepFini();
+        this.repFsig = cliReporteDto.getRepFsig();
         this.repVersion = cliReporteDto.getRepVersion();
     }
 
@@ -137,12 +141,20 @@ public class CliReporte implements Serializable {
         this.repPeriodicidad = repPeriodicidad;
     }
 
-    public LocalDate getRepFfin() {
-        return repFfin;
+    public LocalDate getRepFini() {
+        return repFini;
     }
 
-    public void setRepFfin(LocalDate repFfin) {
-        this.repFfin = repFfin;
+    public void setRepFini(LocalDate repFfin) {
+        this.repFini = repFfin;
+    }
+    
+    public LocalDate getRepFsig() {
+        return repFsig;
+    }
+
+    public void setRepFsig(LocalDate repFsig) {
+        this.repFsig = repFsig;
     }
 
     public Long getRepVersion() {

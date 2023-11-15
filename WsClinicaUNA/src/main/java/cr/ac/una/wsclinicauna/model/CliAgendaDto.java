@@ -18,6 +18,8 @@ public class CliAgendaDto {
     private Long ageId;
     private LocalDate ageFecha;
     private String ageTiempo;
+    private LocalDateTime ageEntrada;
+    private LocalDateTime ageSalida;
     private Long ageEspacios;
     private Long ageVersion;
     private List<CliCitaDto> cliCitaList;
@@ -38,6 +40,8 @@ public class CliAgendaDto {
         this.ageId = cliAgenda.getAgeId();
         this.ageFecha = cliAgenda.getAgeFecha();
         this.ageTiempo = cliAgenda.getAgeTiempo();
+        this.ageEntrada = cliAgenda.getAgeEntrada();
+        this.ageSalida = cliAgenda.getAgeSalida();
         this.ageEspacios = cliAgenda.getAgeEspacios();
         this.ageVersion = cliAgenda.getAgeVersion();
         this.fecha = LocalDateTime.now();
@@ -65,6 +69,22 @@ public class CliAgendaDto {
 
     public void setAgeTiempo(String ageTiempo) {
         this.ageTiempo = ageTiempo;
+    }
+    
+    public LocalDateTime getAgeEntrada() {
+        return this.ageEntrada;
+    }
+
+    public void setAgeEntrada(LocalDateTime ageEntrada) {
+        this.ageEntrada = ageEntrada;
+    }
+
+    public LocalDateTime getAgeSalida() {
+        return this.ageSalida;
+    }
+
+    public void setAgeSalida(LocalDateTime ageSalida) {
+        this.ageSalida = ageSalida;
     }
 
     public Long getAgeEspacios() {

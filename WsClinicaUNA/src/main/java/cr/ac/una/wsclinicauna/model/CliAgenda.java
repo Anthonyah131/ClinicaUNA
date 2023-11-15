@@ -23,6 +23,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -37,6 +38,8 @@ import java.util.List;
     @NamedQuery(name = "CliAgenda.findByAgeId", query = "SELECT c FROM CliAgenda c WHERE c.ageId = :ageId"),
     @NamedQuery(name = "CliAgenda.findByAgeFecha", query = "SELECT c FROM CliAgenda c WHERE c.ageFecha = :ageFecha"),
     @NamedQuery(name = "CliAgenda.findByAgeTiempo", query = "SELECT c FROM CliAgenda c WHERE c.ageTiempo = :ageTiempo"),
+    @NamedQuery(name = "CliAgenda.findByAgeEntrada", query = "SELECT c FROM CliAgenda c WHERE c.ageEntrada = :ageEntrada"),
+    @NamedQuery(name = "CliAgenda.findByAgeSalida", query = "SELECT c FROM CliAgenda c WHERE c.ageSalida = :ageSalida"),
     @NamedQuery(name = "CliAgenda.findByAgeEspacios", query = "SELECT c FROM CliAgenda c WHERE c.ageEspacios = :ageEspacios"),
     @NamedQuery(name = "CliAgenda.findByAgeVersion", query = "SELECT c FROM CliAgenda c WHERE c.ageVersion = :ageVersion")})
 public class CliAgenda implements Serializable {
@@ -53,6 +56,10 @@ public class CliAgenda implements Serializable {
     private LocalDate ageFecha;
     @Column(name = "AGE_TIEMPO")
     private String ageTiempo;
+    @Column(name = "AGE_ENTRADA")
+    private LocalDateTime ageEntrada;
+    @Column(name = "AGE_SALIDA")
+    private LocalDateTime ageSalida;
     @Column(name = "AGE_ESPACIOS")
     private Long ageEspacios;
     @Version
@@ -80,6 +87,8 @@ public class CliAgenda implements Serializable {
     public void actualizar(CliAgendaDto cliAgendaDto) {
         this.ageFecha = cliAgendaDto.getAgeFecha();
         this.ageTiempo = cliAgendaDto.getAgeTiempo();
+        this.ageEntrada = cliAgendaDto.getAgeEntrada();
+        this.ageSalida = cliAgendaDto.getAgeSalida();
         this.ageEspacios = cliAgendaDto.getAgeEspacios();
         this.ageVersion = cliAgendaDto.getAgeVersion();
     }
@@ -106,6 +115,22 @@ public class CliAgenda implements Serializable {
 
     public void setAgeTiempo(String ageTiempo) {
         this.ageTiempo = ageTiempo;
+    }
+    
+    public LocalDateTime getAgeEntrada() {
+        return ageEntrada;
+    }
+
+    public void setAgeEntrada(LocalDateTime ageEntrada) {
+        this.ageEntrada = ageEntrada;
+    }
+    
+    public LocalDateTime getAgeSalida() {
+        return ageSalida;
+    }
+
+    public void setAgeSalida(LocalDateTime ageSalida) {
+        this.ageSalida = ageSalida;
     }
 
     public Long getAgeEspacios() {

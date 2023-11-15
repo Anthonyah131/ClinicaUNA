@@ -5,8 +5,8 @@
 package cr.ac.una.clinicauna.controller;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import cr.ac.una.clinicauna.model.CliCorreodestinoDto;
@@ -16,6 +16,7 @@ import cr.ac.una.clinicauna.model.CliUsuarioDto;
 import cr.ac.una.clinicauna.service.CliCorreodestinoService;
 import cr.ac.una.clinicauna.service.CliParametroconsultaService;
 import cr.ac.una.clinicauna.service.CliReporteService;
+import cr.ac.una.clinicauna.util.BindingUtils;
 import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Formato;
 import cr.ac.una.clinicauna.util.Mensaje;
@@ -43,6 +44,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 
@@ -70,8 +72,6 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
     @FXML
     private JFXDatePicker dpDiaInicia;
     @FXML
-    private JFXDatePicker dpDiaSiguiente;
-    @FXML
     private MFXButton btnLimpiar;
     @FXML
     private MFXButton btnGuardar;
@@ -93,6 +93,22 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
     private MFXButton btnAgregar;
     @FXML
     private TableView<CliParametroconsultaDto> tbvParametros;
+    @FXML
+    private JFXButton btnSql;
+    @FXML
+    private JFXButton btnParameter;
+    @FXML
+    private JFXButton btnSqlValue;
+    @FXML
+    private MFXButton btnSalir;
+    @FXML
+    private ToggleGroup tggPeriodicidad;
+    @FXML
+    private JFXRadioButton rbDiario;
+    @FXML
+    private JFXRadioButton rbSemanal;
+    @FXML
+    private JFXRadioButton rbMensual;
 
     CliReporteDto reporteDto;
     private ObservableList<CliReporteDto> reportes = FXCollections.observableArrayList();
@@ -102,14 +118,6 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
     List<Node> requeridosParametro = new ArrayList<>();
 
     ResourceBundle resourceBundle;
-    @FXML
-    private JFXButton btnSql;
-    @FXML
-    private JFXButton btnParameter;
-    @FXML
-    private JFXButton btnSqlValue;
-    @FXML
-    private MFXButton btnSalir;
 
     /**
      * Initializes the controller class.
@@ -120,6 +128,9 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
         txfTitulo.setTextFormatter(Formato.getInstance().maxLengthFormat(50));
         txaDescripcion.setTextFormatter(Formato.getInstance().maxLengthFormat(150));
         txaConsulta.setTextFormatter(Formato.getInstance().maxLengthFormat(500));
+        rbDiario.setUserData("D");
+        rbSemanal.setUserData("S");
+        rbMensual.setUserData("M");
 
         txfParametro.setTextFormatter(Formato.getInstance().maxLengthFormat(50));
         txfValor.setTextFormatter(Formato.getInstance().maxLengthFormat(30));
@@ -160,23 +171,19 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
                     if (dpDiaInicia.getValue() == null || dpDiaInicia.getValue().isBefore(fechaActual)) {
                         new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), "key.errorDateStart");
                     } else {
-                        if (dpDiaSiguiente.getValue() == null || dpDiaSiguiente.getValue().isBefore(dpDiaInicia.getValue())) {
-                            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), "key.errorDateNext");
+                        CliParametroconsultaService parametroService = new CliParametroconsultaService();
+                        Respuesta respuesta = parametroService.guardarParametroconsulta(this.parametroDto);
+                        if (!respuesta.getEstado()) {
+                            new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), respuesta.getMensaje());
                         } else {
-                            CliParametroconsultaService parametroService = new CliParametroconsultaService();
-                            Respuesta respuesta = parametroService.guardarParametroconsulta(this.parametroDto);
-                            if (!respuesta.getEstado()) {
-                                new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), respuesta.getMensaje());
-                            } else {
-                                unbindParametro();
-                                this.parametroDto = (CliParametroconsultaDto) respuesta.getResultado("Parametroconsulta");
-                                this.parametroDto.setModificado(true);
-                                reporteDto.getCliParametroconsultaList().add(this.parametroDto);
-                                onActionBtnGuardar(event);
-                                this.parametroDto = new CliParametroconsultaDto();
-                                bindParametro();
-                                new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveParameterR", getStage(), "key.updatedParameterR");
-                            }
+                            unbindParametro();
+                            this.parametroDto = (CliParametroconsultaDto) respuesta.getResultado("Parametroconsulta");
+                            this.parametroDto.setModificado(true);
+                            reporteDto.getCliParametroconsultaList().add(this.parametroDto);
+                            onActionBtnGuardar(event);
+                            this.parametroDto = new CliParametroconsultaDto();
+                            bindParametro();
+                            new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveParameterR", getStage(), "key.updatedParameterR");
                         }
                     }
                 }
@@ -218,17 +225,23 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
                 String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
                 new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveReportD", getStage(), mensaje);
             } else {
-                CliReporteService reporteService = new CliReporteService();
-                Respuesta respuesta = reporteService.guardarReporte(reporteDto);
-                if (!respuesta.getEstado()) {
-                    new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveReportD", getStage(), respuesta.getMensaje());
+                LocalDate fechaActual = LocalDate.now();
+                if (dpDiaInicia.getValue() == null || dpDiaInicia.getValue().isBefore(fechaActual)) {
+                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), "key.errorDateStart");
                 } else {
-                    unbindReporte();
-                    this.reporteDto = (CliReporteDto) respuesta.getResultado("Reporte");
-                    cargarParametros();
-                    cargarCorreos();
-                    bindReporte();
-                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveReportD", getStage(), "key.updatedReportD");
+                    reporteDto.setRepFsig(obtenerFechaSiguiente(fechaActual, reporteDto.getRepPeriodicidad()));
+                    CliReporteService reporteService = new CliReporteService();
+                    Respuesta respuesta = reporteService.guardarReporte(reporteDto);
+                    if (!respuesta.getEstado()) {
+                        new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveReportD", getStage(), respuesta.getMensaje());
+                    } else {
+                        unbindReporte();
+                        this.reporteDto = (CliReporteDto) respuesta.getResultado("Reporte");
+                        cargarParametros();
+                        cargarCorreos();
+                        bindReporte();
+                        new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveReportD", getStage(), "key.updatedReportD");
+                    }
                 }
             }
         } catch (Exception ex) {
@@ -343,8 +356,8 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
         txfTitulo.textProperty().bindBidirectional(this.reporteDto.repTitulo);
         txaDescripcion.textProperty().bindBidirectional(this.reporteDto.repDescripcion);
         txaConsulta.textProperty().bindBidirectional(this.reporteDto.repConsulta);
-        dpDiaInicia.valueProperty().bindBidirectional(this.reporteDto.repFfin);
-//        dpDiaSiguiente.valueProperty().bindBidirectional(this.reporteDto.repFsiguiente);
+        dpDiaInicia.valueProperty().bindBidirectional(this.reporteDto.repFini);
+        BindingUtils.bindToggleGroupToProperty(tggPeriodicidad, this.reporteDto.repPeriodicidad);
         if (this.reporteDto.getRepId() == null || this.reporteDto.getRepId() <= 0) {
             hbxCorreoView.setDisable(true);
             hbxParametroView.setDisable(true);
@@ -359,8 +372,8 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
         txfTitulo.textProperty().unbindBidirectional(this.reporteDto.repTitulo);
         txaDescripcion.textProperty().unbindBidirectional(this.reporteDto.repDescripcion);
         txaConsulta.textProperty().unbindBidirectional(this.reporteDto.repConsulta);
-        dpDiaInicia.valueProperty().unbindBidirectional(this.reporteDto.repFfin);
-//        dpDiaSiguiente.valueProperty().unbindBidirectional(this.reporteDto.repFsiguiente);
+        dpDiaInicia.valueProperty().unbindBidirectional(this.reporteDto.repFini);
+        BindingUtils.unbindToggleGroupToProperty(tggPeriodicidad, this.reporteDto.repPeriodicidad);
     }
 
     private void nuevoParametro() {
@@ -429,24 +442,18 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
         if (reporteDto.getCliCorreodestinoList() == null || !reporteDto.getCliCorreodestinoList().stream().anyMatch(e -> e.getCdCorreo().equals(usuarioDto.getUsuCorreo()))) {
             correoDto.setCdCorreo(usuarioDto.getUsuCorreo());
             try {
-                String invalidos = ValidarRequeridos.validarRequeridos(requeridosParametro);
-                if (!invalidos.isEmpty()) {
-                    String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
-                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveEmailR", getStage(), mensaje);
+                CliCorreodestinoService correoService = new CliCorreodestinoService();
+                Respuesta respuesta = correoService.guardarCorreodestino(this.correoDto);
+                if (!respuesta.getEstado()) {
+                    new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveEmailR", getStage(), respuesta.getMensaje());
                 } else {
-                    CliCorreodestinoService correoService = new CliCorreodestinoService();
-                    Respuesta respuesta = correoService.guardarCorreodestino(this.correoDto);
-                    if (!respuesta.getEstado()) {
-                        new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveEmailR", getStage(), respuesta.getMensaje());
-                    } else {
-                        this.correoDto = (CliCorreodestinoDto) respuesta.getResultado("Correodestino");
-                        this.correoDto.setModificado(true);
-                        reporteDto.getCliCorreodestinoList().add(this.correoDto);
-                        ActionEvent event = new ActionEvent();
-                        onActionBtnGuardar(event);
-                        this.correoDto = new CliCorreodestinoDto();
-                        new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveEmailR", getStage(), "key.updatedEmailR");
-                    }
+                    this.correoDto = (CliCorreodestinoDto) respuesta.getResultado("Correodestino");
+                    this.correoDto.setModificado(true);
+                    reporteDto.getCliCorreodestinoList().add(this.correoDto);
+                    ActionEvent event = new ActionEvent();
+                    onActionBtnGuardar(event);
+                    this.correoDto = new CliCorreodestinoDto();
+                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveEmailR", getStage(), "key.updatedEmailR");
                 }
             } catch (Exception ex) {
                 Logger.getLogger(P16_ReporteDinamicoViewController.class.getName()).log(Level.SEVERE, "Error guardando el parametro.", ex);
@@ -455,7 +462,7 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
         }
 
     }
-    
+
     @FXML
     private void onActionBtnSql(ActionEvent event) {
         new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.consultSql", getStage(), "key.lbQueryR");
@@ -474,6 +481,55 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
     @FXML
     private void onActionBtnSalir(ActionEvent event) {
         FlowController.getInstance().goView("P06_MenuPrincipalView");
+    }
+
+    public static LocalDate obtenerFechaSiguiente(LocalDate fechaActual, String period) {
+        switch (period) {
+            case "D" -> {
+                return fechaActual.plusDays(1);
+            }
+            case "S" -> {
+                return fechaActual.plusWeeks(1);
+            }
+            case "M" -> {
+                return obtenerFechaSiguienteMes(fechaActual);
+            }
+            default ->
+                throw new IllegalArgumentException("Frecuencia no válida: " + period);
+        }
+    }
+
+    public static LocalDate obtenerFechaSiguienteMes(LocalDate fechaActual) {
+        int anioSiguiente = fechaActual.getYear();
+        int mesSiguiente = fechaActual.getMonthValue() + 1;
+
+        if (mesSiguiente > 12) {
+            mesSiguiente = 1;
+            anioSiguiente++;
+        }
+
+        int diaSiguiente = Math.min(fechaActual.getDayOfMonth(), obtenerUltimoDiaDelMes(anioSiguiente, mesSiguiente));
+
+        return LocalDate.of(anioSiguiente, mesSiguiente, diaSiguiente);
+    }
+
+    public static int obtenerUltimoDiaDelMes(int anio, int mes) {
+        if (mes < 1 || mes > 12) {
+            throw new IllegalArgumentException("Mes no válido: " + mes);
+        }
+
+        if (mes == 2) {
+            // Verificar si el año es bisiesto
+            return (anio % 4 == 0 && (anio % 100 != 0 || anio % 400 == 0)) ? 29 : 28;
+        }
+
+        // Meses con 31 días: enero, marzo, mayo, julio, agosto, octubre, diciembre
+        if (mes == 1 || mes == 3 || mes == 5 || mes == 7 || mes == 8 || mes == 10 || mes == 12) {
+            return 31;
+        }
+
+        // Meses con 30 días: abril, junio, septiembre, noviembre
+        return 30;
     }
 
     private class ButtonCell extends TableCell<CliParametroconsultaDto, Boolean> {

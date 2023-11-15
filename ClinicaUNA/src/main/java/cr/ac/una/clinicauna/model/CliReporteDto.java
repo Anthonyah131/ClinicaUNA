@@ -20,8 +20,9 @@ public class CliReporteDto {
     public SimpleStringProperty repDescripcion;
     public SimpleStringProperty repConsulta;
     public SimpleStringProperty repTitulo;
-    public SimpleStringProperty repPeriodicidad;
-    public ObjectProperty<LocalDate> repFfin;
+    public ObjectProperty<String> repPeriodicidad;
+    public ObjectProperty<LocalDate> repFini;
+    public ObjectProperty<LocalDate> repFsig;
     ObservableList<CliParametroconsultaDto> cliParametroconsultaList;
     List<CliParametroconsultaDto> cliParametroconsultaListEliminados;
     ObservableList<CliCorreodestinoDto> cliCorreodestinoList;
@@ -35,8 +36,9 @@ public class CliReporteDto {
         this.repDescripcion = new SimpleStringProperty();
         this.repConsulta = new SimpleStringProperty();
         this.repTitulo = new SimpleStringProperty();
-        this.repPeriodicidad = new SimpleStringProperty();
-        this.repFfin = new SimpleObjectProperty();
+        this.repPeriodicidad = new SimpleObjectProperty();
+        this.repFini = new SimpleObjectProperty();
+        this.repFsig = new SimpleObjectProperty();
         this.cliParametroconsultaList = FXCollections.observableArrayList();
         this.cliParametroconsultaListEliminados = new ArrayList<>();
         this.cliCorreodestinoList = FXCollections.observableArrayList();
@@ -96,12 +98,20 @@ public class CliReporteDto {
         this.repPeriodicidad.set(repPeriodicidad);
     }
 
-    public LocalDate getRepFfin() {
-        return repFfin.get();
+    public LocalDate getRepFini() {
+        return repFini.get();
     }
 
-    public void setRepFfin(LocalDate repFfin) {
-        this.repFfin.set(repFfin);
+    public void setRepFini(LocalDate repFini) {
+        this.repFini.set(repFini);
+    }
+    
+    public LocalDate getRepFsig() {
+        return repFsig.get();
+    }
+
+    public void setRepFsig(LocalDate repFsig) {
+        this.repFsig.set(repFsig);
     }
 
     public ObservableList<CliParametroconsultaDto> getCliParametroconsultaList() {

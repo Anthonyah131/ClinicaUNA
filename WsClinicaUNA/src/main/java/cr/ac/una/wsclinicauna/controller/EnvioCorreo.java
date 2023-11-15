@@ -68,25 +68,23 @@ public class EnvioCorreo {
             CliParametrosDto cliParametrosDto = cliParametrosDtoList.get(0);
 
             for (CliReporteDto reporteDto : cliReporteDtos) {
-                /*LocalDate fechaActual = LocalDate.now();
-                LocalDate fechaInicioReporte = reporteDto.getRepFinicio();
-                LocalDate fechaSiguienteReporte = reporteDto.getRepFsiguiente();
+                LocalDate fechaActual = LocalDate.now();
+                LocalDate fechaInicioReporte = reporteDto.getRepFini();
+                LocalDate fechaSiguienteReporte = reporteDto.getRepFsig();
 
                 if (fechaInicioReporte.isEqual(fechaActual)) {
                     reporteEmail(reporteDto, cliParametrosDto);
                 
-                    long diasDiferencia = ChronoUnit.DAYS.between(fechaInicioReporte, fechaSiguienteReporte);
-
                     // Actualizar la fecha de inicio con la fecha siguiente
-                    reporteDto.setRepFinicio(fechaSiguienteReporte);
+                    reporteDto.setRepFini(fechaSiguienteReporte);
 
                     // Sumar la diferencia de días a la fecha siguiente
-                    reporteDto.setRepFsiguiente(fechaSiguienteReporte.plusDays(diasDiferencia));
+                    reporteDto.setRepFsig(obtenerFechaSiguiente(fechaSiguienteReporte, reporteDto.getRepPeriodicidad()));
                 
                     cliReporteService.guardarReporte(reporteDto);
-                }*/
+                }
 
-                LocalDate fechaActual = LocalDate.now();
+                /*LocalDate fechaActual = LocalDate.now();
 
                 String diaReporte = reporteDto.getRepPeriodicidad().toLowerCase();
 
@@ -94,22 +92,13 @@ public class EnvioCorreo {
 
                 if (diaActual.toLowerCase().equalsIgnoreCase(diaReporte)) {
                     reporteEmail(reporteDto, cliParametrosDto);
-                }
+                }*/
             }
         } catch (MessagingException ex) {
             Logger.getLogger(EnvioCorreo.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(EnvioCorreo.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    public static String getSpanishDayOfWeek(LocalDate fecha) {
-        DayOfWeek diaActual = fecha.getDayOfWeek();
-        Locale spanishLocale = new Locale("es", "ES"); // Establecer el idioma español
-
-        // Obtener el nombre del día en español
-        String nombreDia = diaActual.getDisplayName(TextStyle.FULL, spanishLocale);
-        return nombreDia;
     }
 
     private void reporteEmail(CliReporteDto cliReporteDto, CliParametrosDto cliParametrosDto) throws AddressException, MessagingException, IOException {
@@ -252,6 +241,54 @@ public class EnvioCorreo {
 
     private static String convertirABase64(byte[] bytes) {
         return Base64.getEncoder().encodeToString(bytes);
+    }
+    
+    public static LocalDate obtenerFechaSiguiente(LocalDate fechaActual, String period) {
+        switch (period) {
+            case "D" -> {
+                return fechaActual.plusDays(1);
+            }
+            case "S" -> {
+                return fechaActual.plusWeeks(1);
+            }
+            case "M" -> {
+                return obtenerFechaSiguienteMes(fechaActual);
+            }
+            default -> throw new IllegalArgumentException("Frecuencia no válida: " + period);
+        }
+    }
+
+    public static LocalDate obtenerFechaSiguienteMes(LocalDate fechaActual) {
+        int anioSiguiente = fechaActual.getYear();
+        int mesSiguiente = fechaActual.getMonthValue() + 1;
+
+        if (mesSiguiente > 12) {
+            mesSiguiente = 1;
+            anioSiguiente++;
+        }
+
+        int diaSiguiente = Math.min(fechaActual.getDayOfMonth(), obtenerUltimoDiaDelMes(anioSiguiente, mesSiguiente));
+
+        return LocalDate.of(anioSiguiente, mesSiguiente, diaSiguiente);
+    }
+
+    public static int obtenerUltimoDiaDelMes(int anio, int mes) {
+        if (mes < 1 || mes > 12) {
+            throw new IllegalArgumentException("Mes no válido: " + mes);
+        }
+
+        if (mes == 2) {
+            // Verificar si el año es bisiesto
+            return (anio % 4 == 0 && (anio % 100 != 0 || anio % 400 == 0)) ? 29 : 28;
+        }
+
+        // Meses con 31 días: enero, marzo, mayo, julio, agosto, octubre, diciembre
+        if (mes == 1 || mes == 3 || mes == 5 || mes == 7 || mes == 8 || mes == 10 || mes == 12) {
+            return 31;
+        }
+
+        // Meses con 30 días: abril, junio, septiembre, noviembre
+        return 30;
     }
 
 }
