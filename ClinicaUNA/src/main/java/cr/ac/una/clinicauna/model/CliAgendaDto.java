@@ -135,7 +135,7 @@ public class CliAgendaDto {
         this.ageEspacios.set(ageEspacios.toString());
     }
 
-    public CliMedicoDto getCliAgeicoDto() {
+    public CliMedicoDto getCliMedicoDto() {
         return this.cliMedicoDto;
     }
 
