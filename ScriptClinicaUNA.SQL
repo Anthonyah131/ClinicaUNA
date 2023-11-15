@@ -588,7 +588,7 @@ CREATE TABLE CLI_REPORTE(
   rep_fini Date,
   rep_fsig Date,
   rep_version Number DEFAULT 1 NOT NULL,
-  CONSTRAINT CheckConstraint1 CHECK (rep_periosidad in ('D','S','M'))
+  CONSTRAINT CheckConstraint1 CHECK (rep_periodicidad in ('D','S','M'))
 )
 ;
 
