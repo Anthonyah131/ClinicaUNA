@@ -1,6 +1,6 @@
 ﻿/*
 Created: 08/10/2023
-Modified: 07/11/2023
+Modified: 14/11/2023
 Model: ClinicaUNA
 Database: Oracle 18c
 */
@@ -537,6 +537,8 @@ CREATE TABLE CLI_AGENDA(
   age_id Number NOT NULL,
   age_fecha Date,
   age_tiempo Char(20 ),
+  age_entrada Date,
+  age_salida Date,
   age_espacios Number,
   age_version Number DEFAULT 1 NOT NULL,
   med_id Number
@@ -564,6 +566,10 @@ COMMENT ON COLUMN CLI_AGENDA.age_fecha IS 'Fecha de la agenda
 COMMENT ON COLUMN CLI_AGENDA.age_tiempo IS 'Tiempo de los espacion de atencion dentro de la agenda
 '
 ;
+COMMENT ON COLUMN CLI_AGENDA.age_entrada IS 'Hora de entrada'
+;
+COMMENT ON COLUMN CLI_AGENDA.age_salida IS 'Hora salida'
+;
 COMMENT ON COLUMN CLI_AGENDA.age_espacios IS 'Cantidad de espacion de la agenda'
 ;
 COMMENT ON COLUMN CLI_AGENDA.age_version IS 'Version del registro de la agenda
@@ -578,9 +584,11 @@ CREATE TABLE CLI_REPORTE(
   rep_descripcion Varchar2(150 ),
   rep_consulta Varchar2(500 ) NOT NULL,
   rep_titulo Varchar2(50 ) NOT NULL,
-  rep_periodicidad Varchar2(30 ) NOT NULL,
-  rep_ffin Date,
-  rep_version Number DEFAULT 1 NOT NULL
+  rep_periodicidad Varchar2(1 ) NOT NULL,
+  rep_fini Date,
+  rep_fsig Date,
+  rep_version Number DEFAULT 1 NOT NULL,
+  CONSTRAINT CheckConstraint1 CHECK (rep_periosidad in ('D','S','M'))
 )
 ;
 
@@ -601,9 +609,11 @@ COMMENT ON COLUMN CLI_REPORTE.rep_consulta IS 'Consulta sql del reporte'
 ;
 COMMENT ON COLUMN CLI_REPORTE.rep_titulo IS 'Titulo del reporte'
 ;
-COMMENT ON COLUMN CLI_REPORTE.rep_periodicidad IS 'Dia de repeticion periodica'
+COMMENT ON COLUMN CLI_REPORTE.rep_periodicidad IS 'Periosidad ( D:Diario, S:Semanal ,M:Mensual)'
 ;
-COMMENT ON COLUMN CLI_REPORTE.rep_ffin IS 'Día en el cual de dejan de enviar reportes'
+COMMENT ON COLUMN CLI_REPORTE.rep_fini IS 'Dia de creacion del reporte'
+;
+COMMENT ON COLUMN CLI_REPORTE.rep_fsig IS 'Día siguiente que se va a volver a mandar el reporte '
 ;
 COMMENT ON COLUMN CLI_REPORTE.rep_version IS 'Version del registro'
 ;
