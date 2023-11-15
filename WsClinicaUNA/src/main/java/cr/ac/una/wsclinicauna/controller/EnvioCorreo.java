@@ -13,7 +13,6 @@ import jakarta.activation.DataHandler;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Schedule;
 import jakarta.ejb.Singleton;
-import jakarta.mail.BodyPart;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.Multipart;
@@ -30,13 +29,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.List;
-import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,7 +54,7 @@ public class EnvioCorreo {
     @EJB
     CliReporteService cliReporteService;
 
-    @Schedule(hour = "14", minute = "16", persistent = false)
+    @Schedule(hour = "23", minute = "18", persistent = false)
     private void envioReporte() {
         try {
             Respuesta res = cliReporteService.getReportes();
@@ -75,24 +71,10 @@ public class EnvioCorreo {
                 if (fechaInicioReporte.isEqual(fechaActual)) {
                     reporteEmail(reporteDto, cliParametrosDto);
                 
-                    // Actualizar la fecha de inicio con la fecha siguiente
                     reporteDto.setRepFini(fechaSiguienteReporte);
-
-                    // Sumar la diferencia de días a la fecha siguiente
                     reporteDto.setRepFsig(obtenerFechaSiguiente(fechaSiguienteReporte, reporteDto.getRepPeriodicidad()));
-                
                     cliReporteService.guardarReporte(reporteDto);
                 }
-
-                /*LocalDate fechaActual = LocalDate.now();
-
-                String diaReporte = reporteDto.getRepPeriodicidad().toLowerCase();
-
-                String diaActual = getSpanishDayOfWeek(fechaActual);
-
-                if (diaActual.toLowerCase().equalsIgnoreCase(diaReporte)) {
-                    reporteEmail(reporteDto, cliParametrosDto);
-                }*/
             }
         } catch (MessagingException ex) {
             Logger.getLogger(EnvioCorreo.class.getName()).log(Level.SEVERE, null, ex);

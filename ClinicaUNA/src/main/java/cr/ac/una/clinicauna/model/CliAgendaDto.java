@@ -96,15 +96,15 @@ public class CliAgendaDto {
         ageEntrada.set(newDateTime);
     }
 
-    public LocalDateTime getAgeFfin() {
+    public LocalDateTime getAgeSalida() {
         return ageSalida.get();
     }
 
-    public void setAgeFfin(LocalDateTime ageSalida) {
+    public void setAgeSalida(LocalDateTime ageSalida) {
         this.ageSalida.set(ageSalida);
     }
 
-    public LocalTime getAgeFfinTime() {
+    public LocalTime getAgeSalidaTime() {
         if (ageSalida.get() != null) {
             return ageSalida.get().toLocalTime();
         } else {
@@ -112,7 +112,7 @@ public class CliAgendaDto {
         }
     }
 
-    public void setAgeFfinTime(LocalTime time) {
+    public void setAgeSalidaTime(LocalTime time) {
         LocalDateTime currentDateTime = ageSalida.get();
         LocalDateTime newDateTime;
         if (currentDateTime != null) {
