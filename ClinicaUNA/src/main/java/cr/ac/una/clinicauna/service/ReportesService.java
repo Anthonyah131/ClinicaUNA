@@ -22,7 +22,7 @@ import net.sf.jasperreports.engine.JasperPrint;
  */
 public class ReportesService {
 
-    public Respuesta getAngendaReport(Long id, LocalDate fechainicial, LocalDate fechafin) {
+    public Respuesta getAngendaReport(Long id, String fechainicial, String fechafin) {
         try {
 
             Map<String, Object> variables = new HashMap<>();
@@ -71,7 +71,7 @@ public class ReportesService {
         }
     }
 
-    public Respuesta getRendimientoMedicos(LocalDate fechaInicial, LocalDate fechaFin) {
+    public Respuesta getRendimientoMedicos(String fechaInicial, String fechaFin) {
         try {
 
             Map<String, Object> variables = new HashMap<>();
