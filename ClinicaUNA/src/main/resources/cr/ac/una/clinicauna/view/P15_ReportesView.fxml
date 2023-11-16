@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import javafx.geometry.Insets?>
@@ -82,11 +81,16 @@
                         <Separator orientation="VERTICAL" prefHeight="200.0" />
                         <VBox alignment="CENTER" prefHeight="720.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <JFXComboBox fx:id="cbxTipoUsuario" promptText="%key.cbxTypeUser" styleClass="jfx-combo-box" />
+                              <HBox alignment="CENTER" prefHeight="57.0">
+                                 <children>
+                                    <JFXDatePicker fx:id="dpDesdeMR" defaultColor="#0084ff" promptText="%key.fromDay" styleClass="jfx-pickers" />
+                                    <JFXDatePicker fx:id="dpHastaMR" defaultColor="#1f8fff" layoutX="10.0" layoutY="10.0" promptText="%key.toDay" styleClass="jfx-pickers" />
+                                 </children>
+                              </HBox>
                               <HBox alignment="CENTER" prefHeight="64.0" spacing="20.0">
                                  <children>
-                                    <MFXButton fx:id="btnLimpiarU" onAction="#OnActionbtnLimpiaU" styleClass="mfx-button-Log" text="%key.btnClean" />
-                                    <MFXButton fx:id="btnAceptarU" onAction="#OnActionbtnAceptarU" styleClass="mfx-button-Log" text="%key.btnAcept" />
+                                    <MFXButton fx:id="btnLimpiarMR" onAction="#OnActionbtnLimpiaMR" styleClass="mfx-button-Log" text="%key.btnClean" />
+                                    <MFXButton fx:id="btnAceptarMR" onAction="#OnActionbtnAceptarMR" styleClass="mfx-button-Log" text="%key.btnAcept" />
                                  </children>
                                  <padding>
                                     <Insets right="5.0" />

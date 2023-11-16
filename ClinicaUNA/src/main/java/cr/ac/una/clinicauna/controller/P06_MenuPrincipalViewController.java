@@ -38,6 +38,8 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
     private MFXButton btnAtencion;
     @FXML
     private MFXButton btnReporteDinamico;
+    @FXML
+    private MFXButton btnReportes;
 
     CliUsuarioDto usuarioDto;
 
@@ -128,6 +130,12 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
         } else {
             new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "No tiene permisos para ingresar a esta pantalla");
         }
+    }
+    
+    @FXML
+    private void onActionBtnReportes(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
+        FlowController.getInstance().goView("P15_ReportesView");
     }
 
     @FXML

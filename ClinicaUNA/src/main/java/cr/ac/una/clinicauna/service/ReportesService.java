@@ -26,7 +26,7 @@ public class ReportesService {
         try {
 
             Map<String, Object> variables = new HashMap<>();
-            variables.put("usuid", id);
+            variables.put("id", id);
             variables.put("fechainicial", fechainicial);
             variables.put("fechafin", fechafin);
 
@@ -52,7 +52,7 @@ public class ReportesService {
         try {
 
             Map<String, Object> variables = new HashMap<>();
-            variables.put("pacId", pacId);
+            variables.put("id", pacId);
 
             Request request = new Request("ReportesJasperController/expedientePaciente", "/{id}", variables);
             request.get();

@@ -92,6 +92,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
 
     ResourceBundle resourceBundle;
     CliUsuarioDto usuarioDto;
+    String padre;
 
     /**
      * Initializes the controller class.
@@ -183,8 +184,13 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
     private void onActionBtnAgregarCita(ActionEvent event) {
         resultado = tbvResultados.getSelectionModel().getSelectedItem();
         if (resultado != null) {
-            P11_NuevaCitaViewController citasController = (P11_NuevaCitaViewController) FlowController.getInstance().getController("P11_NuevaCitaView");
-            citasController.bindBuscarPaciente();
+            if (padre.equals("P11_NuevaCitaView")) {
+                P11_NuevaCitaViewController citasController = (P11_NuevaCitaViewController) FlowController.getInstance().getController("P11_NuevaCitaView");
+                citasController.bindBuscarPaciente();
+            } else if(padre.equals("P15_ReportesView")) {
+                P15_ReportesViewController reportesController = (P15_ReportesViewController) FlowController.getInstance().getController("P15_ReportesView");
+                reportesController.bindBuscarPaciente();
+            }
         }
         getStage().close();
     }
@@ -271,16 +277,16 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
     }
 
     private void iniciarEscena() {
-        String padre = (String) AppContext.getInstance().get("PadrePacientes");
+        padre = (String) AppContext.getInstance().get("PadrePacientes");
         usuarioDto = (CliUsuarioDto) AppContext.getInstance().get("Usuario");
-        
+
         if (padre.equals("P06_MenuPrincipalView")) {
             btnAgregarCita.setVisible(false);
-        } else if (padre.equals("P11_NuevaCitaView")) {
+        } else if (padre.equals("P11_NuevaCitaView") || padre.equals("P15_ReportesView")) {
             btnSalir.setVisible(false);
             btnAgregarCita.setVisible(true);
         }
-        if (usuarioDto.getUsuTipousuario().equals("R")){
+        if (usuarioDto.getUsuTipousuario().equals("R")) {
             btnIrExpediente.setVisible(false);
         }
     }

@@ -96,6 +96,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
     List<Node> requeridos = new ArrayList<>();
     ResourceBundle resourceBundle;
     Object resultado;
+    String padre;
 
     /**
      * Initializes the controller class.
@@ -207,7 +208,11 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
 
     @FXML
     private void onActionBtnAddToAgenda(ActionEvent event) {
-        cargarMedicoAgenda();
+        if (padre.equals("P10_AgendaView")) {
+            cargarMedicoAgenda();
+        } else if(padre.equals("P15_ReportesView")) {
+            cargarMedicoReporte();
+        }
     }
 
     @FXML
@@ -426,13 +431,29 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         }
         getStage().close();
     }
+    
+    private void cargarMedicoReporte() {
+        resultado = tbvResultados.getSelectionModel().getSelectedItem();
+
+        if (resultado != null) {
+            medicoDto = (CliMedicoDto) resultado;
+            if (medicoDto.getMedEstado().equals("A")) {
+                P15_ReportesViewController reporteController = (P15_ReportesViewController) FlowController.getInstance().getController("P15_ReportesView");
+                reporteController.bindBuscar();
+            } else {
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.deleteUser", getStage(), "Medico inactivo");
+                return;
+            }
+        }
+        getStage().close();
+    }
 
     public Object getSeleccionado() {
         return resultado;
     }
 
     private void iniciarEscena() {
-        String padre = (String) AppContext.getInstance().get("PadreMedicos");
+        padre = (String) AppContext.getInstance().get("PadreMedicos");
         usuario = (CliUsuarioDto) AppContext.getInstance().get("Usuario");
 
         if (padre.equals("P06_MenuPrincipalView")) {
@@ -450,7 +471,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
                 btnFiltrar.setDisable(true);
                 btnLimpiarBusquedaMedico.setDisable(true);
             }
-        } else if (padre.equals("P10_AgendaView")) {
+        } else if (padre.equals("P10_AgendaView") || padre.equals("P15_ReportesView")) {
             btnAddToAgenda.setVisible(true);
             btnSalir.setVisible(false);
 
