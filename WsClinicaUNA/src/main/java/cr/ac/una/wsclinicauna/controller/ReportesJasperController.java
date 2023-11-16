@@ -58,7 +58,7 @@ public class ReportesJasperController {
             }
             //Aun no se que devolver
 
-            return Response.ok().build();//TODO
+            return Response.ok((byte[]) res.getResultado("Reporte")).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(ReportesJasperController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el reporte").build();
@@ -76,7 +76,27 @@ public class ReportesJasperController {
             }
             //Aun no se que devolver
 
-            return Response.ok().build();//TODO
+            return Response.ok((byte[]) res.getResultado("Reporte")).build();//TODO
+        } catch (Exception ex) {
+            Logger.getLogger(ReportesJasperController.class.getName()).log(Level.SEVERE, null, ex);
+            return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el reporte").build();
+        }
+    }
+    
+    @GET
+    @Path("/rendimientoMedicos/{fechaInicial}/{fechaFin}")
+    public Response rendimientoMedicos(@PathParam("fechaInicial") String fechaInicial, @PathParam("fechaFin") String fechaFin) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate fechainicial2 = LocalDate.parse(fechaInicial, formatter);
+            LocalDate fechafin2 = LocalDate.parse(fechaFin, formatter);
+            Respuesta res = reportesJasperService.getRendimientoMedicos(fechainicial2, fechafin2);
+            if (!res.getEstado()) {
+                return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
+            }
+
+
+            return Response.ok((byte[]) res.getResultado("Reporte")).build();//TODO
         } catch (Exception ex) {
             Logger.getLogger(ReportesJasperController.class.getName()).log(Level.SEVERE, null, ex);
             return Response.status(CodigoRespuesta.ERROR_INTERNO.getValue()).entity("Error obteniendo el reporte").build();

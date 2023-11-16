@@ -48,7 +48,7 @@ public class ReportesJasperService {
             Map<String, Object> variables = new HashMap<>();
             variables.put("usuid", id);
             variables.put("fechainicial", fechainicial);
-            variables.put("fechainicial", fechafin);
+            variables.put("fechafin", fechafin);
 
             JasperReport jr = (JasperReport) JRLoader.loadObject(ReportesJasperController.class.getResource("/cr/ac/una/wsclinicauna/reportes/Report1.jasper"));
 
@@ -77,6 +77,25 @@ public class ReportesJasperService {
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el usuario.", ex);
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorSavingUser", "getExpedienteReport " + ex.getMessage());
+        }
+    }
+    
+    public Respuesta getRendimientoMedicos(LocalDate fechaInicial,LocalDate fechaFin) {
+        try {
+            Connection co = em.unwrap(Connection.class);
+
+            Map<String, Object> variables = new HashMap<>();
+            variables.put("fechaInicial", fechaInicial);
+            variables.put("fechaFin", fechaFin);
+
+            JasperReport jr = (JasperReport) JRLoader.loadObject(ReportesJasperController.class.getResource("/cr/ac/una/wsclinicauna/reportes/Report3.jasper"));
+
+            JasperPrint jp = JasperFillManager.fillReport(jr, variables, co);
+            byte[] byteReport = toByteArray(jp);
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Reporte", byteReport);
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el usuario.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorSavingUser", "getAngendaReport " + ex.getMessage());
         }
     }
 

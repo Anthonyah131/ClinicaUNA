@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Report3" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d79fde1b-8938-4363-a686-e96a25278024">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ClinicaUNA"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<subDataset name="Dataset1" uuid="72a6b23a-7dcf-4003-b1e6-2c0ba827a73d">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ClinicaUNA"/>
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<parameter name="fechaInicial" class="java.sql.Date"/>
+		<parameter name="fechaFin" class="java.sql.Date"/>
+		<parameter name="medId" class="java.lang.Long"/>
+		<queryString>
+			<![CDATA[SELECT
+    COUNT(CASE WHEN C.cit_estado = 'P' THEN 1 END) AS citas_programadas,
+    COUNT(CASE WHEN C.cit_estado = 'A' THEN 1 END) AS citas_atendidas,
+    COUNT(CASE WHEN C.cit_estado = 'C' THEN 1 END) AS citas_canceladas,
+    COUNT(CASE WHEN C.cit_estado = 'U' THEN 1 END) AS citas_ausentes
+FROM
+    CLI_MEDICO M
+JOIN CLI_USUARIO U ON M.usu_id = U.usu_id
+LEFT JOIN CLI_AGENDA A ON M.med_id = A.med_id
+LEFT JOIN CLI_CITA C ON A.age_id = C.age_id
+WHERE
+    M.med_id =$P{medId}
+    AND C.cit_fechahora BETWEEN $P{fechaInicial} AND $P{fechaFin}
+GROUP BY
+    M.med_id, M.med_codigo, M.med_folio, M.med_carne, M.med_estado, M.med_fini, M.med_ffin, M.med_espaciosxhora, U.usu_nombre, U.usu_papellido
+ORDER BY
+    M.med_id]]>
+		</queryString>
+		<field name="CITAS_PROGRAMADAS" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.name" value="CITAS_PROGRAMADAS"/>
+			<property name="com.jaspersoft.studio.field.label" value="CITAS_PROGRAMADAS"/>
+		</field>
+		<field name="CITAS_ATENDIDAS" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.name" value="CITAS_ATENDIDAS"/>
+			<property name="com.jaspersoft.studio.field.label" value="CITAS_ATENDIDAS"/>
+		</field>
+		<field name="CITAS_CANCELADAS" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.name" value="CITAS_CANCELADAS"/>
+			<property name="com.jaspersoft.studio.field.label" value="CITAS_CANCELADAS"/>
+		</field>
+		<field name="CITAS_AUSENTES" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.name" value="CITAS_AUSENTES"/>
+			<property name="com.jaspersoft.studio.field.label" value="CITAS_AUSENTES"/>
+		</field>
+	</subDataset>
+	<parameter name="fechaInicial" class="java.sql.Date"/>
+	<parameter name="fechaFin" class="java.sql.Date"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+    M.med_id,
+    M.med_codigo,
+    M.med_folio,
+    M.med_carne,
+    M.med_estado,
+    M.med_fini,
+    M.med_ffin,
+    M.med_espaciosxhora,
+    U.usu_nombre,
+    U.usu_papellido,
+    COUNT(CASE WHEN C.cit_estado = 'P' THEN 1 END) AS citas_programadas,
+    COUNT(CASE WHEN C.cit_estado = 'A' THEN 1 END) AS citas_atendidas,
+    COUNT(CASE WHEN C.cit_estado = 'C' THEN 1 END) AS citas_canceladas,
+    COUNT(CASE WHEN C.cit_estado = 'U' THEN 1 END) AS citas_ausentes
+FROM
+    CLI_MEDICO M
+JOIN CLI_USUARIO U ON M.usu_id = U.usu_id
+LEFT JOIN CLI_AGENDA A ON M.med_id = A.med_id
+LEFT JOIN CLI_CITA C ON A.age_id = C.age_id
+WHERE
+    C.cit_fechahora BETWEEN $P{fechaInicial} AND $P{fechaFin}
+GROUP BY
+    M.med_id, M.med_codigo, M.med_folio, M.med_carne, M.med_estado, M.med_fini, M.med_ffin, M.med_espaciosxhora, U.usu_nombre,U.USU_PAPELLIDO
+ORDER BY
+    M.med_id]]>
+	</queryString>
+	<field name="MED_ID" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="MED_ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="MED_ID"/>
+	</field>
+	<field name="MED_CODIGO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MED_CODIGO"/>
+		<property name="com.jaspersoft.studio.field.label" value="MED_CODIGO"/>
+	</field>
+	<field name="MED_FOLIO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MED_FOLIO"/>
+		<property name="com.jaspersoft.studio.field.label" value="MED_FOLIO"/>
+	</field>
+	<field name="MED_CARNE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MED_CARNE"/>
+		<property name="com.jaspersoft.studio.field.label" value="MED_CARNE"/>
+	</field>
+	<field name="MED_ESTADO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="MED_ESTADO"/>
+		<property name="com.jaspersoft.studio.field.label" value="MED_ESTADO"/>
+	</field>
+	<field name="MED_FINI" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="MED_FINI"/>
+		<property name="com.jaspersoft.studio.field.label" value="MED_FINI"/>
+	</field>
+	<field name="MED_FFIN" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="MED_FFIN"/>
+		<property name="com.jaspersoft.studio.field.label" value="MED_FFIN"/>
+	</field>
+	<field name="MED_ESPACIOSXHORA" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="MED_ESPACIOSXHORA"/>
+		<property name="com.jaspersoft.studio.field.label" value="MED_ESPACIOSXHORA"/>
+	</field>
+	<field name="USU_NOMBRE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="USU_NOMBRE"/>
+		<property name="com.jaspersoft.studio.field.label" value="USU_NOMBRE"/>
+	</field>
+	<field name="USU_PAPELLIDO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="USU_PAPELLIDO"/>
+		<property name="com.jaspersoft.studio.field.label" value="USU_PAPELLIDO"/>
+	</field>
+	<field name="CITAS_PROGRAMADAS" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="CITAS_PROGRAMADAS"/>
+		<property name="com.jaspersoft.studio.field.label" value="CITAS_PROGRAMADAS"/>
+	</field>
+	<field name="CITAS_ATENDIDAS" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="CITAS_ATENDIDAS"/>
+		<property name="com.jaspersoft.studio.field.label" value="CITAS_ATENDIDAS"/>
+	</field>
+	<field name="CITAS_CANCELADAS" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="CITAS_CANCELADAS"/>
+		<property name="com.jaspersoft.studio.field.label" value="CITAS_CANCELADAS"/>
+	</field>
+	<field name="CITAS_AUSENTES" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="CITAS_AUSENTES"/>
+		<property name="com.jaspersoft.studio.field.label" value="CITAS_AUSENTES"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="91" splitType="Stretch">
+			<rectangle>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="87" forecolor="#911210" backcolor="#BF979A" uuid="735dd60a-9c8a-4caf-b0cc-ce644f5fc6d9"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="201" y="24" width="153" height="30" uuid="5076cfb3-83b8-41bd-ab8f-d0e2493a721d"/>
+				<textElement textAlignment="Center">
+					<font size="22"/>
+				</textElement>
+				<text><![CDATA[Clinica UNA]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="0" y="0" width="100" height="30" uuid="958d26b1-1e27-4559-a6af-36fb22c413de"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="57" width="201" height="30" uuid="fff50eec-94b1-4cdd-8261-bc99550a25e6"/>
+				<textFieldExpression><![CDATA["Fechas de :"+new String($P{fechaInicial}.toString())+" hasta: "+new String($P{fechaFin}.toString())]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="49" splitType="Stretch"/>
+	</pageHeader>
+	<detail>
+		<band height="469" splitType="Stretch">
+			<textField>
+				<reportElement x="331" y="130" width="220" height="30" uuid="56ab40d1-8627-4556-8883-d9d55a5d4b1b"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Citas Programadas: "+new String($F{CITAS_PROGRAMADAS}.toString())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="245" height="30" uuid="2f87628b-4379-497e-8af7-d053351a7f68"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nombre: "+$F{USU_NOMBRE}+" "+$F{USU_PAPELLIDO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="130" width="245" height="30" uuid="eb55d03f-99a3-4f54-86e0-630c3313670a"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Citas Atendidas: "+new String($F{CITAS_ATENDIDAS}.toString())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="330" y="180" width="220" height="30" uuid="679a58dc-386e-4c67-a6c6-34c243ec114e"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Citas Canceladas: "+new String($F{CITAS_CANCELADAS}.toString())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="184" width="245" height="30" uuid="a50e0583-5242-4ae1-a114-79a7236ec102"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Citas Ausentes: "+new String($F{CITAS_AUSENTES}.toString())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="30" width="245" height="30" uuid="a724aa7e-2596-4d6b-964a-5e0e70093691"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Carnet: "+new String($F{MED_CARNE})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="350" y="0" width="201" height="30" uuid="a33ae21c-d932-4906-9ecb-3d2be93e2fed"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Codigo: "+new String($F{MED_CODIGO})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="350" y="30" width="201" height="30" uuid="b1922a68-7ebd-46bc-a2f1-0326f93eddfc"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Folio: "+new String($F{MED_FOLIO})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="230" width="220" height="30" uuid="671cc629-71dd-4789-b2dc-b3809c9c7390"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total de citas: " + String.valueOf(
+    ((java.math.BigDecimal)field_CITAS_PROGRAMADAS.getValue()).add((java.math.BigDecimal)field_CITAS_ATENDIDAS.getValue())
+    .add((java.math.BigDecimal)field_CITAS_CANCELADAS.getValue()).add((java.math.BigDecimal)field_CITAS_AUSENTES.getValue())
+)]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="64" splitType="Stretch">
+			<textField>
+				<reportElement x="455" y="34" width="100" height="30" uuid="a198c9db-6919-4952-9de7-7df15cad95f5"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="34" width="100" height="30" uuid="ed76dd9c-71eb-4405-91b3-ffc2f1ca2718"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[
+® UNA, EvaComUNA 2023]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

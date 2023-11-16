@@ -11,6 +11,7 @@ module clinicauna {
     requires java.sql;
     requires jakarta.xml.bind;
     requires org.apache.commons.compress;
+    requires jasperreports;
 
     opens cr.ac.una.clinicauna to javafx.fxml, com.jfoenix;
     opens cr.ac.una.clinicauna.controller to javafx.fxml;
