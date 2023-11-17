@@ -9,6 +9,7 @@ import cr.ac.una.clinicauna.util.Formato;
 import cr.ac.una.clinicauna.util.Mensaje;
 import cr.ac.una.clinicauna.util.Respuesta;
 import cr.ac.una.clinicauna.util.SoundUtil;
+import cr.ac.una.clinicauna.util.Utilidades;
 import cr.ac.una.clinicauna.util.ValidarRequeridos;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.utils.SwingFXUtils;
@@ -31,6 +32,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javax.imageio.ImageIO;
 import org.apache.commons.compress.utils.IOUtils;
@@ -60,6 +62,8 @@ public class P07_MantenimientoGeneralesViewController extends Controller impleme
     private MFXButton btnAgregarPlantilla;
     @FXML
     private MFXButton btnGuardar;
+    @FXML
+    private AnchorPane root;
 
     CliParametrosDto parametrosDto;
     File file;
@@ -71,6 +75,7 @@ public class P07_MantenimientoGeneralesViewController extends Controller impleme
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        Utilidades.ajustarAnchorVentana(root);
         txfNombre.setTextFormatter(Formato.getInstance().maxLengthFormat(30));
         txaInformacion.setTextFormatter(Formato.getInstance().maxLengthFormat(30));
         txfCorreo.setTextFormatter(Formato.getInstance().maxLengthFormat(30));

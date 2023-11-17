@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package cr.ac.una.clinicauna.controller;
 
 import com.jfoenix.controls.JFXButton;
@@ -21,6 +17,7 @@ import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Formato;
 import cr.ac.una.clinicauna.util.Mensaje;
 import cr.ac.una.clinicauna.util.Respuesta;
+import cr.ac.una.clinicauna.util.Utilidades;
 import cr.ac.una.clinicauna.util.ValidarRequeridos;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
@@ -45,6 +42,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 
@@ -118,12 +116,15 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
     List<Node> requeridosParametro = new ArrayList<>();
 
     ResourceBundle resourceBundle;
+    @FXML
+    private AnchorPane root;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        Utilidades.ajustarAnchorVentana(root);
         txfNombre.setTextFormatter(Formato.getInstance().letrasFormat(30));
         txfTitulo.setTextFormatter(Formato.getInstance().maxLengthFormat(50));
         txaDescripcion.setTextFormatter(Formato.getInstance().maxLengthFormat(150));

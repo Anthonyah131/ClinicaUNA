@@ -13,6 +13,7 @@ import cr.ac.una.clinicauna.util.Formato;
 import cr.ac.una.clinicauna.util.Mensaje;
 import cr.ac.una.clinicauna.util.Respuesta;
 import cr.ac.una.clinicauna.util.SoundUtil;
+import cr.ac.una.clinicauna.util.Utilidades;
 import cr.ac.una.clinicauna.util.ValidarRequeridos;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
@@ -80,6 +81,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        Utilidades.ajustarAnchorVentana(root);
         txfCedula.setTextFormatter(Formato.getInstance().cedulaFormat(9));
         txfNombre.setTextFormatter(Formato.getInstance().letrasFormat(25));
         txfPapellido.setTextFormatter(Formato.getInstance().letrasFormat(25));

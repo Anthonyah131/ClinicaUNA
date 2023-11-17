@@ -12,6 +12,7 @@ import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Mensaje;
 import cr.ac.una.clinicauna.util.Respuesta;
 import cr.ac.una.clinicauna.util.SoundUtil;
+import cr.ac.una.clinicauna.util.Utilidades;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -27,6 +28,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.AnchorPane;
 
 /**
  * FXML Controller class
@@ -54,12 +56,15 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
     Object resultado;
 //    List<CliCitaDto> listaCitas;
     private ObservableList<CliCitaDto> listaCitas = FXCollections.observableArrayList();
+    @FXML
+    private AnchorPane root;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        Utilidades.ajustarAnchorVentana(root);
         usuarioDto = (CliUsuarioDto) AppContext.getInstance().get("Usuario");
         lblUserName.setText(usuarioDto.nombreDosApellidos());
         fillTableView();

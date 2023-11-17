@@ -266,6 +266,12 @@
     -fx-padding: 15;
     /*-fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);*/
 }
+
+.grid-pane-citas{
+    -fx-alignment: center;
+    -fx-grid-lines-visible: false;
+    -fx-border-color: #000000;
+}
 /*-----------------------------------------------------------------------------------------------------------------*/
 .fondo-login{
     -fx-background-image: url("../resources/media/images/logImage.png");
@@ -388,6 +394,7 @@
     -fx-max-width: 1000; /* Un valor grande que actúa como reemplazo para Double.MAX_VALUE */
     -fx-max-height: 1000;
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+    -fx-border-color: #000000;
 }
 .label-cita-ausente{
     -fx-font: 15px "Arial Rounded MT Bold";
@@ -395,6 +402,7 @@
     -fx-background-color: rgba(255, 0, 0, 0.39);
     -fx-alignment: CENTER;
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+    -fx-border-color: #000000;
 }
 .label-cita-atendida{
     -fx-font: 15px "Arial Rounded MT Bold";
@@ -402,6 +410,7 @@
     -fx-background-color: rgba(0, 0, 255, 0.39);
     -fx-alignment: CENTER;
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+    -fx-border-color: #000000;
 }
 /*-----------------------------------------------------------------------------------------------------------------*/
 .menu-button-Image{
@@ -471,6 +480,7 @@
     -fx-max-width: 1000; /* Un valor grande que actúa como reemplazo para Double.MAX_VALUE */
     -fx-max-height: 1000;
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+    -fx-border-color: #000000;
 }
 .label-agenda-colHoras{
     -fx-font: 15px "Arial Rounded MT Bold";
@@ -480,6 +490,7 @@
     -fx-max-width: 1000; /* Un valor grande que actúa como reemplazo para Double.MAX_VALUE */
     -fx-max-height: 1000;
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+    -fx-border-color: #000000;
 }
 
 .label-agregar-cita{
@@ -492,4 +503,5 @@
     -fx-max-width: 1000; /* Un valor grande que actúa como reemplazo para Double.MAX_VALUE */
     -fx-max-height: 1000;
     -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 1), 10, 0.5, 0.0, 0.0);
+    -fx-border-color: #000000;
 }

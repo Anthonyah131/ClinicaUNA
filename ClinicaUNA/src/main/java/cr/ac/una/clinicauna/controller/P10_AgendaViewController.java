@@ -65,6 +65,8 @@ public class P10_AgendaViewController extends Controller implements Initializabl
     private Label lblHoraEntrada;
     @FXML
     private Label lblHoraSalida;
+    @FXML
+    private AnchorPane root;
 
     CliUsuarioDto usuarioDto;
     CliMedicoDto medicoDto;
@@ -82,8 +84,6 @@ public class P10_AgendaViewController extends Controller implements Initializabl
     int cantCitasTotales;
     int[] jornadaDoctor;
     int casillasVacias;
-    @FXML
-    private AnchorPane root;
 
     /**
      * Initializes the controller class.
@@ -91,6 +91,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        Utilidades.ajustarAnchorVentana(root);
         iniciarVariables();
         grdCitas.setOnDragOver(event -> {
             if (event.getGestureSource() != grdCitas && event.getDragboard().hasString()) {
@@ -138,19 +139,19 @@ public class P10_AgendaViewController extends Controller implements Initializabl
             //Recupera la agenda si la hay desde base y la lista de citas
             cargarAgenda();
             //Variables varias para calculos de espacios en el grid
-            LocalTime horaEntradaTime = medicoDto.getMedFiniTime();
-            LocalTime horaSalidaTime = medicoDto.getMedFfinTime();
+            LocalTime horaEntradaTime;
+            LocalTime horaSalidaTime;
 
-            if (agendaDto.getAgeFecha().isBefore(LocalDate.now())) {
-//                horaEntradaTime = agendaDto.getAgeIniTime();
-//                horaSalidaTime = agendaDto.getAgeFinTime();
+            if (agendaDto.getAgeId() != null) {
+                horaEntradaTime = agendaDto.getAgeEntradaTime();
+                horaSalidaTime = agendaDto.getAgeSalidaTime();
             } else {
                 horaEntradaTime = medicoDto.getMedFiniTime();
                 horaSalidaTime = medicoDto.getMedFfinTime();
             }
 
             iniJornada = horaEntradaTime.getHour();
-            finJornada = horaSalidaTime.getHour();
+            finJornada = horaSalidaTime.getMinute();
             minutosIniJornada = horaEntradaTime.getMinute();
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
@@ -162,7 +163,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
             lblHoraSalida.setText(horaSalida);
 
             //Obtener la cantidad de horas y minutos que va a trabajar el doctor y asi obtener la jornada
-            jornadaDoctor = Utilidades.calcularJornada(medicoDto.getMedFiniTime(), medicoDto.getMedFfinTime());
+            jornadaDoctor = Utilidades.calcularJornada(horaEntradaTime, horaSalidaTime);
             jornada = jornadaDoctor[0];
             citasHoras = medicoDto.getMedEspaciosxhora().intValue();
             lblJornada.setText(jornadaDoctor[0] + "h " + jornadaDoctor[1] + "m");
@@ -193,6 +194,8 @@ public class P10_AgendaViewController extends Controller implements Initializabl
             if (agendaDto == null) {
                 agendaDto = new CliAgendaDto();
                 agendaDto.setAgeFecha(dtpFechasCitas.getValue());
+                agendaDto.setAgeEntradaTime(medicoDto.getMedFiniTime());
+                agendaDto.setAgeSalidaTime(medicoDto.getMedFfinTime());
             }
 
             listaCitas.clear();
@@ -283,7 +286,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         int numCols = citasHoras + 1;
         int horaInicio = iniJornada;
 
-        if (jornadaDoctor[0] > 0) {
+        if (finJornada > 0) {
             numRows++;
         }
 
@@ -292,6 +295,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         casillasVacias = 0;
 
         grdCitas.getChildren().clear();
+        //grdCitas = new GridPane();
 
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
@@ -427,7 +431,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                 }
             }
         }
-        grdCitas.setGridLinesVisible(true);
+       grdCitas.setGridLinesVisible(true);
     }
 
     private void actualizarCita(CliCitaDto cita) {
@@ -572,44 +576,4 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         agendaDto = agenda;
         medicoDto = medico;
     }
-
-    private void calcularEntradaSalida() {
-
-    }
-//    public void dragAndDrop() {
-//
-//        grdCitas.setOnDragOver(event -> {
-//            if (event.getGestureSource() != grdCitas && event.getDragboard().hasString()) {
-//                event.acceptTransferModes(TransferMode.MOVE);
-//            }
-//            event.consume();
-//        });
-//
-//        grdCitas.setOnDragDropped(event -> {
-//            Dragboard db = event.getDragboard();
-//            boolean success = false;
-//
-//            if (db.hasString()) {
-//                Label sourceLabel = createLabel(db.getString());
-//                grdCitas.add(sourceLabel, colIndex, rowIndex);
-//                success = true;
-//            }
-//
-//            event.setDropCompleted(success);
-//            event.consume();
-//        });
-//    }
-//
-//    private Label createLabel(String text) {
-//        Label label = new Label(text);
-//        label.setOnDragDetected(event -> {
-//            Dragboard db = label.startDragAndDrop(TransferMode.MOVE);
-//            ClipboardContent content = new ClipboardContent();
-//            content.putString(label.getText());
-//            db.setContent(content);
-//            event.consume();
-//        });
-//
-//        return label;
-//    }
 }

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package cr.ac.una.clinicauna.controller;
 
 import com.jfoenix.controls.JFXDatePicker;
@@ -12,6 +8,7 @@ import cr.ac.una.clinicauna.util.AppContext;
 import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Mensaje;
 import cr.ac.una.clinicauna.util.Respuesta;
+import cr.ac.una.clinicauna.util.Utilidades;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
@@ -22,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JasperViewer;
 
@@ -65,12 +63,15 @@ public class P15_ReportesViewController extends Controller implements Initializa
 
     CliMedicoDto medicoDto;
     CliPacienteDto pacienteDto;
+    @FXML
+    private AnchorPane root;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        Utilidades.ajustarAnchorVentana(root);
         lbMedico.setText("......");
         fdesde.setValue(null);
         fhasta.setValue(null);

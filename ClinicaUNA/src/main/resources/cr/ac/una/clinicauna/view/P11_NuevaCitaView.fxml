@@ -66,6 +66,7 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" layoutX="30.0" layoutY="206.0" spacing="10.0">
                      <children>
+                        <MFXButton fx:id="btnMoverCita" layoutX="270.0" layoutY="10.0" onAction="#onActionBtnMoverCita" prefHeight="45.0" prefWidth="200.0" styleClass="mfx-button-menu" text="Mover cita" />
                         <MFXButton fx:id="btnGuardar" onAction="#onActionBtnGuardar" prefHeight="45.0" prefWidth="200.0" styleClass="mfx-button-menu" text="%key.addon" />
                      </children>
                   </HBox>

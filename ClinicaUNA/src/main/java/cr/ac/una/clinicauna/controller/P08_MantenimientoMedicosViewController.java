@@ -105,6 +105,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        Utilidades.ajustarAnchorVentana(root);
         resourceBundle = FlowController.getInstance().getIdioma();
         txfBuscarCodigo.setTextFormatter(Formato.getInstance().maxLengthFormat(15));
         txfBuscarFolio.setTextFormatter(Formato.getInstance().maxLengthFormat(10));
@@ -210,7 +211,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
     private void onActionBtnAddToAgenda(ActionEvent event) {
         if (padre.equals("P10_AgendaView")) {
             cargarMedicoAgenda();
-        } else if(padre.equals("P15_ReportesView")) {
+        } else if (padre.equals("P15_ReportesView")) {
             cargarMedicoReporte();
         }
     }
@@ -431,7 +432,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         }
         getStage().close();
     }
-    
+
     private void cargarMedicoReporte() {
         resultado = tbvResultados.getSelectionModel().getSelectedItem();
 

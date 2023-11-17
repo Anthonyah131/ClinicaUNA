@@ -13,7 +13,6 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane id="AnchorPane" fx:id="root" prefHeight="720.0" prefWidth="1280.0" styleClass="fondo-pacientes" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.clinicauna.controller.P09_MantenimientoPacientesViewController">
@@ -92,10 +91,9 @@
                               <JFXTextField fx:id="txfTelefono" promptText="%key.phone" styleClass="jfx-text-field-edit" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER_RIGHT" prefWidth="200.0" spacing="20.0">
+                        <HBox alignment="CENTER" prefWidth="200.0" spacing="20.0">
                            <children>
                               <MFXButton fx:id="btnIrExpediente" onAction="#onActionBtnIrExpediente" styleClass="mfx-button-menu-minus" text="%key.goMedicRecord" />
-                              <Pane HBox.hgrow="ALWAYS" />
                               <MFXButton fx:id="btnLimpiarCampos" layoutX="133.0" layoutY="10.0" onAction="#onActionBtnLimpiarCampos" styleClass="mfx-button-Image">
                                  <graphic>
                                     <ImageView fitHeight="40.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
@@ -109,6 +107,7 @@
                                  </tooltip>
                               </MFXButton>
                               <MFXButton fx:id="btnGuardar" onAction="#onActionBtnGuardar" prefHeight="45.0" prefWidth="250.0" styleClass="mfx-button-Log" text="%key.addon" HBox.hgrow="ALWAYS" />
+                              <MFXButton fx:id="btnAgregarCita" onAction="#onActionBtnAgregarCita" prefWidth="200.0" styleClass="mfx-button-menu-minus" text="%key.addToCita" />
                            </children>
                         </HBox>
                      </children>
@@ -122,9 +121,6 @@
                <padding>
                   <Insets bottom="20.0" left="5.0" right="5.0" top="5.0" />
                </padding>
-               <children>
-                  <MFXButton fx:id="btnAgregarCita" maxWidth="1.7976931348623157E308" onAction="#onActionBtnAgregarCita" styleClass="mfx-button-menu-minus" text="%key.addToCita" />
-               </children>
             </VBox>
          </children>
          <padding>

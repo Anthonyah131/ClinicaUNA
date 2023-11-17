@@ -94,7 +94,7 @@
                   </HBox>
                   <MFXScrollPane style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
                      <content>
-                        <GridPane fx:id="grdCitas">
+                        <GridPane fx:id="grdCitas" gridLinesVisible="true" styleClass="grid-pane-citas">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" percentWidth="0.0" />
                           </columnConstraints>

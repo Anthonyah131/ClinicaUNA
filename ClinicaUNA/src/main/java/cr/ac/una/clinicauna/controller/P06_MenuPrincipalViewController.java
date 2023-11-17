@@ -5,6 +5,7 @@ import cr.ac.una.clinicauna.util.AppContext;
 import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Mensaje;
 import cr.ac.una.clinicauna.util.SoundUtil;
+import cr.ac.una.clinicauna.util.Utilidades;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -12,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.layout.AnchorPane;
 
 /**
  * FXML Controller class
@@ -40,6 +42,8 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
     private MFXButton btnReporteDinamico;
     @FXML
     private MFXButton btnReportes;
+    @FXML
+    private AnchorPane root;
 
     CliUsuarioDto usuarioDto;
 
@@ -49,6 +53,7 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        Utilidades.ajustarAnchorVentana(root);
         usuarioDto = (CliUsuarioDto) AppContext.getInstance().get("Usuario");
     }
 
@@ -122,7 +127,7 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
 
     @FXML
     private void onActionBtnAtencion(ActionEvent event) {
-         SoundUtil.mouseEnterSound();
+        SoundUtil.mouseEnterSound();
         if (!usuarioDto.getUsuTipousuario().equals("R")) {
             //AppContext.getInstance().set("PadreMedicos", "P06_MenuPrincipalView");
             //FlowController.getInstance().delete("P08_MantenimientoMedicosView");
@@ -131,7 +136,7 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
             new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "No tiene permisos para ingresar a esta pantalla");
         }
     }
-    
+
     @FXML
     private void onActionBtnReportes(ActionEvent event) {
         SoundUtil.mouseEnterSound();

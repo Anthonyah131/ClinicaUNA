@@ -13,6 +13,7 @@ import cr.ac.una.clinicauna.util.Formato;
 import cr.ac.una.clinicauna.util.Mensaje;
 import cr.ac.una.clinicauna.util.Respuesta;
 import cr.ac.una.clinicauna.util.SoundUtil;
+import cr.ac.una.clinicauna.util.Utilidades;
 import cr.ac.una.clinicauna.util.ValidarRequeridos;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
@@ -99,6 +100,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        Utilidades.ajustarAnchorVentana(root);
         rdbHombre.setUserData("M");
         rdbMujer.setUserData("F");
         txfCedula.setTextFormatter(Formato.getInstance().cedulaFormat(9));
@@ -111,6 +113,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
         txfBuscarCedula.setTextFormatter(Formato.getInstance().cedulaFormat(9));
         txfBuscarNombre.setTextFormatter(Formato.getInstance().letrasFormat(25));
         txfBuscarPapellido.setTextFormatter(Formato.getInstance().letrasFormat(25));
+        btnIrExpediente.setDisable(true);
         pacienteDto = new CliPacienteDto();
         iniciarEscena();
         fillTableView();
@@ -187,7 +190,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
             if (padre.equals("P11_NuevaCitaView")) {
                 P11_NuevaCitaViewController citasController = (P11_NuevaCitaViewController) FlowController.getInstance().getController("P11_NuevaCitaView");
                 citasController.bindBuscarPaciente();
-            } else if(padre.equals("P15_ReportesView")) {
+            } else if (padre.equals("P15_ReportesView")) {
                 P15_ReportesViewController reportesController = (P15_ReportesViewController) FlowController.getInstance().getController("P15_ReportesView");
                 reportesController.bindBuscarPaciente();
             }
@@ -228,6 +231,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
             if (newValue != null) {
                 unbindPaciente();
                 pacienteDto = newValue;
+                btnIrExpediente.setDisable(false);
                 bindPaciente();
             } else {
                 nuevoPaciente();
@@ -299,6 +303,9 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
 
     @FXML
     private void onActionBtnIrExpediente(ActionEvent event) {
+        P13_ExpedienteViewController expedienteController = (P13_ExpedienteViewController) FlowController.getInstance().getController("P13_ExpedienteView");
+        expedienteController.cargarPaciente(pacienteDto, usuarioDto);
+        FlowController.getInstance().goViewInWindow("P13_ExpedienteView", false);
     }
 
     private class ButtonCell extends TableCell<CliPacienteDto, Boolean> {

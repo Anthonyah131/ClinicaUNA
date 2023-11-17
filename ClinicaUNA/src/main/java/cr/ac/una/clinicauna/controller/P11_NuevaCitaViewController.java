@@ -11,7 +11,6 @@ import cr.ac.una.clinicauna.service.CliAgendaService;
 import cr.ac.una.clinicauna.service.CliCitaService;
 import cr.ac.una.clinicauna.service.CliMedicoService;
 import cr.ac.una.clinicauna.service.CliPacienteService;
-import cr.ac.una.clinicauna.service.CliUsuarioService;
 import cr.ac.una.clinicauna.util.AppContext;
 import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Mensaje;
@@ -19,7 +18,6 @@ import cr.ac.una.clinicauna.util.Respuesta;
 import cr.ac.una.clinicauna.util.ValidarRequeridos;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,6 +61,8 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
     private MFXButton btnGuardar;
     @FXML
     private Label lblFechaHora;
+    @FXML
+    private MFXButton btnMoverCita;
 
     CliCitaDto citaDto;
     CliUsuarioDto usuarioDto;
@@ -72,6 +72,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
     CliCitaDto citasVector[];
     int posVec;
     List<Node> requeridos = new ArrayList<>();
+    LocalDateTime fechaHoraCita;
 
     ResourceBundle resourceBundle;
 
@@ -84,6 +85,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         resourceBundle = FlowController.getInstance().getIdioma();
         fillCbox();
         requeridos.addAll(Arrays.asList(cboxEstadoCita, cboxEspacioHora));
+
     }
 
     @Override
@@ -172,7 +174,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
                     pacienteService.guardarPaciente(pacienteDto);
                 }
 
-                if (citaDto.getCliPacienteDto() == null) {///preguntar
+                if (citaDto.getCliAgendaDto() == null) {
                     CliAgendaService agendaService = new CliAgendaService();
                     citaDto.setModificado(true);
                     agendaDto.getCliCitaList().add(citaDto);
@@ -257,6 +259,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         usuarioDto = usuario;
         agendaDto = agenda;
         medicoDto = medico;
+        fechaHoraCita = fechaHora;
         citasVector = citasVec;
         posVec = pos;
         if (citaDto.getCitUsuarioRegistra() == null && citaDto.getCitFechaHora() == null) {
@@ -264,6 +267,18 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
             citaDto.setCitFechaHora(fechaHora);
         }
         bindCita();
+        if (citaDto.getCitId() != null) {
+            btnMoverCita.setDisable(false);
+            btnMoverCita.setText("Mover cita");
+        } else {
+            if (AppContext.getInstance().get("CitaMover") == null) {
+                btnMoverCita.setDisable(true);
+            } else {
+                btnMoverCita.setDisable(false);
+                btnMoverCita.setText("Pegar cita");
+            }
+
+        }
     }
 
     public void fillCbox() {
@@ -293,5 +308,23 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
             default ->
                 "P";
         };
+    }
+
+    @FXML
+    private void onActionBtnMoverCita(ActionEvent event) {
+
+        if (AppContext.getInstance().get("CitaMover") == null) {
+
+            citaDto.setCliAgendaDto(null);
+            AppContext.getInstance().set("CitaMover", citaDto);
+            System.out.println("Cita copeada");
+
+        } else {
+            citaDto = (CliCitaDto) AppContext.getInstance().get("CitaMover");
+            citaDto.setCliAgendaDto(agendaDto);
+            citaDto.setCitFechaHora(fechaHoraCita);
+            bindCita();
+            System.out.println("Cita movida");
+        }
     }
 }
