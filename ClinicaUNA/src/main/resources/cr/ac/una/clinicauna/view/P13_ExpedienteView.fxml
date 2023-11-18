@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.clinicauna.controller.P13_ExpedienteViewController">
+<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.clinicauna.controller.P13_ExpedienteViewController">
     <stylesheets>
         <URL value="@styles.css" />
     </stylesheets>
@@ -117,7 +117,7 @@
                                                 <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
                                              </padding>
                                           </VBox>
-                                          <VBox spacing="10.0" styleClass="panel-border" HBox.hgrow="ALWAYS">
+                                          <VBox fx:id="vxAntecedentesFamiliares" spacing="10.0" styleClass="panel-border" HBox.hgrow="ALWAYS">
                                              <children>
                                                 <Label maxWidth="1.7976931348623157E308" minWidth="-Infinity" styleClass="labels-text-minus" text="%key.familyHistory" textAlignment="CENTER" wrapText="true" />
                                                 <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" VBox.vgrow="ALWAYS">
@@ -176,7 +176,7 @@
                                     </HBox>
                                  </children>
                               </VBox>
-                              <VBox alignment="CENTER" spacing="15.0" styleClass="panel-border">
+                              <VBox fx:id="vxAtencion" alignment="CENTER" spacing="15.0" styleClass="panel-border">
                                  <children>
                                     <Label maxWidth="1.7976931348623157E308" styleClass="labels-text-minus-izquierda" text="%key.datingHistory" />
                                     <HBox spacing="10.0">
@@ -277,7 +277,7 @@
                                     </VBox>
                                  </children>
                               </VBox>
-                              <VBox spacing="15.0" styleClass="panel-border">
+                              <VBox fx:id="vxExamenes" spacing="15.0" styleClass="panel-border">
                                  <children>
                                     <VBox spacing="10.0">
                                        <children>

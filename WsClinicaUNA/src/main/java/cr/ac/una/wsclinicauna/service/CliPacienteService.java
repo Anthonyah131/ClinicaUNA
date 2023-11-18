@@ -129,7 +129,14 @@ public class CliPacienteService {
                 em.persist(cliPaciente);
             }
             em.flush();
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Paciente", new CliPacienteDto(cliPaciente));
+            CliPacienteDto pacienteDto = new CliPacienteDto(cliPaciente);
+            for (CliExpediente cliExpediente : cliPaciente.getCliExpedienteList()) {
+                pacienteDto.getCliExpedienteList().add(new CliExpedienteDto(cliExpediente));
+            }
+            for (CliCita cliCita : cliPaciente.getCliCitaList()) {
+                pacienteDto.getCliCitaList().add(new CliCitaDto(cliCita));
+            }
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Paciente", pacienteDto);
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el paciente.", ex);
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el paciente.", "guardarPaciente " + ex.getMessage());

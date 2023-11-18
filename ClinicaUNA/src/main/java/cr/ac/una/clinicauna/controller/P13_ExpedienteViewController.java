@@ -4,16 +4,27 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import cr.ac.una.clinicauna.model.CliAgendaDto;
 import cr.ac.una.clinicauna.model.CliAntecedenteDto;
 import cr.ac.una.clinicauna.model.CliCitaDto;
+import cr.ac.una.clinicauna.model.CliExpedienteDto;
+import cr.ac.una.clinicauna.model.CliMedicoDto;
 import cr.ac.una.clinicauna.model.CliPacienteDto;
+import cr.ac.una.clinicauna.model.CliParametroconsultaDto;
 import cr.ac.una.clinicauna.model.CliUsuarioDto;
+import cr.ac.una.clinicauna.service.CliAgendaService;
+import cr.ac.una.clinicauna.service.CliAntecedenteService;
+import cr.ac.una.clinicauna.service.CliExpedienteService;
+import cr.ac.una.clinicauna.service.CliMedicoService;
+import cr.ac.una.clinicauna.service.CliParametroconsultaService;
 import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Formato;
 import cr.ac.una.clinicauna.util.Mensaje;
+import cr.ac.una.clinicauna.util.Respuesta;
 import cr.ac.una.clinicauna.util.ValidarRequeridos;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,6 +49,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 /**
@@ -133,7 +145,14 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
     private TableView<CliAntecedenteDto> tbvAntecedentes;
     @FXML
     private TableView<?> tbvArchivos;
+    @FXML
+    private VBox vxAntecedentesFamiliares;
+    @FXML
+    private VBox vxAtencion;
+    @FXML
+    private VBox vxExamenes;
 
+    CliExpedienteDto expedienteDto;
     CliPacienteDto pacienteDto;
     CliUsuarioDto usuarioDto;
     CliAntecedenteDto antecedenteDto;
@@ -151,6 +170,10 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
         txfCantHospitalizaciones.setTextFormatter(Formato.getInstance().twoDecimalFormat());
         txfCantOperaciones.setTextFormatter(Formato.getInstance().twoDecimalFormat());
         txfCantAlergias.setTextFormatter(Formato.getInstance().twoDecimalFormat());
+        txaAntPatologicos.setTextFormatter(Formato.getInstance().maxLengthFormat(500));
+        txaAlergias.setTextFormatter(Formato.getInstance().maxLengthFormat(500));
+        txaTratamientosActuales.setTextFormatter(Formato.getInstance().maxLengthFormat(500));
+
         this.antecedenteDto = new CliAntecedenteDto();
 
         requeridosAntecedentes.addAll(Arrays.asList(txfAntTipo, txfAntParentesco, txfAntDescripcion));
@@ -164,8 +187,33 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
     public void initialize() {
     }
 
-    @FXML
+    @FXML // Poner idioma
     private void onActionBtnAgregarAntecedente(ActionEvent event) {
+        try {
+//            String invalidos = ValidarRequeridos.validarRequeridos(requeridosParametro);
+//            if (!invalidos.isEmpty()) {
+//                String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
+//                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), mensaje);
+//            } else {
+            CliAntecedenteService antecedenteService = new CliAntecedenteService();
+            Respuesta respuesta = antecedenteService.guardarAntecedente(this.antecedenteDto);
+            if (!respuesta.getEstado()) {
+                new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), respuesta.getMensaje());
+            } else {
+                unbindAntecedente();
+                this.antecedenteDto = (CliAntecedenteDto) respuesta.getResultado("Antecedente");
+                this.antecedenteDto.setModificado(true);
+                expedienteDto.getCliAntecedenteList().add(this.antecedenteDto);
+                onActionBtnGuardarExpediente(event);
+                this.antecedenteDto = new CliAntecedenteDto();
+                bindAntecedente();
+                new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveParameterR", getStage(), "key.updatedParameterR");
+            }
+//                }
+        } catch (Exception ex) {
+            Logger.getLogger(P16_ReporteDinamicoViewController.class.getName()).log(Level.SEVERE, "Error guardando el parametro.", ex);
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), "key.errorSavingParameterR");
+        }
         try {
             String invalidos = ValidarRequeridos.validarRequeridos(requeridosAntecedentes);
             if (!invalidos.isEmpty()) {
@@ -192,25 +240,84 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
     private void onActionBtnCargarArchivos(ActionEvent event) {
     }
 
-    @FXML
+    @FXML // Poner idioma
     private void onActionBtnGuardarExpediente(ActionEvent event) {
+        try {
+            /*String invalidos = ValidarRequeridos.validarRequeridos(requeridos);
+            if (!invalidos.isEmpty()) {
+                String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), mensaje);
+            } else {*/
+            if (expedienteDto.getExpId() != null) {
+                CliExpedienteService expedienteService = new CliExpedienteService();
+                Respuesta respuesta = expedienteService.guardarExpediente(expedienteDto);
+                if (!respuesta.getEstado()) {
+                    new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
+                } else {
+                    unbindExpediente();
+                    this.expedienteDto = (CliExpedienteDto) respuesta.getResultado("Expediente");
+                    cargarAntecedentes();
+                    bindExpediente();
+                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
+                }
+//                } else {
+//                    System.out.println("Error guardando");
+//                    // Se pone un mensaje que se debe cargar un medico para actualizarlo
+//                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(P08_MantenimientoMedicosViewController.class.getName()).log(Level.SEVERE, "Error guardando el medico.", ex);
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
+        }
     }
 
     @FXML
     private void onActionBtnSalir(ActionEvent event) {
     }
 
+    private void bindExpediente() {
+        txfCantHospitalizaciones.textProperty().bindBidirectional(expedienteDto.expHospitalizaciones);
+        txfCantOperaciones.textProperty().bindBidirectional(expedienteDto.expOperaciones);
+        txfCantAlergias.textProperty().bindBidirectional(expedienteDto.expAlergias);
+        txaAntPatologicos.textProperty().bindBidirectional(expedienteDto.expPatologicos);
+        txaAlergias.textProperty().bindBidirectional(expedienteDto.expTiposalergias);
+        txaTratamientosActuales.textProperty().bindBidirectional(expedienteDto.expTratamientos);
+        if (this.expedienteDto.getExpId() == null || this.expedienteDto.getExpId() <= 0) {
+            vxAntecedentesFamiliares.setDisable(true);
+            vxAtencion.setDisable(true);
+            vxExamenes.setDisable(true);
+        } else {
+            vxAntecedentesFamiliares.setDisable(false);
+            vxAtencion.setDisable(false);
+            vxExamenes.setDisable(false);
+        }
+    }
+
+    private void unbindExpediente() {
+        txfCantHospitalizaciones.textProperty().unbindBidirectional(expedienteDto.expHospitalizaciones);
+        txfCantOperaciones.textProperty().unbindBidirectional(expedienteDto.expOperaciones);
+        txfCantAlergias.textProperty().unbindBidirectional(expedienteDto.expAlergias);
+        txaAntPatologicos.textProperty().unbindBidirectional(expedienteDto.expPatologicos);
+        txaAlergias.textProperty().unbindBidirectional(expedienteDto.expTiposalergias);
+        txaTratamientosActuales.textProperty().unbindBidirectional(expedienteDto.expTratamientos);
+    }
+
     public void cargarPaciente(CliPacienteDto paciente, CliUsuarioDto usuario) {
         pacienteDto = paciente;
         usuarioDto = usuario;
         bindPaciente();
-        fillTableViewCitasPaciente();
+        CliExpedienteService service = new CliExpedienteService();
+        Respuesta respuesta = service.getExpediente(pacienteDto.getCliExpedienteList().get(0).getExpId());
+        expedienteDto = (CliExpedienteDto) respuesta.getResultado("Expediente");
+        bindExpediente();
 
+        fillTableViewCitasPaciente();
         tbvHistorialCitas.getItems().clear();
         listaCitas.clear();
         listaCitas.addAll(pacienteDto.getCliCitaList());
         tbvHistorialCitas.setItems(listaCitas);
         tbvHistorialCitas.refresh();
+        cargarAntecedentes();
     }
 
     public void bindPaciente() {
@@ -301,15 +408,21 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
         TableColumn<CliAntecedenteDto, String> tbcParent = new TableColumn<>(/*resourceBundle.getString("key.papellido")*/"Parentesco");
         tbcParent.setPrefWidth(150);
         tbcParent.setCellValueFactory(cd -> cd.getValue().antTipo);
-        
+
         TableColumn<CliAntecedenteDto, Boolean> tbcEliminar = new TableColumn<>("Eliminar");
         tbcEliminar.setPrefWidth(100);
         tbcEliminar.setCellValueFactory((TableColumn.CellDataFeatures<CliAntecedenteDto, Boolean> p) -> new SimpleBooleanProperty(p.getValue() != null));
         tbcEliminar.setCellFactory((TableColumn<CliAntecedenteDto, Boolean> p) -> new P13_ExpedienteViewController.ButtonCellAntecedentes());
 
-        tbvAntecedentes.getColumns().addAll(tbcTipo, tbcParent,tbcEliminar);
+        tbvAntecedentes.getColumns().addAll(tbcTipo, tbcParent, tbcEliminar);
         tbvAntecedentes.refresh();
 
+    }
+    
+    private void cargarAntecedentes() {
+        tbvAntecedentes.getItems().clear();
+        tbvAntecedentes.setItems(this.expedienteDto.getCliAntecedenteList());
+        tbvAntecedentes.refresh();
     }
 
     private void listenerNodos() {
@@ -338,7 +451,7 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
         tbvAntecedentes.getColumns().addAll(tbcTipo, tbcParent);
         tbvAntecedentes.refresh();
     }
-    
+
     private class ButtonCellAntecedentes extends TableCell<CliAntecedenteDto, Boolean> {
 
         final MFXButton cellButton = new MFXButton();
@@ -349,7 +462,10 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
             cellButton.getStyleClass().add("mfx-button-menuSalir");
 
             cellButton.setOnAction((ActionEvent t) -> {
-//                CliPacienteDto pac = (CliPacienteDto) ButtonCell.this.getTableView().getItems().get(ButtonCell.this.getIndex());
+                CliAntecedenteDto ant = (CliAntecedenteDto) ButtonCellAntecedentes.this.getTableView().getItems().get(ButtonCellAntecedentes.this.getIndex());
+                expedienteDto.getCliAntecedenteListEliminados().add(ant);
+                tbvAntecedentes.getItems().remove(ant);
+                tbvAntecedentes.refresh();
 //                try {
 //                    if (pac.getPacId() == null) {
 //                        new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.deleteUser", getStage(), "key.loadUserDelete");

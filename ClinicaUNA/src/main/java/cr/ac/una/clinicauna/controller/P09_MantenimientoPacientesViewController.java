@@ -3,8 +3,10 @@ package cr.ac.una.clinicauna.controller;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
+import cr.ac.una.clinicauna.model.CliExpedienteDto;
 import cr.ac.una.clinicauna.model.CliPacienteDto;
 import cr.ac.una.clinicauna.model.CliUsuarioDto;
+import cr.ac.una.clinicauna.service.CliExpedienteService;
 import cr.ac.una.clinicauna.service.CliPacienteService;
 import cr.ac.una.clinicauna.util.AppContext;
 import cr.ac.una.clinicauna.util.BindingUtils;
@@ -157,12 +159,32 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
                     unbindPaciente();
                     this.pacienteDto = (CliPacienteDto) respuesta.getResultado("Paciente");
                     bindPaciente();
+                    crearExpediente();
                     new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
                 }
             }
         } catch (Exception ex) {
             Logger.getLogger(P09_MantenimientoPacientesViewController.class.getName()).log(Level.SEVERE, "Error guardando el paciente.", ex);
             new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
+        }
+    }
+    
+    private void crearExpediente() {
+        if (pacienteDto.getCliExpedienteList().isEmpty()) {
+            CliPacienteService usuarioService = new CliPacienteService();
+            CliExpedienteService expedienteService = new CliExpedienteService();
+
+            CliExpedienteDto expedienteDto = new CliExpedienteDto();
+            Respuesta respuestaMedico = expedienteService.guardarExpediente(expedienteDto);
+            expedienteDto = (CliExpedienteDto) respuestaMedico.getResultado("Expediente");
+            expedienteDto.setModificado(true);
+            
+            pacienteDto.getCliExpedienteList().add(expedienteDto);
+            Respuesta respuesta = usuarioService.guardarPaciente(pacienteDto);
+
+            unbindPaciente();
+            this.pacienteDto = (CliPacienteDto) respuesta.getResultado("Paciente");
+            bindPaciente();
         }
     }
 

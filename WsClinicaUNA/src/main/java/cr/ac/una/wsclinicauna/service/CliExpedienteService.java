@@ -14,6 +14,7 @@ import cr.ac.una.wsclinicauna.model.CliExpediente;
 import cr.ac.una.wsclinicauna.model.CliExpedienteDto;
 import cr.ac.una.wsclinicauna.model.CliPaciente;
 import cr.ac.una.wsclinicauna.model.CliPacienteDto;
+import cr.ac.una.wsclinicauna.model.CliParametroconsulta;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import jakarta.ejb.LocalBean;
@@ -121,8 +122,8 @@ public class CliExpedienteService {
                 for (CliExamenDto cliExamenDto : cliExpedienteDto.getCliExamenList()) {
                     if (cliExamenDto.getModificado()) {
                         CliExamen cliExamen = em.find(CliExamen.class, cliExamenDto.getExaId());
-                        cliExpediente.getCliExamenList().add(cliExamen);
                         cliExamen.setExpId(cliExpediente);
+                        cliExpediente.getCliExamenList().add(cliExamen);
                     }
                 }
 
@@ -133,8 +134,8 @@ public class CliExpedienteService {
                 for (CliAtencionDto cliAtencionDto : cliExpedienteDto.getCliAtencionList()) {
                     if (cliAtencionDto.getModificado()) {
                         CliAtencion cliAtencion = em.find(CliAtencion.class, cliAtencionDto.getAteId());
-                        cliExpediente.getCliAtencionList().add(cliAtencion);
                         cliAtencion.setExpId(cliExpediente);
+                        cliExpediente.getCliAtencionList().add(cliAtencion);
                     }
                 }
 
@@ -145,13 +146,15 @@ public class CliExpedienteService {
                 for (CliAntecedenteDto cliAntecedenteDto : cliExpedienteDto.getCliAntecedenteList()) {
                     if (cliAntecedenteDto.getModificado()) {
                         CliAntecedente cliAntecedente = em.find(CliAntecedente.class, cliAntecedenteDto.getAntId());
-                        cliExpediente.getCliAntecedenteList().add(cliAntecedente);
                         cliAntecedente.setExpId(cliExpediente);
+                        cliExpediente.getCliAntecedenteList().add(cliAntecedente);
                     }
                 }
 
                 for (CliAntecedenteDto cliAntecedenteDto : cliExpedienteDto.getCliAntecedenteListEliminados()) {
+                    CliAntecedente cliAntecedente = em.find(CliAntecedente.class, cliAntecedenteDto.getAntId());
                     cliExpediente.getCliAntecedenteList().remove(new CliAntecedente(cliAntecedenteDto.getAntId()));
+                    em.remove(cliAntecedente);
                 }
 
                 cliExpediente = em.merge(cliExpediente);
@@ -160,7 +163,18 @@ public class CliExpedienteService {
                 em.persist(cliExpediente);
             }
             em.flush();
-            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Expediente", new CliExpedienteDto(cliExpediente));
+            CliExpedienteDto expedienteDto = new CliExpedienteDto(cliExpediente);
+            expedienteDto.setCliPacienteDto(new CliPacienteDto(cliExpediente.getPacId()));
+            for (CliExamen cliExamen : cliExpediente.getCliExamenList()) {
+                expedienteDto.getCliExamenList().add(new CliExamenDto(cliExamen));
+            }
+            for (CliAtencion cliAtencion : cliExpediente.getCliAtencionList()) {
+                expedienteDto.getCliAtencionList().add(new CliAtencionDto(cliAtencion));
+            }
+            for (CliAntecedente cliAntecedente : cliExpediente.getCliAntecedenteList()) {
+                expedienteDto.getCliAntecedenteList().add(new CliAntecedenteDto(cliAntecedente));
+            }
+            return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Expediente", expedienteDto);
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el expediente.", ex);
             return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el expediente.", "guardarExpediente " + ex.getMessage());

@@ -17,7 +17,7 @@ public class CliExpedienteDto {
     public SimpleStringProperty expOperaciones;
     public SimpleStringProperty expAlergias;
     public SimpleStringProperty expPatologicos;
-    public SimpleStringProperty expTipoalergias;
+    public SimpleStringProperty expTiposalergias;
     public SimpleStringProperty expTratamientos;
     public CliPacienteDto cliPacienteDto;
     public ObservableList<CliExamenDto> cliExamenList;
@@ -35,7 +35,7 @@ public class CliExpedienteDto {
         this.expOperaciones = new SimpleStringProperty();
         this.expAlergias = new SimpleStringProperty();
         this.expPatologicos = new SimpleStringProperty();
-        this.expTipoalergias = new SimpleStringProperty();
+        this.expTiposalergias = new SimpleStringProperty();
         this.expTratamientos = new SimpleStringProperty();
         this.cliExamenList = FXCollections.observableArrayList();
         this.cliAtencionList = FXCollections.observableArrayList();
@@ -102,12 +102,12 @@ public class CliExpedienteDto {
         this.expPatologicos.set(expPatologicos);
     }
 
-    public String getExpTipoAlergias() {
-        return expTipoalergias.get();
+    public String getExpTiposalergias() {
+        return expTiposalergias.get();
     }
 
-    public void setExpTipoAlergias(String expTipoalergias) {
-        this.expTipoalergias.set(expTipoalergias);
+    public void setExpTiposalergias(String expTiposalergias) {
+        this.expTiposalergias.set(expTiposalergias);
     }
 
     public String getExpTratamientos() {
