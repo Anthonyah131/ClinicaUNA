@@ -34,6 +34,7 @@ import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -184,7 +185,7 @@ public class CliCitaService {
             String asunto = "ClinicaUNA";
 
             //Mensaje que va a ser enviado
-            String mensaje = mensajeEmail(cliPacienteDto, cliParametrosDto.getParHtml(), cliParametrosDto.getParLogo(), cliParametrosDto.getParNombre(), citaDto.getFecha().toLocalDate());
+            String mensaje = mensajeEmail(cliPacienteDto, cliParametrosDto.getParHtml(), cliParametrosDto.getParLogo(), cliParametrosDto.getParNombre(), citaDto.getCitFechaHora());
 
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(correoRemitente));
@@ -206,10 +207,10 @@ public class CliCitaService {
 
     }
 
-    private String mensajeEmail(CliPacienteDto cliPacienteDto, byte[] html, byte[] logo, String nombre, LocalDate fechaCita) throws UnknownHostException, IOException {
+    private String mensajeEmail(CliPacienteDto cliPacienteDto, byte[] html, byte[] logo, String nombre, LocalDateTime citFechaHora) throws UnknownHostException, IOException {
         String base64Image = convertirABase64(logo);
         String mensaje = convertirBytesAHTML(html);
-        String activacionMensaje = "Hola por parte de" + nombre + "su cita fue agendada para el dia: " + fechaCita + "Gracias de antemano " + cliPacienteDto.getPacNombre();
+        String activacionMensaje = "Hola por parte de" + nombre + "su cita fue agendada para el dia: " + citFechaHora + " Gracias de antemano " + cliPacienteDto.getPacNombre();
         mensaje = mensaje.replace("{Insertar nombre de la empresa}", nombre);
         mensaje = mensaje.replace("{Contenido que se le vaya a enviar}", activacionMensaje);
         mensaje = mensaje.replace("{imagen}", "data:image/png;base64," + base64Image);
