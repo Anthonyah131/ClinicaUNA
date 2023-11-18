@@ -72,7 +72,9 @@ public class CliAgendaService {
             for (CliAgenda cliAgenda : cliAgendas) {
                 CliAgendaDto cliAgendaDto = new CliAgendaDto(cliAgenda);
 
-                cliAgendaDto.setCliMedicoDto(new CliMedicoDto(cliAgenda.getMedId()));
+                if (cliAgenda.getMedId() != null) {
+                    cliAgendaDto.setCliMedicoDto(new CliMedicoDto(cliAgenda.getMedId()));
+                }
 
                 for (CliCita cliCita : cliAgenda.getCliCitaList()) {
                     CliCitaDto cita = new CliCitaDto(cliCita);

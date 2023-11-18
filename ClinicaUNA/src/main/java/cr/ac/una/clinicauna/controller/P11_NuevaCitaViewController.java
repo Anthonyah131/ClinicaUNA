@@ -315,12 +315,16 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
 
         if (AppContext.getInstance().get("CitaMover") == null) {
 
+            CliCitaService citaService = new CliCitaService();
             citaDto.setCliAgendaDto(null);
+            Respuesta respuesta = citaService.guardarCita(citaDto);
+            citaDto = (CliCitaDto) respuesta.getResultado("Cita");
+            
             AppContext.getInstance().set("CitaMover", citaDto);
-            agendaDto.getCliCitaListEliminados().add(citaDto);
 
+            agendaDto.getCliCitaListEliminados().add(citaDto);
             CliAgendaService agendaService = new CliAgendaService();
-            Respuesta respuesta = agendaService.guardarAgenda(agendaDto);
+            respuesta = agendaService.guardarAgenda(agendaDto);
             agendaDto = (CliAgendaDto) respuesta.getResultado("Agenda");
 
             System.out.println("Cita copeada");

@@ -114,8 +114,12 @@ public class CliCitaService {
                     return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el citas a modificar.", "guardarCita NoResultException");
                 }
                 cliCita.actualizar(cliCitaDto);
-                CliAgenda cliAgenda = em.find(CliAgenda.class, cliCitaDto.getCliAgendaDto().getAgeId());
-                cliCita.setAgeId(cliAgenda);
+                if (cliCitaDto.getCliAgendaDto() != null && cliCitaDto.getCliAgendaDto().getAgeId() != null && cliCitaDto.getCliAgendaDto().getAgeId() > 0) {
+                    CliAgenda cliAgenda = em.find(CliAgenda.class, cliCitaDto.getCliAgendaDto().getAgeId());
+                    cliCita.setAgeId(cliAgenda);
+                } else {
+                    cliCita.setAgeId(null);
+                }
 
                 CliPaciente cliPaciente = em.find(CliPaciente.class, cliCitaDto.getCliPacienteDto().getPacId());
                 cliCita.setPacId(cliPaciente);
