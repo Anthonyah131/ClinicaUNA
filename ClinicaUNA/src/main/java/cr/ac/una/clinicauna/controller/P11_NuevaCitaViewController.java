@@ -155,8 +155,9 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         }
         return true;
     }
-
+ // Poner idioma
     private void guardarCita() {
+        Boolean banderaNueva = false;
         try {
             if (agendaDto.getAgeId() == null || agendaDto.getAgeId() <= 0) {
                 CliAgendaService agendaService = new CliAgendaService();
@@ -164,6 +165,9 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
                 agendaDto = (CliAgendaDto) respuesta.getResultado("Agenda");
             }
             CliCitaService citaService = new CliCitaService();
+            if(citaDto.getCitId() == null || citaDto.getCitId() <= 0) {
+                banderaNueva = true;
+            }
             Respuesta respuesta = citaService.guardarCita(citaDto);
 
             if (!respuesta.getEstado()) {
@@ -197,7 +201,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
                 respuesta = citaService.getCita(citaDto.getCitId());
                 this.citaDto = (CliCitaDto) respuesta.getResultado("Cita");
 
-                if (!citaDto.getCliPacienteDto().getCliExpedienteList().isEmpty()) {
+                if (!citaDto.getCliPacienteDto().getCliExpedienteList().isEmpty() && banderaNueva) {
                     CliExpedienteService expedienteService = new CliExpedienteService();
                     CliAtencionService atencionService = new CliAtencionService();
 

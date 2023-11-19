@@ -17,6 +17,7 @@ import cr.ac.una.clinicauna.util.Utilidades;
 import cr.ac.una.clinicauna.util.ValidarRequeridos;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -152,7 +153,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         }
     }
 
-    @FXML
+    @FXML // Poner idioma, mensaje de error
     private void onActionBtnGuardar(ActionEvent event) {
         SoundUtil.mouseEnterSound();
         try {
@@ -162,30 +163,34 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
                 new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), mensaje);
             } else {
                 if (medicoDto.getMedId() != null) {
-                    CliMedicoService medicoService = new CliMedicoService();
-                    if (cboxCantidadCitas.getValue() != null) {
-                        medicoDto.setMedEspaciosxhora((long) cboxCantidadCitas.getValue());
-                    }
-                    if (chkActivo.isSelected()) {
-                        medicoDto.setMedEstado("A");
-                    } else {
-                        medicoDto.setMedEstado("I");
-                    }
-                    if (tpkHoraInicio.getValue() != null) {
+                    LocalTime horaInicio = tpkHoraInicio.getValue();
+                    LocalTime horaSalida = tpkHoraSalida.getValue();
+                    if (horaInicio != null && horaSalida != null
+                            && horaInicio.isBefore(horaSalida)) {
+                        CliMedicoService medicoService = new CliMedicoService();
+                        if (cboxCantidadCitas.getValue() != null) {
+                            medicoDto.setMedEspaciosxhora((long) cboxCantidadCitas.getValue());
+                        }
+                        if (chkActivo.isSelected()) {
+                            medicoDto.setMedEstado("A");
+                        } else {
+                            medicoDto.setMedEstado("I");
+                        }
+                        
                         medicoDto.setMedFiniTime(tpkHoraInicio.getValue());
-                    }
-                    if (tpkHoraSalida.getValue() != null) {
                         medicoDto.setMedFfinTime(tpkHoraSalida.getValue());
-                    }
 
-                    Respuesta respuesta = medicoService.guardarMedico(medicoDto);
-                    if (!respuesta.getEstado()) {
-                        new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
+                        Respuesta respuesta = medicoService.guardarMedico(medicoDto);
+                        if (!respuesta.getEstado()) {
+                            new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
+                        } else {
+                            unbindMedico();
+                            this.medicoDto = (CliMedicoDto) respuesta.getResultado("Medico");
+                            bindMedico();
+                            new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
+                        }
                     } else {
-                        unbindMedico();
-                        this.medicoDto = (CliMedicoDto) respuesta.getResultado("Medico");
-                        bindMedico();
-                        new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
+                        // Se pone un mensaje que hay un error con la horas ingresadas
                     }
                 } else {
                     System.out.println("Error guardando");

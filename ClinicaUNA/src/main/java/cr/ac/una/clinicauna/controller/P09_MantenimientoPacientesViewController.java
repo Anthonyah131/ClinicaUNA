@@ -142,7 +142,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
         }
     }
 
-    @FXML
+    @FXML // Poner idioma
     private void onActionBtnGuardar(ActionEvent event) {
         SoundUtil.mouseEnterSound();
         try {
@@ -171,7 +171,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
     
     private void crearExpediente() {
         if (pacienteDto.getCliExpedienteList().isEmpty()) {
-            CliPacienteService usuarioService = new CliPacienteService();
+            CliPacienteService pacienteService = new CliPacienteService();
             CliExpedienteService expedienteService = new CliExpedienteService();
 
             CliExpedienteDto expedienteDto = new CliExpedienteDto();
@@ -180,7 +180,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
             expedienteDto.setModificado(true);
             
             pacienteDto.getCliExpedienteList().add(expedienteDto);
-            Respuesta respuesta = usuarioService.guardarPaciente(pacienteDto);
+            Respuesta respuesta = pacienteService.guardarPaciente(pacienteDto);
 
             unbindPaciente();
             this.pacienteDto = (CliPacienteDto) respuesta.getResultado("Paciente");
