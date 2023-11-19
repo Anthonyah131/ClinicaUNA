@@ -17,6 +17,7 @@ public class CliExamenDto {
     private String exaNombre;
     private LocalDate exaFecha;
     private String exaAnotacionesmed;
+    private byte[] exaArchivo;
     private Long exaVersion;
     private CliAtencionDto cliAtencionDto;
     private CliExpedienteDto cliExpedienteDto;
@@ -34,6 +35,7 @@ public class CliExamenDto {
         this.exaNombre = cliExamen.getExaNombre();
         this.exaFecha = cliExamen.getExaFecha();
         this.exaAnotacionesmed = cliExamen.getExaAnotacionesmed();
+        this.exaArchivo = (byte[]) cliExamen.getExaArchivo();
         this.exaVersion = cliExamen.getExaVersion();
         this.fecha = LocalDateTime.now();
     }
@@ -71,6 +73,15 @@ public class CliExamenDto {
     public void setExaAnotacionesmed(String exaAnotacionesmed) {
         this.exaAnotacionesmed = exaAnotacionesmed;
     }
+
+    public byte[] getExaArchivo() {
+        return exaArchivo;
+    }
+
+    public void setExaArchivo(byte[] exaArchivo) {
+        this.exaArchivo = exaArchivo;
+    }
+    
 
     public Long getExaVersion() {
         return exaVersion;

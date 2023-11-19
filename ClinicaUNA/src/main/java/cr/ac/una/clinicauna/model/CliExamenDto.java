@@ -13,6 +13,7 @@ public class CliExamenDto {
 
     public SimpleStringProperty exaId;
     public SimpleStringProperty exaNombre;
+    public ObjectProperty<byte[]> exaArchivo;
     public ObjectProperty<LocalDate> exaFecha;
     public SimpleStringProperty exaAnotacionesmed;
     public CliAtencionDto cliAtencionDto;
@@ -25,6 +26,7 @@ public class CliExamenDto {
         this.exaNombre = new SimpleStringProperty();
         this.exaFecha = new SimpleObjectProperty();
         this.exaAnotacionesmed = new SimpleStringProperty();
+        this.exaArchivo = new SimpleObjectProperty();
         this.modificado = false;
     }
 
@@ -70,6 +72,14 @@ public class CliExamenDto {
 
     public void setCliAtencionDto(CliAtencionDto cliAtencionDto) {
         this.cliAtencionDto = cliAtencionDto;
+    }
+
+    public byte[] getExaArchivo() {
+        return exaArchivo.get();
+    }
+
+    public void setExaArchivo(byte[] exaArchivo) {
+        this.exaArchivo.set(exaArchivo);
     }
 
     public CliExpedienteDto getCliExpedienteDto() {

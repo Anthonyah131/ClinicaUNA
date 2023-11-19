@@ -12,14 +12,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -51,6 +50,9 @@ public class CliExamen implements Serializable {
     private String exaNombre;
     @Column(name = "EXA_FECHA")
     private LocalDate exaFecha;
+    @Lob
+    @Column(name = "EXA_ARCHIVO")
+    private Serializable exaArchivo;
     @Column(name = "EXA_ANOTACIONESMED")
     private String exaAnotacionesmed;
     @Version
@@ -80,6 +82,7 @@ public class CliExamen implements Serializable {
         this.exaNombre = cliExamenDto.getExaNombre();
         this.exaFecha = cliExamenDto.getExaFecha();
         this.exaAnotacionesmed = cliExamenDto.getExaAnotacionesmed();
+        this.exaArchivo = cliExamenDto.getExaArchivo();
         this.exaVersion = cliExamenDto.getExaVersion();
     }
 
@@ -121,6 +124,14 @@ public class CliExamen implements Serializable {
 
     public void setExaVersion(Long exaVersion) {
         this.exaVersion = exaVersion;
+    }
+
+    public Serializable getExaArchivo() {
+        return exaArchivo;
+    }
+
+    public void setExaArchivo(Serializable exaArchivo) {
+        this.exaArchivo = exaArchivo;
     }
 
     public CliAtencion getAteId() {
