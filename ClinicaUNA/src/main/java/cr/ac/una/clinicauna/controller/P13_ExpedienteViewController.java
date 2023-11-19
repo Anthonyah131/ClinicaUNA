@@ -25,6 +25,7 @@ import cr.ac.una.clinicauna.util.Mensaje;
 import cr.ac.una.clinicauna.util.Respuesta;
 import cr.ac.una.clinicauna.util.ValidarRequeridos;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -56,9 +57,13 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.apache.commons.compress.utils.IOUtils;
+import org.apache.commons.io.FileUtils;
 
 /**
  * FXML Controller class
@@ -606,10 +611,47 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
         }
     }
 
-    private byte[] fileToByte(File file) throws IOException {
+    private byte[] fileToByte(File file) throws IOException {//En teoria este deberia tomar cualquier archivo y convertirlo a byte[]
         FileInputStream fiStream = new FileInputStream(file.getAbsolutePath());
-        byte[] imageInBytes = IOUtils.toByteArray(fiStream);
-        return imageInBytes;
+        byte[] filesToBytes = IOUtils.toByteArray(fiStream);
+        return filesToBytes;
     }
 
+    private static boolean isPDF(byte[] bytes) {
+        String header = new String(bytes, 0, Math.min(bytes.length, 4));
+        return header.startsWith("%PDF");
+    }
+
+    private static boolean isImage(byte[] bytes) {
+        // Verificar si los primeros bytes coinciden con los encabezados de formatos de imagen conocidos
+        if (bytes.length >= 2) {
+            if ((bytes[0] == (byte) 0xFF && bytes[1] == (byte) 0xD8) // JPEG
+                    || (bytes[0] == (byte) 0x89 && bytes[1] == (byte) 0x50 && bytes[2] == (byte) 0x4E && bytes[3] == (byte) 0x47)) // PNG
+            // Agrega más verificaciones según sea necesario para otros formatos
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Image byteToImage(byte[] bytes) {
+        ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+        return new Image(bis);
+    }
+
+    private void savePdfFileChooser(byte[] pdfBytes) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf"));
+        File selectedFile = fileChooser.showSaveDialog(new Stage());
+
+        if (selectedFile != null) {
+            try {
+                FileUtils.writeByteArrayToFile(selectedFile, pdfBytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+               Logger.getLogger(P13_ExpedienteViewController.class.getName()).log(Level.SEVERE, "Error guardando el pdf.", e);
+            }
+        }
+    }
 }
