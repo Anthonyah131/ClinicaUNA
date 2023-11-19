@@ -58,11 +58,11 @@ public class CliExamenDto {
         this.exaFecha.set(exaFecha);
     }
 
-    public String getExaAnotacionesMed() {
+    public String getExaAnotacionesmed() {
         return exaAnotacionesmed.get();
     }
 
-    public void setExaAnotacionesMed(String exaAnotacionesmed) {
+    public void setExaAnotacionesmed(String exaAnotacionesmed) {
         this.exaAnotacionesmed.set(exaAnotacionesmed);
     }
 

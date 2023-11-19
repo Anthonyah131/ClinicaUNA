@@ -308,6 +308,12 @@
                                                 <JFXTextField fx:id="txfNombreArchivo" styleClass="jfx-text-field-edit" />
                                                 <Label styleClass="labels-text-minus" text="%key.date" />
                                                 <JFXDatePicker fx:id="dpkFechaArchivo" styleClass="jfx-pickers" />
+                                                <HBox alignment="CENTER" spacing="5.0">
+                                                   <children>
+                                                      <MFXButton fx:id="btnLimpiarE" onAction="#onActionBtnLimpiarE" styleClass="mfx-button-menu-minus" text="Limpiar Examen" />
+                                                      <MFXButton fx:id="btnGuardarE" onAction="#onActionBtnGuardarE" styleClass="mfx-button-menu-minus" text="Guardar Examen" />
+                                                   </children>
+                                                </HBox>
                                              </children>
                                           </VBox>
                                           <VBox spacing="10.0">

@@ -88,22 +88,22 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
 
     @FXML
     private void onActionBtnIrExpediente(ActionEvent event) {
-         resultado = tbvCitas.getSelectionModel().getSelectedItem();
+        resultado = tbvCitas.getSelectionModel().getSelectedItem();
         if (resultado != null) {
             CliCitaDto citaDto = (CliCitaDto) resultado;
             pacienteDto = citaDto.getCliPacienteDto();
-            
+
             P13_ExpedienteViewController expedienteController = (P13_ExpedienteViewController) FlowController.getInstance().getController("P13_ExpedienteView");
-            expedienteController.cargarPaciente(pacienteDto, usuarioDto);
-             FlowController.getInstance().goViewInWindow("P13_ExpedienteView", false);
+            expedienteController.cargarPaciente(pacienteDto, usuarioDto, citaDto);
+            FlowController.getInstance().goViewInWindow("P13_ExpedienteView", false);
         }
 //        getStage().close();
-       
+
     }
 
     public void fillTableView() {
         tbvCitas.getItems().clear();
-        
+
         TableColumn<CliCitaDto, String> tbcFecha = new TableColumn<>(/*resourceBundle.getString("key.identification")*/"Fecha");
         tbcFecha.setSortable(false);
         tbcFecha.setPrefWidth(150);
@@ -145,13 +145,13 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
 
             return new SimpleStringProperty(horaFormateada);
         });
-        
+
         TableColumn<CliCitaDto, String> tbcDuracion = new TableColumn<>(/*resourceBundle.getString("key.usertype")*/"Duracion");
         tbcDuracion.setSortable(false);
         tbcDuracion.setPrefWidth(150);
         tbcDuracion.setCellValueFactory(cd -> {
             int duracion = cd.getValue().getCliCantespacios().intValue();
-            
+
             //duracion *= medicoDto.getMedEspaciosxhora().intValue();
             duracion *= 15;
 

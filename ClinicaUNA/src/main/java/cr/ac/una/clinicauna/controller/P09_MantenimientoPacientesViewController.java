@@ -326,7 +326,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
     @FXML
     private void onActionBtnIrExpediente(ActionEvent event) {
         P13_ExpedienteViewController expedienteController = (P13_ExpedienteViewController) FlowController.getInstance().getController("P13_ExpedienteView");
-        expedienteController.cargarPaciente(pacienteDto, usuarioDto);
+        expedienteController.cargarPaciente(pacienteDto, usuarioDto, null);
         FlowController.getInstance().goViewInWindow("P13_ExpedienteView", false);
     }
 

@@ -99,8 +99,10 @@ public class CliAtencionService {
                     return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el atencion a modificar.", "guardarAtencion NoResultException");
                 }
                 cliAtencion.actualizar(cliAtencionDto);
-                CliExpediente cliExpediente = em.find(CliExpediente.class, cliAtencionDto.getCliExpedienteDto().getExpId());
-                cliAtencion.setExpId(cliExpediente);
+                if (cliAtencionDto.getCliExpedienteDto() != null) {
+                    CliExpediente cliExpediente = em.find(CliExpediente.class, cliAtencionDto.getCliExpedienteDto().getExpId());
+                    cliAtencion.setExpId(cliExpediente);
+                }
 
                 for (CliExamenDto cliExamenDto : cliAtencionDto.getCliExamenList()) {
                     if (cliExamenDto.getModificado()) {
