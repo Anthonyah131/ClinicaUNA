@@ -26,9 +26,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -77,6 +79,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
     int posVec;
     List<Node> requeridos = new ArrayList<>();
     LocalDateTime fechaHoraCita;
+    LocalDateTime horaAntigua;
 
     ResourceBundle resourceBundle;
 
@@ -155,7 +158,8 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         }
         return true;
     }
- // Poner idioma
+    
+    // Poner idioma
     private void guardarCita() {
         Boolean banderaNueva = false;
         try {
@@ -165,7 +169,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
                 agendaDto = (CliAgendaDto) respuesta.getResultado("Agenda");
             }
             CliCitaService citaService = new CliCitaService();
-            if(citaDto.getCitId() == null || citaDto.getCitId() <= 0) {
+            if (citaDto.getCitId() == null || citaDto.getCitId() <= 0) {
                 banderaNueva = true;
             }
             Respuesta respuesta = citaService.guardarCita(citaDto);
@@ -201,7 +205,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
                 respuesta = citaService.getCita(citaDto.getCitId());
                 this.citaDto = (CliCitaDto) respuesta.getResultado("Cita");
 
-                if (!citaDto.getCliPacienteDto().getCliExpedienteList().isEmpty() && banderaNueva) {
+                if (!citaDto.getCliPacienteDto().getCliExpedienteList().isEmpty() && banderaNueva) { // Crea nueva atencion si es cita nueva
                     CliExpedienteService expedienteService = new CliExpedienteService();
                     CliAtencionService atencionService = new CliAtencionService();
 
@@ -216,8 +220,27 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
                     atencionDto.setModificado(true);
                     expedienteDto.getCliAtencionList().add(atencionDto);
                     expedienteService.guardarExpediente(expedienteDto);
-                }
+                } else { // Actualiza atencion si es cita existente
+                    CliExpedienteService expedienteService = new CliExpedienteService();
+                    CliAtencionService atencionService = new CliAtencionService();
 
+                    CliExpedienteDto expedienteDto = citaDto.getCliPacienteDto().getCliExpedienteList().get(0);
+                    respuesta = expedienteService.getExpediente(expedienteDto.getExpId());
+                    expedienteDto = (CliExpedienteDto) respuesta.getResultado("Expediente");
+
+                    List<CliAtencionDto> atenciones = expedienteDto.getCliAtencionList();
+                    List<CliAtencionDto> atencionesFiltradas = atenciones.stream()
+                            .filter(atencion -> atencion.getAteFechahora().isEqual(horaAntigua))
+                            .collect(Collectors.toList());
+                    Optional<CliAtencionDto> atencionEncontrada = atencionesFiltradas.stream().findFirst();
+
+                    // Verificar si se encontró alguna atención
+                    if (atencionEncontrada.isPresent()) {
+                        CliAtencionDto atencion = atencionEncontrada.get();
+                        atencion.setAteFechahora(citaDto.getCitFechaHora());
+                        atencionService.guardarAtencion(atencion);
+                    }
+                }
                 new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
             }
         } catch (Exception ex) {
@@ -339,24 +362,20 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
     private void onActionBtnMoverCita(ActionEvent event) {
 
         if (AppContext.getInstance().get("CitaMover") == null) {
-
-            CliCitaService citaService = new CliCitaService();
-            citaDto.setCliAgendaDto(null);
-            Respuesta respuesta = citaService.guardarCita(citaDto);
-            citaDto = (CliCitaDto) respuesta.getResultado("Cita");
-
             AppContext.getInstance().set("CitaMover", citaDto);
-
-            agendaDto.getCliCitaListEliminados().add(citaDto);
-            CliAgendaService agendaService = new CliAgendaService();
-            respuesta = agendaService.guardarAgenda(agendaDto);
-            agendaDto = (CliAgendaDto) respuesta.getResultado("Agenda");
+            AppContext.getInstance().set("AgendaAntigua", agendaDto);
 
             System.out.println("Cita copeada");
-
         } else {
             citaDto = (CliCitaDto) AppContext.getInstance().get("CitaMover");
+            CliAgendaDto agendaAntigua = (CliAgendaDto) AppContext.getInstance().get("AgendaAntigua");
+            
+            agendaAntigua.getCliCitaListEliminados().add(citaDto);
+            CliAgendaService agendaService = new CliAgendaService();
+            agendaService.guardarAgenda(agendaAntigua);
+                        
             citaDto.setCliAgendaDto(agendaDto);
+            horaAntigua = citaDto.getCitFechaHora();
             citaDto.setCitFechaHora(fechaHoraCita);
             bindCita();
             System.out.println("Cita movida");
