@@ -25,6 +25,9 @@ import cr.ac.una.clinicauna.util.Mensaje;
 import cr.ac.una.clinicauna.util.Respuesta;
 import cr.ac.una.clinicauna.util.ValidarRequeridos;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -55,6 +58,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import org.apache.commons.compress.utils.IOUtils;
 
 /**
  * FXML Controller class
@@ -212,7 +216,7 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
             } else {
                 unbindAntecedente();
                 this.antecedenteDto = (CliAntecedenteDto) respuesta.getResultado("Antecedente");
-                
+
                 List<CliAntecedenteDto> antecedentes = expedienteDto.getCliAntecedenteList();
                 Predicate<CliAntecedenteDto> tieneMismoId = antecedente -> Objects.equals(antecedente.getAntId(), antecedenteDto.getAntId());
                 boolean antecedenteEncontrado = antecedentes.stream().anyMatch(tieneMismoId);
@@ -226,7 +230,7 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
                     this.expedienteDto = (CliExpedienteDto) respuesta.getResultado("Expediente");
                     cargarAntecedentes();
                 }
-                
+
                 this.antecedenteDto = new CliAntecedenteDto();
                 bindAntecedente();
                 new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveParameterR", getStage(), "key.updatedParameterR");
@@ -488,6 +492,9 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
         txaPlanAtencion.textProperty().bindBidirectional(atencionDto.atePlanatencion);
         txaObservaciones.textProperty().bindBidirectional(atencionDto.ateObservaciones);
         txaTratamiento.textProperty().bindBidirectional(atencionDto.ateTratamiento);
+        if (atencionDto.getAtePeso() != null && atencionDto.getAteTalla() != null) {
+            lblIMC.setText("" + (Integer.parseInt(atencionDto.getAtePeso()) / (Integer.parseInt(atencionDto.getAteTalla()) * Integer.parseInt(atencionDto.getAteTalla()))));
+        }
     }
 
     private void unbindAtencion() {
@@ -501,6 +508,7 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
         txaPlanAtencion.textProperty().unbindBidirectional(atencionDto.atePlanatencion);
         txaObservaciones.textProperty().unbindBidirectional(atencionDto.ateObservaciones);
         txaTratamiento.textProperty().unbindBidirectional(atencionDto.ateTratamiento);
+        lblIMC.setText("IMC");
     }
 
     private void cargarAtenciones() {
@@ -596,6 +604,12 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
                 setGraphic(cellButton);
             }
         }
+    }
+
+    private byte[] fileToByte(File file) throws IOException {
+        FileInputStream fiStream = new FileInputStream(file.getAbsolutePath());
+        byte[] imageInBytes = IOUtils.toByteArray(fiStream);
+        return imageInBytes;
     }
 
 }
