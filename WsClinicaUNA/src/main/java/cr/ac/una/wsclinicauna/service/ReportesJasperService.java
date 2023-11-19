@@ -18,6 +18,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.sql.Connection;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +41,7 @@ public class ReportesJasperService {
     @PersistenceContext(unitName = "WsClinicaUNAPU")
     private EntityManager em;
 
-    public Respuesta getAngendaReport(Long id, LocalDate fechainicial,LocalDate fechafin) {
+    public Respuesta getAngendaReport(Long id, Date fechainicial,Date fechafin) {
         try {
             Connection co = em.unwrap(Connection.class);
             CliMedico cliMedico = em.find(CliMedico.class, id);
@@ -80,7 +81,7 @@ public class ReportesJasperService {
         }
     }
     
-    public Respuesta getRendimientoMedicos(LocalDate fechaInicial,LocalDate fechaFin) {
+    public Respuesta getRendimientoMedicos(Date fechaInicial,Date fechaFin) {
         try {
             Connection co = em.unwrap(Connection.class);
 

@@ -17,6 +17,8 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -49,9 +51,9 @@ public class ReportesJasperController {
     @Path("/agendaMedico/{id}/{fechainicial}/{fechafin}")
     public Response agendaMedico(@PathParam("id") Long id, @PathParam("fechainicial") String fechainicial, @PathParam("fechafin") String fechafin) {
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate fechainicial2 = LocalDate.parse(fechainicial, formatter);
-            LocalDate fechafin2 = LocalDate.parse(fechafin, formatter);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD");
+            Date fechainicial2 = Date.valueOf(fechainicial);
+            Date fechafin2 =  Date.valueOf(fechafin);
             Respuesta res = reportesJasperService.getAngendaReport(id, fechainicial2, fechafin2);
             if (!res.getEstado()) {
                 return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
@@ -87,9 +89,9 @@ public class ReportesJasperController {
     @Path("/rendimientoMedicos/{fechaInicial}/{fechaFin}")
     public Response rendimientoMedicos(@PathParam("fechaInicial") String fechaInicial, @PathParam("fechaFin") String fechaFin) {
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate fechainicial2 = LocalDate.parse(fechaInicial, formatter);
-            LocalDate fechafin2 = LocalDate.parse(fechaFin, formatter);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD");
+            Date fechainicial2 = Date.valueOf(fechaInicial);
+            Date fechafin2 =  Date.valueOf(fechaFin);
             Respuesta res = reportesJasperService.getRendimientoMedicos(fechainicial2, fechafin2);
             if (!res.getEstado()) {
                 return Response.status(res.getCodigoRespuesta().getValue()).entity(res.getMensaje()).build();
