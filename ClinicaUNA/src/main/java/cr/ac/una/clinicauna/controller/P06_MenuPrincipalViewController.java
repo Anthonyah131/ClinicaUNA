@@ -52,7 +52,6 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
         Utilidades.ajustarAnchorVentana(root);
         usuarioDto = (CliUsuarioDto) AppContext.getInstance().get("Usuario");
     }
@@ -68,7 +67,7 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
             AppContext.getInstance().set("Padre", "P06_MenuPrincipalView");
             FlowController.getInstance().goView("P03_RegistroView");
         } else {
-            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "No tiene permisos para ingresar a esta pantalla");
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "key.permit");
         }
     }
 
@@ -78,7 +77,7 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
         if (usuarioDto.getUsuTipousuario().equals("A")) {
             FlowController.getInstance().goView("P07_MantenimientoGeneralesView");
         } else {
-            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "No tiene permisos para ingresar a esta pantalla");
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "key.permit");
         }
     }
 
@@ -90,7 +89,7 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
             FlowController.getInstance().delete("P08_MantenimientoMedicosView");
             FlowController.getInstance().goView("P08_MantenimientoMedicosView");
         } else {
-            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "No tiene permisos para ingresar a esta pantalla");
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "key.permit");
         }
     }
 
@@ -100,23 +99,6 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
         AppContext.getInstance().set("PadrePacientes", "P06_MenuPrincipalView");
         FlowController.getInstance().delete("P09_MantenimientoPacientesView");
         FlowController.getInstance().goView("P09_MantenimientoPacientesView");
-    }
-
-    @FXML
-    private void onActionBtnCerrarSesion(ActionEvent event) {
-        SoundUtil.mouseEnterSound();
-        //limpiar el hashmap del AppContext
-        //AppContext.getInstance().clearHashMap();
-        //limpiar el hashmap del FlowController
-        FlowController.getInstance().clearHashMap();
-        FlowController.getInstance().goViewInWindow("P01_LogInView", false);
-        FlowController.getInstance().salir();
-    }
-
-    @FXML
-    private void onActionBtnSalir(ActionEvent event) {
-        SoundUtil.mouseEnterSound();
-        FlowController.getInstance().salir();
     }
 
     @FXML
@@ -133,20 +115,48 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
             //FlowController.getInstance().delete("P08_MantenimientoMedicosView");
             FlowController.getInstance().goView("P12_AtencionCitasView");
         } else {
-            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "No tiene permisos para ingresar a esta pantalla");
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "key.permit");
         }
     }
 
     @FXML
     private void onActionBtnReportes(ActionEvent event) {
         SoundUtil.mouseEnterSound();
-        FlowController.getInstance().goView("P15_ReportesView");
+        if (!usuarioDto.getUsuTipousuario().equals("R")) {
+            //AppContext.getInstance().set("PadreMedicos", "P06_MenuPrincipalView");
+            //FlowController.getInstance().delete("P08_MantenimientoMedicosView");
+            FlowController.getInstance().goView("P15_ReportesView");
+        } else {
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "key.permit");
+        }
     }
 
     @FXML
     private void onActionBtnReporteDinamico(ActionEvent event) {
         SoundUtil.mouseEnterSound();
-        FlowController.getInstance().goView("P16_ReporteDinamicoView");
+        if (!usuarioDto.getUsuTipousuario().equals("R")) {
+            //AppContext.getInstance().set("PadreMedicos", "P06_MenuPrincipalView");
+            //FlowController.getInstance().delete("P08_MantenimientoMedicosView");
+            FlowController.getInstance().goView("P16_ReporteDinamicoView");
+        } else {
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "key.permit");
+        }
+    }
+    
+    @FXML
+    private void onActionBtnCerrarSesion(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
+        //limpiar el hashmap del AppContext
+        //AppContext.getInstance().clearHashMap();
+        //limpiar el hashmap del FlowController
+        FlowController.getInstance().clearHashMap();
+        FlowController.getInstance().goViewInWindow("P01_LogInView", false);
+        FlowController.getInstance().salir();
     }
 
+    @FXML
+    private void onActionBtnSalir(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
+        FlowController.getInstance().salir();
+    }
 }

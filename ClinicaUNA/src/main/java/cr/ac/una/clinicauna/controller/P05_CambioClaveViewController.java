@@ -25,9 +25,9 @@ import javafx.scene.control.Alert;
 public class P05_CambioClaveViewController extends Controller implements Initializable {
 
     @FXML
-    private MFXButton btnAcepcli;
-    @FXML
     private MFXTextField txfClave;
+    @FXML
+    private MFXButton btnAceptar;
 
     CliUsuarioDto cliUsuarioDto;
 
@@ -55,9 +55,9 @@ public class P05_CambioClaveViewController extends Controller implements Initial
                 cliUsuarioDto.setUsuClave(txfClave.getText());
                 Respuesta respuesta = cliUsuarioService.guardarUsuario(cliUsuarioDto);
                 if (!respuesta.getEstado()) {
-                    new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
+                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
                 } else {
-                    new Mensaje().showModal(Alert.AlertType.INFORMATION, "key.passRecovery", getStage(), "key.passChangedSuccess");
+                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.passRecovery", getStage(), "key.passChangedSuccess");
                     getStage().close();
                 }
             }

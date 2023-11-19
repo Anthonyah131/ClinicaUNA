@@ -18,9 +18,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -68,7 +66,6 @@ public class P07_MantenimientoGeneralesViewController extends Controller impleme
     private AnchorPane root;
 
     CliParametrosDto parametrosDto;
-    File file;
     List<Node> requeridos = new ArrayList<>();
     ResourceBundle resourceBundle;
 
@@ -78,6 +75,7 @@ public class P07_MantenimientoGeneralesViewController extends Controller impleme
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Utilidades.ajustarAnchorVentana(root);
+        resourceBundle = FlowController.getInstance().getIdioma();
         txfNombre.setTextFormatter(Formato.getInstance().maxLengthFormat(30));
         txaInformacion.setTextFormatter(Formato.getInstance().maxLengthFormat(30));
         txfCorreo.setTextFormatter(Formato.getInstance().maxLengthFormat(30));
@@ -96,21 +94,17 @@ public class P07_MantenimientoGeneralesViewController extends Controller impleme
     }
 
     @FXML
-    private void onActionBtnSalir(ActionEvent event) {
-        SoundUtil.mouseEnterSound();
-        FlowController.getInstance().goView("P06_MenuPrincipalView");
-    }
-
-    @FXML
     private void onActionBtnAgregarPlantilla(ActionEvent event) {
         SoundUtil.mouseEnterSound();
         //Inicializa el FileChooser y le da un titulo a la nueva ventana
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Seleccionar archivo");
+        
+        String fileString = resourceBundle.getString("key.selectFile");
+        fileChooser.setTitle(fileString);
 
         // Agregar filtros para facilitar la busqueda
         fileChooser.getExtensionFilters().addAll(
-                //new FileChooser.ExtensionFilter("JPG", "*.jpg", "PNG", "*.png", "GIF", "*.gif"),
+                new FileChooser.ExtensionFilter("HTML", "*.html"),
                 new FileChooser.ExtensionFilter("All files", "*.*")
         );
 
@@ -130,29 +124,34 @@ public class P07_MantenimientoGeneralesViewController extends Controller impleme
     @FXML
     private void onActionBtnGuardar(ActionEvent event) { // Poner idiomas
         SoundUtil.mouseEnterSound();
-        resourceBundle = FlowController.getInstance().getIdioma();
         try {
             String invalidos = ValidarRequeridos.validarRequeridos(requeridos);
             if (!invalidos.isEmpty()) {
                 String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
-                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), mensaje);
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameter", getStage(), mensaje);
             } else {
                 CliParametrosService parametrosService = new CliParametrosService();
                 Respuesta respuesta = parametrosService.guardarParametro(parametrosDto);
                 if (!respuesta.getEstado()) {
-                    new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar Parametros", getStage(), respuesta.getMensaje());
+                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameter", getStage(), respuesta.getMensaje());
                 } else {
                     unbindParametro();
                     this.parametrosDto = (CliParametrosDto) respuesta.getResultado("Parametro");
                     bindParametro();
-                    new Mensaje().showModal(Alert.AlertType.INFORMATION, "Guardar Parametros", getStage(), "Parametros actualizados correctamente.");
+                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveParameter", getStage(), "key.parameterUpdate");
                     initialize(null, null);
                 }
             }
         } catch (Exception ex) {
             Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error guardando los Parametros.", ex);
-            new Mensaje().showModal(Alert.AlertType.ERROR, "Guardar Parametros", getStage(), "Ocurrio un error guardando los Parametros.");
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameter", getStage(), "key.missSaveParameter");
         }
+    }
+
+    @FXML
+    private void onActionBtnSalir(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
+        FlowController.getInstance().goView("P06_MenuPrincipalView");
     }
 
     private void cargarParametros() {
@@ -168,7 +167,7 @@ public class P07_MantenimientoGeneralesViewController extends Controller impleme
                 imvFotoEmpresa.setImage(byteToImage(this.parametrosDto.getParLogo()));
                 bindParametro();
             } else {
-                new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Parametros", getStage(), respuesta.getMensaje());
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameter", getStage(), respuesta.getMensaje());
             }
         } else {
             nuevoParametro();
@@ -201,7 +200,8 @@ public class P07_MantenimientoGeneralesViewController extends Controller impleme
 
             //Inicializa el FileChooser y le da un titulo a la nueva ventana
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Seleccionar imagen");
+            String fileString = resourceBundle.getString("key.selectImage");
+            fileChooser.setTitle(fileString);
 
             // Agregar filtros para facilitar la busqueda
             fileChooser.getExtensionFilters().addAll(
@@ -231,7 +231,7 @@ public class P07_MantenimientoGeneralesViewController extends Controller impleme
 
                 imgview.setImage(image);
             } catch (IOException ex) {
-                new Mensaje().show(Alert.AlertType.ERROR, "Imagen", "Error cargando imagen");
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.selectImage", getStage(), "key.missSaveImage");
             }
         }
     }

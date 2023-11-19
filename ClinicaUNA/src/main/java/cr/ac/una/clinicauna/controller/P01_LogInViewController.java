@@ -52,7 +52,6 @@ public class P01_LogInViewController extends Controller implements Initializable
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
         iniciarScena();
     }
 
@@ -63,7 +62,6 @@ public class P01_LogInViewController extends Controller implements Initializable
 
     @FXML
     private void onActionBtnIngresar(ActionEvent event) {
-
         SoundUtil.mouseEnterSound();
         try {
             if (txfUsuario.getText() == null || txfUsuario.getText().isEmpty()) {
@@ -75,6 +73,7 @@ public class P01_LogInViewController extends Controller implements Initializable
                 Respuesta respuesta = cliUsuarioService.getUsuario(txfUsuario.getText(), txfContrasena.getText());
                 if (respuesta.getEstado()) {
                     CliUsuarioDto cliUsuarioDto = (CliUsuarioDto) respuesta.getResultado("Usuario");
+//                    setIdioma(cliUsuarioDto.getUsuIdioma());
                     AppContext.getInstance().set("Token", cliUsuarioDto.getToken());
                     AppContext.getInstance().set("Usuario", cliUsuarioDto);
                     if (cliUsuarioDto.getUsuClave().equals(cliUsuarioDto.getUsuTempclave())) {
@@ -123,22 +122,14 @@ public class P01_LogInViewController extends Controller implements Initializable
     @FXML
     private void onActionBtnAcercaDe(ActionEvent event) {
         SoundUtil.mouseEnterSound();
-        if (getStage().getOwner() == null) {
-            FlowController.getInstance().goMain();
-        }
-        getStage().close();
-//        FlowController.getInstance().delete("P05_CambioClaveView");
-//        FlowController.getInstance().goViewInWindowModal("P05_CambioClaveView", stage, false);
-
-//        AppContext.getInstance().set("Padre", "");
-//        FlowController.getInstance().goViewInWindowModal("P03_RegistroView", stage, false);
+        FlowController.getInstance().delete("P14_AcercaDeView");
+        FlowController.getInstance().goViewInWindowModal("P14_AcercaDeView", stage, false);
     }
 
     @FXML
     private void onActionMitSpanish(ActionEvent event) {
         SoundUtil.mouseEnterSound();
-        ResourceBundle idioma = ResourceBundle.getBundle("/cr/ac/una/clinicauna/resources/i18n/traduccion_es");
-        FlowController.setIdioma(idioma);
+        setIdioma("E");
 
         FlowController.getInstance().delete("P01_LogInView");
         FlowController.getInstance().goViewInWindow("P01_LogInView", false);
@@ -149,14 +140,25 @@ public class P01_LogInViewController extends Controller implements Initializable
     @FXML
     private void onActionMitEnglish(ActionEvent event) {
         SoundUtil.mouseEnterSound();
-        ResourceBundle idioma = ResourceBundle.getBundle("/cr/ac/una/clinicauna/resources/i18n/traduccion_en");
-        FlowController.setIdioma(idioma);
+        setIdioma("I");
 
         FlowController.getInstance().delete("P01_LogInView");
         FlowController.getInstance().goViewInWindow("P01_LogInView", false);
         getStage().close();
     }
+    
+    //Setea el idioma en el flowController
+    public void setIdioma(String idioma) {
+        if (idioma.equals("E")) {
+            ResourceBundle espanol = ResourceBundle.getBundle("/cr/ac/una/clinicauna/resources/i18n/traduccion_es");
+            FlowController.setIdioma(espanol);
+        } else {
+            ResourceBundle ingles = ResourceBundle.getBundle("/cr/ac/una/clinicauna/resources/i18n/traduccion_en");
+            FlowController.setIdioma(ingles);
+        }
+    }
 
+    //Depende de donde se llame el login muestra ciertos botones o no
     public void iniciarScena() {
         String padre = (String) AppContext.getInstance().get("PadreLogin");
         txfUsuario.clear();
@@ -169,5 +171,4 @@ public class P01_LogInViewController extends Controller implements Initializable
             btnAcercaDe.setVisible(false);
         }
     }
-
 }

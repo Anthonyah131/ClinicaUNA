@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="AnchorPane" prefHeight="800.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/20.0.1" fx:controller="cr.ac.una.clinicauna.controller.P14_AcercaDeViewController">
+    <stylesheets>
+        <URL value="@styles.css" />
+    </stylesheets>
+   <children>
+      <VBox alignment="CENTER" layoutX="213.0" spacing="5.0" styleClass="fondo-acerca" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fitHeight="225.0" fitWidth="225.0" pickOnBounds="true" preserveRatio="true" styleClass="images-effect">
+               <image>
+                  <Image url="@../resources/media/images/logoUNA50.jpeg" />
+               </image>
+            </ImageView>
+            <Pane layoutX="30.0" layoutY="393.0" VBox.vgrow="ALWAYS" />
+            <Label styleClass="labels-text" text="%key.universidad" />
+            <Label layoutX="296.0" layoutY="477.0" styleClass="labels-text" text="%key.ofCR" />
+            <Label layoutX="296.0" layoutY="485.0" styleClass="labels-text" text="%key.sede" />
+            <Label layoutX="296.0" layoutY="494.0" styleClass="labels-text" text="%key.campus" />
+            <Pane layoutX="30.0" layoutY="469.0" VBox.vgrow="ALWAYS" />
+            <Label layoutX="206.0" layoutY="439.0" styleClass="labels-text" text="%key.eif" />
+            <Label layoutX="243.0" layoutY="462.0" styleClass="labels-text" text="%key.ing" />
+            <Pane layoutX="10.0" layoutY="344.0" VBox.vgrow="ALWAYS" />
+            <Label layoutX="203.0" layoutY="485.0" styleClass="labels-text" text="%key.prof" />
+            <Label layoutX="198.0" layoutY="508.0" styleClass="labels-text" text="%key.carlos" />
+            <Pane VBox.vgrow="ALWAYS" />
+            <Label layoutX="193.0" layoutY="485.0" styleClass="labels-text" text="%key.proye" />
+            <Pane layoutX="10.0" layoutY="431.0" VBox.vgrow="ALWAYS" />
+            <Label layoutX="199.0" layoutY="508.0" styleClass="labels-text" text="Luis Vargas Araya" />
+            <Label layoutX="268.0" layoutY="531.0" styleClass="labels-text" text="Kevin Arauz Jiménez" />
+            <Label layoutX="164.0" layoutY="554.0" styleClass="labels-text" text="Anthony Ávila Hernandez" />
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

@@ -58,10 +58,9 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
-        txfNombre.setTextFormatter(Formato.getInstance().letrasFormat(30));
-        txfCedula.setTextFormatter(Formato.getInstance().cedulaFormat(40));
-        txfApellido.setTextFormatter(Formato.getInstance().letrasFormat(15));
+        txfCedula.setTextFormatter(Formato.getInstance().cedulaFormat(9));
+        txfNombre.setTextFormatter(Formato.getInstance().letrasFormat(25));
+        txfApellido.setTextFormatter(Formato.getInstance().letrasFormat(25));
         cleanNodes();
         fillTableView();
     }
@@ -84,7 +83,7 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
             tbvResultados.setItems(usuarios);
             tbvResultados.refresh();
         } else {
-            new Mensaje().showModal(Alert.AlertType.ERROR, "key.loadUsers", getStage(), respuesta.getMensaje());
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.loadUsers", getStage(), respuesta.getMensaje());
         }
     }
 
@@ -141,9 +140,6 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
     public void fillTableView() {
         tbvResultados.getItems().clear();
 
-//        TableColumn<CliUsuarioDto, String> tbcId = new TableColumn<>("Id");
-//        tbcId.setPrefWidth(30);
-//        tbcId.setCellValueFactory(cd -> cd.getValue().usuId);
         TableColumn<CliUsuarioDto, String> tbcCedula = new TableColumn<>(resourceBundle.getString("key.identification"));
         tbcCedula.setPrefWidth(100);
         tbcCedula.setCellValueFactory(cd -> cd.getValue().usuCedula);
@@ -164,17 +160,17 @@ public class P03_RegistroBuscadorViewController extends Controller implements In
 
             switch (tipoUsuario) {
                 case "M" ->
-                    tipoUsuarioTexto = "Médico";
+                    tipoUsuarioTexto = resourceBundle.getString("key.doctor");
                 case "A" ->
-                    tipoUsuarioTexto = "Administrador";
+                    tipoUsuarioTexto = resourceBundle.getString("key.admin");
                 case "R" ->
-                    tipoUsuarioTexto = "Recepcionista";
+                    tipoUsuarioTexto = resourceBundle.getString("key.receptionist");
             }
 
             return new SimpleStringProperty(tipoUsuarioTexto);
         });
 
-        tbvResultados.getColumns().addAll(/*tbcId,*/tbcCedula, tbcNombre, tbcApellido, tbcTipoUser);
+        tbvResultados.getColumns().addAll(tbcCedula, tbcNombre, tbcApellido, tbcTipoUser);
         tbvResultados.refresh();
     }
 

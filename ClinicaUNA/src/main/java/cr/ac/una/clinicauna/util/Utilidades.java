@@ -11,19 +11,28 @@ import javafx.scene.layout.AnchorPane;
 public class Utilidades {
 
     public static int[] calcularJornada(LocalTime horaEntrada, LocalTime horaSalida) {
+
+        LocalTime hora11pm = LocalTime.of(23, 0);
         Duration duration;
+        Duration duration1;
+        Duration duration2;
+
+        int horas;
+        int minutos;
 
         if (horaSalida.isBefore(horaEntrada)) {
             // La salida es al día siguiente, calculamos la diferencia sumando las duraciones
-            duration = Duration.between(LocalTime.MIDNIGHT, horaSalida)
-                    .plus(Duration.between(horaEntrada, LocalTime.MIDNIGHT).abs());
+            duration2 = Duration.between(horaEntrada, hora11pm).abs();
+            duration1 = Duration.between(LocalTime.MIDNIGHT, horaSalida).abs();
+            duration = duration1.plus(duration2);
+            horas = duration.toHoursPart() + 1;
         } else {
             // La salida es en el mismo día
             duration = Duration.between(horaEntrada, horaSalida);
+            horas = duration.toHoursPart();
         }
 
-        int horas = duration.toHoursPart();
-        int minutos = duration.toMinutesPart();
+        minutos = duration.toMinutesPart();
 
         int[] resultados = new int[]{horas, minutos};
 

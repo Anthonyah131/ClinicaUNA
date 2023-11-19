@@ -81,7 +81,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        Utilidades.ajustarAnchorVentana(root);
+        Utilidades.ajustarAnchorVentana(root); //hacer pantalla responsive
         txfCedula.setTextFormatter(Formato.getInstance().cedulaFormat(9));
         txfNombre.setTextFormatter(Formato.getInstance().letrasFormat(25));
         txfPapellido.setTextFormatter(Formato.getInstance().letrasFormat(25));
@@ -144,7 +144,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
                 Respuesta respuesta = usuarioService.guardarUsuario(usuarioDto);
 
                 if (!respuesta.getEstado()) {
-                    new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
+                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
                 } else {
                     unbindUsuario();
                     this.usuarioDto = (CliUsuarioDto) respuesta.getResultado("Usuario");
@@ -395,7 +395,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
         txfCorreo.textProperty().unbindBidirectional(usuarioDto.usuCorreo);
     }
 
-    //carga el ususario de la pesta;a de busqueda.
+    //carga el ususario de la pestana de busqueda.
     public void bindBuscar() {
         P03_RegistroBuscadorViewController buscadorRegistroController = (P03_RegistroBuscadorViewController) FlowController.getInstance().getController("P03_RegistroBuscadorView");
         unbindUsuario();

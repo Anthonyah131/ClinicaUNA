@@ -98,6 +98,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
     ResourceBundle resourceBundle;
     Object resultado;
     String padre;
+    int[] horas;
 
     /**
      * Initializes the controller class.
@@ -160,46 +161,40 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
             String invalidos = ValidarRequeridos.validarRequeridos(requeridos);
             if (!invalidos.isEmpty()) {
                 String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
-                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), mensaje);
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveDoctor", getStage(), mensaje);
             } else {
                 if (medicoDto.getMedId() != null) {
-                    LocalTime horaInicio = tpkHoraInicio.getValue();
-                    LocalTime horaSalida = tpkHoraSalida.getValue();
-                    if (horaInicio != null && horaSalida != null
-                            && horaInicio.isBefore(horaSalida)) {
-                        CliMedicoService medicoService = new CliMedicoService();
-                        if (cboxCantidadCitas.getValue() != null) {
-                            medicoDto.setMedEspaciosxhora((long) cboxCantidadCitas.getValue());
-                        }
-                        if (chkActivo.isSelected()) {
-                            medicoDto.setMedEstado("A");
-                        } else {
-                            medicoDto.setMedEstado("I");
-                        }
-                        
-                        medicoDto.setMedFiniTime(tpkHoraInicio.getValue());
-                        medicoDto.setMedFfinTime(tpkHoraSalida.getValue());
 
-                        Respuesta respuesta = medicoService.guardarMedico(medicoDto);
-                        if (!respuesta.getEstado()) {
-                            new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
-                        } else {
-                            unbindMedico();
-                            this.medicoDto = (CliMedicoDto) respuesta.getResultado("Medico");
-                            bindMedico();
-                            new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
-                        }
+                    CliMedicoService medicoService = new CliMedicoService();
+                    if (cboxCantidadCitas.getValue() != null) {
+                        medicoDto.setMedEspaciosxhora((long) cboxCantidadCitas.getValue());
+                    }
+                    if (chkActivo.isSelected()) {
+                        medicoDto.setMedEstado("A");
                     } else {
-                        // Se pone un mensaje que hay un error con la horas ingresadas
+                        medicoDto.setMedEstado("I");
+                    }
+
+                    medicoDto.setMedFiniTime(tpkHoraInicio.getValue());
+                    medicoDto.setMedFfinTime(tpkHoraSalida.getValue());
+
+                    Respuesta respuesta = medicoService.guardarMedico(medicoDto);
+                    if (!respuesta.getEstado()) {
+                        new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveDoctor", getStage(), respuesta.getMensaje());
+                    } else {
+                        unbindMedico();
+                        this.medicoDto = (CliMedicoDto) respuesta.getResultado("Medico");
+                        bindMedico();
+                        new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveDoctor", getStage(), "key.updatedDoctor");
                     }
                 } else {
                     System.out.println("Error guardando");
-                    // Se pone un mensaje que se debe cargar un medico para actualizarlo
+                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveDoctor", getStage(), "key.loadDoctorAct");
                 }
             }
         } catch (Exception ex) {
             Logger.getLogger(P08_MantenimientoMedicosViewController.class.getName()).log(Level.SEVERE, "Error guardando el medico.", ex);
-            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveDoctor", getStage(), "key.errorSavingDoctor");
         }
     }
 
@@ -232,15 +227,16 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         this.medicoDto = new CliMedicoDto();
         bindMedico();
     }
-    int[] horas;
 
+    //Calcula jornada en horas para actualizar el label
     private void calcJornada() {
         if (tpkHoraInicio.getValue() != null && tpkHoraSalida.getValue() != null) {
             horas = Utilidades.calcularJornada(tpkHoraInicio.getValue(), tpkHoraSalida.getValue());
-            lblJornadaT.setText(horas[0] + "h " + horas[1] + "m");
+            lblJornadaT.setText(horas[0] + "h " + horas[1] + "m"); 
         }
     }
 
+    //Calcula la cantidad de citas para actualizar el label
     private void calcCitasDia() {
         if (tpkHoraInicio.getValue() != null && tpkHoraSalida.getValue() != null && cboxCantidadCitas.getValue() != null) {
             int cantCitas = Utilidades.calcularCitasJornada(horas[0], horas[1], cboxCantidadCitas.getValue());
@@ -297,7 +293,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
             tbvResultados.setItems(medicos);
             tbvResultados.refresh();
         } else {
-            new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Medicos", getStage(), respuesta.getMensaje());
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.loadDoctors", getStage(), respuesta.getMensaje());
         }
     }
 
@@ -316,7 +312,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
             tbvResultados.refresh();
 
         } else {
-            new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Medicos", getStage(), respuesta.getMensaje());
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.loadDoctor", getStage(), respuesta.getMensaje());
         }
     }
 
@@ -355,8 +351,6 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
     }
 
     public void fillTableView() {
-        resourceBundle = FlowController.getInstance().getIdioma();
-
         tbvResultados.getItems().clear();
 
         TableColumn<CliMedicoDto, String> tbcId = new TableColumn<>("Id");
@@ -431,7 +425,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
                 P10_AgendaViewController agendaController = (P10_AgendaViewController) FlowController.getInstance().getController("P10_AgendaView");
                 agendaController.bindBuscar();
             } else {
-                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.deleteUser", getStage(), "Medico inactivo");
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.loadDoctor", getStage(), "key.doctorInactive");
                 return;
             }
         }
@@ -447,7 +441,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
                 P15_ReportesViewController reporteController = (P15_ReportesViewController) FlowController.getInstance().getController("P15_ReportesView");
                 reporteController.bindBuscar();
             } else {
-                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.deleteUser", getStage(), "Medico inactivo");
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.loadDoctor", getStage(), "key.doctorInactive");
                 return;
             }
         }
