@@ -94,7 +94,6 @@ public class P03_RegistroViewController extends Controller implements Initializa
         iniciarScena();
         indicarRequeridos();
         fillCbox();
-
     }
 
     @Override
@@ -238,35 +237,37 @@ public class P03_RegistroViewController extends Controller implements Initializa
             medicoService.eliminarMedico(medicoId);
         }
     }
+    ObservableList<String> tiposUsuarios = FXCollections.observableArrayList();
 
     public void iniciarScena() {
         resourceBundle = FlowController.getInstance().getIdioma();
         String padre = (String) AppContext.getInstance().get("Padre");
+
+        String admin = resourceBundle.getString("key.admin");
+        String doctor = resourceBundle.getString("key.doctor");
+        String receptionist = resourceBundle.getString("key.receptionist");
 
         if (padre.equals("P01_LogInView")) {
             btnSalir.setVisible(false);
             btnEliminar.setDisable(true);
             btnBuscar.setDisable(true);
             chkActivo.setDisable(true);
+            tiposUsuarios.clear();
+            tiposUsuarios.addAll(doctor, receptionist);
         } else if (padre.equals("P06_MenuPrincipalView")) {
             root.setPrefWidth(1280);
             root.getStyleClass().add("fondo-registro-completa");
             btnSalir.setVisible(true);
             btnEliminar.setDisable(false);
             btnBuscar.setDisable(false);
+            tiposUsuarios.clear();
+            tiposUsuarios.addAll(admin, doctor, receptionist);
         }
     }
 
     public void fillCbox() {
         cboxTipoUsuario.getItems().clear();
         cboxIdioma.getItems().clear();
-
-        String admin = resourceBundle.getString("key.admin");
-        String doctor = resourceBundle.getString("key.doctor");
-        String receptionist = resourceBundle.getString("key.receptionist");
-
-        ObservableList<String> tiposUsuarios = FXCollections.observableArrayList();
-        tiposUsuarios.addAll(admin, doctor, receptionist);
         cboxTipoUsuario.setItems(tiposUsuarios);
 
         ObservableList<String> idiomas = FXCollections.observableArrayList();
