@@ -6,8 +6,12 @@ package cr.ac.una.wsclinicauna.service;
 
 import cr.ac.una.wsclinicauna.model.CliAgenda;
 import cr.ac.una.wsclinicauna.model.CliAgendaDto;
+import cr.ac.una.wsclinicauna.model.CliAtencion;
+import cr.ac.una.wsclinicauna.model.CliAtencionDto;
 import cr.ac.una.wsclinicauna.model.CliCita;
 import cr.ac.una.wsclinicauna.model.CliCitaDto;
+import cr.ac.una.wsclinicauna.model.CliExpediente;
+import cr.ac.una.wsclinicauna.model.CliExpedienteDto;
 import cr.ac.una.wsclinicauna.model.CliPaciente;
 import cr.ac.una.wsclinicauna.model.CliPacienteDto;
 import cr.ac.una.wsclinicauna.model.CliParametrosDto;
@@ -63,7 +67,14 @@ public class CliCitaService {
 
             CliCitaDto cliCitaDto = new CliCitaDto(cliCita);
             cliCitaDto.setCliAgendaDto(new CliAgendaDto(cliCita.getAgeId()));
-            cliCitaDto.setCliPacienteDto(new CliPacienteDto(cliCita.getPacId()));
+            
+            CliPacienteDto pacienteDto = new CliPacienteDto(cliCita.getPacId());
+            
+            for (CliExpediente cliExpediente : cliCita.getPacId().getCliExpedienteList()) {
+                pacienteDto.getCliExpedienteList().add(new CliExpedienteDto(cliExpediente));
+            }
+
+            cliCitaDto.setCliPacienteDto(pacienteDto);
 
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Cita", cliCitaDto);
 

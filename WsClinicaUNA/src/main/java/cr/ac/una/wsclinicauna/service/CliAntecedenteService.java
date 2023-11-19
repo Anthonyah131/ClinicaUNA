@@ -83,14 +83,16 @@ public class CliAntecedenteService {
     public Respuesta guardarAntecedente(CliAntecedenteDto cliAntecedenteDto) {
         try {
             CliAntecedente cliAntecedente;
-            if (cliAntecedenteDto.getAntId()!= null && cliAntecedenteDto.getAntId()> 0) {
+            if (cliAntecedenteDto.getAntId() != null && cliAntecedenteDto.getAntId() > 0) {
                 cliAntecedente = em.find(CliAntecedente.class, cliAntecedenteDto.getAntId());
                 if (cliAntecedente == null) {
                     return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el antecedente a modificar.", "guardarAntecedente NoResultException");
                 }
                 cliAntecedente.actualizar(cliAntecedenteDto);
-                CliExpediente cliExpediente = em.find(CliExpediente.class, cliAntecedenteDto.getCliExpedienteDto().getExpId());
-                cliAntecedente.setExpId(cliExpediente);
+                if (cliAntecedenteDto.getCliExpedienteDto() != null) {
+                    CliExpediente cliExpediente = em.find(CliExpediente.class, cliAntecedenteDto.getCliExpedienteDto().getExpId());
+                    cliAntecedente.setExpId(cliExpediente);
+                }
                 cliAntecedente = em.merge(cliAntecedente);
             } else {
                 cliAntecedente = new CliAntecedente(cliAntecedenteDto);

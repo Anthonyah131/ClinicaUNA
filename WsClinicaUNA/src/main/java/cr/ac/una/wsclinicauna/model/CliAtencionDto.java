@@ -16,7 +16,7 @@ import java.util.List;
 public class CliAtencionDto {
 
     private Long ateId;
-    private LocalDate ateFechahora;
+    private LocalDateTime ateFechahora;
     private String atePresion;
     private String ateFrecuenciacard;
     private String atePeso;
@@ -69,11 +69,11 @@ public class CliAtencionDto {
         this.ateId = ateId;
     }
 
-    public LocalDate getAteFechahora() {
+    public LocalDateTime getAteFechahora() {
         return ateFechahora;
     }
 
-    public void setAteFechahora(LocalDate ateFechahora) {
+    public void setAteFechahora(LocalDateTime ateFechahora) {
         this.ateFechahora = ateFechahora;
     }
 

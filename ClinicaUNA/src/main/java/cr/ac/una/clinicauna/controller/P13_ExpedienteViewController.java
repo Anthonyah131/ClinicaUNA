@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import cr.ac.una.clinicauna.model.CliAgendaDto;
 import cr.ac.una.clinicauna.model.CliAntecedenteDto;
+import cr.ac.una.clinicauna.model.CliAtencionDto;
 import cr.ac.una.clinicauna.model.CliCitaDto;
 import cr.ac.una.clinicauna.model.CliExpedienteDto;
 import cr.ac.una.clinicauna.model.CliMedicoDto;
@@ -14,6 +15,7 @@ import cr.ac.una.clinicauna.model.CliParametroconsultaDto;
 import cr.ac.una.clinicauna.model.CliUsuarioDto;
 import cr.ac.una.clinicauna.service.CliAgendaService;
 import cr.ac.una.clinicauna.service.CliAntecedenteService;
+import cr.ac.una.clinicauna.service.CliAtencionService;
 import cr.ac.una.clinicauna.service.CliExpedienteService;
 import cr.ac.una.clinicauna.service.CliMedicoService;
 import cr.ac.una.clinicauna.service.CliParametroconsultaService;
@@ -29,7 +31,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -100,7 +104,7 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
     @FXML
     private JFXTextArea txaTratamientosActuales;
     @FXML
-    private TableView<CliCitaDto> tbvHistorialCitas;
+    private TableView<CliAtencionDto> tbvHistorialCitas;
     @FXML
     private JFXTextField txfPresionArterial;
     @FXML
@@ -151,15 +155,18 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
     private VBox vxAtencion;
     @FXML
     private VBox vxExamenes;
+    @FXML
+    private MFXButton btnLimpiarAnte;
+    @FXML
+    private MFXButton btnLimpiarAte;
 
     CliExpedienteDto expedienteDto;
     CliPacienteDto pacienteDto;
     CliUsuarioDto usuarioDto;
     CliAntecedenteDto antecedenteDto;
+    CliAtencionDto atencionDto;
     List<Node> requeridosAntecedentes = new ArrayList<>();
 
-    ObservableList<CliAntecedenteDto> listaAntecedenteDto = FXCollections.observableArrayList();
-    ObservableList<CliCitaDto> listaCitas = FXCollections.observableArrayList();
     ResourceBundle resourceBundle;
 
     /**
@@ -175,11 +182,14 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
         txaTratamientosActuales.setTextFormatter(Formato.getInstance().maxLengthFormat(500));
 
         this.antecedenteDto = new CliAntecedenteDto();
+        this.atencionDto = new CliAtencionDto();
 
         requeridosAntecedentes.addAll(Arrays.asList(txfAntTipo, txfAntParentesco, txfAntDescripcion));
         resourceBundle = FlowController.getInstance().getIdioma();
         cargarTablaAntecedentes();
+        fillTableViewCitasPaciente();
         nuevoAntecedente();
+        nuevaAtencion();
         listenerNodos();
     }
 
@@ -202,9 +212,21 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
             } else {
                 unbindAntecedente();
                 this.antecedenteDto = (CliAntecedenteDto) respuesta.getResultado("Antecedente");
-                this.antecedenteDto.setModificado(true);
-                expedienteDto.getCliAntecedenteList().add(this.antecedenteDto);
-                onActionBtnGuardarExpediente(event);
+                
+                List<CliAntecedenteDto> antecedentes = expedienteDto.getCliAntecedenteList();
+                Predicate<CliAntecedenteDto> tieneMismoId = antecedente -> Objects.equals(antecedente.getAntId(), antecedenteDto.getAntId());
+                boolean antecedenteEncontrado = antecedentes.stream().anyMatch(tieneMismoId);
+                if (!antecedenteEncontrado) {
+                    this.antecedenteDto.setModificado(true);
+                    expedienteDto.getCliAntecedenteList().add(this.antecedenteDto);
+                    onActionBtnGuardarExpediente(event);
+                } else {
+                    CliExpedienteService expedienteService = new CliExpedienteService();
+                    respuesta = expedienteService.getExpediente(expedienteDto.getExpId());
+                    this.expedienteDto = (CliExpedienteDto) respuesta.getResultado("Expediente");
+                    cargarAntecedentes();
+                }
+                
                 this.antecedenteDto = new CliAntecedenteDto();
                 bindAntecedente();
                 new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveParameterR", getStage(), "key.updatedParameterR");
@@ -214,30 +236,45 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
             Logger.getLogger(P16_ReporteDinamicoViewController.class.getName()).log(Level.SEVERE, "Error guardando el parametro.", ex);
             new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), "key.errorSavingParameterR");
         }
-        try {
-            String invalidos = ValidarRequeridos.validarRequeridos(requeridosAntecedentes);
-            if (!invalidos.isEmpty()) {
-                String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
-                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), mensaje);
-            } else {
+    }
 
-                listaAntecedenteDto.add(antecedenteDto);
-                tbvAntecedentes.setItems(listaAntecedenteDto);
-                tbvAntecedentes.refresh();
-                nuevoAntecedente();
+    @FXML // Poner idioma
+    private void onActionBtnGuardarAtencion(ActionEvent event) {
+        try {
+//            String invalidos = ValidarRequeridos.validarRequeridos(requeridosParametro);
+//            if (!invalidos.isEmpty()) {
+//                String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
+//                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), mensaje);
+//            } else {
+            if (atencionDto.getAteId() == null || atencionDto.getAteId() <= 0) { // poner idioma que diga "Cargue la atencion que quiere editar"
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), "key.errorDateStart");
+            } else {
+                CliAtencionService atencionService = new CliAtencionService();
+                Respuesta respuesta = atencionService.guardarAtencion(this.atencionDto);
+                if (!respuesta.getEstado()) {
+                    new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), respuesta.getMensaje());
+                } else {
+                    unbindAtencion();
+                    this.atencionDto = (CliAtencionDto) respuesta.getResultado("Atencion");
+                    CliExpedienteService expedienteService = new CliExpedienteService();
+                    respuesta = expedienteService.getExpediente(expedienteDto.getExpId());
+                    this.expedienteDto = (CliExpedienteDto) respuesta.getResultado("Expediente");
+                    this.atencionDto = new CliAtencionDto();
+                    cargarAtenciones();
+                    bindAtencion();
+                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveParameterR", getStage(), "key.updatedParameterR");
+                }
             }
+//                }
         } catch (Exception ex) {
-            Logger.getLogger(P13_ExpedienteViewController.class.getName()).log(Level.SEVERE, "Error guardando el antecedente.", ex);
-            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
+            Logger.getLogger(P16_ReporteDinamicoViewController.class.getName()).log(Level.SEVERE, "Error guardando el parametro.", ex);
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), "key.errorSavingParameterR");
         }
     }
 
     @FXML
-    private void onActionBtnGuardarAtencion(ActionEvent event) {
-    }
-
-    @FXML
     private void onActionBtnCargarArchivos(ActionEvent event) {
+
     }
 
     @FXML // Poner idioma
@@ -257,6 +294,7 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
                     unbindExpediente();
                     this.expedienteDto = (CliExpedienteDto) respuesta.getResultado("Expediente");
                     cargarAntecedentes();
+                    cargarAtenciones();
                     bindExpediente();
                     new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
                 }
@@ -273,6 +311,20 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
 
     @FXML
     private void onActionBtnSalir(ActionEvent event) {
+    }
+
+    @FXML // Poner idioma
+    private void onActionBtnLimpiarAnte(ActionEvent event) {
+        if (new Mensaje().showConfirmationi18n("key.clear", getStage(), "key.cleanRegistry")) {
+            nuevoAntecedente();
+        }
+    }
+
+    @FXML // Poner idioma
+    private void onActionBtnLimpiarAte(ActionEvent event) {
+        if (new Mensaje().showConfirmationi18n("key.clear", getStage(), "key.cleanRegistry")) {
+            nuevaAtencion();
+        }
     }
 
     private void bindExpediente() {
@@ -311,13 +363,8 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
         expedienteDto = (CliExpedienteDto) respuesta.getResultado("Expediente");
         bindExpediente();
 
-        fillTableViewCitasPaciente();
-        tbvHistorialCitas.getItems().clear();
-        listaCitas.clear();
-        listaCitas.addAll(pacienteDto.getCliCitaList());
-        tbvHistorialCitas.setItems(listaCitas);
-        tbvHistorialCitas.refresh();
         cargarAntecedentes();
+        cargarAtenciones();
     }
 
     public void bindPaciente() {
@@ -338,18 +385,18 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
     public void fillTableViewCitasPaciente() {
         tbvHistorialCitas.getItems().clear();
 
-        TableColumn<CliCitaDto, String> tbcFecha = new TableColumn<>(/*resourceBundle.getString("key.identification")*/"Fecha");
+        TableColumn<CliAtencionDto, String> tbcFecha = new TableColumn<>(/*resourceBundle.getString("key.identification")*/"Fecha");
         tbcFecha.setPrefWidth(150);
         tbcFecha.setCellValueFactory(cd -> {
-            LocalDateTime fecha = cd.getValue().getCitFechaHora();
+            LocalDateTime fecha = cd.getValue().getAteFechahora();
             String fechaString = fecha.getDayOfMonth() + "/" + fecha.getMonthValue() + "/" + fecha.getYear();
             return new SimpleStringProperty(fechaString);
         });
 
-        TableColumn<CliCitaDto, String> tbcHora = new TableColumn<>(/*resourceBundle.getString("key.usertype")*/"Hora");
+        TableColumn<CliAtencionDto, String> tbcHora = new TableColumn<>(/*resourceBundle.getString("key.usertype")*/"Hora");
         tbcHora.setPrefWidth(150);
         tbcHora.setCellValueFactory(cd -> {
-            LocalDateTime fecha = cd.getValue().getCitFechaHora();
+            LocalDateTime fecha = cd.getValue().getAteFechahora();
             int hora = fecha.getHour();
             int minuto = fecha.getMinute();
 
@@ -365,18 +412,17 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
             return new SimpleStringProperty(horaFormateada);
         });
 
-        TableColumn<CliCitaDto, String> tbcNombre = new TableColumn<>(/*resourceBundle.getString("key.name")*/"Nombre paciente");
+        TableColumn<CliAtencionDto, String> tbcNombre = new TableColumn<>(/*resourceBundle.getString("key.name")*/"Nombre paciente");
         tbcNombre.setPrefWidth(200);
         tbcNombre.setCellValueFactory(cd -> {
             String nombrePac = pacienteDto.getPacNombre();
             return new SimpleStringProperty(nombrePac);
         });
 
-        TableColumn<CliCitaDto, String> tbcMotivo = new TableColumn<>(/*resourceBundle.getString("key.papellido")*/"Motivo");
-        tbcMotivo.setPrefWidth(150);
-        tbcMotivo.setCellValueFactory(cd -> cd.getValue().citMotivo);
-
-        tbvHistorialCitas.getColumns().addAll(tbcFecha, tbcHora, tbcNombre, tbcMotivo);
+//        TableColumn<CliAtencionDto, String> tbcMotivo = new TableColumn<>(/*resourceBundle.getString("key.papellido")*/"Motivo");
+//        tbcMotivo.setPrefWidth(150);
+//        tbcMotivo.setCellValueFactory(cd -> cd.getValue().citMotivo);
+        tbvHistorialCitas.getColumns().addAll(tbcFecha, tbcHora, tbcNombre);
         tbvHistorialCitas.refresh();
     }
 
@@ -407,7 +453,7 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
 
         TableColumn<CliAntecedenteDto, String> tbcParent = new TableColumn<>(/*resourceBundle.getString("key.papellido")*/"Parentesco");
         tbcParent.setPrefWidth(150);
-        tbcParent.setCellValueFactory(cd -> cd.getValue().antTipo);
+        tbcParent.setCellValueFactory(cd -> cd.getValue().antParentesco);
 
         TableColumn<CliAntecedenteDto, Boolean> tbcEliminar = new TableColumn<>("Eliminar");
         tbcEliminar.setPrefWidth(100);
@@ -418,11 +464,56 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
         tbvAntecedentes.refresh();
 
     }
-    
+
     private void cargarAntecedentes() {
         tbvAntecedentes.getItems().clear();
         tbvAntecedentes.setItems(this.expedienteDto.getCliAntecedenteList());
         tbvAntecedentes.refresh();
+    }
+
+    private void nuevaAtencion() {
+        unbindAtencion();
+        this.atencionDto = new CliAtencionDto();
+        bindAtencion();
+    }
+
+    private void bindAtencion() {
+        txfPresionArterial.textProperty().bindBidirectional(atencionDto.atePresion);
+        txfFrecuenciaCar.textProperty().bindBidirectional(atencionDto.ateFrecuenciacard);
+        txfPeso.textProperty().bindBidirectional(atencionDto.atePeso);
+        txfTalla.textProperty().bindBidirectional(atencionDto.ateTalla);
+        txfTemperatura.textProperty().bindBidirectional(atencionDto.ateTemperatura);
+        txaAnotacionesEnfermeria.textProperty().bindBidirectional(atencionDto.ateAnotacionenfe);
+        txfRazonConsulta.textProperty().bindBidirectional(atencionDto.ateRazonconsulta);
+        txaPlanAtencion.textProperty().bindBidirectional(atencionDto.atePlanatencion);
+        txaObservaciones.textProperty().bindBidirectional(atencionDto.ateObservaciones);
+        txaTratamiento.textProperty().bindBidirectional(atencionDto.ateTratamiento);
+    }
+
+    private void unbindAtencion() {
+        txfPresionArterial.textProperty().unbindBidirectional(atencionDto.atePresion);
+        txfFrecuenciaCar.textProperty().unbindBidirectional(atencionDto.ateFrecuenciacard);
+        txfPeso.textProperty().unbindBidirectional(atencionDto.atePeso);
+        txfTalla.textProperty().unbindBidirectional(atencionDto.ateTalla);
+        txfTemperatura.textProperty().unbindBidirectional(atencionDto.ateTemperatura);
+        txaAnotacionesEnfermeria.textProperty().unbindBidirectional(atencionDto.ateAnotacionenfe);
+        txfRazonConsulta.textProperty().unbindBidirectional(atencionDto.ateRazonconsulta);
+        txaPlanAtencion.textProperty().unbindBidirectional(atencionDto.atePlanatencion);
+        txaObservaciones.textProperty().unbindBidirectional(atencionDto.ateObservaciones);
+        txaTratamiento.textProperty().unbindBidirectional(atencionDto.ateTratamiento);
+    }
+
+    private void cargarAtenciones() {
+        ObservableList<CliAtencionDto> atenciones = this.expedienteDto.getCliAtencionList();
+        LocalDateTime fechaActual = LocalDateTime.now();
+
+//        List<CliAtencionDto> atencionesFiltradas = atenciones.stream() // Descomentar esto para traer las atenciones con fechas ya pasadas
+//                .filter(atencion -> atencion.getAteFechahora().isBefore(fechaActual) || atencion.getAteFechahora().isEqual(fechaActual))
+//                .collect(Collectors.toList());
+        tbvHistorialCitas.getItems().clear();
+//        tbvHistorialCitas.setItems((ObservableList<CliAtencionDto>) atencionesFiltradas);
+        tbvHistorialCitas.setItems(atenciones);
+        tbvHistorialCitas.refresh();
     }
 
     private void listenerNodos() {
@@ -433,6 +524,16 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
                 bindAntecedente();
             } else {
                 nuevoAntecedente();
+            }
+        });
+
+        tbvHistorialCitas.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                unbindAtencion();
+                atencionDto = newValue;
+                bindAtencion();
+            } else {
+                nuevaAtencion();
             }
         });
     }

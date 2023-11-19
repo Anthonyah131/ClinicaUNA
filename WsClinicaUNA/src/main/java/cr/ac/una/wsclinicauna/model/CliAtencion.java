@@ -23,6 +23,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -60,7 +61,7 @@ public class CliAtencion implements Serializable {
     @Column(name = "ATE_ID")
     private Long ateId;
     @Column(name = "ATE_FECHAHORA")
-    private LocalDate ateFechahora;
+    private LocalDateTime ateFechahora;
     @Column(name = "ATE_PRESION")
     private String atePresion;
     @Column(name = "ATE_FRECUENCIACARD")
@@ -129,11 +130,11 @@ public class CliAtencion implements Serializable {
         this.ateId = ateId;
     }
 
-    public LocalDate getAteFechahora() {
+    public LocalDateTime getAteFechahora() {
         return ateFechahora;
     }
 
-    public void setAteFechahora(LocalDate ateFechahora) {
+    public void setAteFechahora(LocalDateTime ateFechahora) {
         this.ateFechahora = ateFechahora;
     }
 

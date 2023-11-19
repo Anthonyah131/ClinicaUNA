@@ -55,7 +55,9 @@ public class CliExpedienteService {
                 cliExpedienteDto.getCliExamenList().add(new CliExamenDto(cliExamen));
             }
             for (CliAtencion cliAtencion : cliExpediente.getCliAtencionList()) {
-                cliExpedienteDto.getCliAtencionList().add(new CliAtencionDto(cliAtencion));
+                CliAtencionDto atencionDto = new CliAtencionDto(cliAtencion);
+                atencionDto.setCliExpedienteDto(new CliExpedienteDto(cliAtencion.getExpId()));
+                cliExpedienteDto.getCliAtencionList().add(atencionDto);
             }
             for (CliAntecedente cliAntecedente : cliExpediente.getCliAntecedenteList()) {
                 cliExpedienteDto.getCliAntecedenteList().add(new CliAntecedenteDto(cliAntecedente));
@@ -88,7 +90,9 @@ public class CliExpedienteService {
                     cliExpedienteDto.getCliExamenList().add(new CliExamenDto(cliExamen));
                 }
                 for (CliAtencion cliAtencion : cliExpediente.getCliAtencionList()) {
-                    cliExpedienteDto.getCliAtencionList().add(new CliAtencionDto(cliAtencion));
+                    CliAtencionDto atencionDto = new CliAtencionDto(cliAtencion);
+                    atencionDto.setCliExpedienteDto(new CliExpedienteDto(cliAtencion.getExpId()));
+                    cliExpedienteDto.getCliAtencionList().add(atencionDto);
                 }
                 for (CliAntecedente cliAntecedente : cliExpediente.getCliAntecedenteList()) {
                     cliExpedienteDto.getCliAntecedenteList().add(new CliAntecedenteDto(cliAntecedente));
@@ -169,7 +173,9 @@ public class CliExpedienteService {
                 expedienteDto.getCliExamenList().add(new CliExamenDto(cliExamen));
             }
             for (CliAtencion cliAtencion : cliExpediente.getCliAtencionList()) {
-                expedienteDto.getCliAtencionList().add(new CliAtencionDto(cliAtencion));
+                CliAtencionDto atencionDto = new CliAtencionDto(cliAtencion);
+                atencionDto.setCliExpedienteDto(new CliExpedienteDto(cliAtencion.getExpId()));
+                expedienteDto.getCliAtencionList().add(atencionDto);
             }
             for (CliAntecedente cliAntecedente : cliExpediente.getCliAntecedenteList()) {
                 expedienteDto.getCliAntecedenteList().add(new CliAntecedenteDto(cliAntecedente));

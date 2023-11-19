@@ -1,6 +1,7 @@
 package cr.ac.una.clinicauna.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.ObjectProperty;
@@ -16,7 +17,7 @@ import javafx.collections.ObservableList;
 public class CliAtencionDto {
 
     public SimpleStringProperty ateId;
-    public ObjectProperty<LocalDate> ateFechahora;
+    public ObjectProperty<LocalDateTime> ateFechahora;
     public SimpleStringProperty atePresion;
     public SimpleStringProperty ateFrecuenciacard;
     public SimpleStringProperty atePeso;
@@ -65,11 +66,11 @@ public class CliAtencionDto {
         this.ateId.set(ateId.toString());
     }
 
-    public LocalDate getAteFechaHora() {
+    public LocalDateTime getAteFechahora() {
         return ateFechahora.get();
     }
 
-    public void setAteFechaHora(LocalDate ateFechahora) {
+    public void setAteFechahora(LocalDateTime ateFechahora) {
         this.ateFechahora.set(ateFechahora);
     }
 
@@ -81,11 +82,11 @@ public class CliAtencionDto {
         this.atePresion.set(atePresion);
     }
 
-    public String getAteFrecuenciaCard() {
+    public String getAteFrecuenciacard() {
         return ateFrecuenciacard.get();
     }
 
-    public void setAteFrecuenciaCard(String ateFrecuenciacard) {
+    public void setAteFrecuenciacard(String ateFrecuenciacard) {
         this.ateFrecuenciacard.set(ateFrecuenciacard);
     }
 
@@ -113,35 +114,35 @@ public class CliAtencionDto {
         this.ateTemperatura.set(ateTemperatura);
     }
 
-    public String getAteIMC() {
+    public String getAteImc() {
         return ateImc.get();
     }
 
-    public void setAteIMC(String ateImc) {
+    public void setAteImc(String ateImc) {
         this.ateImc.set(ateImc);
     }
 
-    public String getAteAnotacionEnfermera() {
+    public String getAteAnotacionenfe() {
         return ateAnotacionenfe.get();
     }
 
-    public void setAteAnotacionEnfermera(String ateAnotacionenfe) {
+    public void setAteAnotacionenfe(String ateAnotacionenfe) {
         this.ateAnotacionenfe.set(ateAnotacionenfe);
     }
 
-    public String getAteRazonConsulta() {
+    public String getAteRazonconsulta() {
         return ateRazonconsulta.get();
     }
 
-    public void setAteRazonConsulta(String ateRazonconsulta) {
+    public void setAteRazonconsulta(String ateRazonconsulta) {
         this.ateRazonconsulta.set(ateRazonconsulta);
     }
 
-    public String getAtePlanAtencion() {
+    public String getAtePlanatencion() {
         return atePlanatencion.get();
     }
 
-    public void setAtePlanAtencion(String atePlanatencion) {
+    public void setAtePlanatencion(String atePlanatencion) {
         this.atePlanatencion.set(atePlanatencion);
     }
 

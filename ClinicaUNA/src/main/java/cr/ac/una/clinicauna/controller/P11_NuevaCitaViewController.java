@@ -3,12 +3,16 @@ package cr.ac.una.clinicauna.controller;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import cr.ac.una.clinicauna.model.CliAgendaDto;
+import cr.ac.una.clinicauna.model.CliAtencionDto;
 import cr.ac.una.clinicauna.model.CliCitaDto;
+import cr.ac.una.clinicauna.model.CliExpedienteDto;
 import cr.ac.una.clinicauna.model.CliMedicoDto;
 import cr.ac.una.clinicauna.model.CliPacienteDto;
 import cr.ac.una.clinicauna.model.CliUsuarioDto;
 import cr.ac.una.clinicauna.service.CliAgendaService;
+import cr.ac.una.clinicauna.service.CliAtencionService;
 import cr.ac.una.clinicauna.service.CliCitaService;
+import cr.ac.una.clinicauna.service.CliExpedienteService;
 import cr.ac.una.clinicauna.service.CliMedicoService;
 import cr.ac.una.clinicauna.service.CliPacienteService;
 import cr.ac.una.clinicauna.util.AppContext;
@@ -193,6 +197,23 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
                 respuesta = citaService.getCita(citaDto.getCitId());
                 this.citaDto = (CliCitaDto) respuesta.getResultado("Cita");
 
+                if (!citaDto.getCliPacienteDto().getCliExpedienteList().isEmpty()) {
+                    CliExpedienteService expedienteService = new CliExpedienteService();
+                    CliAtencionService atencionService = new CliAtencionService();
+
+                    CliAtencionDto atencionDto = new CliAtencionDto();
+                    atencionDto.setAteFechahora(citaDto.getCitFechaHora());
+                    CliExpedienteDto expedienteDto = citaDto.getCliPacienteDto().getCliExpedienteList().get(0);
+                    respuesta = expedienteService.getExpediente(expedienteDto.getExpId());
+                    expedienteDto = (CliExpedienteDto) respuesta.getResultado("Expediente");
+
+                    Respuesta respuestaAtencion = atencionService.guardarAtencion(atencionDto);
+                    atencionDto = (CliAtencionDto) respuestaAtencion.getResultado("Atencion");
+                    atencionDto.setModificado(true);
+                    expedienteDto.getCliAtencionList().add(atencionDto);
+                    expedienteService.guardarExpediente(expedienteDto);
+                }
+
                 new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
             }
         } catch (Exception ex) {
@@ -319,7 +340,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
             citaDto.setCliAgendaDto(null);
             Respuesta respuesta = citaService.guardarCita(citaDto);
             citaDto = (CliCitaDto) respuesta.getResultado("Cita");
-            
+
             AppContext.getInstance().set("CitaMover", citaDto);
 
             agendaDto.getCliCitaListEliminados().add(citaDto);
