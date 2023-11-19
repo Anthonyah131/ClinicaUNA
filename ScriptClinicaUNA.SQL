@@ -473,6 +473,7 @@ COMMENT ON COLUMN CLI_ATENCION.ate_tratamiento IS 'tratamientos dados por el med
 COMMENT ON COLUMN CLI_ATENCION.ate_version IS 'version del registro de la atencion'
 ;
 
+
 -- Table CLI_EXAMEN
 
 CREATE TABLE CLI_EXAMEN(
@@ -480,6 +481,7 @@ CREATE TABLE CLI_EXAMEN(
   exa_nombre Varchar2(30 ) NOT NULL,
   exa_fecha Date,
   exa_anotacionesmed Varchar2(80 ),
+  exa_archivo Blob,
   exa_version Number DEFAULT 1 NOT NULL,
   ate_id Number,
   exp_id Number
@@ -508,6 +510,8 @@ COMMENT ON COLUMN CLI_EXAMEN.exa_nombre IS 'nombre del examen'
 COMMENT ON COLUMN CLI_EXAMEN.exa_fecha IS 'fecha del examen'
 ;
 COMMENT ON COLUMN CLI_EXAMEN.exa_anotacionesmed IS 'anotaciones del medico'
+;
+COMMENT ON COLUMN CLI_EXAMEN.exa_archivo IS 'Archivo de los examenes'
 ;
 COMMENT ON COLUMN CLI_EXAMEN.exa_version IS 'version del registro del examen'
 ;
