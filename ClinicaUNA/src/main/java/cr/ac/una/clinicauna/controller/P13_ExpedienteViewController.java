@@ -18,6 +18,7 @@ import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Formato;
 import cr.ac.una.clinicauna.util.Mensaje;
 import cr.ac.una.clinicauna.util.Respuesta;
+import cr.ac.una.clinicauna.util.ValidarRequeridos;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -36,8 +37,10 @@ import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -170,7 +173,11 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
     CliAtencionDto atencionDto;
     CliExamenDto examenDto;
     CliCitaDto citaDto;
+
+    List<Node> requeridosExpediente = new ArrayList<>();
     List<Node> requeridosAntecedentes = new ArrayList<>();
+    List<Node> requeridosAtencion = new ArrayList<>();
+    List<Node> requeridosExamen = new ArrayList<>();
 
     ResourceBundle resourceBundle;
     @FXML
@@ -188,11 +195,29 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
         txaAlergias.setTextFormatter(Formato.getInstance().maxLengthFormat(500));
         txaTratamientosActuales.setTextFormatter(Formato.getInstance().maxLengthFormat(500));
 
+        txfAntTipo.setTextFormatter(Formato.getInstance().maxLengthFormat(10));
+        txfAntParentesco.setTextFormatter(Formato.getInstance().maxLengthFormat(20));
+        txfAntDescripcion.setTextFormatter(Formato.getInstance().maxLengthFormat(20));
+
+        txfPresionArterial.setTextFormatter(Formato.getInstance().maxLengthFormat(5));
+        txfFrecuenciaCar.setTextFormatter(Formato.getInstance().maxLengthFormat(5));
+        txfPeso.setTextFormatter(Formato.getInstance().maxLengthFormat(5));
+        txfTalla.setTextFormatter(Formato.getInstance().maxLengthFormat(5));
+        txfTemperatura.setTextFormatter(Formato.getInstance().maxLengthFormat(5));
+        txaAnotacionesEnfermeria.setTextFormatter(Formato.getInstance().maxLengthFormat(80));
+        txfRazonConsulta.setTextFormatter(Formato.getInstance().maxLengthFormat(50));
+        txaPlanAtencion.setTextFormatter(Formato.getInstance().maxLengthFormat(1));
+        txaObservaciones.setTextFormatter(Formato.getInstance().maxLengthFormat(80));
+        txaTratamiento.setTextFormatter(Formato.getInstance().maxLengthFormat(50));
+
+        txfNombreArchivo.setTextFormatter(Formato.getInstance().maxLengthFormat(30));
+        txaComentarioArchivo.setTextFormatter(Formato.getInstance().maxLengthFormat(80));
+
         this.antecedenteDto = new CliAntecedenteDto();
         this.atencionDto = new CliAtencionDto();
         this.examenDto = new CliExamenDto();
 
-        requeridosAntecedentes.addAll(Arrays.asList(txfAntTipo, txfAntParentesco, txfAntDescripcion));
+        indicarRequeridos();
         resourceBundle = FlowController.getInstance().getIdioma();
         cargarTablaAntecedentes();
         fillTableViewCitasPaciente();
@@ -210,38 +235,38 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
     @FXML // Poner idioma
     private void onActionBtnAgregarAntecedente(ActionEvent event) {
         try {
-//            String invalidos = ValidarRequeridos.validarRequeridos(requeridosParametro);
-//            if (!invalidos.isEmpty()) {
-//                String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
-//                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), mensaje);
-//            } else {
-            CliAntecedenteService antecedenteService = new CliAntecedenteService();
-            Respuesta respuesta = antecedenteService.guardarAntecedente(this.antecedenteDto);
-            if (!respuesta.getEstado()) {
-                new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), respuesta.getMensaje());
+            String invalidos = ValidarRequeridos.validarRequeridos(requeridosAntecedentes);
+            if (!invalidos.isEmpty()) {
+                String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), mensaje);
             } else {
-                unbindAntecedente();
-                this.antecedenteDto = (CliAntecedenteDto) respuesta.getResultado("Antecedente");
-
-                List<CliAntecedenteDto> antecedentes = expedienteDto.getCliAntecedenteList();
-                Predicate<CliAntecedenteDto> tieneMismoId = antecedente -> Objects.equals(antecedente.getAntId(), antecedenteDto.getAntId());
-                boolean antecedenteEncontrado = antecedentes.stream().anyMatch(tieneMismoId);
-                if (!antecedenteEncontrado) {
-                    this.antecedenteDto.setModificado(true);
-                    expedienteDto.getCliAntecedenteList().add(this.antecedenteDto);
-                    onActionBtnGuardarExpediente(event);
+                CliAntecedenteService antecedenteService = new CliAntecedenteService();
+                Respuesta respuesta = antecedenteService.guardarAntecedente(this.antecedenteDto);
+                if (!respuesta.getEstado()) {
+                    new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), respuesta.getMensaje());
                 } else {
-                    CliExpedienteService expedienteService = new CliExpedienteService();
-                    respuesta = expedienteService.getExpediente(expedienteDto.getExpId());
-                    this.expedienteDto = (CliExpedienteDto) respuesta.getResultado("Expediente");
-                    cargarAntecedentes();
-                }
+                    unbindAntecedente();
+                    this.antecedenteDto = (CliAntecedenteDto) respuesta.getResultado("Antecedente");
 
-                this.antecedenteDto = new CliAntecedenteDto();
-                bindAntecedente();
-                new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveParameterR", getStage(), "key.updatedParameterR");
+                    List<CliAntecedenteDto> antecedentes = expedienteDto.getCliAntecedenteList();
+                    Predicate<CliAntecedenteDto> tieneMismoId = antecedente -> Objects.equals(antecedente.getAntId(), antecedenteDto.getAntId());
+                    boolean antecedenteEncontrado = antecedentes.stream().anyMatch(tieneMismoId);
+                    if (!antecedenteEncontrado) {
+                        this.antecedenteDto.setModificado(true);
+                        expedienteDto.getCliAntecedenteList().add(this.antecedenteDto);
+                        onActionBtnGuardarExpediente(event);
+                    } else {
+                        CliExpedienteService expedienteService = new CliExpedienteService();
+                        respuesta = expedienteService.getExpediente(expedienteDto.getExpId());
+                        this.expedienteDto = (CliExpedienteDto) respuesta.getResultado("Expediente");
+                        cargarAntecedentes();
+                    }
+
+                    this.antecedenteDto = new CliAntecedenteDto();
+                    bindAntecedente();
+                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveParameterR", getStage(), "key.updatedParameterR");
+                }
             }
-//                }
         } catch (Exception ex) {
             Logger.getLogger(P16_ReporteDinamicoViewController.class.getName()).log(Level.SEVERE, "Error guardando el parametro.", ex);
             new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), "key.errorSavingParameterR");
@@ -251,40 +276,46 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
     @FXML // Poner idioma
     private void onActionBtnGuardarAtencion(ActionEvent event) {
         try {
-//            String invalidos = ValidarRequeridos.validarRequeridos(requeridosParametro);
-//            if (!invalidos.isEmpty()) {
-//                String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
-//                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), mensaje);
-//            } else {
-            if (atencionDto.getAteId() == null || atencionDto.getAteId() <= 0) { // poner idioma que diga "Cargue la atencion que quiere editar"
-                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), "key.errorDateStart");
+            String invalidos = ValidarRequeridos.validarRequeridos(requeridosAtencion);
+            if (!invalidos.isEmpty()) {
+                String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), mensaje);
             } else {
-                CliAtencionService atencionService = new CliAtencionService();
-                Respuesta respuesta = atencionService.guardarAtencion(this.atencionDto);
-                if (!respuesta.getEstado()) {
-                    new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), respuesta.getMensaje());
+                if (atencionDto.getAteId() == null || atencionDto.getAteId() <= 0) { // poner idioma que diga "Cargue la atencion que quiere editar"
+                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), "key.errorDateStart");
                 } else {
-                    unbindAtencion();
-                    this.atencionDto = (CliAtencionDto) respuesta.getResultado("Atencion");
-                    
-                    CliExpedienteService expedienteService = new CliExpedienteService();
-                    respuesta = expedienteService.getExpediente(expedienteDto.getExpId());
-                    this.expedienteDto = (CliExpedienteDto) respuesta.getResultado("Expediente");
-                    
-                    this.atencionDto = new CliAtencionDto();
-                    cargarAtenciones();
-                    bindAtencion();
-                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveParameterR", getStage(), "key.updatedParameterR");
+                    CliAtencionService atencionService = new CliAtencionService();
+                    if (atencionDto.getAtePeso() != null && atencionDto.getAteTalla() != null
+                            && !atencionDto.getAtePeso().isBlank() && !atencionDto.getAteTalla().isBlank()) {
+                        atencionDto.setAteImc("" + (int) (Double.parseDouble(atencionDto.getAtePeso()) / (Double.parseDouble(atencionDto.getAteTalla()) * Double.parseDouble(atencionDto.getAteTalla()))));
+                    } else {
+                        atencionDto.setAteImc("0");
+                    }
+                    Respuesta respuesta = atencionService.guardarAtencion(this.atencionDto);
+                    if (!respuesta.getEstado()) {
+                        new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), respuesta.getMensaje());
+                    } else {
+                        unbindAtencion();
+                        this.atencionDto = (CliAtencionDto) respuesta.getResultado("Atencion");
+
+                        CliExpedienteService expedienteService = new CliExpedienteService();
+                        respuesta = expedienteService.getExpediente(expedienteDto.getExpId());
+                        this.expedienteDto = (CliExpedienteDto) respuesta.getResultado("Expediente");
+
+                        this.atencionDto = new CliAtencionDto();
+                        cargarAtenciones();
+                        bindAtencion();
+                        new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveParameterR", getStage(), "key.updatedParameterR");
+                    }
                 }
             }
-//                }
         } catch (Exception ex) {
             Logger.getLogger(P16_ReporteDinamicoViewController.class.getName()).log(Level.SEVERE, "Error guardando el parametro.", ex);
             new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), "key.errorSavingParameterR");
         }
     }
 
-    @FXML
+    @FXML // Poner idioma
     private void onActionBtnCargarArchivos(ActionEvent event) {
         //Inicializa el FileChooser y le da un titulo a la nueva ventana
         FileChooser fileChooser = new FileChooser();
@@ -312,53 +343,53 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
     @FXML // Poner idioma
     private void onActionBtnGuardarE(ActionEvent event) {
         try {
-//            String invalidos = ValidarRequeridos.validarRequeridos(requeridosParametro);
-//            if (!invalidos.isEmpty()) {
-//                String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
-//                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), mensaje);
-//            } else {
-            CliExamenService examenService = new CliExamenService();
-            Respuesta respuesta = examenService.guardarExamen(this.examenDto);
-            if (!respuesta.getEstado()) {
-                new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), respuesta.getMensaje());
+            String invalidos = ValidarRequeridos.validarRequeridos(requeridosExamen);
+            if (!invalidos.isEmpty()) {
+                String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), mensaje);
             } else {
-                unbindExamen();
-                this.examenDto = (CliExamenDto) respuesta.getResultado("Examen");
-
-                List<CliExamenDto> examenes = expedienteDto.getCliExamenList();
-                
-                List<CliAtencionDto> atenciones = expedienteDto.getCliAtencionList();
-                LocalDateTime fechaHoraCita = citaDto.getCitFechaHora();
-                Optional<CliAtencionDto> atencionActual = atenciones.stream()
-                        .filter(atencion -> atencion.getAteFechahora().equals(fechaHoraCita))
-                        .findFirst();
-
-                // Verificar si se encontró una atención con la misma fecha y hora
-                if (atencionActual.isPresent()) {
-                    atencionDto = atencionActual.get();
-                    this.examenDto.setModificado(true);
-                    atencionDto.getCliExamenList().add(this.examenDto);
-                    onActionBtnGuardarAtencion(event);
-                }
-                
-                Predicate<CliExamenDto> tieneMismoId = antecedente -> Objects.equals(antecedente.getExaId(), examenDto.getExaId());
-                boolean antecedenteEncontrado = examenes.stream().anyMatch(tieneMismoId);
-                if (!antecedenteEncontrado) {
-                    this.examenDto.setModificado(true);
-                    expedienteDto.getCliExamenList().add(this.examenDto);
-                    onActionBtnGuardarExpediente(event);
+                CliExamenService examenService = new CliExamenService();
+                Respuesta respuesta = examenService.guardarExamen(this.examenDto);
+                if (!respuesta.getEstado()) {
+                    new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), respuesta.getMensaje());
                 } else {
-                    CliExpedienteService expedienteService = new CliExpedienteService();
-                    respuesta = expedienteService.getExpediente(expedienteDto.getExpId());
-                    this.expedienteDto = (CliExpedienteDto) respuesta.getResultado("Expediente");
-                    cargarExamenes();
-                }
+                    unbindExamen();
+                    this.examenDto = (CliExamenDto) respuesta.getResultado("Examen");
 
-                this.examenDto = new CliExamenDto();
-                bindExamen();
-                new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveParameterR", getStage(), "key.updatedParameterR");
+                    List<CliExamenDto> examenes = expedienteDto.getCliExamenList();
+
+                    List<CliAtencionDto> atenciones = expedienteDto.getCliAtencionList();
+                    LocalDateTime fechaHoraCita = citaDto.getCitFechaHora();
+                    Optional<CliAtencionDto> atencionActual = atenciones.stream()
+                            .filter(atencion -> atencion.getAteFechahora().equals(fechaHoraCita))
+                            .findFirst();
+
+                    // Verificar si se encontró una atención con la misma fecha y hora
+                    if (atencionActual.isPresent()) {
+                        atencionDto = atencionActual.get();
+                        this.examenDto.setModificado(true);
+                        atencionDto.getCliExamenList().add(this.examenDto);
+                        onActionBtnGuardarAtencion(event);
+                    }
+
+                    Predicate<CliExamenDto> tieneMismoId = antecedente -> Objects.equals(antecedente.getExaId(), examenDto.getExaId());
+                    boolean antecedenteEncontrado = examenes.stream().anyMatch(tieneMismoId);
+                    if (!antecedenteEncontrado) {
+                        this.examenDto.setModificado(true);
+                        expedienteDto.getCliExamenList().add(this.examenDto);
+                        onActionBtnGuardarExpediente(event);
+                    } else {
+                        CliExpedienteService expedienteService = new CliExpedienteService();
+                        respuesta = expedienteService.getExpediente(expedienteDto.getExpId());
+                        this.expedienteDto = (CliExpedienteDto) respuesta.getResultado("Expediente");
+                        cargarExamenes();
+                    }
+
+                    this.examenDto = new CliExamenDto();
+                    bindExamen();
+                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveParameterR", getStage(), "key.updatedParameterR");
+                }
             }
-//                }
         } catch (Exception ex) {
             Logger.getLogger(P16_ReporteDinamicoViewController.class.getName()).log(Level.SEVERE, "Error guardando el parametro.", ex);
             new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), "key.errorSavingParameterR");
@@ -368,12 +399,11 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
     @FXML // Poner idioma
     private void onActionBtnGuardarExpediente(ActionEvent event) {
         try {
-            /*String invalidos = ValidarRequeridos.validarRequeridos(requeridos);
+            String invalidos = ValidarRequeridos.validarRequeridos(requeridosExpediente);
             if (!invalidos.isEmpty()) {
                 String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
                 new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), mensaje);
-            } else {*/
-            if (expedienteDto.getExpId() != null) {
+            } else {
                 CliExpedienteService expedienteService = new CliExpedienteService();
                 Respuesta respuesta = expedienteService.guardarExpediente(expedienteDto);
                 if (!respuesta.getEstado()) {
@@ -387,10 +417,6 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
                     bindExpediente();
                     new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
                 }
-//                } else {
-//                    System.out.println("Error guardando");
-//                    // Se pone un mensaje que se debe cargar un medico para actualizarlo
-//                }
             }
         } catch (Exception ex) {
             Logger.getLogger(P08_MantenimientoMedicosViewController.class.getName()).log(Level.SEVERE, "Error guardando el medico.", ex);
@@ -421,6 +447,18 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
         if (new Mensaje().showConfirmationi18n("key.clear", getStage(), "key.cleanRegistry")) {
             nuevoExamen();
         }
+    }
+
+    private void indicarRequeridos() {
+        requeridosExpediente.clear();
+        requeridosAntecedentes.clear();
+        requeridosAtencion.clear();
+        requeridosExamen.clear();
+
+        requeridosExpediente.addAll(Arrays.asList());
+        requeridosAntecedentes.addAll(Arrays.asList());
+        requeridosAtencion.addAll(Arrays.asList());
+        requeridosExamen.addAll(Arrays.asList(txfNombreArchivo));
     }
 
     private void bindExpediente() {
@@ -562,35 +600,30 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
 
     public void llenarGrafico() {
         ObservableList<CliAtencionDto> atenciones = this.expedienteDto.getCliAtencionList();
-        atenciones.sort(Comparator.comparing(CliAtencionDto::getAteFechahora));
-        // Limpiar el gráfico
-        gfrEvolucion.getData().clear();
+        LocalDateTime fechaCita = citaDto.getCitFechaHora();
+        List<CliAtencionDto> atencionesFiltradas = atenciones.stream()
+                .filter(atencion -> atencion.getAteFechahora().isBefore(fechaCita) || atencion.getAteFechahora().isEqual(fechaCita))
+                .collect(Collectors.toList());
+        atencionesFiltradas.sort(Comparator.comparing(CliAtencionDto::getAteFechahora));
 
-        // Crear una nueva serie de datos
+        gfrEvolucion.getData().clear();
         XYChart.Series series = new XYChart.Series();
 
-        // Recorrer la lista de atenciones y agregar datos al gráfico
-        for (CliAtencionDto atencionDto : atenciones) {
+        for (CliAtencionDto atencionDto : atencionesFiltradas) {
             if (atencionDto.getAtePeso() != null && atencionDto.getAteTalla() != null
                     && !atencionDto.getAtePeso().isBlank() && !atencionDto.getAteTalla().isBlank()) {
-                // Calcular el IMC
                 double peso = Double.parseDouble(atencionDto.getAtePeso());
                 double talla = Double.parseDouble(atencionDto.getAteTalla()); // Convertir a metros
                 double imc = (int) (peso / (talla * talla));
 
-                // Obtener la fecha de la atención
                 LocalDateTime fecha = atencionDto.getAteFechahora();
-                // Obtener la fecha de la atención como una cadena formateada
                 String fechaFormateada = fecha.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-                // Agregar el punto al gráfico
                 series.getData().add(new XYChart.Data(fechaFormateada, imc));
             }
         }
 
-        // Agregar la serie al gráfico
         gfrEvolucion.getData().add(series);
-
     }
 
     private void nuevaAtencion() {
@@ -610,10 +643,7 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
         txaPlanAtencion.textProperty().bindBidirectional(atencionDto.atePlanatencion);
         txaObservaciones.textProperty().bindBidirectional(atencionDto.ateObservaciones);
         txaTratamiento.textProperty().bindBidirectional(atencionDto.ateTratamiento);
-        if (atencionDto.getAtePeso() != null && atencionDto.getAteTalla() != null
-                && !atencionDto.getAtePeso().isBlank() && !atencionDto.getAteTalla().isBlank()) {
-            lblIMC.setText("" + (Double.parseDouble(atencionDto.getAtePeso()) / (Double.parseDouble(atencionDto.getAteTalla()) * Double.parseDouble(atencionDto.getAteTalla()))));
-        }
+        lblIMC.setText(atencionDto.getAteImc());
     }
 
     private void unbindAtencion() {
@@ -632,14 +662,14 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
 
     private void cargarAtenciones() {
         ObservableList<CliAtencionDto> atenciones = this.expedienteDto.getCliAtencionList();
-        LocalDateTime fechaActual = LocalDateTime.now();
+        atenciones.sort(Comparator.comparing(CliAtencionDto::getAteFechahora));
+        LocalDateTime fechaCita = citaDto.getCitFechaHora();
 
-//        List<CliAtencionDto> atencionesFiltradas = atenciones.stream() // Descomentar esto para traer las atenciones con fechas ya pasadas
-//                .filter(atencion -> atencion.getAteFechahora().isBefore(fechaActual) || atencion.getAteFechahora().isEqual(fechaActual))
-//                .collect(Collectors.toList());
+        List<CliAtencionDto> atencionesFiltradas = atenciones.stream()
+                .filter(atencion -> atencion.getAteFechahora().isBefore(fechaCita) || atencion.getAteFechahora().isEqual(fechaCita))
+                .collect(Collectors.toList());
         tbvHistorialCitas.getItems().clear();
-//        tbvHistorialCitas.setItems((ObservableList<CliAtencionDto>) atencionesFiltradas);
-        tbvHistorialCitas.setItems(atenciones);
+        tbvHistorialCitas.setItems(FXCollections.observableArrayList(atencionesFiltradas));
         tbvHistorialCitas.refresh();
         llenarGrafico();
     }
@@ -711,15 +741,8 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
     }
 
     private void cargarExamenes() {
-        ObservableList<CliExamenDto> examenes = this.expedienteDto.getCliExamenList();
-        LocalDateTime fechaActual = LocalDateTime.now();
-
-//        List<CliAtencionDto> atencionesFiltradas = atenciones.stream() // Descomentar esto para traer las atenciones con fechas ya pasadas
-//                .filter(atencion -> atencion.getAteFechahora().isBefore(fechaActual) || atencion.getAteFechahora().isEqual(fechaActual))
-//                .collect(Collectors.toList());
         tbvArchivos.getItems().clear();
-//        tbvHistorialCitas.setItems((ObservableList<CliAtencionDto>) atencionesFiltradas);
-        tbvArchivos.setItems(examenes);
+        tbvArchivos.setItems(this.expedienteDto.getCliExamenList());
         tbvArchivos.refresh();
     }
 

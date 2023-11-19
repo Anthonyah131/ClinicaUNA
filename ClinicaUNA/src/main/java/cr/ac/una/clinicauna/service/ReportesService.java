@@ -78,7 +78,7 @@ public class ReportesService {
             variables.put("fechaInicial", fechaInicial);
             variables.put("fechaFin", fechaFin);
 
-            Request request = new Request("ReportesJasperController/agendaMedico", "/{id}/{fechainicial}/{fechafin}", variables);
+            Request request = new Request("ReportesJasperController/rendimientoMedicos", "/{fechaInicial}/{fechaFin}", variables);
             request.get();
             if (request.isError()) {
                 return new Respuesta(false, request.getError(), "");

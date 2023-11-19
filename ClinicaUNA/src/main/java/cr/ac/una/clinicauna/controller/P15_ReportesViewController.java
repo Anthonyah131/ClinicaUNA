@@ -116,7 +116,6 @@ public class P15_ReportesViewController extends Controller implements Initializa
                 if (res.getEstado()) {
                     JasperPrint jp = (JasperPrint) res.getResultado("Reporte");
                     JasperViewer jv = new JasperViewer(jp, false);
-                    this.getStage().close();
                     jv.setVisible(true);
                 } else {
                     new Mensaje().showModal(Alert.AlertType.ERROR, "Alerta Reporte", this.getStage(), "No se encontro el id de medico.");
@@ -145,13 +144,12 @@ public class P15_ReportesViewController extends Controller implements Initializa
     @FXML
     private void OnActionbtnAceptarP(ActionEvent event) {
         if (pacienteDto.getPacId() != null && pacienteDto.getPacId() > 0) {
-            Long id = medicoDto.getMedId();
+            Long id = pacienteDto.getPacId();
             ReportesService reporteService = new ReportesService();
             Respuesta res = reporteService.getExpedienteReport(id);
             if (res.getEstado()) {
                 JasperPrint jp = (JasperPrint) res.getResultado("Reporte");
                 JasperViewer jv = new JasperViewer(jp, false);
-                this.getStage().close();
                 jv.setVisible(true);
             } else {
                 new Mensaje().showModal(Alert.AlertType.ERROR, "Alerta Reporte", this.getStage(), "No se encontro el id de paciente.");
@@ -174,16 +172,15 @@ public class P15_ReportesViewController extends Controller implements Initializa
 
     @FXML
     private void OnActionbtnAceptarMR(ActionEvent event) {
-        if (fdesde.getValue() != null && fhasta.getValue() != null) {
-            if (fdesde.getValue().compareTo(fhasta.getValue()) <= 0) {
-                String desde = fdesde.getValue().format(DateTimeFormatter.ISO_LOCAL_DATE);
-                String hasta = fhasta.getValue().format(DateTimeFormatter.ISO_LOCAL_DATE);
+        if (dpDesdeMR.getValue() != null && dpHastaMR.getValue() != null) {
+            if (dpDesdeMR.getValue().compareTo(dpHastaMR.getValue()) <= 0) {
+                String desde = dpDesdeMR.getValue().format(DateTimeFormatter.ISO_LOCAL_DATE);
+                String hasta = dpHastaMR.getValue().format(DateTimeFormatter.ISO_LOCAL_DATE);
                 ReportesService reporteService = new ReportesService();
                 Respuesta res = reporteService.getRendimientoMedicos(desde, hasta);
                 if (res.getEstado()) {
                     JasperPrint jp = (JasperPrint) res.getResultado("Reporte");
                     JasperViewer jv = new JasperViewer(jp, false);
-                    this.getStage().close();
                     jv.setVisible(true);
                 } else {
                     new Mensaje().showModal(Alert.AlertType.ERROR, "Alerta Reporte", this.getStage(), "Error con el reporte.");
