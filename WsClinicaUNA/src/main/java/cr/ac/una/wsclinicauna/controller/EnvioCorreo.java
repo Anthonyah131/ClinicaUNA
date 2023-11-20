@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.List;
@@ -188,7 +189,7 @@ public class EnvioCorreo {
         String asunto = "ClinicaUNA";
 
         //Mensaje que va a ser enviado
-        String mensaje = mensajeEmail(cliPacienteDto, cliParametrosDto.getParHtml(), cliParametrosDto.getParLogo(), cliParametrosDto.getParNombre(), citaDto.getFecha().toLocalDate());
+        String mensaje = mensajeEmail(cliPacienteDto, cliParametrosDto.getParHtml(), cliParametrosDto.getParLogo(), cliParametrosDto.getParNombre(), citaDto.getFecha());
 
         MimeMessage message = new MimeMessage(session);
         message.setFrom(new InternetAddress(correoRemitente));
@@ -204,7 +205,7 @@ public class EnvioCorreo {
 
     }
 
-    private String mensajeEmail(CliPacienteDto cliPacienteDto, byte[] html, byte[] logo, String nombre, LocalDate fechaCita) throws UnknownHostException, IOException {
+    private String mensajeEmail(CliPacienteDto cliPacienteDto, byte[] html, byte[] logo, String nombre, LocalDateTime fechaCita) throws UnknownHostException, IOException {
         String base64Image = convertirABase64(logo);
         String mensaje = convertirBytesAHTML(html);
         String activacionMensaje = "Hola por parte de" + nombre + " le recordamos que debe asistir a su cita el dia: " + fechaCita + "Gracias de antemano";
