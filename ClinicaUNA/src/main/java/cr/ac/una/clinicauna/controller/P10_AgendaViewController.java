@@ -2,11 +2,17 @@ package cr.ac.una.clinicauna.controller;
 
 import com.jfoenix.controls.JFXDatePicker;
 import cr.ac.una.clinicauna.model.CliAgendaDto;
+import cr.ac.una.clinicauna.model.CliAtencionDto;
 import cr.ac.una.clinicauna.model.CliCitaDto;
+import cr.ac.una.clinicauna.model.CliExpedienteDto;
 import cr.ac.una.clinicauna.model.CliMedicoDto;
+import cr.ac.una.clinicauna.model.CliPacienteDto;
 import cr.ac.una.clinicauna.model.CliUsuarioDto;
 import cr.ac.una.clinicauna.service.CliAgendaService;
+import cr.ac.una.clinicauna.service.CliAtencionService;
 import cr.ac.una.clinicauna.service.CliCitaService;
+import cr.ac.una.clinicauna.service.CliExpedienteService;
+import cr.ac.una.clinicauna.service.CliPacienteService;
 import cr.ac.una.clinicauna.util.AppContext;
 import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Mensaje;
@@ -21,9 +27,11 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -85,6 +93,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
     int[] jornadaDoctor;
     int casillasVacias;
     int posDragDrop;
+    LocalDateTime horaAntigua;
 
     /**
      * Initializes the controller class.
@@ -399,13 +408,13 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                             int posAux = posDragDrop;
 
                             posDragDrop = (rowIndex - 1) * citasHoras + colIndex - 1 - casillasVacias;
-
+                            horaAntigua = citaDto.getCitFechaHora();
                             if (citaDto.getCliCantespacios() > 1) {
                                 if (comprobarEspacios(posDragDrop, citaDto.getCliCantespacios().intValue())) {
                                     citasVector[posAux] = null;
                                     citaDto.setCitFechaHora(calcularHora(rowIndex, colIndex));
                                     citasVector[posDragDrop] = citaDto;
-                                    actualizarCita(citaDto);
+                                    actualizarCitaDragAndDrop(citaDto);
                                 } else {
                                     new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveCitas", getStage(), "key.noSlotsAppo");
                                 }
@@ -413,7 +422,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                                 citasVector[posAux] = null;
                                 citaDto.setCitFechaHora(calcularHora(rowIndex, colIndex));
                                 citasVector[posDragDrop] = citaDto;
-                                actualizarCita(citaDto);
+                                actualizarCitaDragAndDrop(citaDto);
                             }
                             cargarAgenda();
                             pasarListaCitasAVector();
@@ -442,7 +451,43 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         try {
             CliCitaService citaService = new CliCitaService();
             Respuesta respuesta = citaService.guardarCita(cita);
+            if (!respuesta.getEstado()) {
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveCitas", getStage(), respuesta.getMensaje());
+            } else {
+                new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveCitas", getStage(), "key.appoActualizada");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error guardando el usuario.", ex);
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveCitas", getStage(), "key.errorSavingAppo");
+        }
+    }
+
+    private void actualizarCitaDragAndDrop(CliCitaDto cita) {
+        try {
+            CliCitaService citaService = new CliCitaService();
+            Respuesta respuesta = citaService.guardarCita(cita);
             citaDto = (CliCitaDto) respuesta.getResultado("Cita");
+            CliExpedienteService expedienteService = new CliExpedienteService();
+            CliAtencionService atencionService = new CliAtencionService();
+
+            CliPacienteService cliPacienteService = new CliPacienteService();
+            Respuesta respuesta2 = cliPacienteService.getPaciente(citaDto.getCliPacienteDto().getPacId());
+            CliPacienteDto cliPacienteDto = (CliPacienteDto) respuesta2.getResultado("Paciente");
+
+            CliExpedienteDto expedienteDto = cliPacienteDto.getCliExpedienteList().get(0);
+            respuesta = expedienteService.getExpediente(expedienteDto.getExpId());
+            expedienteDto = (CliExpedienteDto) respuesta.getResultado("Expediente");
+            List<CliAtencionDto> atenciones = expedienteDto.getCliAtencionList();
+            List<CliAtencionDto> atencionesFiltradas = atenciones.stream()
+                    .filter(atencion -> atencion.getAteFechahora().isEqual(horaAntigua))
+                    .collect(Collectors.toList());
+            Optional<CliAtencionDto> atencionEncontrada = atencionesFiltradas.stream().findFirst();
+            // Verificar si se encontró alguna atención
+            if (atencionEncontrada.isPresent()) {
+                CliAtencionDto atencion = atencionEncontrada.get();
+                atencion.setAteFechahora(citaDto.getCitFechaHora());
+                atencionService.guardarAtencion(atencion);
+            }
             if (!respuesta.getEstado()) {
                 new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveCitas", getStage(), respuesta.getMensaje());
             } else {
