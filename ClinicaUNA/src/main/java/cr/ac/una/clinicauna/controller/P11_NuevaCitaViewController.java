@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -375,13 +376,12 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         } else {
             citaDto = (CliCitaDto) AppContext.getInstance().get("CitaMover");
             CliAgendaDto agendaAntigua = (CliAgendaDto) AppContext.getInstance().get("AgendaAntigua");
-            if (agendaAntigua.getAgeId() != agendaDto.getAgeId()) {
+            if (!Objects.equals(agendaAntigua.getAgeId(), agendaDto.getAgeId())) {
                 agendaAntigua.getCliCitaListEliminados().add(citaDto);
                 CliAgendaService agendaService = new CliAgendaService();
                 agendaService.guardarAgenda(agendaAntigua);
-                citaDto.setCliAgendaDto(agendaDto);
+                citaDto.setCliAgendaDto(null);
             }
-
             horaAntigua = citaDto.getCitFechaHora();
             citaDto.setCitFechaHora(fechaHoraCita);
             bindCita();
