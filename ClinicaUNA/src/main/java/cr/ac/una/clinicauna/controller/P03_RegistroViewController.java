@@ -266,10 +266,10 @@ public class P03_RegistroViewController extends Controller implements Initializa
     }
 
     public void fillCbox() {
-        cboxTipoUsuario.getItems().clear();
-        cboxIdioma.getItems().clear();
+        //cboxTipoUsuario.getItems().clear();
         cboxTipoUsuario.setItems(tiposUsuarios);
 
+        cboxIdioma.getItems().clear();
         ObservableList<String> idiomas = FXCollections.observableArrayList();
         idiomas.addAll("Español", "English");
         cboxIdioma.setItems(idiomas);
