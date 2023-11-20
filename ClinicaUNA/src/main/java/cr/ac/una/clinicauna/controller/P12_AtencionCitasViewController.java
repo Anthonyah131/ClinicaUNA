@@ -7,6 +7,7 @@ import cr.ac.una.clinicauna.model.CliMedicoDto;
 import cr.ac.una.clinicauna.model.CliPacienteDto;
 import cr.ac.una.clinicauna.model.CliUsuarioDto;
 import cr.ac.una.clinicauna.service.CliAgendaService;
+import cr.ac.una.clinicauna.service.CliMedicoService;
 import cr.ac.una.clinicauna.util.AppContext;
 import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Mensaje;
@@ -72,7 +73,11 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
         fillTableView();
         dtpFecha.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                cargarCitasAdmin();
+                if (usuarioDto.getUsuTipousuario().equals("M")) {
+                    cargarCitasMedico();
+                } else {
+                    cargarCitasAdmin();
+                }
             }
         });
     }
@@ -82,13 +87,8 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
     }
 
     @FXML
-    private void onActionBtnSalir(ActionEvent event) {
-        SoundUtil.mouseEnterSound();
-        FlowController.getInstance().goView("P06_MenuPrincipalView");
-    }
-
-    @FXML
     private void onActionBtnIrExpediente(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         resultado = tbvCitas.getSelectionModel().getSelectedItem();
         if (resultado != null) {
             CliCitaDto citaDto = (CliCitaDto) resultado;
@@ -96,10 +96,14 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
 
             P13_ExpedienteViewController expedienteController = (P13_ExpedienteViewController) FlowController.getInstance().getController("P13_ExpedienteView");
             expedienteController.cargarPaciente(pacienteDto, usuarioDto, citaDto);
-            FlowController.getInstance().goViewInWindow("P13_ExpedienteView", false);
+            FlowController.getInstance().goViewInWindow("P13_ExpedienteView", true);
         }
-//        getStage().close();
+    }
 
+    @FXML
+    private void onActionBtnSalir(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
+        FlowController.getInstance().goView("P06_MenuPrincipalView");
     }
 
     public void fillTableView() {
@@ -167,20 +171,30 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
     }
 
     private void cargarCitasMedico() {
-        CliAgendaService service = new CliAgendaService();
-        Respuesta respuesta = service.getAgendas(dtpFecha.getValue());
 
-        if (respuesta.getEstado()) {
-            agendaDto = (CliAgendaDto) respuesta.getResultado("Agenda"); // agendaDto tiene la agenda seleccionad, dentro tiene las citas y el paciente de cada cita
-            tbvCitas.getItems().clear();
-            listaCitas.clear();
-            listaCitas.addAll(agendaDto.getCliCitaList());
-            tbvCitas.setItems(listaCitas);
-            tbvCitas.refresh();
+        CliMedicoService medicoService = new CliMedicoService();
+        Respuesta resMedico = medicoService.getMedicos(usuarioDto.getUsuId());
+
+        if (resMedico.getEstado()) {
+            medicoDto = (CliMedicoDto) resMedico.getResultado("Medicos");
+
+            CliAgendaService service = new CliAgendaService();
+            Respuesta respuesta = service.getAgenda(medicoDto, dtpFecha.getValue());
+
+            if (respuesta.getEstado()) {
+                agendaDto = (CliAgendaDto) respuesta.getResultado("Agenda"); // agendaDto tiene la agenda seleccionada, dentro tiene las citas y el paciente de cada cita
+                tbvCitas.getItems().clear();
+                listaCitas.clear();
+                listaCitas.addAll(agendaDto.getCliCitaList());
+                tbvCitas.setItems(listaCitas);
+                tbvCitas.refresh();
+            } else {
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.loadAgenda", getStage(), respuesta.getMensaje());
+            }
         } else {
-            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.loadAgenda", getStage(), respuesta.getMensaje());
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.loadDoctor", getStage(), resMedico.getMensaje());
         }
-        System.out.println(listaCitas.size());
+
     }
 
     private void cargarCitasAdmin() {
@@ -196,7 +210,6 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
         } else {
             new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.loadAgenda", getStage(), respuesta.getMensaje());
         }
-        System.out.println(listaCitas.size());
     }
 
 }

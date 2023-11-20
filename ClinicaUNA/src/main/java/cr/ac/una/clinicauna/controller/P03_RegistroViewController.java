@@ -72,6 +72,7 @@ public class P03_RegistroViewController extends Controller implements Initializa
     @FXML
     private AnchorPane root;
 
+    ObservableList<String> tiposUsuarios = FXCollections.observableArrayList();
     CliUsuarioDto usuarioDto;
     List<Node> requeridos = new ArrayList<>();
     ResourceBundle resourceBundle;
@@ -209,9 +210,9 @@ public class P03_RegistroViewController extends Controller implements Initializa
             CliMedicoService medicoService = new CliMedicoService();
 
             CliMedicoDto medicoDto = new CliMedicoDto();
-            medicoDto.setMedCodigo(usuarioDto.getUsuNombre() + "-");
-            medicoDto.setMedFolio(usuarioDto.getUsuNombre() + "-");
-            medicoDto.setMedCarne(usuarioDto.getUsuNombre() + "-");
+            medicoDto.setMedCodigo("-");
+            medicoDto.setMedFolio("-");
+            medicoDto.setMedCarne("-");
             medicoDto.setMedEstado("I");
 
             Respuesta respuestaMedico = medicoService.guardarMedico(medicoDto);
@@ -237,7 +238,6 @@ public class P03_RegistroViewController extends Controller implements Initializa
             medicoService.eliminarMedico(medicoId);
         }
     }
-    ObservableList<String> tiposUsuarios = FXCollections.observableArrayList();
 
     public void iniciarScena() {
         resourceBundle = FlowController.getInstance().getIdioma();

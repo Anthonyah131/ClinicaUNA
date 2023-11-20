@@ -19,6 +19,7 @@ import cr.ac.una.clinicauna.util.AppContext;
 import cr.ac.una.clinicauna.util.FlowController;
 import cr.ac.una.clinicauna.util.Mensaje;
 import cr.ac.una.clinicauna.util.Respuesta;
+import cr.ac.una.clinicauna.util.SoundUtil;
 import cr.ac.una.clinicauna.util.ValidarRequeridos;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
@@ -101,7 +102,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
 
     @FXML
     private void onActionBtnGuardar(ActionEvent event) {
-
+        SoundUtil.mouseEnterSound();
         String invalidos = ValidarRequeridos.validarRequeridos(requeridos);
         if (!invalidos.isEmpty()) {
             String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
@@ -130,6 +131,14 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         }
     }
 
+    @FXML
+    private void onActionBtnAgragarPaciente(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
+        AppContext.getInstance().set("PadrePacientes", "P11_NuevaCitaView");
+        FlowController.getInstance().delete("P09_MantenimientoPacientesView");
+        FlowController.getInstance().goViewInWindowModal("P09_MantenimientoPacientesView", stage, false);
+    }
+
     private void asignarDatosCita() {
         citaDto.setCitMotivo(txfMotivo.getText());
         citaDto.setCliCantespacios(Long.valueOf(cboxEspacioHora.getValue()));
@@ -156,11 +165,13 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         return true;
     }
 
-    // Poner idioma
     private void guardarCita() {
         Boolean banderaNueva = false;
         try {
             if (agendaDto.getAgeId() == null || agendaDto.getAgeId() <= 0) {
+                agendaDto.setAgeEspacios(medicoDto.getMedEspaciosxhora());
+                int tiempoCitas = 60 / medicoDto.getMedEspaciosxhora().intValue();
+                agendaDto.setAgeTiempo(Integer.toString(tiempoCitas));
                 CliAgendaService agendaService = new CliAgendaService();
                 Respuesta respuesta = agendaService.guardarAgenda(agendaDto);
                 agendaDto = (CliAgendaDto) respuesta.getResultado("Agenda");
@@ -244,13 +255,6 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
             Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error guardando el usuario.", ex);
             new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingAppo");
         }
-    }
-
-    @FXML
-    private void onActionBtnAgragarPaciente(ActionEvent event) {
-        AppContext.getInstance().set("PadrePacientes", "P11_NuevaCitaView");
-        FlowController.getInstance().delete("P09_MantenimientoPacientesView");
-        FlowController.getInstance().goViewInWindowModal("P09_MantenimientoPacientesView", stage, false);
     }
 
     public void bindBuscarPaciente() {
@@ -359,7 +363,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
 
     @FXML
     private void onActionBtnMoverCita(ActionEvent event) {
-
+        SoundUtil.mouseEnterSound();
         if (AppContext.getInstance().get("CitaMover") == null) {
             AppContext.getInstance().set("CitaMover", citaDto);
             AppContext.getInstance().set("AgendaAntigua", agendaDto);

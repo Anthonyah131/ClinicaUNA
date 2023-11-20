@@ -206,7 +206,7 @@ public class CliUsuarioService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el usuario.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "errorSavingUser", "activacionCuenta " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorSavingUser", "activacionCuenta " + ex.getMessage());
         }
     }
 

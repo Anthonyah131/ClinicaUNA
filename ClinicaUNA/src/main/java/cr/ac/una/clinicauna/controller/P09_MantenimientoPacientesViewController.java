@@ -190,6 +190,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
 
     @FXML
     private void onActionBtnAgregarCita(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         resultado = tbvResultados.getSelectionModel().getSelectedItem();
         if (resultado != null) {
             if (padre.equals("P11_NuevaCitaView")) {
@@ -205,6 +206,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
 
     @FXML
     private void onActionBtnIrExpediente(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         P13_ExpedienteViewController expedienteController = (P13_ExpedienteViewController) FlowController.getInstance().getController("P13_ExpedienteView");
         expedienteController.cargarPaciente(pacienteDto, usuarioDto, null);
         FlowController.getInstance().goViewInWindow("P13_ExpedienteView", false);

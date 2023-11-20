@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.wsclinicauna.service;
 
 import cr.ac.una.wsclinicauna.model.CliAgenda;
@@ -56,13 +52,13 @@ public class CliAgendaService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Agenda", cliAgendaDto);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un agenda con el código ingresado.", "getAgenda NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.errorAgendaCod", "getAgenda NoResultException");
         } catch (NonUniqueResultException ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el agenda.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el agenda.", "getAgenda NonUniqueResultException");
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar la agenda.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColAgenda", "getAgenda NonUniqueResultException");
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Ocurrio un error al consultar el agenda.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el agenda.", "getAgenda " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al consultar la agenda.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColAgenda", "getAgenda " + ex.getMessage());
         }
     }
 
@@ -96,10 +92,10 @@ public class CliAgendaService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Agendas", cliAgendaDtos);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen agenda con los criterios ingresados.", "getAgendas NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.errorDontExistAge", "getAgendas NoResultException");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el agenda.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el agenda.", "getAgendas " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColAgenda", "getAgendas " + ex.getMessage());
         }
     }
 
@@ -109,7 +105,7 @@ public class CliAgendaService {
             if (cliAgendaDto.getAgeId() != null && cliAgendaDto.getAgeId() > 0) {
                 cliAgenda = em.find(CliAgenda.class, cliAgendaDto.getAgeId());
                 if (cliAgenda == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el agenda a modificar.", "guardarAgenda NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noFoundAgenda", "guardarAgenda NoResultException");
                 }
                 cliAgenda.actualizar(cliAgendaDto);
 
@@ -146,7 +142,7 @@ public class CliAgendaService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Agenda", cliCitaDtoR);
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el agenda.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el agenda.", "guardarAgenda " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorSaveAgenda", "guardarAgenda " + ex.getMessage());
         }
     }
 
@@ -156,20 +152,20 @@ public class CliAgendaService {
             if (id != null && id > 0) {
                 cliAgenda = em.find(CliAgenda.class, id);
                 if (cliAgenda == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el agenda a eliminar.", "eliminarAgenda NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noFoundAgeDel", "eliminarAgenda NoResultException");
                 }
                 em.remove(cliAgenda);
             } else {
-                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el agenda a eliminar.", "eliminarAgenda NoResultException");
+                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.loadAgeDel", "eliminarAgenda NoResultException");
             }
             em.flush();
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
             if (ex.getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class) {
-                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el agenda porque tiene relaciones con otros registros.", "eliminarAgenda " + ex.getMessage());
+                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.noAgeDelRela", "eliminarAgenda " + ex.getMessage());
             }
-            LOG.log(Level.SEVERE, "Ocurrio un error al guardar el agenda.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el agenda.", "eliminarAgenda " + ex.getMessage());
+            LOG.log(Level.SEVERE, "Ocurrio un error al eliminar el agenda.", ex);
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorDelAgenda", "eliminarAgenda " + ex.getMessage());
         }
     }
 }

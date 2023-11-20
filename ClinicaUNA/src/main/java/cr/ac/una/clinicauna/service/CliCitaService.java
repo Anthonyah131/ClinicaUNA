@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.clinicauna.service;
 
 import cr.ac.una.clinicauna.model.CliCitaDto;
@@ -32,7 +28,7 @@ public class CliCitaService {
             return new Respuesta(true, "", "", "Cita", citaDto);
         } catch (Exception ex) {
             Logger.getLogger(CliCitaService.class.getName()).log(Level.SEVERE, "Error obteniendo el cita [" + id + "]", ex);
-            return new Respuesta(false, "Error obteniendo el cita.", "getCita " + ex.getMessage());
+            return new Respuesta(false, "key.errorObCita", "getCita " + ex.getMessage());
         }
     }
 
@@ -48,7 +44,7 @@ public class CliCitaService {
             return new Respuesta(true, "", "", "Citas", citas);
         } catch (Exception ex) {
             Logger.getLogger(CliCitaService.class.getName()).log(Level.SEVERE, "Error obteniendo citas.", ex);
-            return new Respuesta(false, "Error obteniendo citas.", "getCitas " + ex.getMessage());
+            return new Respuesta(false, "key.errorObCita", "getCitas " + ex.getMessage());
         }
     }
 
@@ -63,7 +59,7 @@ public class CliCitaService {
             return new Respuesta(true, "", "", "Cita", citaDto);
         } catch (Exception ex) {
             Logger.getLogger(CliCitaService.class.getName()).log(Level.SEVERE, "Error guardando el cita.", ex);
-            return new Respuesta(false, "Error guardando el cita.", "guardarCita " + ex.getMessage());
+            return new Respuesta(false, "key.errorSaveCita", "guardarCita " + ex.getMessage());
         }
     }
 
@@ -79,7 +75,7 @@ public class CliCitaService {
             return new Respuesta(true, "", "");
         } catch (Exception ex) {
             Logger.getLogger(CliCitaService.class.getName()).log(Level.SEVERE, "Error eliminando el cita.", ex);
-            return new Respuesta(false, "Error eliminando el cita.", "eliminarCita " + ex.getMessage());
+            return new Respuesta(false, "key.errorDelCita", "eliminarCita " + ex.getMessage());
         }
     }
 }

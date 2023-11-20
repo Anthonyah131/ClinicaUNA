@@ -303,7 +303,7 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
         tbcValor.setPrefWidth(100);
         tbcValor.setCellValueFactory(cd -> cd.getValue().parcValor);
 
-        TableColumn<CliParametroconsultaDto, Boolean> tbcEliminar = new TableColumn<>(resourceBundle.getString("key.Eliminar"));
+        TableColumn<CliParametroconsultaDto, Boolean> tbcEliminar = new TableColumn<>(resourceBundle.getString("key.delete"));
         tbcEliminar.setPrefWidth(75);
         tbcEliminar.setCellValueFactory((TableColumn.CellDataFeatures<CliParametroconsultaDto, Boolean> p) -> new SimpleBooleanProperty(p.getValue() != null));
         tbcEliminar.setCellFactory((TableColumn<CliParametroconsultaDto, Boolean> p) -> new ButtonCell());

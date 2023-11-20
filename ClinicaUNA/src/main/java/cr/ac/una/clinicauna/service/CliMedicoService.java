@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.clinicauna.service;
 
 import cr.ac.una.clinicauna.model.CliMedicoDto;
@@ -35,7 +31,7 @@ public class CliMedicoService {
             return new Respuesta(true, "", "", "Medico", medicoDto);
         } catch (Exception ex) {
             Logger.getLogger(CliMedicoService.class.getName()).log(Level.SEVERE, "Error obteniendo el medico [" + id + "]", ex);
-            return new Respuesta(false, "Error obteniendo el medico.", "getMedico " + ex.getMessage());
+            return new Respuesta(false, "key.errorObMedico", "getMedico " + ex.getMessage());
         }
     }
 
@@ -59,11 +55,11 @@ public class CliMedicoService {
             
         } catch (Exception ex) {
             Logger.getLogger(CliMedicoService.class.getName()).log(Level.SEVERE, "Error obteniendo medicos.", ex);
-            return new Respuesta(false, "Error obteniendo medicos.", "getMedicos " + ex.getMessage());
+            return new Respuesta(false, "key.errorObMedico", "getMedicos " + ex.getMessage());
         }
     }
 
-    public Respuesta getMedicos(String codigo, String folio, String nombre, String pApellido, boolean activo, boolean todos) {
+    public Respuesta getMedicos(String codigo, String folio, String nombre, String pApellido) {
         try {
             Request request = new Request("CliMedicoController/medicos");
             request.get();
@@ -96,16 +92,10 @@ public class CliMedicoService {
                         .filter(p -> p.getCliUsuarioDto().getUsuPapellido().toLowerCase().contains(apellidoBuscada))
                         .collect(Collectors.toCollection(FXCollections::observableArrayList));
             }
-//            if (!todos) {
-//                String estado = activo ? "A" : "I";
-//                medicos = medicos.stream()
-//                        .filter(p -> p.getMedEstado().equals(estado))
-//                        .collect(Collectors.toCollection(FXCollections::observableArrayList));
-//            }
             return new Respuesta(true, "", "", "Medicos", medicos);
         } catch (Exception ex) {
             Logger.getLogger(CliMedicoService.class.getName()).log(Level.SEVERE, "Error obteniendo medicos.", ex);
-            return new Respuesta(false, "Error obteniendo medicos.", "getMedicos " + ex.getMessage());
+            return new Respuesta(false, "key.errorObMedico", "getMedicos " + ex.getMessage());
         }
     }
 
@@ -120,7 +110,7 @@ public class CliMedicoService {
             return new Respuesta(true, "", "", "Medico", medicoDto);
         } catch (Exception ex) {
             Logger.getLogger(CliMedicoService.class.getName()).log(Level.SEVERE, "Error guardando el medico.", ex);
-            return new Respuesta(false, "Error guardando el medico.", "guardarMedico " + ex.getMessage());
+            return new Respuesta(false, "key.errorSaveMedico", "guardarMedico " + ex.getMessage());
         }
     }
 
@@ -136,7 +126,7 @@ public class CliMedicoService {
             return new Respuesta(true, "", "");
         } catch (Exception ex) {
             Logger.getLogger(CliMedicoService.class.getName()).log(Level.SEVERE, "Error eliminando el medico.", ex);
-            return new Respuesta(false, "Error eliminando el medico.", "eliminarMedico " + ex.getMessage());
+            return new Respuesta(false, "key.errorDelMedico", "eliminarMedico " + ex.getMessage());
         }
     }
 }

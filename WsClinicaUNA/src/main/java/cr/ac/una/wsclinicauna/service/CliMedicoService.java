@@ -49,13 +49,13 @@ public class CliMedicoService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Medico", cliMedicoDto);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un medico con el código ingresado.", "getMedico NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.errorCitaMedico", "getMedico NoResultException");
         } catch (NonUniqueResultException ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el medico.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el medico.", "getMedico NonUniqueResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColMedico", "getMedico NonUniqueResultException");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el medico.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el medico.", "getMedico " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColMedico", "getMedico " + ex.getMessage());
         }
     }
 
@@ -78,10 +78,10 @@ public class CliMedicoService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Medicos", cliMedicoDtos);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen medico con los criterios ingresados.", "getMedicos NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.errorDontExistMedico", "getMedicos NoResultException");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el medico.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el medico.", "getMedicos " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColMedico", "getMedicos " + ex.getMessage());
         }
     }
 
@@ -91,7 +91,7 @@ public class CliMedicoService {
             if (cliMedicoDto.getMedId() != null && cliMedicoDto.getMedId() > 0) {
                 cliMedico = em.find(CliMedico.class, cliMedicoDto.getMedId());
                 if (cliMedico == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el medico a modificar.", "guardarMedico NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noFoundMedico", "guardarMedico NoResultException");
                 }
                 cliMedico.actualizar(cliMedicoDto);
 
@@ -118,7 +118,7 @@ public class CliMedicoService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Medico", new CliMedicoDto(cliMedico));
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el medico.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el medico.", "guardarMedico " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorSaveMedico", "guardarMedico " + ex.getMessage());
         }
     }
 
@@ -128,20 +128,20 @@ public class CliMedicoService {
             if (id != null && id > 0) {
                 cliMedico = em.find(CliMedico.class, id);
                 if (cliMedico == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el medico a eliminar.", "eliminarMedico NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noFoundMedicoDel", "eliminarMedico NoResultException");
                 }
                 em.remove(cliMedico);
             } else {
-                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el medico a eliminar.", "eliminarMedico NoResultException");
+                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.loadMedicoDel", "eliminarMedico NoResultException");
             }
             em.flush();
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
             if (ex.getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class) {
-                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el medico porque tiene relaciones con otros registros.", "eliminarMedico " + ex.getMessage());
+                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.noMedicoDelRela", "eliminarMedico " + ex.getMessage());
             }
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el medico.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el medico.", "eliminarMedico " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorDelMedico", "eliminarMedico " + ex.getMessage());
         }
     }
 }

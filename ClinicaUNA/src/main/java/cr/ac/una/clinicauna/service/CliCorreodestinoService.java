@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.clinicauna.service;
 
 import cr.ac.una.clinicauna.model.CliCorreodestinoDto;
@@ -32,7 +28,7 @@ public class CliCorreodestinoService {
             return new Respuesta(true, "", "", "Correodestino", correodestinoDto);
         } catch (Exception ex) {
             Logger.getLogger(CliCorreodestinoService.class.getName()).log(Level.SEVERE, "Error obteniendo el Correodestino [" + id + "]", ex);
-            return new Respuesta(false, "Error obteniendo el Correodestino.", "getCorreodestino " + ex.getMessage());
+            return new Respuesta(false, "key.errorObCorreo", "getCorreodestino " + ex.getMessage());
         }
     }
 
@@ -48,7 +44,7 @@ public class CliCorreodestinoService {
             return new Respuesta(true, "", "", "Correodestinos", correodestinos);
         } catch (Exception ex) {
             Logger.getLogger(CliCorreodestinoService.class.getName()).log(Level.SEVERE, "Error obteniendo Correodestinos.", ex);
-            return new Respuesta(false, "Error obteniendo Correodestinos.", "getCorreodestinos " + ex.getMessage());
+            return new Respuesta(false, "key.errorObCorreo", "getCorreodestinos " + ex.getMessage());
         }
     }
 
@@ -63,7 +59,7 @@ public class CliCorreodestinoService {
             return new Respuesta(true, "", "", "Correodestino", correodestinoDto);
         } catch (Exception ex) {
             Logger.getLogger(CliCorreodestinoService.class.getName()).log(Level.SEVERE, "Error guardando el Correodestino.", ex);
-            return new Respuesta(false, "Error guardando el Correodestino.", "guardarCorreodestino " + ex.getMessage());
+            return new Respuesta(false, "key.errorSaveCorreo", "guardarCorreodestino " + ex.getMessage());
         }
     }
 
@@ -79,7 +75,7 @@ public class CliCorreodestinoService {
             return new Respuesta(true, "", "");
         } catch (Exception ex) {
             Logger.getLogger(CliCorreodestinoService.class.getName()).log(Level.SEVERE, "Error eliminando el Correodestino.", ex);
-            return new Respuesta(false, "Error eliminando el Correodestino.", "eliminarCorreodestino " + ex.getMessage());
+            return new Respuesta(false, "key.errorDelCorreo", "eliminarCorreodestino " + ex.getMessage());
         }
     }
 }

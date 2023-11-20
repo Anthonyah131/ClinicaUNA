@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.clinicauna.service;
 
 import cr.ac.una.clinicauna.model.CliPacienteDto;
@@ -34,7 +30,7 @@ public class CliPacienteService {
             return new Respuesta(true, "", "", "Paciente", pacienteDto);
         } catch (Exception ex) {
             Logger.getLogger(CliPacienteService.class.getName()).log(Level.SEVERE, "Error obteniendo el paciente [" + id + "]", ex);
-            return new Respuesta(false, "Error obteniendo el paciente.", "getPaciente " + ex.getMessage());
+            return new Respuesta(false, "key.errorObPaciente", "getPaciente " + ex.getMessage());
         }
     }
 
@@ -68,7 +64,7 @@ public class CliPacienteService {
             return new Respuesta(true, "", "", "Pacientes", pacientes);
         } catch (Exception ex) {
             Logger.getLogger(CliPacienteService.class.getName()).log(Level.SEVERE, "Error obteniendo pacientes.", ex);
-            return new Respuesta(false, "Error obteniendo pacientes.", "getPacientes " + ex.getMessage());
+            return new Respuesta(false, "key.errorObPaciente", "getPacientes " + ex.getMessage());
         }
     }
 
@@ -83,7 +79,7 @@ public class CliPacienteService {
             return new Respuesta(true, "", "", "Paciente", pacienteDto);
         } catch (Exception ex) {
             Logger.getLogger(CliPacienteService.class.getName()).log(Level.SEVERE, "Error guardando el paciente.", ex);
-            return new Respuesta(false, "Error guardando el paciente.", "guardarPaciente " + ex.getMessage());
+            return new Respuesta(false, "key.errorSavePaciente", "guardarPaciente " + ex.getMessage());
         }
     }
 
@@ -99,7 +95,7 @@ public class CliPacienteService {
             return new Respuesta(true, "", "");
         } catch (Exception ex) {
             Logger.getLogger(CliPacienteService.class.getName()).log(Level.SEVERE, "Error eliminando el paciente.", ex);
-            return new Respuesta(false, "Error eliminando el paciente.", "eliminarPaciente " + ex.getMessage());
+            return new Respuesta(false, "key.errorDelPaciente", "eliminarPaciente " + ex.getMessage());
         }
     }
 }

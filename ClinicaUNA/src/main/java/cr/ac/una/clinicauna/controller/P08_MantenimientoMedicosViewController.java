@@ -17,7 +17,6 @@ import cr.ac.una.clinicauna.util.Utilidades;
 import cr.ac.una.clinicauna.util.ValidarRequeridos;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -54,10 +53,6 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
     private JFXTextField txfBuscarNombre;
     @FXML
     private JFXTextField txfBuscarPapellido;
-    @FXML
-    private JFXCheckBox chkBuscarActivas;
-    @FXML
-    private JFXCheckBox chkBuscarTodos;
     @FXML
     private MFXButton btnLimpiarBusquedaMedico;
     @FXML
@@ -154,7 +149,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         }
     }
 
-    @FXML // Poner idioma, mensaje de error
+    @FXML
     private void onActionBtnGuardar(ActionEvent event) {
         SoundUtil.mouseEnterSound();
         try {
@@ -198,17 +193,10 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         }
     }
 
-    @FXML
-    private void onActionBuscarTodos(ActionEvent event) {
-        if (chkBuscarTodos.isSelected()) {
-            chkBuscarActivas.setDisable(true);
-        } else {
-            chkBuscarActivas.setDisable(false);
-        }
-    }
-
+    
     @FXML
     private void onActionBtnAddToAgenda(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         if (padre.equals("P10_AgendaView")) {
             cargarMedicoAgenda();
         } else if (padre.equals("P15_ReportesView")) {
@@ -284,7 +272,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
 
     public void cargarMedicos() {
         CliMedicoService service = new CliMedicoService();
-        Respuesta respuesta = service.getMedicos(txfBuscarCodigo.getText(), txfBuscarFolio.getText(), txfBuscarNombre.getText(), txfBuscarPapellido.getText(), chkBuscarActivas.isSelected(), chkBuscarTodos.isSelected());
+        Respuesta respuesta = service.getMedicos(txfBuscarCodigo.getText(), txfBuscarFolio.getText(), txfBuscarNombre.getText(), txfBuscarPapellido.getText());
 
         if (respuesta.getEstado()) {
             tbvResultados.getItems().clear();
@@ -332,8 +320,6 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         txfBuscarFolio.clear();
         txfBuscarNombre.clear();
         txfBuscarPapellido.clear();
-        chkBuscarActivas.setSelected(false);
-        chkBuscarTodos.setSelected(false);
         medicos.clear();
     }
 
@@ -352,10 +338,6 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
 
     public void fillTableView() {
         tbvResultados.getItems().clear();
-
-        TableColumn<CliMedicoDto, String> tbcId = new TableColumn<>("Id");
-        tbcId.setPrefWidth(50);
-        tbcId.setCellValueFactory(cd -> cd.getValue().getCliUsuarioDto().usuId);
 
         TableColumn<CliMedicoDto, String> tbcCedula = new TableColumn<>(resourceBundle.getString("key.identification"));
         tbcCedula.setPrefWidth(100);
@@ -377,7 +359,7 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
         tbcFolio.setPrefWidth(150);
         tbcFolio.setCellValueFactory(cd -> cd.getValue().medFolio);
 
-        tbvResultados.getColumns().addAll(tbcId, tbcCodigo, tbcFolio, tbcCedula, tbcNombre, tbcApellido);
+        tbvResultados.getColumns().addAll(tbcCodigo, tbcFolio, tbcCedula, tbcNombre, tbcApellido);
 
         tbvResultados.refresh();
     }
@@ -466,8 +448,6 @@ public class P08_MantenimientoMedicosViewController extends Controller implement
                 txfBuscarFolio.setDisable(true);
                 txfBuscarNombre.setDisable(true);
                 txfBuscarPapellido.setDisable(true);
-                chkBuscarActivas.setDisable(true);
-                chkBuscarTodos.setDisable(true);
                 btnFiltrar.setDisable(true);
                 btnLimpiarBusquedaMedico.setDisable(true);
             }

@@ -40,7 +40,7 @@
                         </MFXButton>
                         <JFXDatePicker fx:id="dtpFechasCitas" promptText="%key.dateAppo" styleClass="jfx-pickers" />
                         <Label styleClass="labels-text" text="%key.medico" />
-                        <MFXButton fx:id="btnBuscarMedico" onAction="#onActionBtnBuscarMedico" prefWidth="200.0" styleClass="mfx-button-link-bigger" text="%key.searchDoctors" />
+                        <MFXButton fx:id="btnBuscarMedico" onAction="#onActionBtnBuscarMedico" styleClass="mfx-button-link-bigger" text="%key.searchDoctors" />
                         <VBox alignment="CENTER" layoutX="668.0" layoutY="10.0" spacing="10.0" HBox.hgrow="ALWAYS" />
                         <VBox alignment="CENTER" layoutX="987.0" layoutY="10.0" spacing="10.0">
                            <children>

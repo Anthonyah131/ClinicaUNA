@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.wsclinicauna.service;
 
 import cr.ac.una.wsclinicauna.model.CliAtencion;
@@ -50,13 +46,13 @@ public class CliExamenService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Examen", cliExamenDto);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un examen con el código ingresado.", "getExamen NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.errorCitaExamen", "getExamen NoResultException");
         } catch (NonUniqueResultException ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el examen.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el examen.", "getExamen NonUniqueResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColExamen", "getExamen NonUniqueResultException");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el examen.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el examen.", "getExamen " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColExamen", "getExamen " + ex.getMessage());
         }
     }
 
@@ -76,10 +72,10 @@ public class CliExamenService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Examenes", cliExamenDtos);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen examen con los criterios ingresados.", "getExamenes NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.errorDontExistExamen", "getExamenes NoResultException");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el examen.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el examen.", "getExamenes " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColExamen", "getExamenes " + ex.getMessage());
         }
     }
 
@@ -89,7 +85,7 @@ public class CliExamenService {
             if (cliExamenDto.getExaId() != null && cliExamenDto.getExaId() > 0) {
                 cliExamen = em.find(CliExamen.class, cliExamenDto.getExaId());
                 if (cliExamen == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el examen a modificar.", "guardarExamen NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noFoundExamen", "guardarExamen NoResultException");
                 }
                 cliExamen.actualizar(cliExamenDto);
                 CliAtencion atencion = em.find(CliAtencion.class, cliExamenDto.getCliAtencionDto().getAteId());
@@ -106,7 +102,7 @@ public class CliExamenService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Examen", new CliExamenDto(cliExamen));
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el examen.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el examen.", "guardarExamen " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorSaveExamen", "guardarExamen " + ex.getMessage());
         }
     }
 
@@ -116,20 +112,20 @@ public class CliExamenService {
             if (id != null && id > 0) {
                 cliExamen = em.find(CliExamen.class, id);
                 if (cliExamen == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el examen a eliminar.", "eliminarExamen NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noFoundExamenDel", "eliminarExamen NoResultException");
                 }
                 em.remove(cliExamen);
             } else {
-                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el examen a eliminar.", "eliminarExamen NoResultException");
+                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.loadExamenDel", "eliminarExamen NoResultException");
             }
             em.flush();
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
             if (ex.getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class) {
-                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el examen porque tiene relaciones con otros registros.", "eliminarExamen " + ex.getMessage());
+                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.noExamenDelRela", "eliminarExamen " + ex.getMessage());
             }
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el examen.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el examen.", "eliminarExamen " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorDelExamen", "eliminarExamen " + ex.getMessage());
         }
     }
 }

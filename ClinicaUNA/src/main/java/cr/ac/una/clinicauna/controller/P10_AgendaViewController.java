@@ -108,6 +108,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
 
     @FXML
     private void onActionBtnBuscarMedico(ActionEvent event) {
+        SoundUtil.mouseEnterSound();
         AppContext.getInstance().set("PadreMedicos", "P10_AgendaView");
         FlowController.getInstance().delete("P08_MantenimientoMedicosView");
         FlowController.getInstance().goViewInWindowModal("P08_MantenimientoMedicosView", stage, false);
@@ -327,6 +328,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                     Label label = new Label();
 
                     label.setOnMouseClicked(event -> {
+                        SoundUtil.mouseEnterSound();
                         FlowController.getInstance().delete("P11_NuevaCitaView");
                         int rowIndex = GridPane.getRowIndex(label);
                         int colIndex = GridPane.getColumnIndex(label);

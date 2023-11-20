@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.wsclinicauna.service;
 
 import cr.ac.una.wsclinicauna.model.CliCorreodestino;
@@ -47,13 +43,13 @@ public class CliCorreodestinoService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Correodestino", cliCorreodestinoDto);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un Correodestino con el código ingresado.", "getCorreodestino NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.errorCitaCorreo", "getCorreodestino NoResultException");
         } catch (NonUniqueResultException ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el Correodestino.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el Correodestino.", "getCorreodestino NonUniqueResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorObCorreo", "getCorreodestino NonUniqueResultException");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el Correodestino.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el Correodestino.", "getCorreodestino " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorObCorreo", "getCorreodestino " + ex.getMessage());
         }
     }
 
@@ -73,10 +69,10 @@ public class CliCorreodestinoService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Correodestinos", cliCorreodestinoDtos);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen Correodestino con los criterios ingresados.", "getCorreodestinos NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.errorDontExistCorreo", "getCorreodestinos NoResultException");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el Correodestino.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el Correodestino.", "getCorreodestinos " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColCorreo", "getCorreodestinos " + ex.getMessage());
         }
     }
 
@@ -86,7 +82,7 @@ public class CliCorreodestinoService {
             if (cliCorreodestinoDto.getCdId() != null && cliCorreodestinoDto.getCdId() > 0) {
                 cliCorreodestino = em.find(CliCorreodestino.class, cliCorreodestinoDto.getCdId());
                 if (cliCorreodestino == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el Correodestino a modificar.", "guardarCorreodestino NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noFoundCorreo", "guardarCorreodestino NoResultException");
                 }
                 cliCorreodestino.actualizar(cliCorreodestinoDto);
 
@@ -102,7 +98,7 @@ public class CliCorreodestinoService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Correodestino", new CliCorreodestinoDto(cliCorreodestino));
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el Correodestino.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el Correodestino.", "guardarCorreodestino " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorSaveCorreo", "guardarCorreodestino " + ex.getMessage());
         }
     }
 
@@ -112,20 +108,20 @@ public class CliCorreodestinoService {
             if (id != null && id > 0) {
                 cliCorreodestino = em.find(CliCorreodestino.class, id);
                 if (cliCorreodestino == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el Correodestino a eliminar.", "eliminarCorreodestino NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noFoundCorreoDel", "eliminarCorreodestino NoResultException");
                 }
                 em.remove(cliCorreodestino);
             } else {
-                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el Correodestino a eliminar.", "eliminarCorreodestino NoResultException");
+                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.loadCorreoDel", "eliminarCorreodestino NoResultException");
             }
             em.flush();
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
             if (ex.getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class) {
-                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el Correodestino porque tiene relaciones con otros registros.", "eliminarExpediente " + ex.getMessage());
+                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.noCorreoDelRela", "eliminarExpediente " + ex.getMessage());
             }
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el Correodestino.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el Correodestino.", "eliminarCorreodestino " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorDelCorreo", "eliminarCorreodestino " + ex.getMessage());
         }
     }
 }

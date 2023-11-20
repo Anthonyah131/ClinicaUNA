@@ -28,7 +28,7 @@ public class CliExpedienteService {
             return new Respuesta(true, "", "", "Expediente", expedienteDto);
         } catch (Exception ex) {
             Logger.getLogger(CliExpedienteService.class.getName()).log(Level.SEVERE, "Error obteniendo el expediente [" + id + "]", ex);
-            return new Respuesta(false, "Error obteniendo el expediente.", "getExpediente " + ex.getMessage());
+            return new Respuesta(false, "key.errorObExpediente", "getExpediente " + ex.getMessage());
         }
     }
 
@@ -44,7 +44,7 @@ public class CliExpedienteService {
             return new Respuesta(true, "", "", "Expedientes", expedientes);
         } catch (Exception ex) {
             Logger.getLogger(CliExpedienteService.class.getName()).log(Level.SEVERE, "Error obteniendo expedientes.", ex);
-            return new Respuesta(false, "Error obteniendo expedientes.", "getExpedientes " + ex.getMessage());
+            return new Respuesta(false, "key.errorObExpediente", "getExpedientes " + ex.getMessage());
         }
     }
 
@@ -59,7 +59,7 @@ public class CliExpedienteService {
             return new Respuesta(true, "", "", "Expediente", expedienteDto);
         } catch (Exception ex) {
             Logger.getLogger(CliExpedienteService.class.getName()).log(Level.SEVERE, "Error guardando el expediente.", ex);
-            return new Respuesta(false, "Error guardando el expediente.", "guardarExpediente " + ex.getMessage());
+            return new Respuesta(false, "key.errorSaveExpediente", "guardarExpediente " + ex.getMessage());
         }
     }
 
@@ -75,7 +75,7 @@ public class CliExpedienteService {
             return new Respuesta(true, "", "");
         } catch (Exception ex) {
             Logger.getLogger(CliExpedienteService.class.getName()).log(Level.SEVERE, "Error eliminando el expediente.", ex);
-            return new Respuesta(false, "Error eliminando el expediente.", "eliminarExpediente " + ex.getMessage());
+            return new Respuesta(false, "key.errorDelExpediente", "eliminarExpediente " + ex.getMessage());
         }
     }
 }

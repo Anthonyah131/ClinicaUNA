@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.clinicauna.service;
 
 import cr.ac.una.clinicauna.model.CliParametroconsultaDto;
@@ -33,7 +29,7 @@ public class CliParametroconsultaService {
             return new Respuesta(true, "", "", "Parametroconsulta", parametroconsultaDto);
         } catch (Exception ex) {
             Logger.getLogger(CliParametroconsultaService.class.getName()).log(Level.SEVERE, "Error obteniendo el Parametroconsulta [" + id + "]", ex);
-            return new Respuesta(false, "Error obteniendo el Parametroconsulta.", "getParametroconsulta " + ex.getMessage());
+            return new Respuesta(false, "key.errorObParConsulta", "getParametroconsulta " + ex.getMessage());
         }
     }
 
@@ -49,7 +45,7 @@ public class CliParametroconsultaService {
             return new Respuesta(true, "", "", "Parametroconsultas", parametroconsultas);
         } catch (Exception ex) {
             Logger.getLogger(CliParametroconsultaService.class.getName()).log(Level.SEVERE, "Error obteniendo Parametroconsultas.", ex);
-            return new Respuesta(false, "Error obteniendo Parametroconsultas.", "getParametroconsultas " + ex.getMessage());
+            return new Respuesta(false, "key.errorObParConsulta", "getParametroconsultas " + ex.getMessage());
         }
     }
 
@@ -64,7 +60,7 @@ public class CliParametroconsultaService {
             return new Respuesta(true, "", "", "Parametroconsulta", parametroconsultaDto);
         } catch (Exception ex) {
             Logger.getLogger(CliParametroconsultaService.class.getName()).log(Level.SEVERE, "Error guardando el Parametroconsulta.", ex);
-            return new Respuesta(false, "Error guardando el Parametroconsulta.", "guardarParametroconsulta " + ex.getMessage());
+            return new Respuesta(false, "key.errorSaveParConsulta", "guardarParametroconsulta " + ex.getMessage());
         }
     }
 
@@ -80,7 +76,7 @@ public class CliParametroconsultaService {
             return new Respuesta(true, "", "");
         } catch (Exception ex) {
             Logger.getLogger(CliParametroconsultaService.class.getName()).log(Level.SEVERE, "Error eliminando el Parametroconsulta.", ex);
-            return new Respuesta(false, "Error eliminando el Parametroconsulta.", "eliminarParametroconsulta " + ex.getMessage());
+            return new Respuesta(false, "key.errorDelParConsulta", "eliminarParametroconsulta " + ex.getMessage());
         }
     }
 }

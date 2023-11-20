@@ -111,8 +111,6 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
     private void onActionBtnAtencion(ActionEvent event) {
         SoundUtil.mouseEnterSound();
         if (!usuarioDto.getUsuTipousuario().equals("R")) {
-            //AppContext.getInstance().set("PadreMedicos", "P06_MenuPrincipalView");
-            //FlowController.getInstance().delete("P08_MantenimientoMedicosView");
             FlowController.getInstance().goView("P12_AtencionCitasView");
         } else {
             new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "key.permit");
@@ -123,8 +121,6 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
     private void onActionBtnReportes(ActionEvent event) {
         SoundUtil.mouseEnterSound();
         if (!usuarioDto.getUsuTipousuario().equals("R")) {
-            //AppContext.getInstance().set("PadreMedicos", "P06_MenuPrincipalView");
-            //FlowController.getInstance().delete("P08_MantenimientoMedicosView");
             FlowController.getInstance().goView("P15_ReportesView");
         } else {
             new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "key.permit");
@@ -135,8 +131,6 @@ public class P06_MenuPrincipalViewController extends Controller implements Initi
     private void onActionBtnReporteDinamico(ActionEvent event) {
         SoundUtil.mouseEnterSound();
         if (!usuarioDto.getUsuTipousuario().equals("R")) {
-            //AppContext.getInstance().set("PadreMedicos", "P06_MenuPrincipalView");
-            //FlowController.getInstance().delete("P08_MantenimientoMedicosView");
             FlowController.getInstance().goView("P16_ReporteDinamicoView");
         } else {
             new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.userValidation", getStage(), "key.permit");

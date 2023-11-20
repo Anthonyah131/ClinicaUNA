@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.clinicauna.service;
 
 import cr.ac.una.clinicauna.model.CliAntecedenteDto;
@@ -32,7 +28,7 @@ public class CliAntecedenteService {
             return new Respuesta(true, "", "", "Antecedente", antecedenteDto);
         } catch (Exception ex) {
             Logger.getLogger(CliAntecedenteService.class.getName()).log(Level.SEVERE, "Error obteniendo el antecedente [" + id + "]", ex);
-            return new Respuesta(false, "Error obteniendo el antecedente.", "getAntecedente " + ex.getMessage());
+            return new Respuesta(false, "key.errorObAntecedente", "getAntecedente " + ex.getMessage());
         }
     }
 
@@ -48,7 +44,7 @@ public class CliAntecedenteService {
             return new Respuesta(true, "", "", "Antecedentes", antecedentes);
         } catch (Exception ex) {
             Logger.getLogger(CliAntecedenteService.class.getName()).log(Level.SEVERE, "Error obteniendo antecedentes.", ex);
-            return new Respuesta(false, "Error obteniendo antecedentes.", "getAntecedentes " + ex.getMessage());
+            return new Respuesta(false, "key.errorObAntecedente", "getAntecedentes " + ex.getMessage());
         }
     }
 
@@ -63,7 +59,7 @@ public class CliAntecedenteService {
             return new Respuesta(true, "", "", "Antecedente", antecedenteDto);
         } catch (Exception ex) {
             Logger.getLogger(CliAntecedenteService.class.getName()).log(Level.SEVERE, "Error guardando el antecedente.", ex);
-            return new Respuesta(false, "Error guardando el antecedente.", "guardarAntecedente " + ex.getMessage());
+            return new Respuesta(false, "key.errorSaveAntecedente", "guardarAntecedente " + ex.getMessage());
         }
     }
 
@@ -79,7 +75,7 @@ public class CliAntecedenteService {
             return new Respuesta(true, "", "");
         } catch (Exception ex) {
             Logger.getLogger(CliAntecedenteService.class.getName()).log(Level.SEVERE, "Error eliminando el antecedente.", ex);
-            return new Respuesta(false, "Error eliminando el antecedente.", "eliminarAntecedente " + ex.getMessage());
+            return new Respuesta(false, "key.errorDelAntecedente", "eliminarAntecedente " + ex.getMessage());
         }
     }
 }

@@ -73,7 +73,7 @@ public class P01_LogInViewController extends Controller implements Initializable
                 Respuesta respuesta = cliUsuarioService.getUsuario(txfUsuario.getText(), txfContrasena.getText());
                 if (respuesta.getEstado()) {
                     CliUsuarioDto cliUsuarioDto = (CliUsuarioDto) respuesta.getResultado("Usuario");
-//                    setIdioma(cliUsuarioDto.getUsuIdioma());
+                    setIdioma(cliUsuarioDto.getUsuIdioma());
                     AppContext.getInstance().set("Token", cliUsuarioDto.getToken());
                     AppContext.getInstance().set("Usuario", cliUsuarioDto);
                     if (cliUsuarioDto.getUsuClave().equals(cliUsuarioDto.getUsuTempclave())) {

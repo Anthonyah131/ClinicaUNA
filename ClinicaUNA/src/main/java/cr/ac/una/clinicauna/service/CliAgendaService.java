@@ -34,8 +34,8 @@ public class CliAgendaService {
             CliAgendaDto agendaDto = (CliAgendaDto) request.readEntity(CliAgendaDto.class);
             return new Respuesta(true, "", "", "Agenda", agendaDto);
         } catch (Exception ex) {
-            Logger.getLogger(CliAgendaService.class.getName()).log(Level.SEVERE, "Error obteniendo el agenda [" + id + "]", ex);
-            return new Respuesta(false, "Error obteniendo el agenda.", "getAgenda " + ex.getMessage());
+            Logger.getLogger(CliAgendaService.class.getName()).log(Level.SEVERE, "Error obteniendo la agenda [" + id + "]", ex);
+            return new Respuesta(false, "key.errorObAgenda", "getAgenda " + ex.getMessage());
         }
     }
 
@@ -62,7 +62,7 @@ public class CliAgendaService {
             return new Respuesta(true, "", "", "Agenda", agendaEncontrada);
         } catch (Exception ex) {
             Logger.getLogger(CliAgendaService.class.getName()).log(Level.SEVERE, "Error obteniendo agendas.", ex);
-            return new Respuesta(false, "Error obteniendo agendas.", "getAgendas " + ex.getMessage());
+            return new Respuesta(false, "key.errorObAgenda", "getAgendas " + ex.getMessage());
         }
     }
 
@@ -85,7 +85,7 @@ public class CliAgendaService {
             return new Respuesta(true, "", "", "Agenda", agendaFiltrada);
         } catch (Exception ex) {
             Logger.getLogger(CliAgendaService.class.getName()).log(Level.SEVERE, "Error obteniendo agendas.", ex);
-            return new Respuesta(false, "Error obteniendo agendas.", "getAgendas " + ex.getMessage());
+            return new Respuesta(false, "key.errorObAgenda", "getAgendas " + ex.getMessage());
         }
     }
 
@@ -100,7 +100,7 @@ public class CliAgendaService {
             return new Respuesta(true, "", "", "Agenda", agendaDto);
         } catch (Exception ex) {
             Logger.getLogger(CliAgendaService.class.getName()).log(Level.SEVERE, "Error guardando el agenda.", ex);
-            return new Respuesta(false, "Error guardando el agenda.", "guardarAgenda " + ex.getMessage());
+            return new Respuesta(false, "key.errorSaveAgenda", "guardarAgenda " + ex.getMessage());
         }
     }
 
@@ -116,7 +116,7 @@ public class CliAgendaService {
             return new Respuesta(true, "", "");
         } catch (Exception ex) {
             Logger.getLogger(CliAgendaService.class.getName()).log(Level.SEVERE, "Error eliminando el agenda.", ex);
-            return new Respuesta(false, "Error eliminando el agenda.", "eliminarAgenda " + ex.getMessage());
+            return new Respuesta(false, "key.errorDelAgenda", "eliminarAgenda " + ex.getMessage());
         }
     }
 }

@@ -50,13 +50,13 @@ public class CliPacienteService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Paciente", cliPacienteDto);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un paciente con el código ingresado.", "getPaciente NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.errorCitaPaciente", "getPaciente NoResultException");
         } catch (NonUniqueResultException ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el paciente.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el paciente.", "getPaciente NonUniqueResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColPaciente", "getPaciente NonUniqueResultException");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el paciente.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el paciente.", "getPaciente " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColPaciente", "getPaciente " + ex.getMessage());
         }
     }
 
@@ -81,10 +81,10 @@ public class CliPacienteService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Pacientes", cliPacienteDtos);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen paciente con los criterios ingresados.", "getPacientes NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.errorCitaPaciente", "getPacientes NoResultException");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el paciente.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el paciente.", "getPacientes " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColPaciente", "getPacientes " + ex.getMessage());
         }
     }
 
@@ -94,7 +94,7 @@ public class CliPacienteService {
             if (cliPacienteDto.getPacId() != null && cliPacienteDto.getPacId() > 0) {
                 cliPaciente = em.find(CliPaciente.class, cliPacienteDto.getPacId());
                 if (cliPaciente == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el paciente a modificar.", "guardarPaciente NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noFoundPaciente", "guardarPaciente NoResultException");
                 }
                 cliPaciente.actualizar(cliPacienteDto);
 
@@ -138,7 +138,7 @@ public class CliPacienteService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Paciente", pacienteDto);
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el paciente.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el paciente.", "guardarPaciente " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorSavePaciente", "guardarPaciente " + ex.getMessage());
         }
     }
 
@@ -148,20 +148,20 @@ public class CliPacienteService {
             if (id != null && id > 0) {
                 cliPaciente = em.find(CliPaciente.class, id);
                 if (cliPaciente == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el paciente a eliminar.", "eliminarPaciente NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noFoundPacienteDel", "eliminarPaciente NoResultException");
                 }
                 em.remove(cliPaciente);
             } else {
-                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el paciente a eliminar.", "eliminarPaciente NoResultException");
+                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.loadPacienteDel", "eliminarPaciente NoResultException");
             }
             em.flush();
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
             if (ex.getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class) {
-                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el paciente porque tiene relaciones con otros registros.", "eliminarPaciente " + ex.getMessage());
+                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.noPacienteDelRela", "eliminarPaciente " + ex.getMessage());
             }
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el paciente.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el paciente.", "eliminarPaciente " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorDelPaciente", "eliminarPaciente " + ex.getMessage());
         }
     }
 }

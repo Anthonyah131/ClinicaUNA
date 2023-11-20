@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.clinicauna.service;
 
 import cr.ac.una.clinicauna.model.CliExamenDto;
@@ -32,7 +28,7 @@ public class CliExamenService {
             return new Respuesta(true, "", "", "Examen", examenDto);
         } catch (Exception ex) {
             Logger.getLogger(CliExamenService.class.getName()).log(Level.SEVERE, "Error obteniendo el examen [" + id + "]", ex);
-            return new Respuesta(false, "Error obteniendo el examen.", "getExamen " + ex.getMessage());
+            return new Respuesta(false, "key.errorObExamen", "getExamen " + ex.getMessage());
         }
     }
 
@@ -48,7 +44,7 @@ public class CliExamenService {
             return new Respuesta(true, "", "", "Examens", examens);
         } catch (Exception ex) {
             Logger.getLogger(CliExamenService.class.getName()).log(Level.SEVERE, "Error obteniendo examens.", ex);
-            return new Respuesta(false, "Error obteniendo examens.", "getExamens " + ex.getMessage());
+            return new Respuesta(false, "key.errorObExamen", "getExamens " + ex.getMessage());
         }
     }
 
@@ -63,7 +59,7 @@ public class CliExamenService {
             return new Respuesta(true, "", "", "Examen", examenDto);
         } catch (Exception ex) {
             Logger.getLogger(CliExamenService.class.getName()).log(Level.SEVERE, "Error guardando el examen.", ex);
-            return new Respuesta(false, "Error guardando el examen.", "guardarExamen " + ex.getMessage());
+            return new Respuesta(false, "key.errorSaveExamen", "guardarExamen " + ex.getMessage());
         }
     }
 
@@ -79,7 +75,7 @@ public class CliExamenService {
             return new Respuesta(true, "", "");
         } catch (Exception ex) {
             Logger.getLogger(CliExamenService.class.getName()).log(Level.SEVERE, "Error eliminando el examen.", ex);
-            return new Respuesta(false, "Error eliminando el examen.", "eliminarExamen " + ex.getMessage());
+            return new Respuesta(false, "key.errorDelExamen", "eliminarExamen " + ex.getMessage());
         }
     }
 }

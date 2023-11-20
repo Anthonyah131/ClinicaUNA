@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.clinicauna.service;
 
 import cr.ac.una.clinicauna.model.CliParametrosDto;
@@ -32,7 +28,7 @@ public class CliParametrosService {
             return new Respuesta(true, "", "", "Parametro", parametrosDto);
         } catch (Exception ex) {
             Logger.getLogger(CliParametrosService.class.getName()).log(Level.SEVERE, "Error obteniendo el parametros [" + id + "]", ex);
-            return new Respuesta(false, "Error obteniendo el parametros.", "getParametros " + ex.getMessage());
+            return new Respuesta(false, "key.errorObParConsulta", "getParametros " + ex.getMessage());
         }
     }
 
@@ -48,7 +44,7 @@ public class CliParametrosService {
             return new Respuesta(true, "", "", "Parametros", parametros);
         } catch (Exception ex) {
             Logger.getLogger(CliParametrosService.class.getName()).log(Level.SEVERE, "Error obteniendo parametros.", ex);
-            return new Respuesta(false, "Error obteniendo parametros.", "getParametros " + ex.getMessage());
+            return new Respuesta(false, "key.errorObParConsulta", "getParametros " + ex.getMessage());
         }
     }
 
@@ -63,7 +59,7 @@ public class CliParametrosService {
             return new Respuesta(true, "", "", "Parametro", parametrosDto);
         } catch (Exception ex) {
             Logger.getLogger(CliParametrosService.class.getName()).log(Level.SEVERE, "Error guardando el parametros.", ex);
-            return new Respuesta(false, "Error guardando el parametros.", "guardarParametros " + ex.getMessage());
+            return new Respuesta(false, "key.errorSaveParConsulta", "guardarParametros " + ex.getMessage());
         }
     }
 
@@ -79,7 +75,7 @@ public class CliParametrosService {
             return new Respuesta(true, "", "");
         } catch (Exception ex) {
             Logger.getLogger(CliParametrosService.class.getName()).log(Level.SEVERE, "Error eliminando el parametros.", ex);
-            return new Respuesta(false, "Error eliminando el parametros.", "eliminarParametros " + ex.getMessage());
+            return new Respuesta(false, "key.errorDelParConsulta", "eliminarParametros " + ex.getMessage());
         }
     }
 }

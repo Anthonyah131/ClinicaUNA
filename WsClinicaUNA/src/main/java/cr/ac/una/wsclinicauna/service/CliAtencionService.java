@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.wsclinicauna.service;
 
 import cr.ac.una.wsclinicauna.model.CliAtencion;
@@ -53,13 +49,13 @@ public class CliAtencionService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Atencion", cliAtencionDto);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un atencion con el código ingresado.", "getAtencion NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.errorAtencionCod", "getAtencion NoResultException");
         } catch (NonUniqueResultException ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el atencion.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el atencion.", "getAtencion NonUniqueResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColAtencion", "getAtencion NonUniqueResultException");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el atencion.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el atencion.", "getAtencion " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColAtencion", "getAtencion " + ex.getMessage());
         }
     }
 
@@ -83,10 +79,10 @@ public class CliAtencionService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Atenciones", cliAtencionDtos);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen atencion con los criterios ingresados.", "getAtenciones NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.errorDontExistAtencio", "getAtenciones NoResultException");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el atencion.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el atencion.", "getAtenciones " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColAtencion", "getAtenciones " + ex.getMessage());
         }
     }
 
@@ -96,7 +92,7 @@ public class CliAtencionService {
             if (cliAtencionDto.getAteId() != null && cliAtencionDto.getAteId() > 0) {
                 cliAtencion = em.find(CliAtencion.class, cliAtencionDto.getAteId());
                 if (cliAtencion == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el atencion a modificar.", "guardarAtencion NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noFoundAtencion", "guardarAtencion NoResultException");
                 }
                 cliAtencion.actualizar(cliAtencionDto);
                 if (cliAtencionDto.getCliExpedienteDto() != null) {
@@ -125,7 +121,7 @@ public class CliAtencionService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Atencion", new CliAtencionDto(cliAtencion));
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el atencion.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el atencion.", "guardarAtencion " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorSaveAtencion", "guardarAtencion " + ex.getMessage());
         }
     }
 
@@ -135,20 +131,20 @@ public class CliAtencionService {
             if (id != null && id > 0) {
                 cliAtencion = em.find(CliAtencion.class, id);
                 if (cliAtencion == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el atencion a eliminar.", "eliminarAtencion NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noFoundAtencionDel", "eliminarAtencion NoResultException");
                 }
                 em.remove(cliAtencion);
             } else {
-                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el atencion a eliminar.", "eliminarAtencion NoResultException");
+                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.loadAtencionDel", "eliminarAtencion NoResultException");
             }
             em.flush();
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
             if (ex.getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class) {
-                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el atencion porque tiene relaciones con otros registros.", "eliminarAtencion " + ex.getMessage());
+                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.noAtencionDelRela", "eliminarAtencion " + ex.getMessage());
             }
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el atencion.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el atencion.", "eliminarAtencion " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorDelAtencion", "eliminarAtencion " + ex.getMessage());
         }
     }
 }

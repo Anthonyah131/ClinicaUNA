@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.clinicauna.service;
 
 import cr.ac.una.clinicauna.model.CliReporteDto;
@@ -32,7 +28,7 @@ public class CliReporteService {
             return new Respuesta(true, "", "");
         } catch (Exception ex) {
             Logger.getLogger(CliReporteService.class.getName()).log(Level.SEVERE, "Error obteniendo el Reporte", ex);
-            return new Respuesta(false, "Error obteniendo el Reporte.", "getReporte " + ex.getMessage());
+            return new Respuesta(false, "key.errorObReporte", "getReporte " + ex.getMessage());
         }
     }
     
@@ -49,7 +45,7 @@ public class CliReporteService {
             return new Respuesta(true, "", "", "Reporte", reporteDto);
         } catch (Exception ex) {
             Logger.getLogger(CliReporteService.class.getName()).log(Level.SEVERE, "Error obteniendo el Reporte [" + id + "]", ex);
-            return new Respuesta(false, "Error obteniendo el Reporte.", "getReporte " + ex.getMessage());
+            return new Respuesta(false, "key.errorObReporte", "getReporte " + ex.getMessage());
         }
     }
 
@@ -65,7 +61,7 @@ public class CliReporteService {
             return new Respuesta(true, "", "", "Reportes", reportes);
         } catch (Exception ex) {
             Logger.getLogger(CliReporteService.class.getName()).log(Level.SEVERE, "Error obteniendo Reportes.", ex);
-            return new Respuesta(false, "Error obteniendo Reportes.", "getReportes " + ex.getMessage());
+            return new Respuesta(false, "key.errorObReporte", "getReportes " + ex.getMessage());
         }
     }
 
@@ -80,7 +76,7 @@ public class CliReporteService {
             return new Respuesta(true, "", "", "Reporte", reporteDto);
         } catch (Exception ex) {
             Logger.getLogger(CliReporteService.class.getName()).log(Level.SEVERE, "Error guardando el Reporte.", ex);
-            return new Respuesta(false, "Error guardando el Reporte.", "guardarReporte " + ex.getMessage());
+            return new Respuesta(false, "key.errorSaveReporte", "guardarReporte " + ex.getMessage());
         }
     }
 
@@ -96,7 +92,7 @@ public class CliReporteService {
             return new Respuesta(true, "", "");
         } catch (Exception ex) {
             Logger.getLogger(CliReporteService.class.getName()).log(Level.SEVERE, "Error eliminando el Reporte.", ex);
-            return new Respuesta(false, "Error eliminando el Reporte.", "eliminarReporte " + ex.getMessage());
+            return new Respuesta(false, "key.errorDelReporte", "eliminarReporte " + ex.getMessage());
         }
     }
 }

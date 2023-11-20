@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.wsclinicauna.service;
 
 import cr.ac.una.wsclinicauna.model.CliParametroconsulta;
@@ -47,13 +43,13 @@ public class CliParametroconsultaService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Parametroconsulta", cliParametroconsultaDto);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un Parametroconsulta con el código ingresado.", "getParametroconsulta NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.errorCitaParConsulta", "getParametroconsulta NoResultException");
         } catch (NonUniqueResultException ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el Parametroconsulta.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el Parametroconsulta.", "getParametroconsulta NonUniqueResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColParConsulta", "getParametroconsulta NonUniqueResultException");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el Parametroconsulta.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el Parametroconsulta.", "getParametroconsulta " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColParConsulta", "getParametroconsulta " + ex.getMessage());
         }
     }
 
@@ -73,10 +69,10 @@ public class CliParametroconsultaService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Parametroconsultas", cliParametroconsultaDtos);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen CliParametroconsulta con los criterios ingresados.", "getCliParametroconsultas NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.errorCitaParConsulta", "getCliParametroconsultas NoResultException");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el CliParametroconsulta.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el CliParametroconsulta.", "getCliParametroconsultas " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColParConsulta", "getCliParametroconsultas " + ex.getMessage());
         }
     }
 
@@ -86,7 +82,7 @@ public class CliParametroconsultaService {
             if (cliParametroconsultaDto.getParcId()!= null && cliParametroconsultaDto.getParcId()> 0) {
                 cliParametroconsulta = em.find(CliParametroconsulta.class, cliParametroconsultaDto.getParcId());
                 if (cliParametroconsulta == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el CliParametroconsulta a modificar.", "guardarCliParametroconsulta NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noFoundParConsulta", "guardarCliParametroconsulta NoResultException");
                 }
                 cliParametroconsulta.actualizar(cliParametroconsultaDto);
                 CliReporte cliPaciente = em.find(CliReporte.class, cliParametroconsultaDto.getCliReporteDto().getRepId());
@@ -101,7 +97,7 @@ public class CliParametroconsultaService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Parametroconsulta", new CliParametroconsultaDto(cliParametroconsulta));
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el Parametroconsulta.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el Parametroconsulta.", "guardarParametroconsulta " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorSaveParConsulta", "guardarParametroconsulta " + ex.getMessage());
         }
     }
 
@@ -111,20 +107,20 @@ public class CliParametroconsultaService {
             if (id != null && id > 0) {
                 cliParametroconsulta = em.find(CliParametroconsulta.class, id);
                 if (cliParametroconsulta == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el Parametroconsulta a eliminar.", "eliminarParametroconsulta NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noFoundParConsulta", "eliminarParametroconsulta NoResultException");
                 }
                 em.remove(cliParametroconsulta);
             } else {
-                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el Parametroconsulta a eliminar.", "eliminarParametroconsulta NoResultException");
+                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.loadParConsultaDel", "eliminarParametroconsulta NoResultException");
             }
             em.flush();
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
             if (ex.getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class) {
-                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el Parametroconsulta porque tiene relaciones con otros registros.", "eliminarParametroconsulta " + ex.getMessage());
+                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.noParConsultaDelRela", "eliminarParametroconsulta " + ex.getMessage());
             }
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el Parametroconsulta.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el Parametroconsulta.", "eliminarParametroconsulta " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorDelParConsulta", "eliminarParametroconsulta " + ex.getMessage());
         }
     }
 }

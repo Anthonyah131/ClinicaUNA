@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.clinicauna.service;
 
 import cr.ac.una.clinicauna.model.CliAtencionDto;
@@ -32,7 +28,7 @@ public class CliAtencionService {
             return new Respuesta(true, "", "", "Atencion", atencionDto);
         } catch (Exception ex) {
             Logger.getLogger(CliAtencionService.class.getName()).log(Level.SEVERE, "Error obteniendo el atencion [" + id + "]", ex);
-            return new Respuesta(false, "Error obteniendo el atencion.", "getAtencion " + ex.getMessage());
+            return new Respuesta(false, "key.errorObAtencion", "getAtencion " + ex.getMessage());
         }
     }
 
@@ -48,7 +44,7 @@ public class CliAtencionService {
             return new Respuesta(true, "", "", "Atencions", atencions);
         } catch (Exception ex) {
             Logger.getLogger(CliAtencionService.class.getName()).log(Level.SEVERE, "Error obteniendo atencions.", ex);
-            return new Respuesta(false, "Error obteniendo atencions.", "getAtencions " + ex.getMessage());
+            return new Respuesta(false, "key.errorObAtencion", "getAtencions " + ex.getMessage());
         }
     }
 
@@ -63,7 +59,7 @@ public class CliAtencionService {
             return new Respuesta(true, "", "", "Atencion", atencionDto);
         } catch (Exception ex) {
             Logger.getLogger(CliAtencionService.class.getName()).log(Level.SEVERE, "Error guardando el atencion.", ex);
-            return new Respuesta(false, "Error guardando el atencion.", "guardarAtencion " + ex.getMessage());
+            return new Respuesta(false, "key.errorSaveAtencion", "guardarAtencion " + ex.getMessage());
         }
     }
 
@@ -79,7 +75,7 @@ public class CliAtencionService {
             return new Respuesta(true, "", "");
         } catch (Exception ex) {
             Logger.getLogger(CliAtencionService.class.getName()).log(Level.SEVERE, "Error eliminando el atencion.", ex);
-            return new Respuesta(false, "Error eliminando el atencion.", "eliminarAtencion " + ex.getMessage());
+            return new Respuesta(false, "key.errorDelAtencion", "eliminarAtencion " + ex.getMessage());
         }
     }
 }

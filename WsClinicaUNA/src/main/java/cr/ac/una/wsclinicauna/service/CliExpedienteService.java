@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.wsclinicauna.service;
 
 import cr.ac.una.wsclinicauna.model.CliAntecedente;
@@ -14,7 +10,6 @@ import cr.ac.una.wsclinicauna.model.CliExpediente;
 import cr.ac.una.wsclinicauna.model.CliExpedienteDto;
 import cr.ac.una.wsclinicauna.model.CliPaciente;
 import cr.ac.una.wsclinicauna.model.CliPacienteDto;
-import cr.ac.una.wsclinicauna.model.CliParametroconsulta;
 import cr.ac.una.wsclinicauna.util.CodigoRespuesta;
 import cr.ac.una.wsclinicauna.util.Respuesta;
 import jakarta.ejb.LocalBean;
@@ -66,13 +61,13 @@ public class CliExpedienteService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Expediente", cliExpedienteDto);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un expediente con el código ingresado.", "getExpediente NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.errorCitaExpediente", "getExpediente NoResultException");
         } catch (NonUniqueResultException ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el expediente.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el expediente.", "getExpediente NonUniqueResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColExpediente", "getExpediente NonUniqueResultException");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el expediente.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el expediente.", "getExpediente " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColExpediente", "getExpediente " + ex.getMessage());
         }
     }
 
@@ -104,10 +99,10 @@ public class CliExpedienteService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Expedientes", cliExpedienteDtos);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen expediente con los criterios ingresados.", "getExpedientes NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.errorDontExistExpediente", "getExpedientes NoResultException");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el expediente.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el expediente.", "getExpedientes " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColExpediente", "getExpedientes " + ex.getMessage());
         }
     }
 
@@ -117,7 +112,7 @@ public class CliExpedienteService {
             if (cliExpedienteDto.getExpId() != null && cliExpedienteDto.getExpId() > 0) {
                 cliExpediente = em.find(CliExpediente.class, cliExpedienteDto.getExpId());
                 if (cliExpediente == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el expediente a modificar.", "guardarExpediente NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noFoundExpediente", "guardarExpediente NoResultException");
                 }
                 cliExpediente.actualizar(cliExpedienteDto);
                 CliPaciente cliPaciente = em.find(CliPaciente.class, cliExpedienteDto.getCliPacienteDto().getPacId());
@@ -183,7 +178,7 @@ public class CliExpedienteService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Expediente", expedienteDto);
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el expediente.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el expediente.", "guardarExpediente " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorSaveExpediente", "guardarExpediente " + ex.getMessage());
         }
     }
 
@@ -193,20 +188,20 @@ public class CliExpedienteService {
             if (id != null && id > 0) {
                 cliExpediente = em.find(CliExpediente.class, id);
                 if (cliExpediente == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el expediente a eliminar.", "eliminarExpediente NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noFoundExpedienteDel", "eliminarExpediente NoResultException");
                 }
                 em.remove(cliExpediente);
             } else {
-                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el expediente a eliminar.", "eliminarExpediente NoResultException");
+                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.loadExpedienteDel", "eliminarExpediente NoResultException");
             }
             em.flush();
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
             if (ex.getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class) {
-                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el expediente porque tiene relaciones con otros registros.", "eliminarExpediente " + ex.getMessage());
+                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.noExpedienteDelRela", "eliminarExpediente " + ex.getMessage());
             }
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el expediente.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el expediente.", "eliminarExpediente " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorDelExpediente", "eliminarExpediente " + ex.getMessage());
         }
     }
 }

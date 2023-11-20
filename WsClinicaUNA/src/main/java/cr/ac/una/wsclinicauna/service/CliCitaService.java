@@ -1,13 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.wsclinicauna.service;
 
 import cr.ac.una.wsclinicauna.model.CliAgenda;
 import cr.ac.una.wsclinicauna.model.CliAgendaDto;
-import cr.ac.una.wsclinicauna.model.CliAtencion;
-import cr.ac.una.wsclinicauna.model.CliAtencionDto;
 import cr.ac.una.wsclinicauna.model.CliCita;
 import cr.ac.una.wsclinicauna.model.CliCitaDto;
 import cr.ac.una.wsclinicauna.model.CliExpediente;
@@ -37,7 +31,6 @@ import java.io.InputStream;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -79,13 +72,13 @@ public class CliCitaService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Cita", cliCitaDto);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un cita con el código ingresado.", "getCita NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.errorCitaCod", "getCita NoResultException");
         } catch (NonUniqueResultException ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el cita.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el cita.", "getCita NonUniqueResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColCita", "getCita NonUniqueResultException");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el cita.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el cita.", "getCita " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColCita", "getCita " + ex.getMessage());
         }
     }
 
@@ -110,10 +103,10 @@ public class CliCitaService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Citas", cliCitaDtos);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen citas con los criterios ingresados.", "getCitas NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.errorDontExistCita", "getCitas NoResultException");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el citas.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el citas.", "getCitas " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColCita", "getCitas " + ex.getMessage());
         }
     }
 
@@ -123,7 +116,7 @@ public class CliCitaService {
             if (cliCitaDto.getCitId() != null && cliCitaDto.getCitId() > 0) {
                 cliCita = em.find(CliCita.class, cliCitaDto.getCitId());
                 if (cliCita == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el citas a modificar.", "guardarCita NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noFoundCita", "guardarCita NoResultException");
                 }
                 cliCita.actualizar(cliCitaDto);
                 if (cliCitaDto.getCliAgendaDto() != null && cliCitaDto.getCliAgendaDto().getAgeId() != null && cliCitaDto.getCliAgendaDto().getAgeId() > 0) {
@@ -151,7 +144,7 @@ public class CliCitaService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Citas", citaDto);
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el citas.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el citas.", "guardarCita " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorSaveCita", "guardarCita " + ex.getMessage());
         }
     }
 
@@ -161,20 +154,20 @@ public class CliCitaService {
             if (id != null && id > 0) {
                 cliCita = em.find(CliCita.class, id);
                 if (cliCita == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el citas a eliminar.", "eliminarCita NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noFoundCitaDel", "eliminarCita NoResultException");
                 }
                 em.remove(cliCita);
             } else {
-                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el citas a eliminar.", "eliminarCita NoResultException");
+                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.loadCitaDel", "eliminarCita NoResultException");
             }
             em.flush();
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
             if (ex.getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class) {
-                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el citas porque tiene relaciones con otros registros.", "eliminarCita " + ex.getMessage());
+                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.noCitaDelRela", "eliminarCita " + ex.getMessage());
             }
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el citas.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el citas.", "eliminarCita " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorDelCita", "eliminarCita " + ex.getMessage());
         }
     }
 

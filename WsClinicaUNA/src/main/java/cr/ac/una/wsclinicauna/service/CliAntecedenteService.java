@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.wsclinicauna.service;
 
 import cr.ac.una.wsclinicauna.model.CliAntecedente;
@@ -47,13 +43,13 @@ public class CliAntecedenteService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Antecedente", cliAntecedenteDto);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existe un antecedente con el código ingresado.", "getAntecedente NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.errorAntecedenteCod", "getAntecedente NoResultException");
         } catch (NonUniqueResultException ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el antecedente.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el antecedente.", "getAntecedente NonUniqueResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColAntecedente", "getAntecedente NonUniqueResultException");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el antecedente.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el antecedente.", "getAntecedente " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColAntecedente", "getAntecedente " + ex.getMessage());
         }
     }
 
@@ -73,10 +69,10 @@ public class CliAntecedenteService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Antecedentes", cliAntecedenteDtos);
 
         } catch (NoResultException ex) {
-            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No existen antecedente con los criterios ingresados.", "getAntecedentes NoResultException");
+            return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.errorDontExistAnte", "getAntecedentes NoResultException");
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al consultar el antecedente.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al consultar el antecedente.", "getAntecedentes " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorColAntecedente", "getAntecedentes " + ex.getMessage());
         }
     }
 
@@ -86,7 +82,7 @@ public class CliAntecedenteService {
             if (cliAntecedenteDto.getAntId() != null && cliAntecedenteDto.getAntId() > 0) {
                 cliAntecedente = em.find(CliAntecedente.class, cliAntecedenteDto.getAntId());
                 if (cliAntecedente == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el antecedente a modificar.", "guardarAntecedente NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noFoundAntecedent", "guardarAntecedente NoResultException");
                 }
                 cliAntecedente.actualizar(cliAntecedenteDto);
                 if (cliAntecedenteDto.getCliExpedienteDto() != null) {
@@ -102,7 +98,7 @@ public class CliAntecedenteService {
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "", "Antecedente", new CliAntecedenteDto(cliAntecedente));
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el antecedente.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al guardar el antecedente.", "guardarAntecedente " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorSaveAntecedente", "guardarAntecedente " + ex.getMessage());
         }
     }
 
@@ -112,20 +108,20 @@ public class CliAntecedenteService {
             if (id != null && id > 0) {
                 cliAntecedente = em.find(CliAntecedente.class, id);
                 if (cliAntecedente == null) {
-                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "No se encrontró el antecedente a eliminar.", "eliminarAntecedente NoResultException");
+                    return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.noFoundAnteDel", "eliminarAntecedente NoResultException");
                 }
                 em.remove(cliAntecedente);
             } else {
-                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "Debe cargar el antecedente a eliminar.", "eliminarAntecedente NoResultException");
+                return new Respuesta(false, CodigoRespuesta.ERROR_NOENCONTRADO, "key.loadAnteDel", "eliminarAntecedente NoResultException");
             }
             em.flush();
             return new Respuesta(true, CodigoRespuesta.CORRECTO, "", "");
         } catch (Exception ex) {
             if (ex.getCause() != null && ex.getCause().getCause().getClass() == SQLIntegrityConstraintViolationException.class) {
-                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "No se puede eliminar el antecedente porque tiene relaciones con otros registros.", "eliminarAntecedente " + ex.getMessage());
+                return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.noAnteDelRela", "eliminarAntecedente " + ex.getMessage());
             }
             LOG.log(Level.SEVERE, "Ocurrio un error al guardar el antecedente.", ex);
-            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "Ocurrio un error al eliminar el antecedente.", "eliminarAntecedente " + ex.getMessage());
+            return new Respuesta(false, CodigoRespuesta.ERROR_INTERNO, "key.errorDelAntecedente", "eliminarAntecedente " + ex.getMessage());
         }
     }
 }

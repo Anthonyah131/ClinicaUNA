@@ -51,12 +51,6 @@
                      <children>
                         <JFXTextField fx:id="txfBuscarNombre" promptText="%key.searchName" styleClass="jfx-text-field-edit" HBox.hgrow="ALWAYS" />
                         <JFXTextField fx:id="txfBuscarPapellido" promptText="%key.searchFName" styleClass="jfx-text-field-edit" HBox.hgrow="ALWAYS" />
-                        <VBox spacing="10.0" HBox.hgrow="ALWAYS">
-                           <children>
-                              <JFXCheckBox fx:id="chkBuscarActivas" styleClass="jfx-check-box" text="%key.selectActive" />
-                              <JFXCheckBox fx:id="chkBuscarTodos" onAction="#onActionBuscarTodos" styleClass="jfx-check-box" text="%key.selectActive" />
-                           </children>
-                        </VBox>
                         <MFXButton fx:id="btnLimpiarBusquedaMedico" onAction="#onActionBtnLimpiarBusquedaMedico" styleClass="mfx-button-Image">
                            <graphic>
                               <ImageView fitHeight="50.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">

@@ -29,7 +29,7 @@ public class CliUsuarioService {
             return new Respuesta(true, "", "", "Token", token);
         } catch (Exception ex) {
             Logger.getLogger(CliUsuarioService.class.getName()).log(Level.SEVERE, "Error obteniendo el token", ex);
-            return new Respuesta(false, "Error renovando el token.", "renovarToken " + ex.getMessage());
+            return new Respuesta(false, "key.errorRenewToken", "renovarToken " + ex.getMessage());
         }
     }
 
@@ -47,7 +47,7 @@ public class CliUsuarioService {
             return new Respuesta(true, "", "", "Usuario", usuarioDto);
         } catch (Exception ex) {
             Logger.getLogger(CliUsuarioService.class.getName()).log(Level.SEVERE, "Error obteniendo el usuario [" + usuario + "]", ex);
-            return new Respuesta(false, "key.errorQuerying", "getUsuario " + ex.getMessage());
+            return new Respuesta(false, "key.errorQueryUser", "getUsuario " + ex.getMessage());
         }
     }
 
@@ -64,7 +64,7 @@ public class CliUsuarioService {
             return new Respuesta(true, "", "", "Usuario", usuarioDto);
         } catch (Exception ex) {
             Logger.getLogger(CliUsuarioService.class.getName()).log(Level.SEVERE, "Error obteniendo el usuario [" + id + "]", ex);
-            return new Respuesta(false, "key.errorQuerying", "getUsuario " + ex.getMessage());
+            return new Respuesta(false, "key.errorQueryUser", "getUsuario " + ex.getMessage());
         }
     }
 
@@ -118,7 +118,7 @@ public class CliUsuarioService {
             return new Respuesta(true, "", "", "Usuarios", usuarios);
         } catch (Exception ex) {
             Logger.getLogger(CliUsuarioService.class.getName()).log(Level.SEVERE, "Error obteniendo usuarios.", ex);
-            return new Respuesta(false, "key.errorQuerying", "getUsuarios " + ex.getMessage());
+            return new Respuesta(false, "key.errorQueryGetUsers", "getUsuarios " + ex.getMessage());
         }
     }
 
@@ -165,7 +165,7 @@ public class CliUsuarioService {
             return new Respuesta(true, "", "");
         } catch (Exception ex) {
             Logger.getLogger(CliUsuarioService.class.getName()).log(Level.SEVERE, "Error recuperando la clave", ex);
-            return new Respuesta(false, "key.errorQuerying", "RecuperarClave " + ex.getMessage());
+            return new Respuesta(false, "key.recoveryPassError", "RecuperarClave " + ex.getMessage());
         }
     }
 }

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.una.clinicauna.service;
 
 import cr.ac.una.clinicauna.util.Request;
@@ -9,7 +5,6 @@ import cr.ac.una.clinicauna.util.Respuesta;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -37,14 +32,14 @@ public class ReportesService {
             }
             byte[] doc = (byte[]) request.readEntity(byte[].class);
             if (doc == null) {
-                return new Respuesta(false, "Error al traer el reporte.", "getAngendaReport ");
+                return new Respuesta(false, "key.errorObReporte", "getAngendaReport ");
             }
             JasperPrint jp = toJasperPrint(doc);
             return new Respuesta(true, "", "", "Reporte", jp);
 
         } catch (Exception ex) {
             Logger.getLogger(ReportesService.class.getName()).log(Level.SEVERE, "Error al generar el Reporte.", ex);
-            return new Respuesta(false, "Error generando el Reporte", "getAngendaReport " + ex.getMessage());
+            return new Respuesta(false, "key.errorGenerateReporte", "getAngendaReport " + ex.getMessage());
         }
     }
 
@@ -61,13 +56,13 @@ public class ReportesService {
             }
             byte[] doc = (byte[]) request.readEntity(byte[].class);
             if (doc == null) {
-                return new Respuesta(false, "Error al traer el reporte.", "getExpedienteReport ");
+                return new Respuesta(false, "key.errorObReporte", "getExpedienteReport ");
             }
             JasperPrint jp = toJasperPrint(doc);
             return new Respuesta(true, "", "", "Reporte", jp);
         } catch (Exception ex) {
             Logger.getLogger(ReportesService.class.getName()).log(Level.SEVERE, "Error al generar el Reporte.", ex);
-            return new Respuesta(false, "Error generando el Reporte", "getAngendaReport " + ex.getMessage());
+            return new Respuesta(false, "key.errorGenerateReporte", "getAngendaReport " + ex.getMessage());
         }
     }
 
@@ -85,13 +80,13 @@ public class ReportesService {
             }
             byte[] doc = (byte[]) request.readEntity(byte[].class);
             if (doc == null) {
-                return new Respuesta(false, "Error al traer el reporte.", "getAngendaReport ");
+                return new Respuesta(false, "key.errorObReporte", "getAngendaReport ");
             }
             JasperPrint jp = toJasperPrint(doc);
             return new Respuesta(true, "", "", "Reporte", jp);
         } catch (Exception ex) {
             Logger.getLogger(ReportesService.class.getName()).log(Level.SEVERE, "Error al generar el Reporte.", ex);
-            return new Respuesta(false, "Error generando el Reporte", "getAngendaReport " + ex.getMessage());
+            return new Respuesta(false, "key.errorGenerateReporte", "getAngendaReport " + ex.getMessage());
         }
     }
 
