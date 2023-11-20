@@ -325,7 +325,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
                 btnMoverCita.setDisable(true);
             } else {
                 btnMoverCita.setDisable(false);
-                 String citaPegar = resourceBundle.getString("key.pasteAppo");
+                String citaPegar = resourceBundle.getString("key.pasteAppo");
                 btnMoverCita.setText(citaPegar);
             }
 
@@ -375,12 +375,13 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         } else {
             citaDto = (CliCitaDto) AppContext.getInstance().get("CitaMover");
             CliAgendaDto agendaAntigua = (CliAgendaDto) AppContext.getInstance().get("AgendaAntigua");
+            if (agendaAntigua.getAgeId() != agendaDto.getAgeId()) {
+                agendaAntigua.getCliCitaListEliminados().add(citaDto);
+                CliAgendaService agendaService = new CliAgendaService();
+                agendaService.guardarAgenda(agendaAntigua);
+                citaDto.setCliAgendaDto(agendaDto);
+            }
 
-            agendaAntigua.getCliCitaListEliminados().add(citaDto);
-            CliAgendaService agendaService = new CliAgendaService();
-            agendaService.guardarAgenda(agendaAntigua);
-
-            citaDto.setCliAgendaDto(agendaDto);
             horaAntigua = citaDto.getCitFechaHora();
             citaDto.setCitFechaHora(fechaHoraCita);
             bindCita();
