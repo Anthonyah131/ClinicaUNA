@@ -289,7 +289,7 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
                     if (atencionDto.getAtePeso() != null && atencionDto.getAteTalla() != null
                             && !atencionDto.getAtePeso().isBlank() && !atencionDto.getAteTalla().isBlank()) {
                         int peso = Integer.parseInt(atencionDto.getAtePeso());
-                        int talla = Integer.parseInt(atencionDto.getAteTalla()) / 100;
+                        double talla = Double.parseDouble(atencionDto.getAteTalla()) / 100;
                         int imc = (int) (peso / (talla * talla));
                         atencionDto.setAteImc("" + imc);
                     } else {
