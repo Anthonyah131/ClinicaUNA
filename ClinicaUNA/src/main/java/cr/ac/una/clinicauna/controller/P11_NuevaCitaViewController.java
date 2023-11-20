@@ -318,13 +318,15 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         bindCita();
         if (citaDto.getCitId() != null) {
             btnMoverCita.setDisable(false);
-            btnMoverCita.setText("Mover cita");
+            String citaMover = resourceBundle.getString("key.moveAppo");
+            btnMoverCita.setText(citaMover);
         } else {
             if (AppContext.getInstance().get("CitaMover") == null) {
                 btnMoverCita.setDisable(true);
             } else {
                 btnMoverCita.setDisable(false);
-                btnMoverCita.setText("Pegar cita");
+                 String citaPegar = resourceBundle.getString("key.pasteAppo");
+                btnMoverCita.setText(citaPegar);
             }
 
         }
@@ -354,7 +356,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
                 "U";
             case "Atendida", "Attended" ->
                 "A";
-            case "Cancelada", "Cancelled" ->
+            case "Cancelada", "Canceled" ->
                 "C";
             default ->
                 "P";
@@ -368,7 +370,8 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
             AppContext.getInstance().set("CitaMover", citaDto);
             AppContext.getInstance().set("AgendaAntigua", agendaDto);
 
-            System.out.println("Cita copeada");
+            new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.moveAppo", getStage(), "key.copyAppo");
+            stage.close();
         } else {
             citaDto = (CliCitaDto) AppContext.getInstance().get("CitaMover");
             CliAgendaDto agendaAntigua = (CliAgendaDto) AppContext.getInstance().get("AgendaAntigua");
@@ -381,6 +384,9 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
             horaAntigua = citaDto.getCitFechaHora();
             citaDto.setCitFechaHora(fechaHoraCita);
             bindCita();
+            AppContext.getInstance().delete("CitaMover");
+            AppContext.getInstance().delete("AgendaAntigua");
+            btnMoverCita.setDisable(true);
             System.out.println("Cita movida");
         }
     }

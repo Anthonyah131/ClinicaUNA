@@ -12,6 +12,7 @@ import cr.ac.una.clinicauna.model.CliPacienteDto;
 import cr.ac.una.clinicauna.model.CliUsuarioDto;
 import cr.ac.una.clinicauna.service.CliAntecedenteService;
 import cr.ac.una.clinicauna.service.CliAtencionService;
+import cr.ac.una.clinicauna.service.CliCitaService;
 import cr.ac.una.clinicauna.service.CliExamenService;
 import cr.ac.una.clinicauna.service.CliExpedienteService;
 import cr.ac.una.clinicauna.util.FlowController;
@@ -199,11 +200,11 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
         txfAntParentesco.setTextFormatter(Formato.getInstance().maxLengthFormat(20));
         txfAntDescripcion.setTextFormatter(Formato.getInstance().maxLengthFormat(20));
 
-        txfPresionArterial.setTextFormatter(Formato.getInstance().maxLengthFormat(5));
-        txfFrecuenciaCar.setTextFormatter(Formato.getInstance().maxLengthFormat(5));
-        txfPeso.setTextFormatter(Formato.getInstance().maxLengthFormat(5));
-        txfTalla.setTextFormatter(Formato.getInstance().maxLengthFormat(5));
-        txfTemperatura.setTextFormatter(Formato.getInstance().maxLengthFormat(5));
+        txfPresionArterial.setTextFormatter(Formato.getInstance().cedulaFormat(5));
+        txfFrecuenciaCar.setTextFormatter(Formato.getInstance().cedulaFormat(5));
+        txfPeso.setTextFormatter(Formato.getInstance().cedulaFormat(5));
+        txfTalla.setTextFormatter(Formato.getInstance().cedulaFormat(5));
+        txfTemperatura.setTextFormatter(Formato.getInstance().cedulaFormat(5));
         txaAnotacionesEnfermeria.setTextFormatter(Formato.getInstance().maxLengthFormat(80));
         txfRazonConsulta.setTextFormatter(Formato.getInstance().maxLengthFormat(50));
         txaPlanAtencion.setTextFormatter(Formato.getInstance().maxLengthFormat(1));
@@ -232,7 +233,7 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
     public void initialize() {
     }
 
-    @FXML // Poner idioma
+    @FXML
     private void onActionBtnAgregarAntecedente(ActionEvent event) {
         try {
             String invalidos = ValidarRequeridos.validarRequeridos(requeridosAntecedentes);
@@ -273,7 +274,7 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
         }
     }
 
-    @FXML 
+    @FXML
     private void onActionBtnGuardarAtencion(ActionEvent event) {
         try {
             String invalidos = ValidarRequeridos.validarRequeridos(requeridosAtencion);
@@ -281,7 +282,7 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
                 String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
                 new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveAtencion", getStage(), mensaje);
             } else {
-                if (atencionDto.getAteId() == null || atencionDto.getAteId() <= 0) { // poner idioma que diga "Cargue la atencion que quiere editar"
+                if (atencionDto.getAteId() == null || atencionDto.getAteId() <= 0) {
                     new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveAtencion", getStage(), "key.loadAtencionEdit");
                 } else {
                     CliAtencionService atencionService = new CliAtencionService();
@@ -305,6 +306,8 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
                         this.atencionDto = new CliAtencionDto();
                         cargarAtenciones();
                         bindAtencion();
+                        citaDto.setCitEstado("A");
+                        actualizarCita(citaDto);
                         new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveAtencion", getStage(), "key.atencionActualizada");
                     }
                 }
@@ -397,7 +400,7 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
         }
     }
 
-    @FXML // Poner idioma
+    @FXML
     private void onActionBtnGuardarExpediente(ActionEvent event) {
         try {
             String invalidos = ValidarRequeridos.validarRequeridos(requeridosExpediente);
@@ -429,21 +432,21 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
     private void onActionBtnSalir(ActionEvent event) {
     }
 
-    @FXML 
+    @FXML
     private void onActionBtnLimpiarAnte(ActionEvent event) {
         if (new Mensaje().showConfirmationi18n("key.clear", getStage(), "key.cleanRegistry")) {
             nuevoAntecedente();
         }
     }
 
-    @FXML 
+    @FXML
     private void onActionBtnLimpiarAte(ActionEvent event) {
         if (new Mensaje().showConfirmationi18n("key.clear", getStage(), "key.cleanRegistry")) {
             nuevaAtencion();
         }
     }
 
-    @FXML 
+    @FXML
     private void onActionBtnLimpiarE(ActionEvent event) {
         if (new Mensaje().showConfirmationi18n("key.clear", getStage(), "key.cleanRegistry")) {
             nuevoExamen();
@@ -493,6 +496,22 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
         cargarAntecedentes();
         cargarAtenciones();
         cargarExamenes();
+    }
+    
+    private void actualizarCita(CliCitaDto cita) {
+        try {
+            CliCitaService citaService = new CliCitaService();
+            Respuesta respuesta = citaService.guardarCita(cita);
+
+            if (!respuesta.getEstado()) {
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveCitas", getStage(), respuesta.getMensaje());
+            } else {
+                new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveCitas", getStage(), "key.appoActualizada");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error guardando el usuario.", ex);
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveCitas", getStage(), "key.errorSavingAppo");
+        }
     }
 
     public void bindPaciente() {
@@ -546,7 +565,7 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
             String nombrePac = pacienteDto.getPacNombre();
             return new SimpleStringProperty(nombrePac);
         });
-        
+
         tbvHistorialCitas.getColumns().addAll(tbcFecha, tbcHora, tbcNombre);
         tbvHistorialCitas.refresh();
     }

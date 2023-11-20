@@ -55,9 +55,7 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
     CliMedicoDto medicoDto;
     CliAgendaDto agendaDto;
     CliPacienteDto pacienteDto;
-    CliCitaDto citaDto;
     Object resultado;
-//    List<CliCitaDto> listaCitas;
     private ObservableList<CliCitaDto> listaCitas = FXCollections.observableArrayList();
     ResourceBundle resourceBundle;
 
@@ -156,10 +154,8 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
         tbcDuracion.setPrefWidth(150);
         tbcDuracion.setCellValueFactory(cd -> {
             int duracion = cd.getValue().getCliCantespacios().intValue();
-
-            //duracion *= medicoDto.getMedEspaciosxhora().intValue();
-            // duracion *= (60 / agendaDto.getAgeEspacios());
-            duracion *= 15;
+            
+            duracion *= Integer.parseInt(agendaDto.getAgeTiempo());
 
             String duraString = duracion + " minutos";
 
@@ -194,7 +190,6 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
         } else {
             new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.loadDoctor", getStage(), resMedico.getMensaje());
         }
-
     }
 
     private void cargarCitasAdmin() {

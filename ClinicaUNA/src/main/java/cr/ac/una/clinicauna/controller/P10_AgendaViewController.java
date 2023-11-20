@@ -147,9 +147,11 @@ public class P10_AgendaViewController extends Controller implements Initializabl
             if (agendaDto.getAgeId() != null) {
                 horaEntradaTime = agendaDto.getAgeEntradaTime();
                 horaSalidaTime = agendaDto.getAgeSalidaTime();
+                citasHoras = agendaDto.getAgeEspacios().intValue();
             } else {
                 horaEntradaTime = medicoDto.getMedFiniTime();
                 horaSalidaTime = medicoDto.getMedFfinTime();
+                citasHoras = medicoDto.getMedEspaciosxhora().intValue();
             }
 
             iniJornada = horaEntradaTime.getHour();
@@ -167,7 +169,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
             //Obtener la cantidad de horas y minutos que va a trabajar el doctor y asi obtener la jornada
             jornadaDoctor = Utilidades.calcularJornada(horaEntradaTime, horaSalidaTime);
             jornada = jornadaDoctor[0];
-            citasHoras = medicoDto.getMedEspaciosxhora().intValue();
+            
             lblJornada.setText(jornadaDoctor[0] + "h " + jornadaDoctor[1] + "m");
 
             //obtener el total de citas que puede atender el doctor para inicializar vectores
@@ -524,13 +526,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
     }
 
     private LocalDateTime calcularHora(int fila, int columna) {
-        int iniJornada = medicoDto.getMedFiniTime().getHour();
-        int finJornada = medicoDto.getMedFfinTime().getHour();
-        int jornada = finJornada - iniJornada;
-        int citasHoras = Math.toIntExact(medicoDto.getMedEspaciosxhora());
-
         int hora = iniJornada + fila - 1;
-
         int minutos = 0;
 
         if (columna == 2) {
@@ -573,7 +569,6 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         }
     }
 
-    //verificar si se ocupa
     public void cargarCita(CliCitaDto cita, CliAgendaDto agenda, CliMedicoDto medico) {
         citaDto = cita;
         agendaDto = agenda;

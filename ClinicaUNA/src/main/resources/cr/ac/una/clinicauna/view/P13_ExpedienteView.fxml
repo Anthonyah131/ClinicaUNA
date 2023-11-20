@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.clinicauna.controller.P13_ExpedienteViewController">
+<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cr.ac.una.clinicauna.controller.P13_ExpedienteViewController">
     <stylesheets>
         <URL value="@styles.css" />
     </stylesheets>
@@ -48,7 +48,7 @@
                         <Label fx:id="lblNombreUsuario" layoutX="10.0" layoutY="14.0" styleClass="labels-text" text="nombreMed" />
                      </children>
                   </HBox>
-                  <MFXScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                  <MFXScrollPane fitToWidth="true" hbarPolicy="NEVER" vvalue="0.01" VBox.vgrow="ALWAYS">
                      <content>
                         <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="1250.0" spacing="15.0">
                            <children>
@@ -95,19 +95,19 @@
                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                    <children>
                                                       <Label prefWidth="150.0" styleClass="labels-text-minus-izquierda" text="%key.hospitalizations" />
-                                                      <JFXTextField fx:id="txfCantHospitalizaciones" prefWidth="100.0" promptText="%key.quantity" styleClass="jfx-text-field-edit" />
+                                                      <JFXTextField fx:id="txfCantHospitalizaciones" promptText="%key.quantity" styleClass="jfx-text-field-edit" />
                                                    </children>
                                                 </HBox>
                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                    <children>
                                                       <Label prefWidth="150.0" styleClass="labels-text-minus-izquierda" text="%key.operations" />
-                                                      <JFXTextField fx:id="txfCantOperaciones" prefWidth="100.0" promptText="%key.quantity" styleClass="jfx-text-field-edit" />
+                                                      <JFXTextField fx:id="txfCantOperaciones" promptText="%key.quantity" styleClass="jfx-text-field-edit" />
                                                    </children>
                                                 </HBox>
                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                    <children>
                                                       <Label prefWidth="150.0" styleClass="labels-text-minus-izquierda" text="%key.allergies" />
-                                                      <JFXTextField fx:id="txfCantAlergias" prefWidth="100.0" promptText="%key.quantity" styleClass="jfx-text-field-edit" />
+                                                      <JFXTextField fx:id="txfCantAlergias" promptText="%key.quantity" styleClass="jfx-text-field-edit" />
                                                    </children>
                                                 </HBox>
                                                 <Label styleClass="labels-text-minus-izquierda" text="%key.typesAllergies" />
@@ -142,10 +142,10 @@
                                                                   <JFXTextField fx:id="txfAntDescripcion" styleClass="jfx-text-field-edit" HBox.hgrow="ALWAYS" />
                                                                </children>
                                                             </HBox>
-                                                            <HBox alignment="CENTER" spacing="25.0">
+                                                            <HBox alignment="CENTER" spacing="10.0">
                                                                <children>
-                                                                  <MFXButton fx:id="btnLimpiarAnte" onAction="#onActionBtnLimpiarAnte" prefHeight="35.0" styleClass="mfx-button-menu-minus" text="Limpiar antecedente" />
-                                                                  <MFXButton fx:id="btnAgregarAntecedente" onAction="#onActionBtnAgregarAntecedente" prefHeight="35.0" prefWidth="100.0" styleClass="mfx-button-menu-minus" text="%key.add" />
+                                                                  <MFXButton fx:id="btnLimpiarAnte" maxWidth="1.7976931348623157E308" onAction="#onActionBtnLimpiarAnte" prefHeight="35.0" styleClass="mfx-button-menu-minus" text="%key.clear" HBox.hgrow="ALWAYS" />
+                                                                  <MFXButton fx:id="btnAgregarAntecedente" maxWidth="1.7976931348623157E308" onAction="#onActionBtnAgregarAntecedente" prefHeight="35.0" styleClass="mfx-button-menu-minus" text="%key.add" HBox.hgrow="ALWAYS" />
                                                                </children>
                                                             </HBox>
                                                          </children>
@@ -268,8 +268,8 @@
                                     </HBox>
                                     <HBox alignment="CENTER" spacing="25.0">
                                        <children>
+                                          <MFXButton fx:id="btnLimpiarAte" onAction="#onActionBtnLimpiarAte" prefHeight="35.0" styleClass="mfx-button-menu-minus" text="%key.clear" />
                                           <MFXButton fx:id="btnGuardarAtencion" onAction="#onActionBtnGuardarAtencion" styleClass="mfx-button-menu" text="%key.saveAttention" />
-                                          <MFXButton fx:id="btnLimpiarAte" onAction="#onActionBtnLimpiarAte" prefHeight="35.0" styleClass="mfx-button-menu-minus" text="Limpiar antecedente" />
                                        </children>
                                     </HBox>
                                     <VBox spacing="10.0">
@@ -310,8 +310,8 @@
                                                 <JFXDatePicker fx:id="dpkFechaArchivo" styleClass="jfx-pickers" />
                                                 <HBox alignment="CENTER" spacing="5.0">
                                                    <children>
-                                                      <MFXButton fx:id="btnLimpiarE" onAction="#onActionBtnLimpiarE" styleClass="mfx-button-menu-minus" text="Limpiar Examen" />
-                                                      <MFXButton fx:id="btnGuardarE" onAction="#onActionBtnGuardarE" styleClass="mfx-button-menu-minus" text="Guardar Examen" />
+                                                      <MFXButton fx:id="btnLimpiarE" maxWidth="1.7976931348623157E308" onAction="#onActionBtnLimpiarE" styleClass="mfx-button-menu-minus" text="%key.clear" HBox.hgrow="ALWAYS" />
+                                                      <MFXButton fx:id="btnGuardarE" maxWidth="1.7976931348623157E308" onAction="#onActionBtnGuardarE" styleClass="mfx-button-menu-minus" text="%key.addon" HBox.hgrow="ALWAYS" />
                                                    </children>
                                                 </HBox>
                                              </children>
@@ -331,7 +331,7 @@
                                  <children>
                                     <HBox alignment="CENTER_RIGHT" spacing="10.0" HBox.hgrow="ALWAYS">
                                        <children>
-                                          <MFXButton fx:id="btnGuardarExpediente" onAction="#onActionBtnGuardarExpediente" prefWidth="152.0" styleClass="mfx-button-menu-minus" text="%key.addon" />
+                                          <MFXButton fx:id="btnGuardarExpediente" onAction="#onActionBtnGuardarExpediente" prefWidth="152.0" styleClass="mfx-button-menu" text="%key.saveRecords" />
                                        </children>
                                     </HBox>
                                  </children>
