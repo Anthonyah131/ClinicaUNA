@@ -312,8 +312,8 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
                     }
                 }
             }
-        } catch (Exception ex) {
-            Logger.getLogger(P16_ReporteDinamicoViewController.class.getName()).log(Level.SEVERE, "Error guardando el parametro.", ex);
+        } catch (NumberFormatException ex) {
+            Logger.getLogger(P13_ExpedienteViewController.class.getName()).log(Level.SEVERE, "Error guardando el parametro.", ex);
             new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveAtencion", getStage(), "key.errorSavingAtencion");
         }
     }
@@ -497,7 +497,7 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
         cargarAtenciones();
         cargarExamenes();
     }
-    
+
     private void actualizarCita(CliCitaDto cita) {
         try {
             CliCitaService citaService = new CliCitaService();
@@ -721,9 +721,15 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
                 nuevoExamen();
             }
         });
+
+        txfPeso.textProperty().addListener((observable, oldValue, newValue) -> {
+            // Aquí puedes realizar acciones basadas en el cambio del texto
+        });
+        txfTalla.textProperty().addListener((observable, oldValue, newValue) -> {
+            // Aquí puedes realizar acciones basadas en el cambio del texto
+        });
     }
 
-    // Poner idioma
     private void cargarTablaArchivos() {
         tbvArchivos.getItems().clear();
 
