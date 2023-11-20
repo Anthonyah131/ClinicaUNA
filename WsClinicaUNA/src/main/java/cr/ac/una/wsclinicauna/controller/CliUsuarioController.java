@@ -89,7 +89,11 @@ public class CliUsuarioController {
             Respuesta re2 = cliParametrosService.getParametros();
             List<CliParametrosDto> cliParametrosDtoList = (List<CliParametrosDto>) re2.getResultado("Parametros");
             CliParametrosDto cliParametrosDto = cliParametrosDtoList.get(0);
-            Boolean flag = cliUsuarioDto.getUsuId().equals(null);
+            Boolean flag = false;
+            
+            if(cliUsuarioDto.getUsuId() == null){
+                flag = true;
+            }
 
             cliUsuarioDto = (CliUsuarioDto) res.getResultado("Usuario");
             if (flag) {
