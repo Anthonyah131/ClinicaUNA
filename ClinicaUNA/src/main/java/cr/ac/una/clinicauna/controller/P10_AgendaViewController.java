@@ -169,7 +169,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
             //Obtener la cantidad de horas y minutos que va a trabajar el doctor y asi obtener la jornada
             jornadaDoctor = Utilidades.calcularJornada(horaEntradaTime, horaSalidaTime);
             jornada = jornadaDoctor[0];
-            
+
             lblJornada.setText(jornadaDoctor[0] + "h " + jornadaDoctor[1] + "m");
 
             //obtener el total de citas que puede atender el doctor para inicializar vectores
@@ -415,7 +415,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                                 citasVector[posDragDrop] = citaDto;
                                 actualizarCita(citaDto);
                             }
-
+                            cargarAgenda();
                             pasarListaCitasAVector();
                             comprobarEspaciosCitas();
                             crearCita();
@@ -442,7 +442,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         try {
             CliCitaService citaService = new CliCitaService();
             Respuesta respuesta = citaService.guardarCita(cita);
-
+            citaDto = (CliCitaDto) respuesta.getResultado("Cita");
             if (!respuesta.getEstado()) {
                 new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveCitas", getStage(), respuesta.getMensaje());
             } else {
