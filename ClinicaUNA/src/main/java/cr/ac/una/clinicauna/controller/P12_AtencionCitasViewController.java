@@ -17,6 +17,8 @@ import cr.ac.una.clinicauna.util.Utilidades;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
@@ -57,6 +59,8 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
     CliPacienteDto pacienteDto;
     Object resultado;
     private ObservableList<CliCitaDto> listaCitas = FXCollections.observableArrayList();
+    List<CliMedicoDto> listaMedicos = new ArrayList<>();
+    List<CliAgendaDto> listaAgendas = new ArrayList<>();
     ResourceBundle resourceBundle;
 
     /**
@@ -127,7 +131,11 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
         TableColumn<CliCitaDto, String> tbcMotivo = new TableColumn<>(resourceBundle.getString("key.reason"));
         tbcMotivo.setSortable(false);
         tbcMotivo.setPrefWidth(150);
-        tbcMotivo.setCellValueFactory(cd -> cd.getValue().citMotivo);
+        tbcMotivo.setCellValueFactory(cd -> {
+            String motivo = (cd.getValue().getCitMotivo() == null) ? "No indica" : cd.getValue().getCitMotivo();
+
+            return new SimpleStringProperty(motivo);
+        });
 
         TableColumn<CliCitaDto, String> tbcHora = new TableColumn<>(resourceBundle.getString("key.attenHora"));
         tbcHora.setSortable(false);
@@ -154,8 +162,12 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
         tbcDuracion.setPrefWidth(150);
         tbcDuracion.setCellValueFactory(cd -> {
             int duracion = cd.getValue().getCliCantespacios().intValue();
-            
-            duracion *= Integer.parseInt(agendaDto.getAgeTiempo());
+
+            if (usuarioDto.getUsuTipousuario().equals("M")) {
+                duracion *= Integer.parseInt(agendaDto.getAgeTiempo());
+            } else {
+                duracion = 0;
+            }
 
             String duraString = duracion + " minutos";
 
@@ -172,7 +184,8 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
         Respuesta resMedico = medicoService.getMedicos(usuarioDto.getUsuId());
 
         if (resMedico.getEstado()) {
-            medicoDto = (CliMedicoDto) resMedico.getResultado("Medicos");
+            listaMedicos = (List<CliMedicoDto>) resMedico.getResultado("Medicos");
+            medicoDto = listaMedicos.get(0);
 
             CliAgendaService service = new CliAgendaService();
             Respuesta respuesta = service.getAgenda(medicoDto, dtpFecha.getValue());
@@ -197,6 +210,9 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
         Respuesta respuesta = service.getAgendas(dtpFecha.getValue());
 
         if (respuesta.getEstado()) {
+            listaAgendas = (List<CliAgendaDto>) respuesta.getResultado("Agenda");
+            //agendaDto = (CliAgendaDto) respuesta.getResultado("Agenda");
+            
             tbvCitas.getItems().clear();
             listaCitas.clear();
             listaCitas.addAll((List<CliCitaDto>) respuesta.getResultado("Agenda"));

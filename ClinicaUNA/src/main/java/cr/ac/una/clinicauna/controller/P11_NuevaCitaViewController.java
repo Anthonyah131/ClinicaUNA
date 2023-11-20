@@ -107,6 +107,8 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         if (!invalidos.isEmpty()) {
             String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
             new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), mensaje);
+        } else if (pacienteDto == null) {
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.loadPacientAppo");
         } else {
             //Si la cita no existe intenta crear una nueva si cumple los espacios
             if (citasVector[posVec] == null) {
@@ -325,7 +327,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
                 btnMoverCita.setDisable(true);
             } else {
                 btnMoverCita.setDisable(false);
-                 String citaPegar = resourceBundle.getString("key.pasteAppo");
+                String citaPegar = resourceBundle.getString("key.pasteAppo");
                 btnMoverCita.setText(citaPegar);
             }
 
