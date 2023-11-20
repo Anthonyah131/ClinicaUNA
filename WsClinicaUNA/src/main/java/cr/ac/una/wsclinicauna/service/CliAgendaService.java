@@ -84,6 +84,7 @@ public class CliAgendaService {
                         pacienteDto.getCliExpedienteList().add(new CliExpedienteDto(cliExpediente));
                     }
                     cita.setCliPacienteDto(pacienteDto);
+                    cita.setCliAgendaDto(new CliAgendaDto(cliCita.getAgeId()));
                     cliAgendaDto.getCliCitaList().add(cita);
                 }
                 cliAgendaDtos.add(cliAgendaDto);
