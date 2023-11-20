@@ -89,12 +89,12 @@ public class CliUsuarioController {
             Respuesta re2 = cliParametrosService.getParametros();
             List<CliParametrosDto> cliParametrosDtoList = (List<CliParametrosDto>) re2.getResultado("Parametros");
             CliParametrosDto cliParametrosDto = cliParametrosDtoList.get(0);
-
-            if (cliUsuarioDto.getUsuId() == null) {
-                cliUsuarioService.correoActivacion(cliUsuarioDto, cliParametrosDto);
-            }
+            Boolean flag = cliUsuarioDto.getUsuId().equals(null);
 
             cliUsuarioDto = (CliUsuarioDto) res.getResultado("Usuario");
+            if (flag) {
+                cliUsuarioService.correoActivacion(cliUsuarioDto, cliParametrosDto);
+            }
             return Response.ok(cliUsuarioDto).build();
         } catch (Exception ex) {
             Logger.getLogger(CliUsuarioController.class.getName()).log(Level.SEVERE, null, ex);
