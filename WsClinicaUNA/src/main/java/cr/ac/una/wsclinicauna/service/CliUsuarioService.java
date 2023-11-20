@@ -376,8 +376,8 @@ public class CliUsuarioService {
                 + "<span style=\"font-size: 18px; line-height: 32.4px; color: #000000;\">"
                 + "<span style=\"line-height: 32.4px; font-family: Montserrat, sans-serif; font-size: 18px;\">"
                 + "Presione el link para activar su cuenta: "
-                + "<a href=\"http://" + obtenerIp() + ":8080/ws/CliUsuarioController/activacion/" + cliUsuarioDto.getUsuId() + "\">"
-                + "http://" + obtenerIp() + ":8080/ws/CliUsuarioController/activacion/" + cliUsuarioDto.getUsuId()
+                + "<a href=\"http://" + obtenerIp() + ":8080/WsClinicaUNA/ws/CliUsuarioController/activacion/" + cliUsuarioDto.getUsuId() + "\">"
+                + "http://" + obtenerIp() + ":8080/WsClinicaUNA/ws/CliUsuarioController/activacion/" + cliUsuarioDto.getUsuId()
                 + "</a>"
                 + "</span>"
                 + "</span>"
