@@ -238,12 +238,12 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
             String invalidos = ValidarRequeridos.validarRequeridos(requeridosAntecedentes);
             if (!invalidos.isEmpty()) {
                 String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
-                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), mensaje);
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveAntece", getStage(), mensaje);
             } else {
                 CliAntecedenteService antecedenteService = new CliAntecedenteService();
                 Respuesta respuesta = antecedenteService.guardarAntecedente(this.antecedenteDto);
                 if (!respuesta.getEstado()) {
-                    new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), respuesta.getMensaje());
+                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveAntece", getStage(), respuesta.getMensaje());
                 } else {
                     unbindAntecedente();
                     this.antecedenteDto = (CliAntecedenteDto) respuesta.getResultado("Antecedente");
@@ -264,25 +264,25 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
 
                     this.antecedenteDto = new CliAntecedenteDto();
                     bindAntecedente();
-                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveParameterR", getStage(), "key.updatedParameterR");
+                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveAntece", getStage(), "key.anteceActualizada");
                 }
             }
         } catch (Exception ex) {
             Logger.getLogger(P16_ReporteDinamicoViewController.class.getName()).log(Level.SEVERE, "Error guardando el parametro.", ex);
-            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), "key.errorSavingParameterR");
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveAntece", getStage(), "key.errorSavingAntece");
         }
     }
 
-    @FXML // Poner idioma
+    @FXML 
     private void onActionBtnGuardarAtencion(ActionEvent event) {
         try {
             String invalidos = ValidarRequeridos.validarRequeridos(requeridosAtencion);
             if (!invalidos.isEmpty()) {
                 String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
-                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), mensaje);
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveAtencion", getStage(), mensaje);
             } else {
                 if (atencionDto.getAteId() == null || atencionDto.getAteId() <= 0) { // poner idioma que diga "Cargue la atencion que quiere editar"
-                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), "key.errorDateStart");
+                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveAtencion", getStage(), "key.loadAtencionEdit");
                 } else {
                     CliAtencionService atencionService = new CliAtencionService();
                     if (atencionDto.getAtePeso() != null && atencionDto.getAteTalla() != null
@@ -293,7 +293,7 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
                     }
                     Respuesta respuesta = atencionService.guardarAtencion(this.atencionDto);
                     if (!respuesta.getEstado()) {
-                        new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), respuesta.getMensaje());
+                        new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveAtencion", getStage(), respuesta.getMensaje());
                     } else {
                         unbindAtencion();
                         this.atencionDto = (CliAtencionDto) respuesta.getResultado("Atencion");
@@ -305,25 +305,26 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
                         this.atencionDto = new CliAtencionDto();
                         cargarAtenciones();
                         bindAtencion();
-                        new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveParameterR", getStage(), "key.updatedParameterR");
+                        new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveAtencion", getStage(), "key.atencionActualizada");
                     }
                 }
             }
         } catch (Exception ex) {
             Logger.getLogger(P16_ReporteDinamicoViewController.class.getName()).log(Level.SEVERE, "Error guardando el parametro.", ex);
-            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), "key.errorSavingParameterR");
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveAtencion", getStage(), "key.errorSavingAtencion");
         }
     }
 
-    @FXML // Poner idioma
+    @FXML
     private void onActionBtnCargarArchivos(ActionEvent event) {
         //Inicializa el FileChooser y le da un titulo a la nueva ventana
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Seleccionar archivo");
+        String fileString = resourceBundle.getString("key.selectFile");
+        fileChooser.setTitle(fileString);
 
         // Agregar filtros para facilitar la busqueda
         fileChooser.getExtensionFilters().addAll(
-                //new FileChooser.ExtensionFilter("JPG", "*.jpg", "PNG", "*.png", "GIF", "*.gif"),
+                new FileChooser.ExtensionFilter("JPG", "*.jpg", "PNG", "*.png", "GIF", "*.gif", "PDF", "*.pdf"),
                 new FileChooser.ExtensionFilter("All files", "*.*")
         );
 
@@ -340,18 +341,18 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
         }
     }
 
-    @FXML // Poner idioma
+    @FXML
     private void onActionBtnGuardarE(ActionEvent event) {
         try {
             String invalidos = ValidarRequeridos.validarRequeridos(requeridosExamen);
             if (!invalidos.isEmpty()) {
                 String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
-                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), mensaje);
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.loadFilesExp", getStage(), mensaje);
             } else {
                 CliExamenService examenService = new CliExamenService();
                 Respuesta respuesta = examenService.guardarExamen(this.examenDto);
                 if (!respuesta.getEstado()) {
-                    new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), respuesta.getMensaje());
+                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.loadFilesExp", getStage(), respuesta.getMensaje());
                 } else {
                     unbindExamen();
                     this.examenDto = (CliExamenDto) respuesta.getResultado("Examen");
@@ -387,12 +388,12 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
 
                     this.examenDto = new CliExamenDto();
                     bindExamen();
-                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveParameterR", getStage(), "key.updatedParameterR");
+                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.loadFilesExp", getStage(), "key.filesActualizados");
                 }
             }
         } catch (Exception ex) {
             Logger.getLogger(P16_ReporteDinamicoViewController.class.getName()).log(Level.SEVERE, "Error guardando el parametro.", ex);
-            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), "key.errorSavingParameterR");
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.loadFilesExp", getStage(), "key.errorSavingFiles");
         }
     }
 
@@ -402,12 +403,12 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
             String invalidos = ValidarRequeridos.validarRequeridos(requeridosExpediente);
             if (!invalidos.isEmpty()) {
                 String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
-                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), mensaje);
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveExpediente", getStage(), mensaje);
             } else {
                 CliExpedienteService expedienteService = new CliExpedienteService();
                 Respuesta respuesta = expedienteService.guardarExpediente(expedienteDto);
                 if (!respuesta.getEstado()) {
-                    new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
+                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveExpediente", getStage(), respuesta.getMensaje());
                 } else {
                     unbindExpediente();
                     this.expedienteDto = (CliExpedienteDto) respuesta.getResultado("Expediente");
@@ -415,12 +416,12 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
                     cargarAtenciones();
                     cargarExamenes();
                     bindExpediente();
-                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
+                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveExpediente", getStage(), "key.expedienteActualizado");
                 }
             }
         } catch (Exception ex) {
             Logger.getLogger(P08_MantenimientoMedicosViewController.class.getName()).log(Level.SEVERE, "Error guardando el medico.", ex);
-            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveExpediente", getStage(), "key.errorSavingExpediente");
         }
     }
 
@@ -428,21 +429,21 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
     private void onActionBtnSalir(ActionEvent event) {
     }
 
-    @FXML // Poner idioma
+    @FXML 
     private void onActionBtnLimpiarAnte(ActionEvent event) {
         if (new Mensaje().showConfirmationi18n("key.clear", getStage(), "key.cleanRegistry")) {
             nuevoAntecedente();
         }
     }
 
-    @FXML // Poner idioma
+    @FXML 
     private void onActionBtnLimpiarAte(ActionEvent event) {
         if (new Mensaje().showConfirmationi18n("key.clear", getStage(), "key.cleanRegistry")) {
             nuevaAtencion();
         }
     }
 
-    @FXML // Poner idioma
+    @FXML 
     private void onActionBtnLimpiarE(ActionEvent event) {
         if (new Mensaje().showConfirmationi18n("key.clear", getStage(), "key.cleanRegistry")) {
             nuevoExamen();
@@ -498,7 +499,7 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
         lblNombreUsuario.setText(usuarioDto.nombreDosApellidos());
 
         lblCedula.textProperty().bind(pacienteDto.pacCedula);
-        String genero = ("M".equals(pacienteDto.getPacGenero())) ? "Masculino" : "Femenino";
+        String genero = ("M".equals(pacienteDto.getPacGenero())) ? resourceBundle.getString("key.man") : resourceBundle.getString("key.women");
         lblGenero.setText(genero);
         lblFecha.textProperty().bind(pacienteDto.pacFnacimiento.asString());
         lblPacienteNombre.textProperty().bind(pacienteDto.pacNombre);
@@ -512,7 +513,7 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
     public void fillTableViewCitasPaciente() {
         tbvHistorialCitas.getItems().clear();
 
-        TableColumn<CliAtencionDto, String> tbcFecha = new TableColumn<>(/*resourceBundle.getString("key.identification")*/"Fecha");
+        TableColumn<CliAtencionDto, String> tbcFecha = new TableColumn<>(resourceBundle.getString("key.date"));
         tbcFecha.setPrefWidth(150);
         tbcFecha.setCellValueFactory(cd -> {
             LocalDateTime fecha = cd.getValue().getAteFechahora();
@@ -520,7 +521,7 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
             return new SimpleStringProperty(fechaString);
         });
 
-        TableColumn<CliAtencionDto, String> tbcHora = new TableColumn<>(/*resourceBundle.getString("key.usertype")*/"Hora");
+        TableColumn<CliAtencionDto, String> tbcHora = new TableColumn<>(resourceBundle.getString("key.attenHora"));
         tbcHora.setPrefWidth(150);
         tbcHora.setCellValueFactory(cd -> {
             LocalDateTime fecha = cd.getValue().getAteFechahora();
@@ -539,16 +540,13 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
             return new SimpleStringProperty(horaFormateada);
         });
 
-        TableColumn<CliAtencionDto, String> tbcNombre = new TableColumn<>(/*resourceBundle.getString("key.name")*/"Nombre paciente");
+        TableColumn<CliAtencionDto, String> tbcNombre = new TableColumn<>(resourceBundle.getString("key.namePacient"));
         tbcNombre.setPrefWidth(200);
         tbcNombre.setCellValueFactory(cd -> {
             String nombrePac = pacienteDto.getPacNombre();
             return new SimpleStringProperty(nombrePac);
         });
-
-//        TableColumn<CliAtencionDto, String> tbcMotivo = new TableColumn<>(/*resourceBundle.getString("key.papellido")*/"Motivo");
-//        tbcMotivo.setPrefWidth(150);
-//        tbcMotivo.setCellValueFactory(cd -> cd.getValue().citMotivo);
+        
         tbvHistorialCitas.getColumns().addAll(tbcFecha, tbcHora, tbcNombre);
         tbvHistorialCitas.refresh();
     }
@@ -574,15 +572,15 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
     private void cargarTablaAntecedentes() {
         tbvAntecedentes.getItems().clear();
 
-        TableColumn<CliAntecedenteDto, String> tbcTipo = new TableColumn<>(/*resourceBundle.getString("key.papellido")*/"Tipo");
+        TableColumn<CliAntecedenteDto, String> tbcTipo = new TableColumn<>(resourceBundle.getString("key.typeHistory"));
         tbcTipo.setPrefWidth(130);
         tbcTipo.setCellValueFactory(cd -> cd.getValue().antTipo);
 
-        TableColumn<CliAntecedenteDto, String> tbcParent = new TableColumn<>(/*resourceBundle.getString("key.papellido")*/"Parentesco");
+        TableColumn<CliAntecedenteDto, String> tbcParent = new TableColumn<>(resourceBundle.getString("key.relationHistory"));
         tbcParent.setPrefWidth(150);
         tbcParent.setCellValueFactory(cd -> cd.getValue().antParentesco);
 
-        TableColumn<CliAntecedenteDto, Boolean> tbcEliminar = new TableColumn<>("Eliminar");
+        TableColumn<CliAntecedenteDto, Boolean> tbcEliminar = new TableColumn<>(resourceBundle.getString("key.delete"));
         tbcEliminar.setPrefWidth(100);
         tbcEliminar.setCellValueFactory((TableColumn.CellDataFeatures<CliAntecedenteDto, Boolean> p) -> new SimpleBooleanProperty(p.getValue() != null));
         tbcEliminar.setCellFactory((TableColumn<CliAntecedenteDto, Boolean> p) -> new P13_ExpedienteViewController.ButtonCellAntecedentes());
@@ -710,11 +708,11 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
     private void cargarTablaArchivos() {
         tbvArchivos.getItems().clear();
 
-        TableColumn<CliExamenDto, String> tbcId = new TableColumn<>(/*resourceBundle.getString("key.papellido")*/"Id");
+        TableColumn<CliExamenDto, String> tbcId = new TableColumn<>("Id");
         tbcId.setPrefWidth(50);
         tbcId.setCellValueFactory(cd -> cd.getValue().exaId);
 
-        TableColumn<CliExamenDto, String> tbcNombre = new TableColumn<>(/*resourceBundle.getString("key.papellido")*/"Nombre");
+        TableColumn<CliExamenDto, String> tbcNombre = new TableColumn<>(resourceBundle.getString("key.name"));
         tbcNombre.setPrefWidth(150);
         tbcNombre.setCellValueFactory(cd -> cd.getValue().exaNombre);
 

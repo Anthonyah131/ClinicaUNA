@@ -125,6 +125,7 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Utilidades.ajustarAnchorVentana(root);
+        resourceBundle = FlowController.getInstance().getIdioma();
         txfNombre.setTextFormatter(Formato.getInstance().letrasFormat(30));
         txfTitulo.setTextFormatter(Formato.getInstance().maxLengthFormat(50));
         txaDescripcion.setTextFormatter(Formato.getInstance().maxLengthFormat(150));
@@ -175,7 +176,7 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
                         CliParametroconsultaService parametroService = new CliParametroconsultaService();
                         Respuesta respuesta = parametroService.guardarParametroconsulta(this.parametroDto);
                         if (!respuesta.getEstado()) {
-                            new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), respuesta.getMensaje());
+                            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveParameterR", getStage(), respuesta.getMensaje());
                         } else {
                             unbindParametro();
                             this.parametroDto = (CliParametroconsultaDto) respuesta.getResultado("Parametroconsulta");
@@ -195,7 +196,7 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
         }
     }
 
-    @FXML // Poner idioma
+    @FXML
     private void onActionBtnLimpiar(ActionEvent event) {
         if (new Mensaje().showConfirmationi18n("key.clear", getStage(), "key.cleanRegistry")) {
             nuevoReporte();
@@ -205,7 +206,7 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
         }
     }
 
-    @FXML // Poner idioma
+    @FXML
     private void onActionBtnGuardar(ActionEvent event) {
         /*try {
             String consulta = "SELECT u.usu_nombre, u.usu_papellido, u.usu_cedula FROM CLI_USUARIO u WHERE u.usu_nombre = nombre";
@@ -234,7 +235,7 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
                     CliReporteService reporteService = new CliReporteService();
                     Respuesta respuesta = reporteService.guardarReporte(reporteDto);
                     if (!respuesta.getEstado()) {
-                        new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveReportD", getStage(), respuesta.getMensaje());
+                        new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveReportD", getStage(), respuesta.getMensaje());
                     } else {
                         unbindReporte();
                         this.reporteDto = (CliReporteDto) respuesta.getResultado("Reporte");
@@ -252,7 +253,7 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
         onActionBtnFiltrar(event);
     }
 
-    @FXML // Poner idioma
+    @FXML
     private void onActionBtnEliminar(ActionEvent event) {
         try {
             if (this.reporteDto.getRepId() == null) {
@@ -274,7 +275,7 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
         onActionBtnFiltrar(event);
     }
 
-    @FXML // Poner idioma
+    @FXML
     private void onActionBtnFiltrar(ActionEvent event) {
         CliReporteService service = new CliReporteService();
         Respuesta respuesta = service.getReportes(txfNombreBusqueda.getText());
@@ -286,7 +287,7 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
             tbvReportes.setItems(reportes);
             tbvReportes.refresh();
         } else {
-            new Mensaje().showModal(Alert.AlertType.ERROR, "key.loadReportsD", getStage(), respuesta.getMensaje());
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.loadReportsD", getStage(), respuesta.getMensaje());
         }
     }
 
@@ -294,15 +295,15 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
         // Parametros
         tbvParametros.getItems().clear();
 
-        TableColumn<CliParametroconsultaDto, String> tbcParametro = new TableColumn<>("Parametro");
+        TableColumn<CliParametroconsultaDto, String> tbcParametro = new TableColumn<>(resourceBundle.getString("key.parameterR"));
         tbcParametro.setPrefWidth(150);
         tbcParametro.setCellValueFactory(cd -> cd.getValue().parcParametro);
 
-        TableColumn<CliParametroconsultaDto, String> tbcValor = new TableColumn<>("Valor");
+        TableColumn<CliParametroconsultaDto, String> tbcValor = new TableColumn<>(resourceBundle.getString("key.valorR"));
         tbcValor.setPrefWidth(100);
         tbcValor.setCellValueFactory(cd -> cd.getValue().parcValor);
 
-        TableColumn<CliParametroconsultaDto, Boolean> tbcEliminar = new TableColumn<>("Eliminar");
+        TableColumn<CliParametroconsultaDto, Boolean> tbcEliminar = new TableColumn<>(resourceBundle.getString("key.Eliminar"));
         tbcEliminar.setPrefWidth(75);
         tbcEliminar.setCellValueFactory((TableColumn.CellDataFeatures<CliParametroconsultaDto, Boolean> p) -> new SimpleBooleanProperty(p.getValue() != null));
         tbcEliminar.setCellFactory((TableColumn<CliParametroconsultaDto, Boolean> p) -> new ButtonCell());
@@ -313,11 +314,11 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
         // Reportes
         tbvReportes.getItems().clear();
 
-        TableColumn<CliReporteDto, String> tbcNombre = new TableColumn<>("Parametro");
+        TableColumn<CliReporteDto, String> tbcNombre = new TableColumn<>(resourceBundle.getString("key.parameterR"));
         tbcNombre.setPrefWidth(100);
         tbcNombre.setCellValueFactory(cd -> cd.getValue().repNombre);
 
-        TableColumn<CliReporteDto, String> tbcDescripcion = new TableColumn<>("Valor");
+        TableColumn<CliReporteDto, String> tbcDescripcion = new TableColumn<>(resourceBundle.getString("key.valorR"));
         tbcDescripcion.setPrefWidth(150);
         tbcDescripcion.setCellValueFactory(cd -> cd.getValue().repDescripcion);
 
@@ -446,7 +447,7 @@ public class P16_ReporteDinamicoViewController extends Controller implements Ini
                 CliCorreodestinoService correoService = new CliCorreodestinoService();
                 Respuesta respuesta = correoService.guardarCorreodestino(this.correoDto);
                 if (!respuesta.getEstado()) {
-                    new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveEmailR", getStage(), respuesta.getMensaje());
+                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveEmailR", getStage(), respuesta.getMensaje());
                 } else {
                     this.correoDto = (CliCorreodestinoDto) respuesta.getResultado("Correodestino");
                     this.correoDto.setModificado(true);

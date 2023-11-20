@@ -96,6 +96,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
     ResourceBundle resourceBundle;
     CliUsuarioDto usuarioDto;
     String padre;
+    Object resultado;
 
     /**
      * Initializes the controller class.
@@ -103,6 +104,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Utilidades.ajustarAnchorVentana(root);
+        resourceBundle = FlowController.getInstance().getIdioma();
         rdbHombre.setUserData("M");
         rdbMujer.setUserData("F");
         txfCedula.setTextFormatter(Formato.getInstance().cedulaFormat(9));
@@ -142,49 +144,30 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
         }
     }
 
-    @FXML // Poner idioma
+    @FXML
     private void onActionBtnGuardar(ActionEvent event) {
         SoundUtil.mouseEnterSound();
         try {
             String invalidos = ValidarRequeridos.validarRequeridos(requeridos);
             if (!invalidos.isEmpty()) {
                 String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
-                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), mensaje);
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.savePacient", getStage(), mensaje);
             } else {
                 CliPacienteService pacienteService = new CliPacienteService();
                 Respuesta respuesta = pacienteService.guardarPaciente(pacienteDto);
                 if (!respuesta.getEstado()) {
-                    new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
+                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.savePacient", getStage(), respuesta.getMensaje());
                 } else {
                     unbindPaciente();
                     this.pacienteDto = (CliPacienteDto) respuesta.getResultado("Paciente");
                     bindPaciente();
                     crearExpediente();
-                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
+                    new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.savePacient", getStage(), "key.updatedPacient");
                 }
             }
         } catch (Exception ex) {
             Logger.getLogger(P09_MantenimientoPacientesViewController.class.getName()).log(Level.SEVERE, "Error guardando el paciente.", ex);
-            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
-        }
-    }
-    
-    private void crearExpediente() {
-        if (pacienteDto.getCliExpedienteList().isEmpty()) {
-            CliPacienteService pacienteService = new CliPacienteService();
-            CliExpedienteService expedienteService = new CliExpedienteService();
-
-            CliExpedienteDto expedienteDto = new CliExpedienteDto();
-            Respuesta respuestaMedico = expedienteService.guardarExpediente(expedienteDto);
-            expedienteDto = (CliExpedienteDto) respuestaMedico.getResultado("Expediente");
-            expedienteDto.setModificado(true);
-            
-            pacienteDto.getCliExpedienteList().add(expedienteDto);
-            Respuesta respuesta = pacienteService.guardarPaciente(pacienteDto);
-
-            unbindPaciente();
-            this.pacienteDto = (CliPacienteDto) respuesta.getResultado("Paciente");
-            bindPaciente();
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.savePacient", getStage(), "key.errorSavingPacient");
         }
     }
 
@@ -201,7 +184,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
             tbvResultados.setItems(pacientes);
             tbvResultados.refresh();
         } else {
-            new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Pacientes", getStage(), respuesta.getMensaje());
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.loadPacients", getStage(), respuesta.getMensaje());
         }
     }
 
@@ -220,8 +203,33 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
         getStage().close();
     }
 
+    @FXML
+    private void onActionBtnIrExpediente(ActionEvent event) {
+        P13_ExpedienteViewController expedienteController = (P13_ExpedienteViewController) FlowController.getInstance().getController("P13_ExpedienteView");
+        expedienteController.cargarPaciente(pacienteDto, usuarioDto, null);
+        FlowController.getInstance().goViewInWindow("P13_ExpedienteView", false);
+    }
+
+    private void crearExpediente() {
+        if (pacienteDto.getCliExpedienteList().isEmpty()) {
+            CliPacienteService pacienteService = new CliPacienteService();
+            CliExpedienteService expedienteService = new CliExpedienteService();
+
+            CliExpedienteDto expedienteDto = new CliExpedienteDto();
+            Respuesta respuestaMedico = expedienteService.guardarExpediente(expedienteDto);
+            expedienteDto = (CliExpedienteDto) respuestaMedico.getResultado("Expediente");
+            expedienteDto.setModificado(true);
+
+            pacienteDto.getCliExpedienteList().add(expedienteDto);
+            Respuesta respuesta = pacienteService.guardarPaciente(pacienteDto);
+
+            unbindPaciente();
+            this.pacienteDto = (CliPacienteDto) respuesta.getResultado("Paciente");
+            bindPaciente();
+        }
+    }
+
     public void fillTableView() {
-        resourceBundle = FlowController.getInstance().getIdioma();
 
         tbvResultados.getItems().clear();
 
@@ -246,7 +254,7 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
         tbcEliminar.setCellValueFactory((TableColumn.CellDataFeatures<CliPacienteDto, Boolean> p) -> new SimpleBooleanProperty(p.getValue() != null));
         tbcEliminar.setCellFactory((TableColumn<CliPacienteDto, Boolean> p) -> new ButtonCell());
 
-        tbvResultados.getColumns().addAll(tbcId, tbcCedula, tbcNombre, tbcApellido/*, tbcEliminar*/);
+        tbvResultados.getColumns().addAll(/*tbcId,*/tbcCedula, tbcNombre, tbcApellido/*, tbcEliminar*/);
         tbvResultados.refresh();
 
         tbvResultados.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -317,17 +325,8 @@ public class P09_MantenimientoPacientesViewController extends Controller impleme
         }
     }
 
-    Object resultado;
-
     public Object getSeleccionado() {
         return resultado;
-    }
-
-    @FXML
-    private void onActionBtnIrExpediente(ActionEvent event) {
-        P13_ExpedienteViewController expedienteController = (P13_ExpedienteViewController) FlowController.getInstance().getController("P13_ExpedienteView");
-        expedienteController.cargarPaciente(pacienteDto, usuarioDto, null);
-        FlowController.getInstance().goViewInWindow("P13_ExpedienteView", false);
     }
 
     private class ButtonCell extends TableCell<CliPacienteDto, Boolean> {

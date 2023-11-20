@@ -47,6 +47,8 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
     private MFXButton btnIrExpediente;
     @FXML
     private Label lblUserName;
+    @FXML
+    private AnchorPane root;
 
     CliUsuarioDto usuarioDto;
     CliMedicoDto medicoDto;
@@ -56,14 +58,14 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
     Object resultado;
 //    List<CliCitaDto> listaCitas;
     private ObservableList<CliCitaDto> listaCitas = FXCollections.observableArrayList();
-    @FXML
-    private AnchorPane root;
+    ResourceBundle resourceBundle;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        resourceBundle = FlowController.getInstance().getIdioma();
         Utilidades.ajustarAnchorVentana(root);
         usuarioDto = (CliUsuarioDto) AppContext.getInstance().get("Usuario");
         lblUserName.setText(usuarioDto.nombreDosApellidos());
@@ -73,7 +75,6 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
                 cargarCitasAdmin();
             }
         });
-        // TODO
     }
 
     @Override
@@ -104,7 +105,7 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
     public void fillTableView() {
         tbvCitas.getItems().clear();
 
-        TableColumn<CliCitaDto, String> tbcFecha = new TableColumn<>(/*resourceBundle.getString("key.identification")*/"Fecha");
+        TableColumn<CliCitaDto, String> tbcFecha = new TableColumn<>(resourceBundle.getString("key.date"));
         tbcFecha.setSortable(false);
         tbcFecha.setPrefWidth(150);
         tbcFecha.setCellValueFactory(cd -> {
@@ -113,7 +114,7 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
             return new SimpleStringProperty(fechaString);
         });
 
-        TableColumn<CliCitaDto, String> tbcNombre = new TableColumn<>(/*resourceBundle.getString("key.name")*/"Nombre paciente");
+        TableColumn<CliCitaDto, String> tbcNombre = new TableColumn<>(resourceBundle.getString("key.namePacient"));
         tbcNombre.setSortable(false);
         tbcNombre.setPrefWidth(200);
         tbcNombre.setCellValueFactory(cd -> {
@@ -121,12 +122,12 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
             return new SimpleStringProperty(nombrePac);
         });
 
-        TableColumn<CliCitaDto, String> tbcMotivo = new TableColumn<>(/*resourceBundle.getString("key.papellido")*/"Motivo");
+        TableColumn<CliCitaDto, String> tbcMotivo = new TableColumn<>(resourceBundle.getString("key.reason"));
         tbcMotivo.setSortable(false);
         tbcMotivo.setPrefWidth(150);
         tbcMotivo.setCellValueFactory(cd -> cd.getValue().citMotivo);
 
-        TableColumn<CliCitaDto, String> tbcHora = new TableColumn<>(/*resourceBundle.getString("key.usertype")*/"Hora");
+        TableColumn<CliCitaDto, String> tbcHora = new TableColumn<>(resourceBundle.getString("key.attenHora"));
         tbcHora.setSortable(false);
         tbcHora.setPrefWidth(150);
         tbcHora.setCellValueFactory(cd -> {
@@ -146,13 +147,14 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
             return new SimpleStringProperty(horaFormateada);
         });
 
-        TableColumn<CliCitaDto, String> tbcDuracion = new TableColumn<>(/*resourceBundle.getString("key.usertype")*/"Duracion");
+        TableColumn<CliCitaDto, String> tbcDuracion = new TableColumn<>(resourceBundle.getString("key.attenDuracion"));
         tbcDuracion.setSortable(false);
         tbcDuracion.setPrefWidth(150);
         tbcDuracion.setCellValueFactory(cd -> {
             int duracion = cd.getValue().getCliCantespacios().intValue();
 
             //duracion *= medicoDto.getMedEspaciosxhora().intValue();
+            // duracion *= (60 / agendaDto.getAgeEspacios());
             duracion *= 15;
 
             String duraString = duracion + " minutos";
@@ -160,7 +162,7 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
             return new SimpleStringProperty(duraString);
         });
 
-        tbvCitas.getColumns().addAll(/*tbcHora,*/tbcFecha, tbcHora, tbcNombre, tbcMotivo, tbcDuracion/*, tbcTipoUser*/);
+        tbvCitas.getColumns().addAll(tbcFecha, tbcHora, tbcNombre, tbcMotivo, tbcDuracion);
         tbvCitas.refresh();
     }
 
@@ -176,7 +178,7 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
             tbvCitas.setItems(listaCitas);
             tbvCitas.refresh();
         } else {
-            new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Agenda", getStage(), respuesta.getMensaje());
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.loadAgenda", getStage(), respuesta.getMensaje());
         }
         System.out.println(listaCitas.size());
     }
@@ -192,7 +194,7 @@ public class P12_AtencionCitasViewController extends Controller implements Initi
             tbvCitas.setItems(listaCitas);
             tbvCitas.refresh();
         } else {
-            new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Agenda", getStage(), respuesta.getMensaje());
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.loadAgenda", getStage(), respuesta.getMensaje());
         }
         System.out.println(listaCitas.size());
     }

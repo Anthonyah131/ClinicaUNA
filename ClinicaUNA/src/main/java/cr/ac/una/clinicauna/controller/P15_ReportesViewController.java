@@ -17,8 +17,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JasperViewer;
@@ -31,8 +29,6 @@ import net.sf.jasperreports.view.JasperViewer;
 public class P15_ReportesViewController extends Controller implements Initializable {
 
     @FXML
-    private Label lbMedico;
-    @FXML
     private MFXButton btnBuscarMedico;
     @FXML
     private JFXDatePicker fdesde;
@@ -42,8 +38,6 @@ public class P15_ReportesViewController extends Controller implements Initializa
     private MFXButton btnLimpiarM;
     @FXML
     private MFXButton btnAceptarM;
-    @FXML
-    private Label lbPaciente;
     @FXML
     private MFXButton btnBuscarPaciente;
     @FXML
@@ -60,11 +54,12 @@ public class P15_ReportesViewController extends Controller implements Initializa
     private MFXButton btnLimpiarMR;
     @FXML
     private MFXButton btnAceptarMR;
+    @FXML
+    private AnchorPane root;
 
     CliMedicoDto medicoDto;
     CliPacienteDto pacienteDto;
-    @FXML
-    private AnchorPane root;
+    ResourceBundle resourceBundle;
 
     /**
      * Initializes the controller class.
@@ -72,12 +67,11 @@ public class P15_ReportesViewController extends Controller implements Initializa
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Utilidades.ajustarAnchorVentana(root);
-        lbMedico.setText("......");
+        resourceBundle = FlowController.getInstance().getIdioma();
         fdesde.setValue(null);
         fhasta.setValue(null);
         medicoDto = new CliMedicoDto();
 
-        lbPaciente.setText("......");
         pacienteDto = new CliPacienteDto();
 
         dpDesdeMR.setValue(null);
@@ -97,7 +91,8 @@ public class P15_ReportesViewController extends Controller implements Initializa
 
     @FXML
     private void OnActionbtnLimpiarM(ActionEvent event) {
-        lbMedico.setText("......");
+        String mensaje = resourceBundle.getString("key.searchDoctors");
+        btnBuscarMedico.setText(mensaje);
         fdesde.setValue(null);
         fhasta.setValue(null);
         medicoDto = new CliMedicoDto();
@@ -118,13 +113,13 @@ public class P15_ReportesViewController extends Controller implements Initializa
                     JasperViewer jv = new JasperViewer(jp, false);
                     jv.setVisible(true);
                 } else {
-                    new Mensaje().showModal(Alert.AlertType.ERROR, "Alerta Reporte", this.getStage(), "No se encontro el id de medico.");
+                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.alertaReporte", this.getStage(), "key.noIdMedico");
                 }
             } else {
-                new Mensaje().showModal(Alert.AlertType.ERROR, "Alerta Reporte", this.getStage(), "Error de formato en las fechas.");
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.alertaReporte", this.getStage(), "key.errorFechas");
             }
         } else {
-            new Mensaje().showModal(Alert.AlertType.ERROR, "Alerta Reporte", this.getStage(), "Selecciona un rango de fechas.");
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.alertaReporte", this.getStage(), "key.selectFechas");
         }
     }
 
@@ -137,7 +132,8 @@ public class P15_ReportesViewController extends Controller implements Initializa
 
     @FXML
     private void OnActionbtnLimpiaP(ActionEvent event) {
-        lbPaciente.setText("......");
+        String mensaje = resourceBundle.getString("key.btnSearchUser");
+        btnBuscarPaciente.setText(mensaje);
         pacienteDto = new CliPacienteDto();
     }
 
@@ -152,10 +148,10 @@ public class P15_ReportesViewController extends Controller implements Initializa
                 JasperViewer jv = new JasperViewer(jp, false);
                 jv.setVisible(true);
             } else {
-                new Mensaje().showModal(Alert.AlertType.ERROR, "Alerta Reporte", this.getStage(), "No se encontro el id de paciente.");
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.alertaReporte", this.getStage(), "key.noIdUsuario");
             }
         } else {
-            new Mensaje().showModal(Alert.AlertType.ERROR, "Alerta Reporte", this.getStage(), "Digite un paciente valido.");
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.alertaReporte", this.getStage(), "key.pacientValid");
         }
     }
 
@@ -183,13 +179,13 @@ public class P15_ReportesViewController extends Controller implements Initializa
                     JasperViewer jv = new JasperViewer(jp, false);
                     jv.setVisible(true);
                 } else {
-                    new Mensaje().showModal(Alert.AlertType.ERROR, "Alerta Reporte", this.getStage(), "Error con el reporte.");
+                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.alertaReporte", this.getStage(), "key.errorReporte");
                 }
             } else {
-                new Mensaje().showModal(Alert.AlertType.ERROR, "Alerta Reporte", this.getStage(), "Error de formato en las fechas.");
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.alertaReporte", this.getStage(), "key.errorFechas");
             }
         } else {
-            new Mensaje().showModal(Alert.AlertType.ERROR, "Alerta Reporte", this.getStage(), "Selecciona un rango de fechas.");
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.alertaReporte", this.getStage(), "key.selectFechas");
         }
     }
 
@@ -197,7 +193,7 @@ public class P15_ReportesViewController extends Controller implements Initializa
         P08_MantenimientoMedicosViewController buscadorRegistroController = (P08_MantenimientoMedicosViewController) FlowController.getInstance().getController("P08_MantenimientoMedicosView");
         medicoDto = (CliMedicoDto) buscadorRegistroController.getSeleccionado();
         if (medicoDto != null) {
-            lbMedico.setText(medicoDto.getCliUsuarioDto().nombreDosApellidos());
+            btnBuscarMedico.setText(medicoDto.getCliUsuarioDto().nombreDosApellidos());
         }
     }
 
@@ -205,7 +201,7 @@ public class P15_ReportesViewController extends Controller implements Initializa
         P09_MantenimientoPacientesViewController pacienteRegistroController = (P09_MantenimientoPacientesViewController) FlowController.getInstance().getController("P09_MantenimientoPacientesView");
         pacienteDto = (CliPacienteDto) pacienteRegistroController.getSeleccionado();
         if (pacienteDto != null) {
-            lbPaciente.setText(pacienteDto.getPacNombre());
+            btnBuscarPaciente.setText(pacienteDto.nombrePacienteCompleto());
         }
     }
 }

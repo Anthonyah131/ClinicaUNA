@@ -97,7 +97,6 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
 
     @Override
     public void initialize() {
-
     }
 
     @FXML
@@ -108,14 +107,12 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
             String mensaje = resourceBundle.getString("key.invalidFields") + invalidos;
             new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), mensaje);
         } else {
-            int cboxEspacios = cboxEspacioHora.getValue();
-
             //Si la cita no existe intenta crear una nueva si cumple los espacios
             if (citasVector[posVec] == null) {
                 if (comprobarEspacios(posVec, 0)) {
                     asignarDatosCita();
                 } else {
-                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "No hay suficientes campos libres");
+                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveCitas", getStage(), "key.noSpaceAppo");
                 }
             } // si los espacios del cbox son mayores a los que ya tenia la cita se comprueba el espacio
             else if (cboxEspacioHora.getValue() > citaDto.getCliCantespacios()) {
@@ -125,7 +122,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
                 if (comprobarEspacios(posAux, inicio)) {
                     asignarDatosCita();
                 } else {
-                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "No hay suficientes campos libres");
+                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveCitas", getStage(), "key.noSpaceAppo");
                 }
             } else {
                 asignarDatosCita();
@@ -158,7 +155,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         }
         return true;
     }
-    
+
     // Poner idioma
     private void guardarCita() {
         Boolean banderaNueva = false;
@@ -175,7 +172,7 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
             Respuesta respuesta = citaService.guardarCita(citaDto);
 
             if (!respuesta.getEstado()) {
-                new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveCitas", getStage(), respuesta.getMensaje());
             } else {
                 this.citaDto = (CliCitaDto) respuesta.getResultado("Cita");
 
@@ -241,11 +238,11 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
                         atencionService.guardarAtencion(atencion);
                     }
                 }
-                new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveUser", getStage(), "key.updatedUser");
+                new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveCitas", getStage(), "key.appoActualizada");
             }
         } catch (Exception ex) {
             Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error guardando el usuario.", ex);
-            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingAppo");
         }
     }
 
@@ -333,11 +330,13 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         cboxEstadoCita.getItems().clear();
         cboxEspacioHora.getItems().clear();
 
-//        String admin = resourceBundle.getString("key.admin");
-//        String doctor = resourceBundle.getString("key.doctor");
-//        String receptionist = resourceBundle.getString("key.receptionist");
+        String programada = resourceBundle.getString("key.appoProgramada");
+        String atendida = resourceBundle.getString("key.appoAtendida");
+        String cancelada = resourceBundle.getString("key.appoCancelada");
+        String ausente = resourceBundle.getString("key.appoAusente");
+
         ObservableList<String> estados = FXCollections.observableArrayList();
-        estados.addAll("Programada", "Atendida", "Cancelada", "Ausente");
+        estados.addAll(programada, atendida, cancelada, ausente);
         cboxEstadoCita.setItems(estados);
 
         ObservableList<Integer> numeros = FXCollections.observableArrayList();
@@ -347,11 +346,11 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
 
     public String estadoCita() {
         return switch (cboxEstadoCita.getValue()) {
-            case "Ausente" ->
+            case "Ausente", "Absent" ->
                 "U";
-            case "Atendida" ->
+            case "Atendida", "Attended" ->
                 "A";
-            case "Cancelada" ->
+            case "Cancelada", "Cancelled" ->
                 "C";
             default ->
                 "P";
@@ -369,11 +368,11 @@ public class P11_NuevaCitaViewController extends Controller implements Initializ
         } else {
             citaDto = (CliCitaDto) AppContext.getInstance().get("CitaMover");
             CliAgendaDto agendaAntigua = (CliAgendaDto) AppContext.getInstance().get("AgendaAntigua");
-            
+
             agendaAntigua.getCliCitaListEliminados().add(citaDto);
             CliAgendaService agendaService = new CliAgendaService();
             agendaService.guardarAgenda(agendaAntigua);
-                        
+
             citaDto.setCliAgendaDto(agendaDto);
             horaAntigua = citaDto.getCitFechaHora();
             citaDto.setCitFechaHora(fechaHoraCita);

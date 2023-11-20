@@ -84,6 +84,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
     int cantCitasTotales;
     int[] jornadaDoctor;
     int casillasVacias;
+    int posDragDrop;
 
     /**
      * Initializes the controller class.
@@ -201,7 +202,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
             listaCitas.clear();
             listaCitas.addAll(agendaDto.getCliCitaList());
         } else {
-            new Mensaje().showModal(Alert.AlertType.ERROR, "Cargar Agenda", getStage(), respuesta.getMensaje());
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.loadAgenda", getStage(), respuesta.getMensaje());
         }
     }
 
@@ -295,7 +296,6 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         casillasVacias = 0;
 
         grdCitas.getChildren().clear();
-        //grdCitas = new GridPane();
 
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
@@ -403,7 +403,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                                     citasVector[posDragDrop] = citaDto;
                                     actualizarCita(citaDto);
                                 } else {
-                                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "No hay suficientes campos libres");
+                                    new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveCitas", getStage(), "key.noSlotsAppo");
                                 }
                             } else {
                                 citasVector[posAux] = null;
@@ -431,7 +431,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
                 }
             }
         }
-       grdCitas.setGridLinesVisible(true);
+        grdCitas.setGridLinesVisible(true);
     }
 
     private void actualizarCita(CliCitaDto cita) {
@@ -440,11 +440,13 @@ public class P10_AgendaViewController extends Controller implements Initializabl
             Respuesta respuesta = citaService.guardarCita(cita);
 
             if (!respuesta.getEstado()) {
-                new Mensaje().showModal(Alert.AlertType.ERROR, "key.saveUser", getStage(), respuesta.getMensaje());
+                new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveCitas", getStage(), respuesta.getMensaje());
+            } else {
+                new Mensaje().showModali18n(Alert.AlertType.INFORMATION, "key.saveCitas", getStage(), "key.appoActualizada");
             }
         } catch (Exception ex) {
             Logger.getLogger(P03_RegistroViewController.class.getName()).log(Level.SEVERE, "Error guardando el usuario.", ex);
-            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "key.errorSavingUser");
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveCitas", getStage(), "key.errorSavingAppo");
         }
     }
 
@@ -461,7 +463,6 @@ public class P10_AgendaViewController extends Controller implements Initializabl
         }
         return true;
     }
-    int posDragDrop;
 
     private void crearCita() {
         try {
@@ -474,7 +475,7 @@ public class P10_AgendaViewController extends Controller implements Initializabl
             }
         } catch (NullPointerException e) {
             System.err.println("Error: El objeto Label es nulo. No se puede invocar getStyleClass().");
-            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.saveUser", getStage(), "Conflicto en la hora de entrada o salida y la duracion de las citas");
+            new Mensaje().showModali18n(Alert.AlertType.ERROR, "key.loadAgenda", getStage(), "key.agendaConflict");
             grdCitas.getChildren().clear();
         }
     }

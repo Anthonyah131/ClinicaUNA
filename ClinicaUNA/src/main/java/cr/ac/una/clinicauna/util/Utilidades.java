@@ -33,7 +33,6 @@ public class Utilidades {
         }
 
         minutos = duration.toMinutesPart();
-
         int[] resultados = new int[]{horas, minutos};
 
         return resultados;
