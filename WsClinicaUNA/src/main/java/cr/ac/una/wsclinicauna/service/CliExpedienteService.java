@@ -163,7 +163,9 @@ public class CliExpedienteService {
             }
             em.flush();
             CliExpedienteDto expedienteDto = new CliExpedienteDto(cliExpediente);
-            expedienteDto.setCliPacienteDto(new CliPacienteDto(cliExpediente.getPacId()));
+            if (cliExpediente.getPacId() != null) {
+                expedienteDto.setCliPacienteDto(new CliPacienteDto(cliExpediente.getPacId()));
+            }
             for (CliExamen cliExamen : cliExpediente.getCliExamenList()) {
                 expedienteDto.getCliExamenList().add(new CliExamenDto(cliExamen));
             }

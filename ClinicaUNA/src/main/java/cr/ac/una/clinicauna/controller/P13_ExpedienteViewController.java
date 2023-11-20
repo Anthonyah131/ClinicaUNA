@@ -189,9 +189,9 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        txfCantHospitalizaciones.setTextFormatter(Formato.getInstance().twoDecimalFormat());
-        txfCantOperaciones.setTextFormatter(Formato.getInstance().twoDecimalFormat());
-        txfCantAlergias.setTextFormatter(Formato.getInstance().twoDecimalFormat());
+        txfCantHospitalizaciones.setTextFormatter(Formato.getInstance().maxIntegerFormat(5));
+        txfCantOperaciones.setTextFormatter(Formato.getInstance().maxIntegerFormat(5));
+        txfCantAlergias.setTextFormatter(Formato.getInstance().maxIntegerFormat(5));
         txaAntPatologicos.setTextFormatter(Formato.getInstance().maxLengthFormat(500));
         txaAlergias.setTextFormatter(Formato.getInstance().maxLengthFormat(500));
         txaTratamientosActuales.setTextFormatter(Formato.getInstance().maxLengthFormat(500));
@@ -200,11 +200,11 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
         txfAntParentesco.setTextFormatter(Formato.getInstance().maxLengthFormat(20));
         txfAntDescripcion.setTextFormatter(Formato.getInstance().maxLengthFormat(20));
 
-        txfPresionArterial.setTextFormatter(Formato.getInstance().cedulaFormat(5));
-        txfFrecuenciaCar.setTextFormatter(Formato.getInstance().cedulaFormat(5));
-        txfPeso.setTextFormatter(Formato.getInstance().cedulaFormat(5));
-        txfTalla.setTextFormatter(Formato.getInstance().cedulaFormat(5));
-        txfTemperatura.setTextFormatter(Formato.getInstance().cedulaFormat(5));
+        txfPresionArterial.setTextFormatter(Formato.getInstance().maxIntegerFormat(5));
+        txfFrecuenciaCar.setTextFormatter(Formato.getInstance().maxIntegerFormat(5));
+        txfPeso.setTextFormatter(Formato.getInstance().maxIntegerFormat(5));
+        txfTalla.setTextFormatter(Formato.getInstance().maxIntegerFormat(5));
+        txfTemperatura.setTextFormatter(Formato.getInstance().maxIntegerFormat(5));
         txaAnotacionesEnfermeria.setTextFormatter(Formato.getInstance().maxLengthFormat(80));
         txfRazonConsulta.setTextFormatter(Formato.getInstance().maxLengthFormat(50));
         txaPlanAtencion.setTextFormatter(Formato.getInstance().maxLengthFormat(1));
@@ -288,7 +288,10 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
                     CliAtencionService atencionService = new CliAtencionService();
                     if (atencionDto.getAtePeso() != null && atencionDto.getAteTalla() != null
                             && !atencionDto.getAtePeso().isBlank() && !atencionDto.getAteTalla().isBlank()) {
-                        atencionDto.setAteImc("" + (int) (Double.parseDouble(atencionDto.getAtePeso()) / (Double.parseDouble(atencionDto.getAteTalla()) * Double.parseDouble(atencionDto.getAteTalla()))));
+                        int peso = Integer.parseInt(atencionDto.getAtePeso());
+                        int talla = Integer.parseInt(atencionDto.getAteTalla()) / 100;
+                        int imc = (int) (peso / (talla * talla));
+                        atencionDto.setAteImc("" + imc);
                     } else {
                         atencionDto.setAteImc("0");
                     }
@@ -481,6 +484,10 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
         txaAntPatologicos.textProperty().unbindBidirectional(expedienteDto.expPatologicos);
         txaAlergias.textProperty().unbindBidirectional(expedienteDto.expTiposalergias);
         txaTratamientosActuales.textProperty().unbindBidirectional(expedienteDto.expTratamientos);
+        
+        txfCantHospitalizaciones.clear();
+        txfCantOperaciones.clear();
+        txfCantAlergias.clear();
     }
 
     public void cargarPaciente(CliPacienteDto paciente, CliUsuarioDto usuario, CliCitaDto citaDto) {
@@ -617,11 +624,16 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
 
     public void llenarGrafico() {
         ObservableList<CliAtencionDto> atenciones = this.expedienteDto.getCliAtencionList();
-        LocalDateTime fechaCita = citaDto.getCitFechaHora();
-        List<CliAtencionDto> atencionesFiltradas = atenciones.stream()
-                .filter(atencion -> atencion.getAteFechahora().isBefore(fechaCita) || atencion.getAteFechahora().isEqual(fechaCita))
-                .collect(Collectors.toList());
-        atencionesFiltradas.sort(Comparator.comparing(CliAtencionDto::getAteFechahora));
+        List<CliAtencionDto> atencionesFiltradas = new ArrayList<>();
+        if (citaDto != null) {
+            LocalDateTime fechaCita = citaDto.getCitFechaHora();
+            atencionesFiltradas = atenciones.stream()
+                    .filter(atencion -> atencion.getAteFechahora().isBefore(fechaCita) || atencion.getAteFechahora().isEqual(fechaCita))
+                    .collect(Collectors.toList());
+            atencionesFiltradas.sort(Comparator.comparing(CliAtencionDto::getAteFechahora));
+        } else {
+            atencionesFiltradas.addAll(atenciones);
+        }
 
         gfrEvolucion.getData().clear();
         XYChart.Series series = new XYChart.Series();
@@ -630,8 +642,8 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
             if (atencionDto.getAtePeso() != null && atencionDto.getAteTalla() != null
                     && !atencionDto.getAtePeso().isBlank() && !atencionDto.getAteTalla().isBlank()) {
                 double peso = Double.parseDouble(atencionDto.getAtePeso());
-                double talla = Double.parseDouble(atencionDto.getAteTalla()); // Convertir a metros
-                double imc = (int) (peso / (talla * talla));
+                double talla = Double.parseDouble(atencionDto.getAteTalla()) / 100;
+                int imc = (int) (peso / (talla * talla));
 
                 LocalDateTime fecha = atencionDto.getAteFechahora();
                 String fechaFormateada = fecha.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
@@ -675,19 +687,30 @@ public class P13_ExpedienteViewController extends Controller implements Initiali
         txaObservaciones.textProperty().unbindBidirectional(atencionDto.ateObservaciones);
         txaTratamiento.textProperty().unbindBidirectional(atencionDto.ateTratamiento);
         lblIMC.setText("IMC");
+        txfPresionArterial.clear();
+        txfFrecuenciaCar.clear();
+        txfPeso.clear();
+        txfTalla.clear();
+        txfTemperatura.clear();
     }
 
     private void cargarAtenciones() {
         ObservableList<CliAtencionDto> atenciones = this.expedienteDto.getCliAtencionList();
         atenciones.sort(Comparator.comparing(CliAtencionDto::getAteFechahora));
-        LocalDateTime fechaCita = citaDto.getCitFechaHora();
+        if (citaDto != null) {
+            LocalDateTime fechaCita = citaDto.getCitFechaHora();
+            List<CliAtencionDto> atencionesFiltradas = atenciones.stream()
+                    .filter(atencion -> atencion.getAteFechahora().isBefore(fechaCita) || atencion.getAteFechahora().isEqual(fechaCita))
+                    .collect(Collectors.toList());
+            tbvHistorialCitas.getItems().clear();
+            tbvHistorialCitas.setItems(FXCollections.observableArrayList(atencionesFiltradas));
+            tbvHistorialCitas.refresh();
+        } else {
+            tbvHistorialCitas.getItems().clear();
+            tbvHistorialCitas.setItems(FXCollections.observableArrayList(atenciones));
+            tbvHistorialCitas.refresh();
+        }
 
-        List<CliAtencionDto> atencionesFiltradas = atenciones.stream()
-                .filter(atencion -> atencion.getAteFechahora().isBefore(fechaCita) || atencion.getAteFechahora().isEqual(fechaCita))
-                .collect(Collectors.toList());
-        tbvHistorialCitas.getItems().clear();
-        tbvHistorialCitas.setItems(FXCollections.observableArrayList(atencionesFiltradas));
-        tbvHistorialCitas.refresh();
         llenarGrafico();
     }
 

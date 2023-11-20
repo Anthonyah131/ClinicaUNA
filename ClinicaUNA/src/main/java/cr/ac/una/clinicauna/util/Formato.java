@@ -113,7 +113,7 @@ public class Formato {
                 }
             }
             c.setText(c.getText().replaceAll("[^a-zA-Z0-9-]", ""));
-            if(c.getControlNewText().matches(".*-{2,}.*")){
+            if (c.getControlNewText().matches(".*-{2,}.*")) {
                 return null;
             }
             return c;
@@ -136,7 +136,7 @@ public class Formato {
                 }
             }
             c.setText(c.getText().replaceAll("[^a-zA-Z ]", ""));
-            if(c.getControlNewText().matches(".*\\s{2,}.*")){
+            if (c.getControlNewText().matches(".*\\s{2,}.*")) {
                 return null;
             }
             return c;
@@ -159,6 +159,30 @@ public class Formato {
                 return null;
             }
             return c;
+        });
+        return maxLengthFormat;
+    }
+
+    public TextFormatter maxIntegerFormat(Integer length) {
+        TextFormatter maxLengthFormat = new TextFormatter<>(c
+                -> {
+            if (c == null || c.getControlNewText().isEmpty()) {
+                return c;
+            }
+
+            if (((TextInputControl) c.getControl()).getLength() >= length && !c.isDeleted()) {
+                return null;
+            }
+            if (c.getText().length() > length && !c.isDeleted()) {
+                return null;
+            }
+
+            Pattern validDoubleText = Pattern.compile("\\d+");
+            if (validDoubleText.matcher(c.getControlNewText()).matches()) {
+                return c;
+            } else {
+                return null;
+            }
         });
         return maxLengthFormat;
     }
