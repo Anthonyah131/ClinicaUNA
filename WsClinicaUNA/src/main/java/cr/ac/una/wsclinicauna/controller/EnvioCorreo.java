@@ -55,7 +55,7 @@ public class EnvioCorreo {
     @EJB
     CliReporteService cliReporteService;
 
-    @Schedule(hour = "5", minute = "30", persistent = false)//Se tiene que cambiar a la hora que quiera el usuario que se manden automaticamente
+    @Schedule(hour = "18", minute = "58", persistent = false)//Se tiene que cambiar a la hora que quiera el usuario que se manden automaticamente
     private void envioReporte() {
         try {
             Respuesta res = cliReporteService.getReportes();
