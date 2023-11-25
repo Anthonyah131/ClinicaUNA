@@ -39,3 +39,35 @@ If you have any questions, suggestions or comments about this project, you can c
 - anthonyah131@gmail.com
 - kjarj54@gmail.com
 - Luvarapz@gmail.com
+
+  ### LoginView
+![LoginView](https://raw.githubusercontent.com/kjarj54/ClinicaUNA/main/Imagenes/Login.png)
+
+### MenuPrincipalView
+![MenuPrincipalView](https://github.com/kjarj54/ClinicaUNA/blob/main/Imagenes/MenuPrincipal.png?raw=true)
+
+### MantUsuView
+![MantUsuarioView](https://github.com/kjarj54/ClinicaUNA/blob/main/Imagenes/MantenimientoUsuario.png?raw=true)
+
+### MantMedicView
+![MantMedicView](https://github.com/kjarj54/ClinicaUNA/blob/main/Imagenes/MantenimientoMedico.png?raw=true)
+
+### MantPacView
+![MantPacView](https://github.com/kjarj54/ClinicaUNA/blob/main/Imagenes/MantenimientoPaciente.png?raw=true)
+
+### AgendaView
+![AgendView](https://github.com/kjarj54/ClinicaUNA/blob/main/Imagenes/AgendaCitas.png?raw=true)
+
+### AtencionCitaView
+![AtencionCitaView](https://github.com/kjarj54/ClinicaUNA/blob/main/Imagenes/AtencionCita.png?raw=true)
+
+### FileView
+![ExpedienteView](https://github.com/kjarj54/ClinicaUNA/blob/main/Imagenes/Expediente.png?raw=true)
+![ExpedienteView2](https://github.com/kjarj54/ClinicaUNA/blob/main/Imagenes/Expediente2.png?raw=true)
+![ExpedienteView3](https://github.com/kjarj54/ClinicaUNA/blob/main/Imagenes/Expediente3.png?raw=true)
+
+### ReportView
+![ReportView](https://github.com/kjarj54/ClinicaUNA/blob/main/Imagenes/Reportes.png?raw=true)
+
+### ReportDinamicView
+![ReportDinamicView](https://github.com/kjarj54/ClinicaUNA/blob/main/Imagenes/ReporteDinamico.png?raw=true)
